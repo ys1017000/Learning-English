@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f7f5f0">
+<title>気持ちを伝える英語</title>
+<style>
+:root{--bg:#f7f5f0;--card:#fff;--ink:#242424;--muted:#686868;--line:#e6e0d6;--accent:#285c4d;--soft:#e8f1ed;--bad:#fff0ee}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;line-height:1.55}
+main{max-width:720px;margin:auto;padding:20px 15px 44px}.top{padding:10px 2px 16px}.eyebrow{font-size:12px;letter-spacing:.08em;color:var(--accent);font-weight:700}
+h1{font-size:27px;line-height:1.25;margin:7px 0 8px}h2{font-size:19px;margin:0 0 10px}.muted{color:var(--muted);font-size:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:17px;margin:12px 0;box-shadow:0 2px 8px #00000005}
+.row{display:flex;gap:8px;flex-wrap:wrap}.tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin:12px 0}
+button{font:inherit;cursor:pointer;border:1px solid var(--line);border-radius:12px;padding:11px 13px;background:white;color:var(--ink)}
+button.primary{background:var(--accent);color:white;border-color:var(--accent);font-weight:700}
+button.active{background:var(--soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+button.option{display:block;width:100%;text-align:left;margin:8px 0;padding:13px}
+button.option:disabled{cursor:default}
+.prompt{font-size:19px;font-weight:700;margin:9px 0 14px}
+.answer{font-size:18px;font-weight:700;color:var(--accent);margin:8px 0}
+.translation{margin:5px 0}.feedback{padding:12px;border-radius:12px;background:var(--soft);margin-top:12px}
+textarea,input{width:100%;font:inherit;border:1px solid var(--line);border-radius:12px;padding:12px;background:white;color:var(--ink)}
+progress{width:100%;height:8px;accent-color:var(--accent)}.stat{font-weight:700}
+.phrase{padding:12px 0;border-bottom:1px solid var(--line)}.phrase:last-child{border-bottom:0}
+.smallbtn{padding:7px 10px;font-size:13px}.footer{font-size:12px;color:var(--muted);text-align:center;margin-top:22px}
+@media(min-width:560px){main{padding-top:28px}.card{padding:22px}}
+</style>
+</head>
+<body>
+<main>
+  <header class="top">
+    <div class="eyebrow">DAILY ENGLISH · FOR REAL CONVERSATIONS</div>
+    <h1>気持ちを伝える英語</h1>
+    <div class="muted">短く、自然に、自分の言葉で。少しずつ練習しよう。</div>
+  </header>
+  <div class="card">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div><div class="muted">これまでの正解数</div><div class="stat" id="stats">0問</div></div>
+      <div><div class="muted">復習リスト</div><div class="stat" id="reviewCount">0個</div></div>
+    </div>
+  </div>
+  <nav class="tabs">
+    <button class="active" data-mode="quiz">英語クイズ</button>
+    <button data-mode="write">自分で英作文</button>
+    <button data-mode="phrases">表現集</button>
+  </nav>
+  <section id="content"></section>
+  <div class="footer">学習状況はこの端末のブラウザに保存されます。<br>他の端末やブラウザとは自動同期されません。</div>
+</main>
+<script>
+const questions = [
+{jp:"一緒に過ごす時間は、僕にとってとても大切だよ。",en:"The time we spend together means a lot to me.",note:"mean a lot to me = 私にとってとても大切",opts:["The time we spend together means a lot to me.","The time we spend together is many important to me.","The time we spend together means many for me."]},
+{jp:"英語で気持ちをうまく説明できないこともあるけど、努力し続けたい。",en:"I can't always explain my feelings well in English, but I want to keep trying.",note:"can't always = いつもできるわけではない／keep trying = 努力し続ける",opts:["I can't always explain my feelings well in English, but I want to keep trying.","I can't explain always my feelings good, but I keep to try.","I don't can explain my feelings in English, but I try continue."]},
+{jp:"今すぐ答えを出すようにプレッシャーをかけたいわけじゃない。",en:"I don't want to pressure you to give me an answer right now.",note:"pressure someone to do = 人に〜するよう圧力をかける",opts:["I don't want to pressure you to give me an answer right now.","I don't want pressure you giving me an answer.","I don't want you to pressure for answer right now."]},
+{jp:"二人にとって何が一番いいのか、一緒に考えたい。",en:"I want us to figure out what's best for both of us.",note:"I want us to ... = 二人で〜したい／figure out = 考えて答えを見つける",opts:["I want us to figure out what's best for both of us.","I want we figure what's best for both us.","I want us figuring what is best to both of us."]},
+{jp:"君の考えを否定しようとしているわけじゃない。",en:"I'm not trying to dismiss your point of view.",note:"dismiss someone's point of view = 人の考え・見方を軽視する／退ける",opts:["I'm not trying to dismiss your point of view.","I'm not trying dismiss your point of view.","I'm not trying to refuse your opinion's view."]},
+{jp:"君が物事をどう捉えているのか理解したい。",en:"I want to understand how you see things.",note:"how you see things = 君が物事をどう捉えているか",opts:["I want to understand how you see things.","I want understand how do you see things.","I want to understand how you are seeing thing things."]},
+{jp:"意見が違っても、話し合うことはできると思う。",en:"I think we can talk things through even when we disagree.",note:"talk things through = 話し合って整理する／disagree = 意見が合わない",opts:["I think we can talk things through even when we disagree.","I think we can talk through things even we disagree.","I think we can talk things although disagree each other."]},
+{jp:"君に僕の気持ちを理解してほしい。",en:"I want you to understand my feelings.",note:"want + 人 + to do = 人に〜してほしい",opts:["I want you to understand my feelings.","I want you understand my feelings.","I want that you understand my feelings."]},
+{jp:"君の意見も聞くつもりだよ。",en:"I'm willing to listen to your opinion, too.",note:"be willing to = 進んで〜するつもりがある",opts:["I'm willing to listen to your opinion, too.","I'm willing listen your opinion, too.","I'm willing to hear your opinion, too."]},
+{jp:"今すべての答えを出す必要はないと思う。",en:"I don't think we need to have all the answers right now.",note:"I don't think we need to ... = 〜する必要はないと思う",opts:["I don't think we need to have all the answers right now.","I think we don't need having all answers now.","I don't think we need have every answers right now."]}
+];
+const phrases = [
+["気持ちを伝える","I care about you, and I want to be honest with you.","君のことを大切に思っているし、正直に話したい。"],
+["英語が難しいとき","Sometimes I struggle to explain my feelings in English.","英語で気持ちを説明するのが難しいときがある。"],
+["相手の考えを聞く","I want to understand how you see things.","君がどう考えているのか理解したい。"],
+["プレッシャーをかけない","I don't want to pressure you to give me an answer.","答えを出すようにプレッシャーをかけたいわけじゃない。"],
+["一緒に考える","I want us to figure out what's best for both of us.","二人にとって何が一番いいか一緒に考えたい。"],
+["違いを話し合う","I'm open to talking about our differences.","意見の違いについて話し合うことに前向きだよ。"],
+["相手の意見を尊重する","I'm not trying to dismiss your point of view.","君の考えを軽視しようとしているわけじゃない。"],
+["正直さを伝える","I might not always find the right words, but I'm trying to be honest.","いつも適切な言葉が見つかるとは限らないけど、正直に伝えようとしている。"],
+["急がない","I don't think we need to have all the answers right now.","今すべての答えを出す必要はないと思う。"],
+["関係を大切にする","I want to take our relationship seriously.","僕たちの関係を真剣に考えたい。"]
+];
+let mode="quiz", idx=0, chosen=null, checked=false, writeShown=false;
+let store={correct:0,review:[],seen:[]};
+try{store={...store,...JSON.parse(localStorage.getItem("feelEnglishStore")||"{}")}}catch(e){}
+function save(){try{localStorage.setItem("feelEnglishStore",JSON.stringify(store))}catch(e){};document.getElementById("stats").textContent=(store.correct||0)+"問";document.getElementById("reviewCount").textContent=(store.review||[]).length+"個"}
+function shuffleOptions(q){return q.opts.map(x=>({text:x,ok:x===q.en})).sort(()=>Math.random()-.5)}
+let currentOptions=[];
+function render(){
+ document.querySelectorAll("[data-mode]").forEach(b=>b.classList.toggle("active",b.dataset.mode===mode));
+ const el=document.getElementById("content");
+ if(mode==="quiz") renderQuiz(el); else if(mode==="write") renderWrite(el); else renderPhrases(el);
+ save();
+}
+function renderQuiz(el){
+ const q=questions[idx%questions.length];
+ if(!currentOptions.length) currentOptions=shuffleOptions(q);
+ el.innerHTML=`<div class="card"><div class="row" style="justify-content:space-between"><span class="muted">問題 ${idx%questions.length+1} / ${questions.length}</span><button class="smallbtn" id="reviewToggle">${(store.review||[]).includes(q.en)?"★ 復習に登録済み":"☆ 復習に追加"}</button></div><progress value="${idx%questions.length+1}" max="${questions.length}"></progress><div class="prompt">${q.jp}</div><div class="muted">最も自然な英文を選んでね。</div><div id="options"></div><div id="feedback"></div><div class="row" style="margin-top:14px"><button id="next" class="primary" style="flex:1" ${checked?"":"disabled"}>次の問題 →</button><button id="showAnswer">答えを見る</button></div></div>`;
+ const options=el.querySelector("#options");
+ currentOptions.forEach((o,i)=>{let b=document.createElement("button");b.className="option";b.textContent=o.text;if(checked)b.style.borderColor=o.ok?"#285c4d":(chosen===i?"#b84d42":"#e6e0d6");b.onclick=()=>{if(checked)return;chosen=i;checked=true;if(o.ok)store.correct=(store.correct||0)+1;store.seen=store.seen||[];store.seen.push(q.en);renderFeedback(q,o.ok);render()};options.appendChild(b)});
+ el.querySelector("#reviewToggle").onclick=()=>{store.review=store.review||[];store.review.includes(q.en)?store.review=store.review.filter(x=>x!==q.en):store.review.push(q.en);render()};
+ el.querySelector("#next").onclick=()=>{idx++;chosen=null;checked=false;currentOptions=[];render()};
+ el.querySelector("#showAnswer").onclick=()=>{checked=true;renderFeedback(q,null);render()};
+ if(checked)renderFeedback(q,chosen===null?null:currentOptions[chosen]?.ok);
+}
+function renderFeedback(q,ok){
+ const f=document.getElementById("feedback");if(!f)return;
+ f.innerHTML=`<div class="feedback"><div class="answer">${q.en}</div><div class="translation">${q.jp}</div><div class="muted">${q.note}</div>${ok===null?"":`<div style="margin-top:7px;font-weight:700">${ok?"正解！":"今回は不正解。正しい英文を確認してみよう。"}</div>`}</div>`;
+}
+function renderWrite(el){
+ const q=questions[idx%questions.length];
+ el.innerHTML=`<div class="card"><div class="muted">英作文 ${idx%questions.length+1} / ${questions.length}</div><progress value="${idx%questions.length+1}" max="${questions.length}"></progress><div class="prompt">${q.jp}</div><div class="muted">まずは自分で英語にしてみよう。完璧でなくて大丈夫。</div><textarea id="draft" rows="3" placeholder="Write your sentence here..."></textarea><div class="row" style="margin-top:12px"><button class="primary" id="reveal">模範解答を見る</button><button id="nextWrite">次の問題 →</button></div><div id="model"></div></div>`;
+ el.querySelector("#reveal").onclick=()=>{const m=el.querySelector("#model");m.innerHTML=`<div class="feedback"><div class="answer">${q.en}</div><div>${q.jp}</div><div class="muted">${q.note}</div><button class="smallbtn" id="mark" style="margin-top:9px">${(store.review||[]).includes(q.en)?"★ 復習登録済み":"☆ 復習に追加"}</button></div>`;m.querySelector("#mark").onclick=()=>{store.review=store.review||[];store.review.includes(q.en)?store.review=store.review.filter(x=>x!==q.en):store.review.push(q.en);renderWrite(el)};writeShown=true};
+ el.querySelector("#nextWrite").onclick=()=>{idx++;writeShown=false;render()};
+}
+function renderPhrases(el){
+ el.innerHTML=`<div class="card"><h2>すぐに使える表現</h2><p class="muted">気になる表現は「復習に追加」。英語を声に出して読むのもおすすめ。</p><div id="list"></div><h2 style="margin-top:20px">復習リスト</h2><div id="reviewList"></div></div>`;
+ const list=el.querySelector("#list");
+ phrases.forEach(p=>{const d=document.createElement("div");d.className="phrase";d.innerHTML=`<div class="muted">${p[0]}</div><div style="font-weight:700;margin:4px 0">${p[1]}</div><div>${p[2]}</div>`;const b=document.createElement("button");b.className="smallbtn";b.style.marginTop="7px";b.textContent=(store.review||[]).includes(p[1])?"★ 復習に登録済み":"☆ 復習に追加";b.onclick=()=>{store.review=store.review||[];store.review.includes(p[1])?store.review=store.review.filter(x=>x!==p[1]):store.review.push(p[1]);renderPhrases(el);save()};d.appendChild(b);list.appendChild(d)});
+ const rl=el.querySelector("#reviewList");
+ if(!(store.review||[]).length)rl.innerHTML='<div class="muted">まだ登録されていません。覚えにくい表現を追加してね。</div>';
+ else store.review.forEach(s=>{const d=document.createElement("div");d.className="phrase";d.textContent=s;const b=document.createElement("button");b.className="smallbtn";b.textContent="削除";b.onclick=()=>{store.review=store.review.filter(x=>x!==s);renderPhrases(el);save()};d.appendChild(b);rl.appendChild(d)});
+}
+document.querySelectorAll("[data-mode]").forEach(b=>b.addEventListener("click",()=>{mode=b.dataset.mode;chosen=null;checked=false;currentOptions=[];render()}));
+render();
+</script>
+</body>
+</html>
