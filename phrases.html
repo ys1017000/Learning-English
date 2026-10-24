@@ -366,4 +366,18 @@ if(pageMode!=='home'){mode=pageMode;const titles={quiz:'英語クイズ',write:'
 document.querySelectorAll('.page-nav a').forEach(a=>{if(a.dataset.page===pageMode)a.classList.add('active')});
 if(pageMode==='home'){document.getElementById('homeTiles').style.display='grid';}else{document.getElementById('homeTiles').style.display='none';}
 render();
+</script><script>
+// 表現集ページの初期表示フォールバック。通常の初期化で一覧が描画されなかった場合に再描画する。
+window.addEventListener('load', function () {
+  if ((location.pathname.split('/').pop() || '').toLowerCase() !== 'phrases.html') return;
+  const content = document.getElementById('content');
+  if (!content || content.querySelector('#phraseGenre')) return;
+  try {
+    if (typeof renderPhrases === 'function') renderPhrases(content);
+    if (typeof save === 'function') save();
+  } catch (err) {
+    content.innerHTML = '<div class="card"><h2>表現集を読み込めませんでした</h2><p>ページの読み込み中にエラーが発生しました。ブラウザを再読み込みしてください。</p><details><summary>エラー情報</summary><pre style="white-space:pre-wrap;overflow-wrap:anywhere"></pre></details></div>';
+    const pre = content.querySelector('pre'); if (pre) pre.textContent = String(err && (err.stack || err.message) || err);
+  }
+});
 </script></body></html>
