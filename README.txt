@@ -1,7 +1,5 @@
-英語学習アプリ（ページ分割版）
+Learning English app - updated simple conversation phrases
 
-GitHub Pagesへ反映する場合：このフォルダ内の6ファイルをリポジトリのルートに配置してください。
-index.html がホームです。各ページは quiz.html / writing.html / speaking.html / phrases.html / review.html です。
+Upload all six HTML files to the root of your existing GitHub Pages repository and replace files with the same names. Keep the same site address and do not delete your repository. The app continues to use the existing localStorage key: feelEnglishStore.
 
-すべてのページで同じ localStorage キー feelEnglishStore を利用するため、同じドメイン上では学習履歴を共有します。
-既存データを保持するため、ブラウザのサイトデータを削除しないでください。
+New phrases are in 表現集 under categories for discrimination/human rights, height, ADHD, listening to worries, and expressing your own feelings. Sentences are intentionally short and have Japanese translations.
