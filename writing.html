@@ -55,7 +55,17 @@ const questions=[
 {jp:"最後にうまくいかなかったとしても、試してみたことを後悔するとは思わない。",en:"Even if things don't work out in the end, I don't think I'll regret trying.",note:"even if = たとえ〜でも／regret -ing = 〜したことを後悔する",opts:["Even if things don't work out in the end, I don't think I'll regret trying.","Even things don't work, I won't regret to try.","Even if not go well at end, I don't regret try."],category:"将来・関係"},
 {jp:"君に恋愛感情を持つようにプレッシャーをかけたいわけじゃない。",en:"I don't want to pressure you to develop romantic feelings.",note:"pressure someone to do = 人に〜するようプレッシャーをかける",opts:["I don't want to pressure you to develop romantic feelings.","I don't want pressure you for romantic feelings.","I don't want you develop romantic feeling pressure."],category:"プレッシャーをかけない"},
 {jp:"焦らずに時間をかけて、これからどうなるか一緒に見ていきたい。",en:"I'd like us to take our time and see how things go.",note:"take our time = 焦らず時間をかける／see how things go = 様子を見る",opts:["I'd like us to take our time and see how things go.","I'd like we take time and see what goes.","I want to take times and see how goes things."],category:"ゆっくり進む"}
-];
+,
+{jp:'「君のことを大切に思っているよ。」',en:'I care about you.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['I care about you.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・気持ち・話し合い'},
+{jp:'「理解したいんだ。」',en:'I want to understand.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['I want to understand.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・気持ち・話し合い'},
+{jp:'「もう少し聞かせてくれる？」',en:'Can you tell me more?',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['Can you tell me more?', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・気持ち・話し合い'},
+{jp:'「今の君のままが好きだよ。」',en:'I like you as you are.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['I like you as you are.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・自分らしさ・不安'},
+{jp:'「話を聞くよ。」',en:'I’m here to listen.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['I’m here to listen.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・自分らしさ・不安'},
+{jp:'「この問題を真剣に受け止めているよ。」',en:'I take this seriously.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['I take this seriously.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・政治・人権'},
+{jp:'「誰に対しても、そんなことがあってはいけないよ。」',en:'That shouldn’t happen to anyone.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['That shouldn’t happen to anyone.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・政治・人権'},
+{jp:'「君が心配する理由は分かるよ。」',en:'I understand your concern.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['I understand your concern.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・政治・人権'},
+{jp:'「焦らず進めばいいよ。」',en:'We can take our time.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['We can take our time.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・関係・将来'},
+{jp:'「話してくれてうれしいよ。」',en:'I’m glad you told me.',note:'短い版：短くても自然に気持ちを伝える表現。',opts:['I’m glad you told me.', 'I want understand you.', 'I understand about you.', 'I am understand you.'],category:'短い版・自分らしさ・不安'}];
 const categoryByIndex=["関係・気持ち","英語で気持ちを伝える","プレッシャーをかけない","一緒に考える","違い・価値観","違い・価値観","違い・価値観","関係・気持ち","話し合い・気持ち","ゆっくり進む"];
 questions.forEach((q,i)=>{if(!q.category)q.category=categoryByIndex[i]||"話し合い・気持ち"});
 const phrases=[["気持ちを伝える","I care about you, and I want to be honest with you.","君のことを大切に思っているし、正直に話したい。"],["英語が難しいとき","Sometimes I struggle to explain my feelings in English.","英語で気持ちを説明するのが難しいときがある。"],["相手の考えを聞く","I want to understand how you see things.","君がどう考えているのか理解したい。"],["プレッシャーをかけない","I don't want to pressure you to give me an answer.","答えを出すようにプレッシャーをかけたいわけじゃない。"],["一緒に考える","I want us to figure out what's best for both of us.","二人にとって何が一番いいか一緒に考えたい。"],["違いを話し合う","I'm open to talking about our differences.","意見の違いについて話し合うことに前向きだよ。"],["相手の意見を尊重する","I'm not trying to dismiss your point of view.","君の考えを軽視しようとしているわけじゃない。"],["正直さを伝える","I might not always find the right words, but I'm trying to be honest.","いつも適切な言葉が見つかるとは限らないけど、正直に伝えようとしている。"],["急がない","I don't think we need to have all the answers right now.","今すべての答えを出す必要はないと思う。"],["関係を大切にする","I want to take our relationship seriously.","僕たちの関係を真剣に考えたい。"],
@@ -85,6 +95,26 @@ const phrases=[["気持ちを伝える","I care about you, and I want to be hone
 ["自分の気持ちを伝える","I wasn't trying to make light of your worries.","マルちゃんの不安を軽く考えていたわけじゃないよ。"],
 ["自分の気持ちを伝える","I wanted to help, but I didn't know what to say.","力になりたかったけど、何と言えばいいか分からなかったんだ。"],
 ["自分の気持ちを伝える","I'm still learning how to understand you better.","もっとマルちゃんを理解する方法を、今も学んでいるところだよ。"],
+['短い版・気持ち','I care about you.','君のことを大切に思っているよ。'],
+['短い版・気持ち','I want to be honest.','正直でいたいんだ。'],
+['短い版・話し合い','I want to understand.','理解したいんだ。'],
+['短い版・話し合い','I see it differently.','僕は違う見方をしているよ。'],
+['短い版・話し合い','Can you tell me more?','もう少し聞かせてくれる？'],
+['短い版・身長','Our height difference is okay with me.','僕は身長差を気にしていないよ。'],
+['短い版・身長','I like you as you are.','今の君のままが好きだよ。'],
+['短い版・ADHD・不安','I’m here to listen.','話を聞くよ。'],
+['短い版・ADHD・不安','You can talk to me.','僕に話していいんだよ。'],
+['短い版・ADHD・不安','You don’t have to pretend.','無理に平気なふりをしなくていいよ。'],
+['短い版・政治・人権','I take this seriously.','この問題を真剣に受け止めているよ。'],
+['短い版・政治・人権','That shouldn’t happen to anyone.','誰に対しても、そんなことがあってはいけないよ。'],
+['短い版・政治・人権','I know this is a real problem.','これは実際にある問題だと分かっているよ。'],
+['短い版・政治・人権','I understand your concern.','君が心配する理由は分かるよ。'],
+['短い版・政治・人権','I want to hear your view.','君の見方を聞きたいよ。'],
+['短い版・不安を受け止める','I might not know what to say.','何と言えばいいか分からないかもしれない。'],
+['短い版・不安を受け止める','I’m not judging you.','君を否定したいわけじゃないよ。'],
+['短い版・関係','We can take our time.','焦らず進めばいいよ。'],
+['短い版・関係','One step at a time.','一歩ずつ進もう。'],
+['短い版・関係','I’m glad you told me.','話してくれてうれしいよ。'],
 ["短い版・気持ちを伝える","I want to understand you better.","もっと君のことを理解したい。"],
 ["短い版・気持ちを伝える","I might not understand everything, but I want to understand you.","全部は理解できないかもしれないけど、君のことを理解したい。"],
 ["短い版・身長","I don't think our height difference matters.","僕は二人の身長差は問題じゃないと思うよ。"],
@@ -255,10 +285,10 @@ function renderConversation(el){const convo=conversations[conversationIndex%conv
 }
 function startRecognition(q,el){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){el.querySelector('#micStatus').className='status warn';el.querySelector('#micStatus').textContent='このChrome環境では音声認識が使えないようです。キーボードのマイク（音声入力）で入力するか、お手本を聞いて声に出して練習してね。';return}const status=el.querySelector('#micStatus'),heard=el.querySelector('#heard'),compare=el.querySelector('#compare');const rec=new SR();rec.lang='en-US';rec.interimResults=false;rec.maxAlternatives=1;status.className='status warn';status.textContent='聞き取り中… 英語で話してね。初回はマイクの許可を求められることがあります。';heard.textContent='';compare.textContent='';rec.onresult=e=>{const said=e.results[0][0].transcript;heard.textContent=said;analyzeGrammarAnswer(said,q.en,'speaking-speech');status.className='status good';status.textContent='音声を文字にできたよ！';const norm=s=>s.toLowerCase().replace(/[^a-z0-9\s']/g,' ').split(/\s+/).filter(Boolean);const expected=norm(q.en),actual=norm(said),set=new Set(actual);const matched=expected.filter(w=>set.has(w)).length;const pct=Math.round(matched/Math.max(expected.length,1)*100);compare.textContent=`お手本の単語と約${pct}%一致（目安）`;el.querySelector('#revealModel').click()};rec.onerror=e=>{status.className='status warn';status.textContent=e.error==='not-allowed'?'マイクが許可されていません。Chromeのサイト設定でマイクを許可してね。':e.error==='network'?'音声認識の通信に失敗したようです。ネット接続を確認してね。':'音声を認識できませんでした。もう一度試すか、キーボードのマイクを使ってね。'};rec.onend=()=>{if(status.textContent==='聞き取り中… 英語で話してね。初回はマイクの許可を求められることがあります。')status.textContent='認識が終了しました。必要ならもう一度マイクを押してね。'};try{rec.start()}catch(e){status.className='status warn';status.textContent='マイクを開始できませんでした。少し待ってから再度試してね。'}}
 function renderPhrases(el){
- const genres=['すべて',...new Set(phrases.map(p=>p[0]))];
+ const phraseGenreGroup=g=>{if(g.startsWith('短い版'))return '短い版';if(/身長|自分らしさ|ADHD|不安|心配/.test(g))return '自分らしさ・不安';if(/差別|人権|政治/.test(g))return '政治・人権';if(/違い|意見|話し合い|相手の考え|正直|気持ち|プレッシャー|一緒に考える|英語が難しい/.test(g))return '気持ち・話し合い';if(/関係|将来|未来|一歩|急がない|焦らず/.test(g))return '関係・将来';return '日常で使う表現'};const genres=['すべて','短い版','気持ち・話し合い','自分らしさ・不安','政治・人権','関係・将来','日常で使う表現'];
  el.innerHTML=`<div class="card"><h2>表現集</h2><p class="muted">ジャンルで絞り込んだり、英語・日本語で検索できるよ。🔊で発音も確認しよう。</p><label for="phraseGenre" class="muted">ジャンル</label><select id="phraseGenre" style="width:100%;padding:11px;border:1px solid var(--line);border-radius:12px;margin:5px 0 10px;background:white;font:inherit">${genres.map(g=>`<option>${escapeHtml(g)}</option>`).join('')}</select><input id="phraseSearch" placeholder="表現を検索（英語・日本語）" aria-label="表現を検索"><div id="list"></div><h2 style="margin-top:22px">辞書・表現検索</h2><p class="muted">アプリ内の表現・クイズ文から検索できるよ。よく使う単語は意味・品詞・発音・例文まで確認できるよ。収録外の語句はオンライン辞書も使えるよ。</p><div class="row"><input id="dictionarySearch" placeholder="英単語・フレーズを入力" aria-label="辞書検索" style="flex:1;min-width:180px"><button class="primary" id="dictionaryGo">検索</button></div><div id="dictionaryResults"></div><div id="externalDictionary" style="margin-top:8px"></div></div>`;
  const list=el.querySelector('#list'), genre=el.querySelector('#phraseGenre'), search=el.querySelector('#phraseSearch');
- function drawPhrases(){const term=search.value.trim().toLowerCase();const filtered=phrases.filter(p=>(genre.value==='すべて'||p[0]===genre.value)&&(!term||p.join(' ').toLowerCase().includes(term)));list.innerHTML='';if(!filtered.length){list.innerHTML='<p class="muted">該当する表現がありません。</p>';return}filtered.forEach(p=>{const d=document.createElement('div');d.className='phrase';d.innerHTML=`<div class="muted">${escapeHtml(p[0])}</div><div style="font-weight:700;margin:4px 0">${escapeHtml(p[1])}</div><div>${escapeHtml(p[2])}</div><div class="speechbuttons">${speakButton(p[1])}<button class="smallbtn" data-review="${escapeHtml(p[1])}">${(store.review||[]).includes(p[1])?'★ 復習に登録済み':'☆ 復習に追加'}</button></div>`;list.appendChild(d)});addSpeakEvents(list);list.querySelectorAll('[data-review]').forEach(b=>b.onclick=()=>{const v=b.dataset.review;store.review=store.review||[];store.review.includes(v)?store.review=store.review.filter(x=>x!==v):store.review.push(v);save();drawPhrases()})}
+ function drawPhrases(){const term=search.value.trim().toLowerCase();const filtered=phrases.filter(p=>(genre.value==='すべて'||phraseGenreGroup(p[0])===genre.value)&&(!term||p.join(' ').toLowerCase().includes(term)));list.innerHTML='';if(!filtered.length){list.innerHTML='<p class="muted">該当する表現がありません。</p>';return}filtered.forEach(p=>{const d=document.createElement('div');d.className='phrase';d.innerHTML=`<div class="muted">${escapeHtml(phraseGenreGroup(p[0]))}${p[0].startsWith('短い版')?' · 短い版':''}</div><div style="font-weight:700;margin:4px 0">${escapeHtml(p[1])}</div><div>${escapeHtml(p[2])}</div><div class="speechbuttons">${speakButton(p[1])}<button class="smallbtn" data-review="${escapeHtml(p[1])}">${(store.review||[]).includes(p[1])?'★ 復習に登録済み':'☆ 復習に追加'}</button></div>`;list.appendChild(d)});addSpeakEvents(list);list.querySelectorAll('[data-review]').forEach(b=>b.onclick=()=>{const v=b.dataset.review;store.review=store.review||[];store.review.includes(v)?store.review=store.review.filter(x=>x!==v):store.review.push(v);save();drawPhrases()})}
  genre.onchange=drawPhrases;search.oninput=drawPhrases;drawPhrases();
  const miniDictionary=[
  {word:'care',pos:'動詞・名詞',pron:'/ker/',meaning:'気にかける、大切に思う／気遣い',example:'I care about you.',jp:'君のことを大切に思っている。',note:'care about + 人・物 で「〜を大切に思う」。'},
