@@ -228,6 +228,37 @@ const adjectiveItems=[
 {prompt:'a ___ mistake（重大な間違い）',jp:'重大な間違い',answer:'serious',opts:['seriously','serious','seriousness','series'],note:'a serious mistake = 重大な間違い。serious は形容詞。'},
 {prompt:'be ___ about the future（将来について不安だ）',jp:'将来について不安だ',answer:'worried',opts:['worry','worried','worrying','worriedly'],note:'be worried about = 〜について心配している。'}
 ];
+
+// 表現集のフレーズを、他の学習モードでも使える共通問題として追加（既存英文は重複登録しない）
+(function addPhrasebookToPractice(){
+  const normalizeEnglish = value => String(value || '').replace(/[’‘]/g, "'").replace(/\s+/g, ' ').trim().toLowerCase().replace(/[.!?]+$/, '');
+  const known = new Set(questions.map(q => normalizeEnglish(q.en)));
+  const phraseRows = Array.isArray(phrases) ? phrases : [];
+  for (const row of phraseRows) {
+    if (!Array.isArray(row) || row.length < 3) continue;
+    const [category, en, jp] = row;
+    const key = normalizeEnglish(en);
+    if (!key || known.has(key)) continue;
+    // 選択肢は既存の英文から重複なく用意。英作文・スピーキングでは日本語と模範英文を利用する。
+    const distractors = [];
+    for (const q of questions) {
+      const candidate = String(q.en || '').trim();
+      if (candidate && normalizeEnglish(candidate) !== key && !distractors.some(x => normalizeEnglish(x) === normalizeEnglish(candidate))) {
+        distractors.push(candidate);
+      }
+      if (distractors.length >= 3) break;
+    }
+    questions.push({
+      jp: String(jp || ''),
+      en: String(en || ''),
+      note: '表現集から追加したフレーズ。意味と使い方を確認し、英作文や発話でも練習しよう。',
+      opts: [String(en || ''), ...distractors],
+      category: String(category || '表現集')
+    });
+    known.add(key);
+  }
+})();
+
 const adverbItems=[
 {prompt:'___ understand（よく理解する）',jp:'よく理解する',answer:'clearly',opts:['clear','clearly','clarity','clearness'],note:'clearly は動詞 understand を説明し、「はっきりと理解する」。'},
 {prompt:'___ appreciate（本当に感謝する）',jp:'本当に感謝する',answer:'really',opts:['real','really','reality','realize'],note:'really appreciate = 本当に感謝する。really は動詞 appreciate を強める。'},
