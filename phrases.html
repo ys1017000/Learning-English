@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>気持ちを伝える英語 - 表現集</title>
+  <title>心をつなぐ英語表現 - 表現集</title>
   <style>
     :root {
       --primary: #4f46e5;
@@ -158,7 +158,6 @@
     .btn-record.recording { background: #dc2626; animation: pulse 1s infinite; }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
-    /* Quick Nav Buttons */
     .nav-buttons-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -200,17 +199,32 @@
     .cal-day.today { border: 2px solid var(--primary); }
     .weakness-list { list-style: none; }
     .weakness-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; }
+    
+    .progress-bar-container {
+      width: 100%;
+      background: #e2e8f0;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
   </style>
 </head>
 <body>
   <header>
-    <a href="index.html" class="logo">心に届く英語表現</a>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
     <span id="streakBadge" style="font-size:0.8rem; background:#e0e7ff; color:#3730a3; padding:4px 8px; border-radius:12px;">🔥 0日連続学習</span>
   </header>
 
   <div class="container">
     
-    <input type="text" id="searchInput" class="search-box" placeholder="キーワード検索 (例: 感謝, coffee, regret)...">
+    <input type="text" id="searchInput" class="search-box" placeholder="キーワード検索 (例: 味方, would, strong, coffee)...">
     <div id="phrasesList"></div>
 
   </div>
@@ -225,51 +239,41 @@
 
   <script>
     const phrases = [
-  ["相手に感謝を伝えるとき", "Thank you for the note.", "メッセージをありがとうございます。"],
-  ["相手に感謝を伝えるとき", "Thank you for opening up to me.", "私に心を開いて打ち明けてくれてありがとうございます。"],
-  ["相手に感謝を伝えるとき", "I really appreciate your quick reply.", "迅速なご返信、本当に感謝いたします。"],
-  ["相手に感謝を伝えるとき", "Thanks for taking the time to talk with me.", "お時間を割いてお話ししていただきありがとうございます。"],
-  ["相手に感謝を伝えるとき", "I can't thank you enough for your help.", "ご助言・ご協力いただき、感謝してもしきれません。"],
-  ["共感する", "I understand how you feel.", "お気持ちよく分かります。"],
-  ["共感する", "That must have been hard.", "それは大変でしたね。"],
-  ["共感する", "I know what you mean.", "仰ること、とてもよく分かります。"],
-  ["共感する", "I'd feel the same way if I were in your shoes.", "もし私があなたの立場でも、全く同じように感じると思います。"],
-  ["共感する", "It totally makes sense that you feel that way.", "あなたがそう感じるのも当然だと思います。"],
-  ["励ます・応援する", "You got this!", "あなたならできますよ！ / 応援しています！"],
-  ["励ます・応援する", "I'm always here for you.", "いつでも力になりますよ。"],
+  ["恋人・パートナーへの思いやり", "I'm always on your side.", "私はどんな時もあなたの味方だよ。"],
+  ["恋人・パートナーへの思いやり", "Take your time, there's no rush.", "焦らなくていいから、あなたのペースで大丈夫だよ。"],
+  ["恋人・パートナーへの思いやり", "Thank you for being you.", "そのままのあなたでいてくれてありがとう。"],
+  ["恋人・パートナーへの思いやり", "How was your day? I'm here if you want to talk.", "今日はどんな一日だった？ 話したいことがあったらいつでも聞くよ。"],
+  ["恋人・パートナーへの思いやり", "You don't have to carry it all by yourself.", "一人で全部抱え込まなくていいんだよ。"],
+  ["恋人・パートナーへの思いやり", "You did your best today. Get some good rest.", "今日も一日本当によくがんばったね。ゆっくり休んでね。"],
+  ["愛情・絆を深める表現", "I'm so grateful to have you in my life.", "あなたと一緒にいられて、心から幸せだよ。"],
+  ["愛情・絆を深める表現", "I feel safest when I'm with you.", "あなたと一緒にいる時が一番安心できるよ。"],
+  ["愛情・絆を深める表現", "You make every ordinary day feel special.", "あなたといると、何気ない毎日が特別な日になるよ。"],
+  ["愛情・絆を深める表現", "I love how we can just be ourselves together.", "お互い素のままでいられる関係がすごく愛おしいよ。"],
+  ["愛情・絆を深める表現", "Text me when you get home so I know you're safe.", "無事に着いたか心配だから、家に着いたらLINEしてね。"],
+  ["would / could 恋人同士の会話", "Would you like to stay in and relax tonight?", "今夜はお家でまったり過ごさない？"],
+  ["would / could 恋人同士の会話", "I would do anything to make you feel better.", "あなたの気持ちが少しでも楽になるなら、何でもするよ。"],
+  ["would / could 恋人同士の会話", "Could I get a hug?", "ぎゅーってハグしてもいい？"],
+  ["would / could 恋人同士の会話", "Would you mind if I held your hand?", "手を繋いでもいいかな？"],
+  ["would / could 恋人同士の会話", "Could you let me know if you need anything?", "何か必要なものがあったら教えてくれる？"],
+  ["would / could 恋人同士の会話", "Where would you like to go on our next day off?", "次の休みはどこにお出かけしたい？"],
+  ["単語・熟語 (形容詞＋名詞)", "strong coffee", "濃いコーヒー"],
+  ["単語・熟語 (形容詞＋名詞)", "difficult decision", "難しい決断"],
+  ["単語・熟語 (形容詞＋名詞)", "heavy rain", "激しい雨"],
+  ["単語・熟語 (形容詞＋名詞)", "bright idea", "素晴らしい閃き・グッドアイデア"],
+  ["単語・熟語 (形容詞＋名詞)", "golden opportunity", "絶好の機会・チャンス"],
+  ["単語・熟語 (副詞＋動詞)", "clearly understand", "明確に理解する"],
+  ["単語・熟語 (副詞＋動詞)", "deeply regret", "深く後悔する"],
+  ["単語・熟語 (副詞＋動詞)", "strongly recommend", "強くお勧めする"],
+  ["単語・熟語 (副詞＋動詞)", "sincerely hope", "心から願う"],
+  ["友達・カジュアル雑談", "What have you been up to?", "最近どう過ごしてた？"],
+  ["友達・カジュアル雑談", "We should totally hang out this weekend!", "今週末、絶対遊びに行こうよ！"],
+  ["友達・カジュアル雑談", "That's hilarious!", "それ超ウケる／めちゃくちゃ面白いね！"],
+  ["友達・カジュアル雑談", "Let me know when you're free.", "手が空いたら教えてね。"],
+  ["共感する・寄り添う", "I understand how you feel.", "あなたの気持ち、すごくよく分かるよ。"],
+  ["共感する・寄り添う", "That must have been really hard.", "それは本当につらかったね。"],
+  ["共感する・寄り添う", "I'd feel the same way if I were in your shoes.", "もし私があなたの立場でも、きっと同じように感じると思う。"],
   ["励ます・応援する", "Don't be so hard on yourself.", "自分を責めすぎないでね。"],
-  ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてくださいね。"],
-  ["励ます・応援する", "You've come a long way.", "ここまで本当に良く頑張ってきましたね。"],
-  ["賛成・同意する", "I totally agree with you.", "全く同感です。"],
-  ["賛成・同意する", "That makes sense.", "なるほど、理にかなっていますね。"],
-  ["賛成・同意する", "You took the words right out of my mouth.", "まさに私が言おうとしていた通りです。"],
-  ["賛成・同意する", "I couldn't have said it better.", "これ以上ないほど適切な表現ですね。"],
-  ["丁寧に断る", "I'd love to, but I have other plans.", "行きたいのですが、あいにく先約がありまして。"],
-  ["丁寧に断る", "I'm afraid I can't make it.", "あいにく都合がつきそうにありません。"],
-  ["丁寧に断る", "Thank you for asking, but I'll have to pass this time.", "お声がけいただき嬉しいですが、今回は見送らせてください。"],
-  ["自分の意見を言う", "In my opinion, it's worth a try.", "私の意見では、やってみる価値はあると思います。"],
-  ["自分の意見を言う", "As far as I'm concerned, we should wait.", "私としては、待つべきだと思います。"],
-  ["自分の意見を言う", "From my perspective, this looks promising.", "私の視点からは、これはとても見込みがあるように思えます。"],
-  ["雑談・近況報告", "How have you been lately?", "最近どう過ごしていましたか？"],
-  ["雑談・近況報告", "Nothing much, just the usual.", "相変わらず、普段通りですよ。"],
-  ["雑談・近況報告", "How is work treating you?", "最近お仕事の調子はいかがですか？"],
-  ["雑談・近況報告", "It's been a while! Great to see you.", "お久しぶりです！お会いできて嬉しいです。"],
-  ["形容詞＋名詞", "strong coffee", "濃いコーヒー"],
-  ["形容詞＋名詞", "difficult decision", "難しい決断"],
-  ["形容詞＋名詞", "heavy rain", "激しい雨"],
-  ["形容詞＋名詞", "bright idea", "素晴らしい閃き・グッドアイデア"],
-  ["形容詞＋名詞", "golden opportunity", "絶好の機会・チャンス"],
-  ["形容詞＋名詞", "vital role", "極めて重要な役割"],
-  ["形容詞＋名詞", "slight difference", "わずかな違い"],
-  ["形容詞＋名詞", "high priority", "高い優先度"],
-  ["副詞＋動詞", "clearly understand", "明確に理解する"],
-  ["副詞＋動詞", "deeply regret", "深く後悔する"],
-  ["副詞＋動詞", "strongly recommend", "強くお勧めする"],
-  ["副詞＋動詞", "sincerely hope", "心から願う"],
-  ["副詞＋動詞", "fully appreciate", "十分に感謝する・理解する"],
-  ["副詞＋動詞", "firmly believe", "固く信じる"],
-  ["副詞＋動詞", "greatly improve", "大幅に改善する"],
-  ["副詞＋動詞", "eagerly await", "心待ちにする"]
+  ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてね。"]
 ];
     
     function renderPhrases(filterText = '') {
