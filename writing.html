@@ -51,25 +51,30 @@
       gap: 4px;
     }
     nav a.active { color: var(--primary); font-weight: bold; }
-    .container { max-width: 600px; margin: 0 auto; padding: 1.5rem; }
+    .container { max-width: 600px; margin: 0 auto; padding: 1.25rem; }
     .card {
       background: var(--card-bg);
       border-radius: var(--radius);
-      padding: 1.5rem;
+      padding: 1.25rem;
       margin-bottom: 1.25rem;
       border: 1px solid var(--border);
     }
-    .question { font-size: 1.1rem; font-weight: bold; margin-bottom: 1rem; }
-    textarea {
-      width: 100%;
-      height: 100px;
-      padding: 0.75rem;
+    .question { font-size: 1.15rem; font-weight: bold; margin-bottom: 1rem; color: #0f172a; }
+    .options { display: flex; flex-direction: column; gap: 0.75rem; }
+    .option-btn {
+      padding: 0.85rem 1rem;
       border: 1px solid var(--border);
       border-radius: 8px;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      resize: vertical;
+      background: #fff;
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
     }
+    .option-btn:hover { background: #f1f5f9; border-color: var(--primary); }
+    .feedback { margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none; font-weight: bold; }
+    .feedback.correct { background: #dcfce7; color: #15803d; }
+    .feedback.wrong { background: #fee2e2; color: #b91c1c; }
     .btn {
       display: inline-block;
       width: 100%;
@@ -82,6 +87,16 @@
       border: none;
       cursor: pointer;
     }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      resize: vertical;
+    }
     .answer-box {
       margin-top: 1rem;
       padding: 1rem;
@@ -89,12 +104,42 @@
       border-radius: 8px;
       display: none;
     }
+    .search-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .phrase-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border);
+    }
+    .category-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 0.4rem;
+    }
+    .en-text { font-size: 1.05rem; font-weight: bold; color: #0f172a; }
+    .ja-text { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
+    .btn-record { background: #ef4444; }
+    .btn-record.recording { background: #dc2626; animation: pulse 1s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
   </style>
 </head>
 <body>
   <header>✍️ 実践英作文</header>
 
   <div class="container">
+    
     <div class="card">
       <div id="categoryLabel" style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">カテゴリー</div>
       <div class="question" id="promptText">問題文を読み込み中...</div>
@@ -107,35 +152,50 @@
         <button class="btn" id="nextBtn" style="margin-top:1rem; background:#475569;">次の問題へ</button>
       </div>
     </div>
+
   </div>
 
   <nav>
-    <a href="index.html">🏠 ホーム</a>
-    <a href="quiz.html">❓ クイズ</a>
+    <a href="index.html" class="">🏠 ホーム</a>
+    <a href="quiz.html" class="">❓ クイズ</a>
     <a href="writing.html" class="active">✍️ 英作文</a>
-    <a href="speaking.html">🎙️ スピーキング</a>
-    <a href="phrases.html">📚 表現集</a>
+    <a href="speaking.html" class="">🎙️ スピーキング</a>
+    <a href="phrases.html" class="">📚 表現集</a>
   </nav>
 
   <script>
     const phrases = [
   ["相手に感謝を伝えるとき", "Thank you for the note.", "メッセージをありがとうございます。"],
   ["相手に感謝を伝えるとき", "Thank you for opening up to me.", "私に心を開いて打ち明けてくれてありがとうございます。"],
+  ["相手に感謝を伝えるとき", "I really appreciate your quick reply.", "迅速なご返信、本当に感謝いたします。"],
+  ["相手に感謝を伝えるとき", "Thanks for taking the time to talk with me.", "お時間を割いてお話ししていただきありがとうございます。"],
+  ["相手に感謝を伝えるとき", "I can't thank you enough for your help.", "ご助言・ご協力いただき、感謝してもしきれません。"],
   ["共感する", "I understand how you feel.", "お気持ちよく分かります。"],
   ["共感する", "That must have been hard.", "それは大変でしたね。"],
   ["共感する", "I know what you mean.", "仰ること、とてもよく分かります。"],
+  ["共感する", "I'd feel the same way if I were in your shoes.", "もし私があなたの立場でも、全く同じように感じると思います。"],
+  ["共感する", "It totally makes sense that you feel that way.", "あなたがそう感じるのも当然だと思います。"],
   ["励ます・応援する", "You got this!", "あなたならできますよ！ / 応援しています！"],
   ["励ます・応援する", "I'm always here for you.", "いつでも力になりますよ。"],
   ["励ます・応援する", "Don't be so hard on yourself.", "自分を責めすぎないでね。"],
+  ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてくださいね。"],
+  ["励ます・応援する", "You've come a long way.", "ここまで本当に良く頑張ってきましたね。"],
   ["賛成・同意する", "I totally agree with you.", "全く同感です。"],
   ["賛成・同意する", "That makes sense.", "なるほど、理にかなっていますね。"],
+  ["賛成・同意する", "You took the words right out of my mouth.", "まさに私が言おうとしていた通りです。"],
+  ["賛成・同意する", "I couldn't have said it better.", "これ以上ないほど適切な表現ですね。"],
   ["丁寧に断る", "I'd love to, but I have other plans.", "行きたいのですが、あいにく先約がありまして。"],
   ["丁寧に断る", "I'm afraid I can't make it.", "あいにく都合がつきそうにありません。"],
+  ["丁寧に断る", "Thank you for asking, but I'll have to pass this time.", "お声がけいただき嬉しいですが、今回は見送らせてください。"],
   ["自分の意見を言う", "In my opinion, it's worth a try.", "私の意見では、やってみる価値はあると思います。"],
   ["自分の意見を言う", "As far as I'm concerned, we should wait.", "私としては、待つべきだと思います。"],
+  ["自分の意見を言う", "From my perspective, this looks promising.", "私の視点からは、これはとても見込みがあるように思えます。"],
   ["雑談・近況報告", "How have you been lately?", "最近どう過ごしていましたか？"],
-  ["雑談・近況報告", "Nothing much, just the usual.", "相変わらず、普段通りですよ。"]
+  ["雑談・近況報告", "Nothing much, just the usual.", "相変わらず、普段通りですよ。"],
+  ["雑談・近況報告", "How is work treating you?", "最近お仕事の調子はいかがですか？"],
+  ["雑談・近況報告", "It's been a while! Great to see you.", "お久しぶりです！お会いできて嬉しいです。"]
 ];
+    
     let currentItem = null;
 
     function markStudy(item) {
@@ -179,6 +239,7 @@
 
       document.getElementById('nextBtn').addEventListener('click', loadWritingPrompt);
     });
+
   </script>
 </body>
 </html>

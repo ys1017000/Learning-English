@@ -34,7 +34,7 @@
       top: 0;
       z-index: 100;
     }
-    .logo { font-weight: 700; font-size: 1.25rem; color: var(--primary); text-decoration: none; }
+    .logo { font-weight: 700; font-size: 1.2rem; color: var(--primary); text-decoration: none; }
     nav {
       position: fixed;
       bottom: 0;
@@ -57,21 +57,55 @@
       gap: 4px;
     }
     nav a.active { color: var(--primary); font-weight: bold; }
-    .container { max-width: 600px; margin: 0 auto; padding: 1.5rem; }
+    .container { max-width: 600px; margin: 0 auto; padding: 1.25rem; }
     .card {
       background: var(--card-bg);
       border-radius: var(--radius);
-      padding: 1.5rem;
+      padding: 1.25rem;
       margin-bottom: 1.25rem;
       border: 1px solid var(--border);
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
-    .card h2 { font-size: 1.1rem; margin-bottom: 1rem; color: var(--text); }
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; text-align: center; }
-    .stat-number { font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+    .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; text-align: center; }
+    .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
     .stat-label { font-size: 0.75rem; color: var(--text-muted); }
+    
+    /* Quick Nav Buttons */
+    .nav-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .nav-card-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+    .nav-card-btn:hover, .nav-card-btn:active {
+      background: #e0e7ff;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .nav-card-btn .icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+
     .btn {
-      display: inline-block;
+      display: block;
       width: 100%;
       padding: 0.85rem;
       background: var(--primary);
@@ -82,7 +116,6 @@
       font-weight: 600;
       border: none;
       cursor: pointer;
-      margin-top: 0.5rem;
     }
     .btn:hover { background: var(--primary-hover); }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; margin-top: 1rem; }
@@ -97,10 +130,26 @@
 <body>
   <header>
     <a href="index.html" class="logo">心に届く英語表現</a>
-    <span id="streakBadge" style="font-size:0.85rem; background:#e0e7ff; color:#3730a3; padding:4px 8px; border-radius:12px;">🔥 0日連続学習</span>
+    <span id="streakBadge" style="font-size:0.8rem; background:#e0e7ff; color:#3730a3; padding:4px 8px; border-radius:12px;">🔥 0日連続学習</span>
   </header>
 
   <div class="container">
+    <!-- Quick Nav Grid -->
+    <div class="nav-buttons-grid">
+      <a href="quiz.html" class="nav-card-btn">
+        <span class="icon">❓</span>
+        <span>クイズ</span>
+      </a>
+      <a href="writing.html" class="nav-card-btn">
+        <span class="icon">✍️</span>
+        <span>英作文</span>
+      </a>
+      <a href="speaking.html" class="nav-card-btn">
+        <span class="icon">🎙️</span>
+        <span>スピーキング</span>
+      </a>
+    </div>
+
     <div class="card">
       <h2>📊 学習進捗サマリー</h2>
       <div class="stats-grid">
@@ -122,9 +171,9 @@
     <div class="card">
       <h2>📅 学習カレンダー (今月)</h2>
       <div style="display:flex; justify-content:space-between; align-items:center;">
-        <button id="prevMonthBtn" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">◀</button>
+        <button id="prevMonthBtn" style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding:0 8px;">◀</button>
         <span id="calMonthTitle" style="font-weight:bold;">2026年10月</span>
-        <button id="nextMonthBtn" style="background:none; border:none; cursor:pointer; font-size:1.2rem;">▶</button>
+        <button id="nextMonthBtn" style="background:none; border:none; cursor:pointer; font-size:1.2rem; padding:0 8px;">▶</button>
       </div>
       <div class="calendar-grid" id="calendarGrid"></div>
     </div>
@@ -151,20 +200,33 @@
     const phrases = [
   ["相手に感謝を伝えるとき", "Thank you for the note.", "メッセージをありがとうございます。"],
   ["相手に感謝を伝えるとき", "Thank you for opening up to me.", "私に心を開いて打ち明けてくれてありがとうございます。"],
+  ["相手に感謝を伝えるとき", "I really appreciate your quick reply.", "迅速なご返信、本当に感謝いたします。"],
+  ["相手に感謝を伝えるとき", "Thanks for taking the time to talk with me.", "お時間を割いてお話ししていただきありがとうございます。"],
+  ["相手に感謝を伝えるとき", "I can't thank you enough for your help.", "ご助言・ご協力いただき、感謝してもしきれません。"],
   ["共感する", "I understand how you feel.", "お気持ちよく分かります。"],
   ["共感する", "That must have been hard.", "それは大変でしたね。"],
   ["共感する", "I know what you mean.", "仰ること、とてもよく分かります。"],
+  ["共感する", "I'd feel the same way if I were in your shoes.", "もし私があなたの立場でも、全く同じように感じると思います。"],
+  ["共感する", "It totally makes sense that you feel that way.", "あなたがそう感じるのも当然だと思います。"],
   ["励ます・応援する", "You got this!", "あなたならできますよ！ / 応援しています！"],
   ["励ます・応援する", "I'm always here for you.", "いつでも力になりますよ。"],
   ["励ます・応援する", "Don't be so hard on yourself.", "自分を責めすぎないでね。"],
+  ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてくださいね。"],
+  ["励ます・応援する", "You've come a long way.", "ここまで本当に良く頑張ってきましたね。"],
   ["賛成・同意する", "I totally agree with you.", "全く同感です。"],
   ["賛成・同意する", "That makes sense.", "なるほど、理にかなっていますね。"],
+  ["賛成・同意する", "You took the words right out of my mouth.", "まさに私が言おうとしていた通りです。"],
+  ["賛成・同意する", "I couldn't have said it better.", "これ以上ないほど適切な表現ですね。"],
   ["丁寧に断る", "I'd love to, but I have other plans.", "行きたいのですが、あいにく先約がありまして。"],
   ["丁寧に断る", "I'm afraid I can't make it.", "あいにく都合がつきそうにありません。"],
+  ["丁寧に断る", "Thank you for asking, but I'll have to pass this time.", "お声がけいただき嬉しいですが、今回は見送らせてください。"],
   ["自分の意見を言う", "In my opinion, it's worth a try.", "私の意見では、やってみる価値はあると思います。"],
   ["自分の意見を言う", "As far as I'm concerned, we should wait.", "私としては、待つべきだと思います。"],
+  ["自分の意見を言う", "From my perspective, this looks promising.", "私の視点からは、これはとても見込みがあるように思えます。"],
   ["雑談・近況報告", "How have you been lately?", "最近どう過ごしていましたか？"],
-  ["雑談・近況報告", "Nothing much, just the usual.", "相変わらず、普段通りですよ。"]
+  ["雑談・近況報告", "Nothing much, just the usual.", "相変わらず、普段通りですよ。"],
+  ["雑談・近況報告", "How is work treating you?", "最近お仕事の調子はいかがですか？"],
+  ["雑談・近況報告", "It's been a while! Great to see you.", "お久しぶりです！お会いできて嬉しいです。"]
 ];
 
     function getStore() {
@@ -180,7 +242,6 @@
     function renderDashboard() {
       const store = getStore();
       
-      // Safety checks
       const studied = Array.isArray(store.studied) ? store.studied : [];
       const quizStats = store.quizStats || { correct: 0, total: 0 };
       
