@@ -5,6 +5,7 @@
 <title>使い方ガイド｜気持ちを伝える英語</title>
 <style>
 :root{--ink:#243047;--muted:#657187;--line:#dfe5ee;--bg:#f5f7fb;--accent:#4968d8;--soft:#edf1ff}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Noto Sans JP",sans-serif;line-height:1.65}header{padding:22px 16px 14px;max-width:900px;margin:auto}h1{font-size:1.5rem;margin:0 0 5px}header p{margin:0;color:var(--muted)}nav{display:flex;gap:7px;flex-wrap:wrap;max-width:900px;margin:0 auto;padding:0 12px 12px}nav a{font-size:.9rem;text-decoration:none;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 11px}.wrap{max-width:900px;margin:auto;padding:0 12px 32px}.card{background:#fff;border:1px solid var(--line);border-radius:18px;padding:18px;margin:0 0 14px;box-shadow:0 3px 12px #24304708}.card h2{font-size:1.15rem;margin:0 0 8px}.card h3{font-size:1rem;margin:14px 0 5px}.muted{color:var(--muted);font-size:.94rem}.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px}.step{background:#f8f9fd;border:1px solid var(--line);border-radius:13px;padding:13px}.num{display:inline-grid;place-items:center;width:28px;height:28px;background:var(--soft);color:var(--accent);border-radius:50%;font-weight:800;margin-right:6px}.btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;border-radius:12px;padding:10px 14px;font-weight:700;margin:5px 4px 0 0}.btn.secondary{background:var(--soft);color:var(--ink)}.phrase{padding:12px 0;border-bottom:1px solid var(--line)}.phrase:last-child{border-bottom:0}.en{font-weight:750}.jp{color:var(--muted)}details{border:1px solid var(--line);border-radius:12px;padding:10px 12px;margin-top:8px}summary{font-weight:700;cursor:pointer}ul{padding-left:1.2rem;margin:8px 0}strong{font-weight:750}
+button,a[href],[role="button"]{touch-action:manipulation;-webkit-tap-highlight-color:rgba(40,92,77,.16)}
 </style></head><body>
 <header><h1>🧭 使い方ガイド</h1><p>迷ったらここから。全部を使いこなす必要はないよ。</p></header>
 <nav><a href="https://ys1017000.github.io/Learning-English/index.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/index.html');return false;">🏠 ホーム</a><a href="https://ys1017000.github.io/Learning-English/quiz.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/quiz.html');return false;">🧠 英語クイズ</a><a href="https://ys1017000.github.io/Learning-English/writing.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/writing.html');return false;">✍️ 英作文</a><a href="https://ys1017000.github.io/Learning-English/speaking.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/speaking.html');return false;">🎙 声に出す</a><a href="https://ys1017000.github.io/Learning-English/phrases.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/phrases.html');return false;">📚 表現集</a><a href="https://ys1017000.github.io/Learning-English/review.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/review.html');return false;">🔁 復習リスト</a><a href="https://ys1017000.github.io/Learning-English/conversation.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/conversation.html');return false;" data-page="conversation">🗣️ 会話ログ</a><a href="https://ys1017000.github.io/Learning-English/guide.html" onclick="window.location.assign('https://ys1017000.github.io/Learning-English/guide.html');return false;">🧭 使い方</a></nav>
@@ -27,4 +28,42 @@ function run(){addToggle();process(document);if(lang==='en')document.documentEle
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
 new MutationObserver(ms=>{if(lang!=='en')return;for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1)process(n);}).observe(document.documentElement,{childList:true,subtree:true});
 })();
-</script></body></html>
+</script><script>
+/* Touch interaction fallback: run existing click handlers from the trusted touch pointerup,
+   then suppress the matching browser-generated click to avoid double actions. */
+(function installTouchTapFallback(){
+  if (window.__touchTapFallbackInstalled) return;
+  window.__touchTapFallbackInstalled = true;
+  const recent = new WeakMap();
+  const getTarget = node => {
+    const el = node instanceof Element ? node : node && node.parentElement;
+    return el && el.closest('button, a[href], [role="button"]');
+  };
+  document.addEventListener('pointerup', event => {
+    if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
+    const target = getTarget(event.target);
+    if (!target || target.matches(':disabled') || target.getAttribute('aria-disabled') === 'true') return;
+    if (target.closest('label') && !target.matches('button, a[href], [role="button"]')) return;
+    const stamp = Date.now();
+    recent.set(target, stamp);
+    try {
+      target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+    } catch (error) {
+      console.error('Touch tap fallback failed:', error);
+    }
+    setTimeout(() => { if (recent.get(target) === stamp) recent.delete(target); }, 900);
+  }, true);
+  document.addEventListener('click', event => {
+    if (!event.isTrusted) return;
+    const target = getTarget(event.target);
+    if (!target) return;
+    const stamp = recent.get(target);
+    if (stamp && Date.now() - stamp < 900) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      recent.delete(target);
+    }
+  }, true);
+})();
+</script>
+</body></html>
