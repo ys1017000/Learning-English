@@ -67,10 +67,97 @@
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
     .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
-    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; text-align: center; }
-    .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
-    .stat-label { font-size: 0.75rem; color: var(--text-muted); }
     
+    .genre-select-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .question { font-size: 1.15rem; font-weight: bold; margin-bottom: 1rem; color: #0f172a; }
+    .options { display: flex; flex-direction: column; gap: 0.75rem; }
+    .option-btn {
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option-btn:hover { background: #f1f5f9; border-color: var(--primary); }
+    .feedback { margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none; font-weight: bold; }
+    .feedback.correct { background: #dcfce7; color: #15803d; }
+    .feedback.wrong { background: #fee2e2; color: #b91c1c; }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--primary-hover); }
+    textarea {
+      width: 100%;
+      height: 100px;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      resize: vertical;
+    }
+    .answer-box {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f1f5f9;
+      border-radius: 8px;
+      display: none;
+    }
+    .search-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .phrase-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border);
+    }
+    .category-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 0.4rem;
+    }
+    .en-text { font-size: 1.05rem; font-weight: bold; color: #0f172a; }
+    .ja-text { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
+    .btn-record { background: #ef4444; }
+    .btn-record.recording { background: #dc2626; animation: pulse 1s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
     /* Quick Nav Buttons */
     .nav-buttons-grid {
       display: grid;
@@ -103,21 +190,9 @@
       font-size: 1.5rem;
       margin-bottom: 0.3rem;
     }
-
-    .btn {
-      display: block;
-      width: 100%;
-      padding: 0.85rem;
-      background: var(--primary);
-      color: white;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 8px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-    }
-    .btn:hover { background: var(--primary-hover); }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; text-align: center; }
+    .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); }
     .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; margin-top: 1rem; }
     .cal-day-header { font-size: 0.75rem; font-weight: bold; color: var(--text-muted); padding: 4px; }
     .cal-day { padding: 8px 0; font-size: 0.85rem; border-radius: 6px; background: #f1f5f9; }
@@ -134,6 +209,7 @@
   </header>
 
   <div class="container">
+    
     <!-- Quick Nav Grid -->
     <div class="nav-buttons-grid">
       <a href="quiz.html" class="nav-card-btn">
@@ -186,14 +262,15 @@
     </div>
 
     <a href="quiz.html" class="btn">🚀 今日の学習を始める (クイズ)</a>
+
   </div>
 
   <nav>
     <a href="index.html" class="active">🏠 ホーム</a>
-    <a href="quiz.html">❓ クイズ</a>
-    <a href="writing.html">✍️ 英作文</a>
-    <a href="speaking.html">🎙️ スピーキング</a>
-    <a href="phrases.html">📚 表現集</a>
+    <a href="quiz.html" class="">❓ クイズ</a>
+    <a href="writing.html" class="">✍️ 英作文</a>
+    <a href="speaking.html" class="">🎙️ スピーキング</a>
+    <a href="phrases.html" class="">📚 表現集</a>
   </nav>
 
   <script>
@@ -228,7 +305,7 @@
   ["雑談・近況報告", "How is work treating you?", "最近お仕事の調子はいかがですか？"],
   ["雑談・近況報告", "It's been a while! Great to see you.", "お久しぶりです！お会いできて嬉しいです。"]
 ];
-
+    
     function getStore() {
       try {
         return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {} };
@@ -327,6 +404,7 @@
         renderDashboard();
       });
     });
+
   </script>
 </body>
 </html>

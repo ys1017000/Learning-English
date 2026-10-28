@@ -7,9 +7,11 @@
   <style>
     :root {
       --primary: #4f46e5;
+      --primary-hover: #4338ca;
       --bg: #f8fafc;
       --card-bg: #ffffff;
       --text: #1e293b;
+      --text-muted: #64748b;
       --border: #e2e8f0;
       --radius: 12px;
     }
@@ -25,10 +27,14 @@
       background: var(--card-bg);
       padding: 1rem 1.5rem;
       border-bottom: 1px solid var(--border);
-      text-align: center;
-      font-weight: bold;
-      color: var(--primary);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
+    .logo { font-weight: 700; font-size: 1.2rem; color: var(--primary); text-decoration: none; }
     nav {
       position: fixed;
       bottom: 0;
@@ -42,7 +48,7 @@
       z-index: 100;
     }
     nav a {
-      color: #64748b;
+      color: var(--text-muted);
       text-decoration: none;
       font-size: 0.75rem;
       display: flex;
@@ -58,7 +64,23 @@
       padding: 1.25rem;
       margin-bottom: 1.25rem;
       border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     }
+    .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
+    
+    .genre-select-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
     .question { font-size: 1.15rem; font-weight: bold; margin-bottom: 1rem; color: #0f172a; }
     .options { display: flex; flex-direction: column; gap: 0.75rem; }
     .option-btn {
@@ -86,7 +108,9 @@
       font-weight: 600;
       border: none;
       cursor: pointer;
+      text-decoration: none;
     }
+    .btn:hover { background: var(--primary-hover); }
     textarea {
       width: 100%;
       height: 100px;
@@ -133,13 +157,61 @@
     .btn-record { background: #ef4444; }
     .btn-record.recording { background: #dc2626; animation: pulse 1s infinite; }
     @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+    /* Quick Nav Buttons */
+    .nav-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-bottom: 1.25rem;
+    }
+    .nav-card-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0.5rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+    .nav-card-btn:hover, .nav-card-btn:active {
+      background: #e0e7ff;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .nav-card-btn .icon {
+      font-size: 1.5rem;
+      margin-bottom: 0.3rem;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; text-align: center; }
+    .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; margin-top: 1rem; }
+    .cal-day-header { font-size: 0.75rem; font-weight: bold; color: var(--text-muted); padding: 4px; }
+    .cal-day { padding: 8px 0; font-size: 0.85rem; border-radius: 6px; background: #f1f5f9; }
+    .cal-day.active { background: #dbeafe; color: #1e40af; font-weight: bold; }
+    .cal-day.today { border: 2px solid var(--primary); }
+    .weakness-list { list-style: none; }
+    .weakness-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; }
   </style>
 </head>
 <body>
-  <header>❓ 3秒クイズ</header>
+  <header>
+    <a href="index.html" class="logo">心に届く英語表現</a>
+    <span id="streakBadge" style="font-size:0.8rem; background:#e0e7ff; color:#3730a3; padding:4px 8px; border-radius:12px;">🔥 0日連続学習</span>
+  </header>
 
   <div class="container">
     
+    <select id="genreSelect" class="genre-select-box"></select>
+
     <div class="card">
       <div id="categoryLabel" style="font-size:0.8rem; color:#64748b; margin-bottom:0.5rem;">カテゴリー</div>
       <div class="question" id="questionText">問題文を読み込み中...</div>
@@ -191,6 +263,29 @@
   ["雑談・近況報告", "It's been a while! Great to see you.", "お久しぶりです！お会いできて嬉しいです。"]
 ];
     
+    function populateGenreSelect() {
+      const select = document.getElementById('genreSelect');
+      if (!select) return;
+
+      const categories = Array.from(new Set(phrases.map(p => p[0])));
+      select.innerHTML = '<option value="ALL">✨ 全ジャンル (ランダム出題)</option>';
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = `📁 ${cat}`;
+        select.appendChild(opt);
+      });
+    }
+
+    function getFilteredPhrases() {
+      const select = document.getElementById('genreSelect');
+      const selectedGenre = select ? select.value : 'ALL';
+      if (selectedGenre === 'ALL') {
+        return phrases.filter(p => Array.isArray(p) && p.length >= 3);
+      }
+      return phrases.filter(p => Array.isArray(p) && p.length >= 3 && p[0] === selectedGenre);
+    }
+
     let currentQuestion = null;
 
     function getStore() {
@@ -232,7 +327,8 @@
     }
 
     function loadQuestion() {
-      const validPhrases = phrases.filter(p => Array.isArray(p) && p.length >= 3);
+      const validPhrases = getFilteredPhrases();
+      const allValid = phrases.filter(p => Array.isArray(p) && p.length >= 3);
       if (validPhrases.length === 0) return;
 
       currentQuestion = validPhrases[Math.floor(Math.random() * validPhrases.length)];
@@ -244,8 +340,8 @@
       optionsContainer.innerHTML = '';
 
       const choices = [currentQuestion[1]];
-      while (choices.length < 3) {
-        const rand = validPhrases[Math.floor(Math.random() * validPhrases.length)][1];
+      while (choices.length < 3 && allValid.length > choices.length) {
+        const rand = allValid[Math.floor(Math.random() * allValid.length)][1];
         if (!choices.includes(rand)) choices.push(rand);
       }
       choices.sort(() => Math.random() - 0.5);
@@ -283,7 +379,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      populateGenreSelect();
       loadQuestion();
+
+      document.getElementById('genreSelect').addEventListener('change', loadQuestion);
       document.getElementById('nextBtn').addEventListener('click', loadQuestion);
     });
 
