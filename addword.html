@@ -388,13 +388,11 @@
       localStorage.setItem('english_app_custom_phrases', JSON.stringify(customs));
     }
 
-    // Combined phrases list (base + user added custom phrases)
     function getAllPhrases() {
       const customs = getCustomPhrases();
       return [...customs, ...basePhrases];
     }
 
-    // For compatibility with global 'phrases' variable in pages
     const phrases = getAllPhrases();
 
     function getStore() {
@@ -428,7 +426,6 @@
     }
 
     
-    // Simple helper dictionary for offline auto-fetching simulation
     const autoTranslateDict = {
       "resilience": ["回復力、立ち直り力", "She showed great resilience in overcoming challenges."],
       "empathy": ["共感、感情移入", "Empathy is essential for building deep relationships."],
@@ -438,7 +435,7 @@
       "breathtaking": ["息をのむほど美しい", "The view from the top of the mountain was breathtaking."]
     };
 
-    function autoSearchWord() {
+    async function autoSearchWord() {
       const wordInput = document.getElementById('inputWord').value.trim();
       const statusBox = document.getElementById('searchStatus');
       
@@ -452,27 +449,36 @@
       statusBox.style.color = '#3730a3';
       statusBox.textContent = '🌐 オンライン辞書＆翻訳データを検索中...';
 
-      setTimeout(() => {
-        const lower = wordInput.toLowerCase();
-        let translatedJa = "";
-        let samplePhrase = `I want to learn more about "${wordInput}".`;
+      const lower = wordInput.toLowerCase();
+      let translatedJa = "";
+      let samplePhrase = `I want to learn more about "${wordInput}".`;
 
-        if (autoTranslateDict[lower]) {
-          translatedJa = autoTranslateDict[lower][0];
-          samplePhrase = autoTranslateDict[lower][1];
-        } else {
-          // Heuristic fallback for any word entered
+      if (autoTranslateDict[lower]) {
+        translatedJa = autoTranslateDict[lower][0];
+        samplePhrase = autoTranslateDict[lower][1];
+      } else {
+        // Try free translation API for meaning
+        try {
+          const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(wordInput)}&langpair=en|ja`;
+          const response = await fetch(url);
+          const data = await response.json();
+          if (data && data.responseData && data.responseData.translatedText) {
+            translatedJa = data.responseData.translatedText;
+          }
+        } catch(e) {}
+
+        if (!translatedJa || translatedJa.includes('MATCH NO')) {
           translatedJa = `「${wordInput}」の意味・翻訳`;
-          samplePhrase = `This is a great sentence using "${wordInput}".`;
         }
+        samplePhrase = `This is a great sentence using "${wordInput}".`;
+      }
 
-        document.getElementById('inputMeaning').value = translatedJa;
-        document.getElementById('inputExample').value = samplePhrase;
+      document.getElementById('inputMeaning').value = translatedJa;
+      document.getElementById('inputExample').value = samplePhrase;
 
-        statusBox.style.background = '#dcfce7';
-        statusBox.style.color = '#15803d';
-        statusBox.textContent = '✨ 辞書から意味と例文を自動取得しました！';
-      }, 700);
+      statusBox.style.background = '#dcfce7';
+      statusBox.style.color = '#15803d';
+      statusBox.textContent = '✨ 辞書から意味と例文を自動取得しました！';
     }
 
     function renderCustomList() {
@@ -526,7 +532,7 @@
 
         const newItem = ["マイ単語・フレーズ", word, meaning, example];
         const list = getCustomPhrases();
-        list.unshift(newItem); // Add to top
+        list.unshift(newItem);
         saveCustomPhrases(list);
 
         alert('🎉 マイ単語帳に新しく追加されました！クイズや英作文、発音チェックにすぐ反映されます。');

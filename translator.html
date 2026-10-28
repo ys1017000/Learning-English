@@ -279,13 +279,13 @@
     
     <div class="card">
       <h2>🌐 リアルタイム会話・音声翻訳ツール</h2>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">日本語を話す、または入力すると、英語に変換してネイティブ音声で読み上げます！</p>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">日本語または英語を入力・発話すると、オンライン翻訳で正確に変換し、ネイティブ音声で読み上げます！</p>
       
       <div style="margin-bottom:1rem;">
         <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">翻訳モード:</label>
         <select id="transDirection" class="genre-select-box" style="margin-top:4px; margin-bottom:0;">
-          <option value="ja2en">🇯🇵 日本語 ➔ 🇬🇧 英語 (音声読み上げ)</option>
           <option value="en2ja">🇬🇧 英語 ➔ 🇯🇵 日本語 (日本語訳)</option>
+          <option value="ja2en">🇯🇵 日本語 ➔ 🇬🇧 英語 (音声読み上げ)</option>
         </select>
       </div>
 
@@ -384,13 +384,11 @@
       localStorage.setItem('english_app_custom_phrases', JSON.stringify(customs));
     }
 
-    // Combined phrases list (base + user added custom phrases)
     function getAllPhrases() {
       const customs = getCustomPhrases();
       return [...customs, ...basePhrases];
     }
 
-    // For compatibility with global 'phrases' variable in pages
     const phrases = getAllPhrases();
 
     function getStore() {
@@ -424,27 +422,56 @@
     }
 
     
-    const customDictionary = {
-      "こんにちは": "Hello! How are you doing today?",
-      "ありがとう": "Thank you so much, I really appreciate it.",
-      "お疲れ様です": "You did a great job today! Let's get some rest.",
-      "何か手伝おうか？": "Is there anything I can help you with?",
-      "愛してる": "I love you with all my heart.",
-      "また後でね": "See you later! Take care.",
-      "元気？": "How have you been lately?",
-      "お腹空いた": "I'm starving. Let's grab something to eat."
+    const offlineDictionary = {
+      "it's nice weather today": "今日はいい天気ですね",
+      "it is nice weather today": "今日はいい天気ですね",
+      "nice weather today": "今日はいい天気ですね",
+      "hello": "こんにちは",
+      "thank you": "ありがとうございます",
+      "how are you": "お元気ですか？",
+      "good morning": "おはようございます",
+      "good night": "おやすみなさい",
+      "i love you": "愛しています",
+      "see you later": "また後でね",
+      "what's up": "最近どう？"
     };
 
-    function translateText(text, direction) {
+    async function translateText(text, direction) {
       const clean = text.trim();
       if (!clean) return "（テキストを入力または音声入力してください）";
 
-      if (direction === 'ja2en') {
-        if (customDictionary[clean]) return customDictionary[clean];
-        return `[English Translation]: "${clean}" (You can also speak freely or check our phrases!)`;
+      const lower = clean.toLowerCase();
+
+      // Check offline dictionary first
+      if (direction === 'en2ja') {
+        if (offlineDictionary[lower]) {
+          return offlineDictionary[lower];
+        }
       } else {
-        return `[日本語訳]: "${clean}" (心を通わせる素敵なメッセージですね！)`;
+        for (let [en, ja] of Object.entries(offlineDictionary)) {
+          if (clean === ja) return en;
+        }
       }
+
+      // Use MyMemory free public translation API for real translation
+      try {
+        const langpair = (direction === 'ja2en') ? 'ja|en' : 'en|ja';
+        const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(clean)}&langpair=${langpair}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        
+        if (data && data.responseData && data.responseData.translatedText) {
+          let translated = data.responseData.translatedText;
+          if (translated.includes('MATCH NO') || translated.includes('QUERY LENGTH')) {
+            return direction === 'ja2en' ? `[English]: ${clean}` : `[日本語]: ${clean}`;
+          }
+          return translated;
+        }
+      } catch(e) {
+        console.error("API Translation error: ", e);
+      }
+
+      return direction === 'ja2en' ? `[English]: ${clean}` : `[日本語]: ${clean}`;
     }
 
     function speakText(text, lang = 'en-US') {
@@ -463,9 +490,10 @@
       const speakBtn = document.getElementById('transSpeakBtn');
       const micBtn = document.getElementById('transMicBtn');
 
-      translateBtn.addEventListener('click', () => {
+      translateBtn.addEventListener('click', async () => {
         const dir = directionSelect.value;
-        const res = translateText(inputField.value, dir);
+        outputText.textContent = '🔄 翻訳中...';
+        const res = await translateText(inputField.value, dir);
         outputText.textContent = res;
       });
 
@@ -499,11 +527,12 @@
           }
         });
 
-        recognition.onresult = (event) => {
+        recognition.onresult = async (event) => {
           const transcript = event.results[0][0].transcript;
           inputField.value = transcript;
           const dir = directionSelect.value;
-          const res = translateText(transcript, dir);
+          outputText.textContent = '🔄 翻訳中...';
+          const res = await translateText(transcript, dir);
           outputText.textContent = res;
         };
 

@@ -435,13 +435,11 @@
       localStorage.setItem('english_app_custom_phrases', JSON.stringify(customs));
     }
 
-    // Combined phrases list (base + user added custom phrases)
     function getAllPhrases() {
       const customs = getCustomPhrases();
       return [...customs, ...basePhrases];
     }
 
-    // For compatibility with global 'phrases' variable in pages
     const phrases = getAllPhrases();
 
     function getStore() {
