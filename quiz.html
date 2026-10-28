@@ -14,6 +14,7 @@
       --text-muted: #64748b;
       --border: #e2e8f0;
       --radius: 12px;
+      --fav: #f59e0b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -65,6 +66,7 @@
       margin-bottom: 1.25rem;
       border: 1px solid var(--border);
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative;
     }
     .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
     
@@ -111,6 +113,13 @@
       text-decoration: none;
     }
     .btn:hover { background: var(--primary-hover); }
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
     textarea {
       width: 100%;
       height: 100px;
@@ -142,6 +151,7 @@
       padding: 1rem;
       margin-bottom: 0.75rem;
       border: 1px solid var(--border);
+      position: relative;
     }
     .category-badge {
       display: inline-block;
@@ -214,6 +224,46 @@
       width: 0%;
       transition: width 0.3s ease;
     }
+
+    .fav-star-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #cbd5e1;
+      transition: color 0.2s, transform 0.1s;
+    }
+    .fav-star-btn.active {
+      color: var(--fav);
+    }
+    .fav-star-btn:active {
+      transform: scale(1.2);
+    }
+
+    .speed-controls {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .speed-btn {
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .speed-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
   </style>
 </head>
 <body>
@@ -227,7 +277,9 @@
     <select id="genreSelect" class="genre-select-box"></select>
 
     <div class="card" id="quizCard">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+      <button class="fav-star-btn" id="quizFavBtn">★</button>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; padding-right:2rem;">
         <span id="categoryLabel" style="font-size:0.8rem; color:#64748b;">カテゴリー</span>
         <span id="quizStepText" style="font-size:0.85rem; font-weight:bold; color:var(--primary);">第 1 問 / 全 5 問</span>
       </div>
@@ -298,13 +350,44 @@
   ["励ます・応援する", "Don't be so hard on yourself.", "自分を責めすぎないでね。"],
   ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてね。"]
 ];
+
+    function getStore() {
+      try {
+        return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
+      } catch(e) {
+        return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
+      }
+    }
+
+    function saveStore(store) {
+      localStorage.setItem('english_app_data', JSON.stringify(store));
+    }
+
+    function isFavorite(enText) {
+      const store = getStore();
+      return (store.favorites || []).includes(enText);
+    }
+
+    function toggleFavorite(enText) {
+      const store = getStore();
+      store.favorites = store.favorites || [];
+      const idx = store.favorites.indexOf(enText);
+      if (idx >= 0) {
+        store.favorites.splice(idx, 1);
+      } else {
+        store.favorites.push(enText);
+      }
+      saveStore(store);
+      return idx < 0; // returns true if added
+    }
+
     
     function populateGenreSelect() {
       const select = document.getElementById('genreSelect');
       if (!select) return;
 
       const categories = Array.from(new Set(phrases.map(p => p[0])));
-      select.innerHTML = '<option value="ALL">✨ 全ジャンル (ランダム出題)</option>';
+      select.innerHTML = '<option value="ALL">✨ 全ジャンル (ランダム出題)</option><option value="FAV">⭐ お気に入りフレーズのみ</option>';
       categories.forEach(cat => {
         const opt = document.createElement('option');
         opt.value = cat;
@@ -316,6 +399,11 @@
     function getFilteredPhrases() {
       const select = document.getElementById('genreSelect');
       const selectedGenre = select ? select.value : 'ALL';
+      if (selectedGenre === 'FAV') {
+        const store = getStore();
+        const favs = store.favorites || [];
+        return phrases.filter(p => Array.isArray(p) && p.length >= 3 && favs.includes(p[1]));
+      }
       if (selectedGenre === 'ALL') {
         return phrases.filter(p => Array.isArray(p) && p.length >= 3);
       }
@@ -325,18 +413,6 @@
     let quizSet = [];
     let currentIndex = 0;
     let score = 0;
-
-    function getStore() {
-      try {
-        return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, history: {}, weaknesses: {} };
-      } catch(e) {
-        return { studied: [], quizStats: { correct: 0, total: 0 }, history: {}, weaknesses: {} };
-      }
-    }
-
-    function saveStore(data) {
-      localStorage.setItem('english_app_data', JSON.stringify(data));
-    }
 
     function recordAnswer(isCorrect, item) {
       if (!item || !Array.isArray(item)) return;
@@ -366,9 +442,14 @@
 
     function startNewQuizSession() {
       const filtered = getFilteredPhrases();
-      if (filtered.length === 0) return;
+      if (filtered.length === 0) {
+        const select = document.getElementById('genreSelect');
+        if (select && select.value === 'FAV') {
+          alert('⭐ お気に入りに登録されているフレーズがありません。表現集やお気に入り星マークから登録してください！');
+        }
+        return;
+      }
 
-      // Shuffle and pick 5
       const shuffled = [...filtered].sort(() => Math.random() - 0.5);
       quizSet = shuffled.slice(0, Math.min(5, shuffled.length));
       currentIndex = 0;
@@ -389,7 +470,6 @@
       const current = quizSet[currentIndex];
       const allValid = phrases.filter(p => Array.isArray(p) && p.length >= 3);
 
-      // Progress bar & Step indicator
       const stepNum = currentIndex + 1;
       const totalNum = quizSet.length;
       document.getElementById('quizStepText').textContent = `第 ${stepNum} 問 / 全 ${totalNum} 問`;
@@ -397,6 +477,15 @@
 
       document.getElementById('categoryLabel').textContent = current[0];
       document.getElementById('questionText').textContent = `「${current[2]}」に対応する自然な表現は？`;
+
+      const favBtn = document.getElementById('quizFavBtn');
+      if (favBtn) {
+        favBtn.classList.toggle('active', isFavorite(current[1]));
+        favBtn.onclick = () => {
+          const added = toggleFavorite(current[1]);
+          favBtn.classList.toggle('active', added);
+        };
+      }
 
       const optionsContainer = document.getElementById('optionsContainer');
       optionsContainer.innerHTML = '';

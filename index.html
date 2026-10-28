@@ -14,6 +14,7 @@
       --text-muted: #64748b;
       --border: #e2e8f0;
       --radius: 12px;
+      --fav: #f59e0b;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -65,6 +66,7 @@
       margin-bottom: 1.25rem;
       border: 1px solid var(--border);
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative;
     }
     .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
     
@@ -111,6 +113,13 @@
       text-decoration: none;
     }
     .btn:hover { background: var(--primary-hover); }
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
     textarea {
       width: 100%;
       height: 100px;
@@ -142,6 +151,7 @@
       padding: 1rem;
       margin-bottom: 0.75rem;
       border: 1px solid var(--border);
+      position: relative;
     }
     .category-badge {
       display: inline-block;
@@ -214,6 +224,46 @@
       width: 0%;
       transition: width 0.3s ease;
     }
+
+    .fav-star-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #cbd5e1;
+      transition: color 0.2s, transform 0.1s;
+    }
+    .fav-star-btn.active {
+      color: var(--fav);
+    }
+    .fav-star-btn:active {
+      transform: scale(1.2);
+    }
+
+    .speed-controls {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .speed-btn {
+      padding: 4px 10px;
+      font-size: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .speed-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
   </style>
 </head>
 <body>
@@ -241,18 +291,22 @@
 
     <div class="card">
       <h2>📊 学習進捗サマリー</h2>
-      <div class="stats-grid">
+      <div class="stats-grid" style="grid-template-columns: repeat(4, 1fr);">
         <div>
           <div class="stat-number" id="totalStudied">0</div>
-          <div class="stat-label">学習済みフレーズ</div>
+          <div class="stat-label">学習済み</div>
         </div>
         <div>
           <div class="stat-number" id="quizAccuracy">0%</div>
-          <div class="stat-label">クイズ正答率</div>
+          <div class="stat-label">正答率</div>
         </div>
         <div>
           <div class="stat-number" id="speakCount">0</div>
-          <div class="stat-label">スピーキング回数</div>
+          <div class="stat-label">話した回数</div>
+        </div>
+        <div>
+          <div class="stat-number" id="favCount" style="color:var(--fav);">0</div>
+          <div class="stat-label">⭐ お気に入り</div>
         </div>
       </div>
     </div>
@@ -274,7 +328,7 @@
       </ul>
     </div>
 
-    <a href="quiz.html" class="btn">🚀 今日の5問クイズを始める</a>
+    <a href="speaking.html" class="btn">🎙️ 発音チェック付きスピーキングへ</a>
 
   </div>
 
@@ -324,15 +378,38 @@
   ["励ます・応援する", "Don't be so hard on yourself.", "自分を責めすぎないでね。"],
   ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてね。"]
 ];
-    
+
     function getStore() {
       try {
-        return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {} };
+        return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
       } catch(e) {
-        return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {} };
+        return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
       }
     }
 
+    function saveStore(store) {
+      localStorage.setItem('english_app_data', JSON.stringify(store));
+    }
+
+    function isFavorite(enText) {
+      const store = getStore();
+      return (store.favorites || []).includes(enText);
+    }
+
+    function toggleFavorite(enText) {
+      const store = getStore();
+      store.favorites = store.favorites || [];
+      const idx = store.favorites.indexOf(enText);
+      if (idx >= 0) {
+        store.favorites.splice(idx, 1);
+      } else {
+        store.favorites.push(enText);
+      }
+      saveStore(store);
+      return idx < 0; // returns true if added
+    }
+
+    
     let currentDate = new Date();
 
     function renderDashboard() {
@@ -340,11 +417,13 @@
       
       const studied = Array.isArray(store.studied) ? store.studied : [];
       const quizStats = store.quizStats || { correct: 0, total: 0 };
+      const favs = store.favorites || [];
       
       document.getElementById('totalStudied').textContent = studied.length;
       const acc = quizStats.total > 0 ? Math.round((quizStats.correct / quizStats.total) * 100) : 0;
       document.getElementById('quizAccuracy').textContent = acc + '%';
       document.getElementById('speakCount').textContent = store.speakCount || 0;
+      document.getElementById('favCount').textContent = favs.length;
 
       renderCalendar(store.history || {});
       renderWeaknesses(store.weaknesses || {});
