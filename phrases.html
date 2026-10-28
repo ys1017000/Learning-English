@@ -51,7 +51,7 @@
     nav a {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -161,6 +161,10 @@
       border-radius: 4px;
       margin-bottom: 0.4rem;
     }
+    .category-badge.custom {
+      background: #fef3c7;
+      color: #92400e;
+    }
     .en-text { font-size: 1.05rem; font-weight: bold; color: #0f172a; }
     .ja-text { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
     .btn-record { background: #ef4444; }
@@ -169,8 +173,8 @@
 
     .nav-buttons-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
       margin-bottom: 1.25rem;
     }
     .nav-card-btn {
@@ -178,14 +182,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1rem 0.5rem;
+      padding: 0.75rem 0.25rem;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       text-decoration: none;
       color: var(--text);
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: all 0.2s;
     }
@@ -195,8 +199,8 @@
       color: var(--primary);
     }
     .nav-card-btn .icon {
-      font-size: 1.5rem;
-      margin-bottom: 0.3rem;
+      font-size: 1.25rem;
+      margin-bottom: 0.2rem;
     }
     .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; text-align: center; }
     .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
@@ -274,8 +278,9 @@
   <div class="container">
     
     <div style="display:flex; gap:8px; margin-bottom:1rem;">
-      <input type="text" id="searchInput" class="search-box" style="margin-bottom:0;" placeholder="キーワード検索 (例: affection, back up, 味方)...">
-      <button id="favFilterBtn" style="white-space:nowrap; padding:0 12px; background:var(--fav); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">⭐ お気に入り</button>
+      <input type="text" id="searchInput" class="search-box" style="margin-bottom:0;" placeholder="キーワード検索 (例: resilience, affection)...">
+      <button id="customFilterBtn" style="white-space:nowrap; padding:0 10px; background:#fef3c7; color:#92400e; border:1px solid #f59e0b; border-radius:8px; font-weight:bold; cursor:pointer; font-size:0.8rem;">➕ 追加単語</button>
+      <button id="favFilterBtn" style="white-space:nowrap; padding:0 10px; background:var(--fav); color:white; border:none; border-radius:8px; font-weight:bold; cursor:pointer; font-size:0.8rem;">⭐ お気に入り</button>
     </div>
     <div id="phrasesList"></div>
 
@@ -287,11 +292,12 @@
     <a href="writing.html" class="">✍️ 英作文</a>
     <a href="speaking.html" class="">🎙️ 発音</a>
     <a href="translator.html" class="">🌐 翻訳会話</a>
+    <a href="addword.html" class="">➕ 単語追加</a>
     <a href="phrases.html" class="active">📚 表現集</a>
   </nav>
 
   <script>
-    const phrases = [
+    const basePhrases = [
   ["恋人・パートナーへの思いやり", "I'm always on your side.", "私はどんな時もあなたの味方だよ。"],
   ["恋人・パートナーへの思いやり", "Take your time, there's no rush.", "焦らなくていいから、あなたのペースで大丈夫だよ。"],
   ["恋人・パートナーへの思いやり", "Thank you for being you.", "そのままのあなたでいてくれてありがとう。"],
@@ -345,6 +351,27 @@
   ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてね。"]
 ];
 
+    function getCustomPhrases() {
+      try {
+        return JSON.parse(localStorage.getItem('english_app_custom_phrases')) || [];
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function saveCustomPhrases(customs) {
+      localStorage.setItem('english_app_custom_phrases', JSON.stringify(customs));
+    }
+
+    // Combined phrases list (base + user added custom phrases)
+    function getAllPhrases() {
+      const customs = getCustomPhrases();
+      return [...customs, ...basePhrases];
+    }
+
+    // For compatibility with global 'phrases' variable in pages
+    const phrases = getAllPhrases();
+
     function getStore() {
       try {
         return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
@@ -390,7 +417,8 @@
       container.innerHTML = '';
 
       const query = filterText.toLowerCase().trim();
-      const validPhrases = phrases.filter(p => Array.isArray(p) && p.length >= 3);
+      const currentPhrases = getAllPhrases();
+      const validPhrases = currentPhrases.filter(p => Array.isArray(p) && p.length >= 3);
 
       const store = getStore();
       const favs = store.favorites || [];
@@ -398,6 +426,9 @@
       const filtered = validPhrases.filter(p => {
         if (query === 'favorite') {
           return favs.includes(p[1]);
+        }
+        if (query === 'custom') {
+          return p[0] === 'マイ単語・フレーズ';
         }
         return p[0].toLowerCase().includes(query) ||
                p[1].toLowerCase().includes(query) ||
@@ -413,10 +444,11 @@
         const card = document.createElement('div');
         card.className = 'phrase-card';
         const isFav = favs.includes(p[1]);
+        const isCustom = (p[0] === 'マイ単語・フレーズ');
         
         card.innerHTML = `
           <button class="fav-star-btn ${isFav ? 'active' : ''}">★</button>
-          <span class="category-badge">${p[0]}</span>
+          <span class="category-badge ${isCustom ? 'custom' : ''}">${p[0]}</span>
           <div style="display:flex; justify-content:space-between; align-items:center;">
             <div class="en-text">${p[1]}</div>
             <button class="btn-play-sound" style="background:none; border:none; cursor:pointer; font-size:1.2rem; margin-left:8px;">🔊</button>
@@ -453,6 +485,13 @@
       if (favFilterBtn) {
         favFilterBtn.addEventListener('click', () => {
           renderPhrases('favorite');
+        });
+      }
+
+      const customFilterBtn = document.getElementById('customFilterBtn');
+      if (customFilterBtn) {
+        customFilterBtn.addEventListener('click', () => {
+          renderPhrases('custom');
         });
       }
     });

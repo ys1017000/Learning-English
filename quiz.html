@@ -51,7 +51,7 @@
     nav a {
       color: var(--text-muted);
       text-decoration: none;
-      font-size: 0.65rem;
+      font-size: 0.6rem;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -161,6 +161,10 @@
       border-radius: 4px;
       margin-bottom: 0.4rem;
     }
+    .category-badge.custom {
+      background: #fef3c7;
+      color: #92400e;
+    }
     .en-text { font-size: 1.05rem; font-weight: bold; color: #0f172a; }
     .ja-text { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
     .btn-record { background: #ef4444; }
@@ -169,8 +173,8 @@
 
     .nav-buttons-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 0.75rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
       margin-bottom: 1.25rem;
     }
     .nav-card-btn {
@@ -178,14 +182,14 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1rem 0.5rem;
+      padding: 0.75rem 0.25rem;
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: var(--radius);
       text-decoration: none;
       color: var(--text);
       font-weight: 600;
-      font-size: 0.85rem;
+      font-size: 0.75rem;
       box-shadow: 0 1px 3px rgba(0,0,0,0.05);
       transition: all 0.2s;
     }
@@ -195,8 +199,8 @@
       color: var(--primary);
     }
     .nav-card-btn .icon {
-      font-size: 1.5rem;
-      margin-bottom: 0.3rem;
+      font-size: 1.25rem;
+      margin-bottom: 0.2rem;
     }
     .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; text-align: center; }
     .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
@@ -309,11 +313,12 @@
     <a href="writing.html" class="">✍️ 英作文</a>
     <a href="speaking.html" class="">🎙️ 発音</a>
     <a href="translator.html" class="">🌐 翻訳会話</a>
+    <a href="addword.html" class="">➕ 単語追加</a>
     <a href="phrases.html" class="">📚 表現集</a>
   </nav>
 
   <script>
-    const phrases = [
+    const basePhrases = [
   ["恋人・パートナーへの思いやり", "I'm always on your side.", "私はどんな時もあなたの味方だよ。"],
   ["恋人・パートナーへの思いやり", "Take your time, there's no rush.", "焦らなくていいから、あなたのペースで大丈夫だよ。"],
   ["恋人・パートナーへの思いやり", "Thank you for being you.", "そのままのあなたでいてくれてありがとう。"],
@@ -367,6 +372,27 @@
   ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてね。"]
 ];
 
+    function getCustomPhrases() {
+      try {
+        return JSON.parse(localStorage.getItem('english_app_custom_phrases')) || [];
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function saveCustomPhrases(customs) {
+      localStorage.setItem('english_app_custom_phrases', JSON.stringify(customs));
+    }
+
+    // Combined phrases list (base + user added custom phrases)
+    function getAllPhrases() {
+      const customs = getCustomPhrases();
+      return [...customs, ...basePhrases];
+    }
+
+    // For compatibility with global 'phrases' variable in pages
+    const phrases = getAllPhrases();
+
     function getStore() {
       try {
         return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
@@ -402,12 +428,13 @@
       const select = document.getElementById('genreSelect');
       if (!select) return;
 
-      const categories = Array.from(new Set(phrases.map(p => p[0])));
+      const currentPhrases = getAllPhrases();
+      const categories = Array.from(new Set(currentPhrases.map(p => p[0])));
       select.innerHTML = '<option value="ALL">✨ 全ジャンル (ランダム出題)</option><option value="FAV">⭐ お気に入りフレーズのみ</option>';
       categories.forEach(cat => {
         const opt = document.createElement('option');
         opt.value = cat;
-        opt.textContent = `📁 ${cat}`;
+        opt.textContent = (cat === 'マイ単語・フレーズ') ? `⭐ ${cat}` : `📁 ${cat}`;
         select.appendChild(opt);
       });
     }
@@ -415,15 +442,17 @@
     function getFilteredPhrases() {
       const select = document.getElementById('genreSelect');
       const selectedGenre = select ? select.value : 'ALL';
+      const currentPhrases = getAllPhrases();
+
       if (selectedGenre === 'FAV') {
         const store = getStore();
         const favs = store.favorites || [];
-        return phrases.filter(p => Array.isArray(p) && p.length >= 3 && favs.includes(p[1]));
+        return currentPhrases.filter(p => Array.isArray(p) && p.length >= 3 && favs.includes(p[1]));
       }
       if (selectedGenre === 'ALL') {
-        return phrases.filter(p => Array.isArray(p) && p.length >= 3);
+        return currentPhrases.filter(p => Array.isArray(p) && p.length >= 3);
       }
-      return phrases.filter(p => Array.isArray(p) && p.length >= 3 && p[0] === selectedGenre);
+      return currentPhrases.filter(p => Array.isArray(p) && p.length >= 3 && p[0] === selectedGenre);
     }
 
     let quizSet = [];
@@ -463,6 +492,8 @@
         const select = document.getElementById('genreSelect');
         if (select && select.value === 'FAV') {
           alert('⭐ お気に入りに登録されているフレーズがありません。');
+        } else {
+          alert('出題できるフレーズがありません。「単語追加」タブから単語を追加してみてください！');
         }
         return;
       }
@@ -485,7 +516,7 @@
       }
 
       const current = quizSet[currentIndex];
-      const allValid = phrases.filter(p => Array.isArray(p) && p.length >= 3);
+      const allValid = getAllPhrases().filter(p => Array.isArray(p) && p.length >= 3);
 
       const stepNum = currentIndex + 1;
       const totalNum = quizSet.length;
