@@ -281,7 +281,7 @@
 
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; padding-right:2rem;">
         <span id="categoryLabel" style="font-size:0.8rem; color:#64748b;">カテゴリー</span>
-        <span id="quizStepText" style="font-size:0.85rem; font-weight:bold; color:var(--primary);">第 1 問 / 全 5 問</span>
+        <span id="quizStepText" style="font-size:0.85rem; font-weight:bold; color:var(--primary);">第 1 問 / 全 10 問</span>
       </div>
 
       <div class="progress-bar-container">
@@ -297,9 +297,9 @@
     <div class="card" id="resultCard" style="display:none; text-align:center;">
       <div style="font-size:2.5rem; margin-bottom:0.5rem;">🏆</div>
       <h2>クイズ完了！</h2>
-      <div id="resultScoreText" style="font-size:1.4rem; font-weight:bold; color:var(--primary); margin:0.75rem 0;">5 問中 5 問 正解！</div>
+      <div id="resultScoreText" style="font-size:1.4rem; font-weight:bold; color:var(--primary); margin:0.75rem 0;">10 問中 10 問 正解！</div>
       <p id="resultMessage" style="color:var(--text-muted); margin-bottom:1.5rem;">パーフェクト！素晴らしいです！🌟</p>
-      <button class="btn" id="restartBtn">🔄 もう一度 5問挑戦する</button>
+      <button class="btn" id="restartBtn">🔄 もう一度 10問挑戦する</button>
     </div>
 
   </div>
@@ -331,6 +331,22 @@
   ["would / could 恋人同士の会話", "Would you mind if I held your hand?", "手を繋いでもいいかな？"],
   ["would / could 恋人同士の会話", "Could you let me know if you need anything?", "何か必要なものがあったら教えてくれる？"],
   ["would / could 恋人同士の会話", "Where would you like to go on our next day off?", "次の休みはどこにお出かけしたい？"],
+  ["単語 (単体)", "affection", "愛情、慈しみ"],
+  ["単語 (単体)", "intimacy", "親密さ、親交"],
+  ["単語 (単体)", "devotion", "献身、深い愛情"],
+  ["単語 (単体)", "comfort", "慰め、心地よさ"],
+  ["単語 (単体)", "cherish", "大事にする、心に抱く"],
+  ["単語 (単体)", "trust", "信頼、信用"],
+  ["単語 (単体)", "passion", "情熱、熱中"],
+  ["単語 (単体)", "warmth", "温かみ、思いやり"],
+  ["熟語 (イディオム)", "back someone up", "（人を）バックアップする、支持する"],
+  ["熟語 (イディオム)", "open up", "心を開く、本音を話す"],
+  ["熟語 (イディオム)", "lean on", "（人に）頼る、寄りかかる"],
+  ["熟語 (イディオム)", "count on", "〜を当てにする、頼りにする"],
+  ["熟語 (イディオム)", "get along", "仲良くやっていく"],
+  ["熟語 (イディオム)", "fall for", "〜に夢中になる、惚れ込む"],
+  ["熟語 (イディオム)", "cuddle up", "寄り添う、抱き合う"],
+  ["熟語 (イディオム)", "cheer up", "元気を出す、励ます"],
   ["単語・熟語 (形容詞＋名詞)", "strong coffee", "濃いコーヒー"],
   ["単語・熟語 (形容詞＋名詞)", "difficult decision", "難しい決断"],
   ["単語・熟語 (形容詞＋名詞)", "heavy rain", "激しい雨"],
@@ -378,7 +394,7 @@
         store.favorites.push(enText);
       }
       saveStore(store);
-      return idx < 0; // returns true if added
+      return idx < 0;
     }
 
     
@@ -413,6 +429,7 @@
     let quizSet = [];
     let currentIndex = 0;
     let score = 0;
+    let quizLength = 10; // Changed from 5 to 10 questions!
 
     function recordAnswer(isCorrect, item) {
       if (!item || !Array.isArray(item)) return;
@@ -445,13 +462,13 @@
       if (filtered.length === 0) {
         const select = document.getElementById('genreSelect');
         if (select && select.value === 'FAV') {
-          alert('⭐ お気に入りに登録されているフレーズがありません。表現集やお気に入り星マークから登録してください！');
+          alert('⭐ お気に入りに登録されているフレーズがありません。');
         }
         return;
       }
 
       const shuffled = [...filtered].sort(() => Math.random() - 0.5);
-      quizSet = shuffled.slice(0, Math.min(5, shuffled.length));
+      quizSet = shuffled.slice(0, Math.min(quizLength, shuffled.length));
       currentIndex = 0;
       score = 0;
 
@@ -547,7 +564,7 @@
       let msg = "";
       if (score === total) {
         msg = "パーフェクト！素晴らしいです！🌟";
-      } else if (score >= 3) {
+      } else if (score >= Math.ceil(total * 0.7)) {
         msg = "ナイスチャレンジ！この調子で続けましょう！💪";
       } else {
         msg = "もう一回挑戦して復習してみましょう！✨";
