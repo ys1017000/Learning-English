@@ -28,49 +28,5 @@ function run(){addToggle();process(document);if(lang==='en')document.documentEle
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',run);else run();
 new MutationObserver(ms=>{if(lang!=='en')return;for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1)process(n);}).observe(document.documentElement,{childList:true,subtree:true});
 })();
-</script><script>
-/* Touch handling v2:
-   Prefer invoking the existing onclick handler directly. Some controls redraw their DOM
-   during the handler, which makes synthetic-click + native-click suppression unreliable.
-   For listener-only controls, use click() as a fallback and suppress the paired native click. */
-(function installTouchTapFallbackV2(){
-  if (window.__touchTapFallbackV2Installed) return;
-  window.__touchTapFallbackV2Installed = true;
-  let lastTap = null;
-  const getTarget = node => {
-    const el = node instanceof Element ? node : node && node.parentElement;
-    return el && el.closest('button, a[href], [role="button"]');
-  };
-  document.addEventListener('pointerup', event => {
-    if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
-    const target = getTarget(event.target);
-    if (!target || target.matches(':disabled') || target.getAttribute('aria-disabled') === 'true') return;
-    /* Real links should keep the browser's normal navigation behaviour. */
-    if (target.matches('a[href]')) return;
-    lastTap = { x: event.clientX, y: event.clientY, time: Date.now() };
-    try {
-      if (typeof target.onclick === 'function') {
-        target.onclick.call(target, event);
-      } else {
-        target.click();
-      }
-      event.preventDefault();
-    } catch (error) {
-      console.error('Touch tap handler failed:', error);
-    }
-  }, { capture: true, passive: false });
-  document.addEventListener('click', event => {
-    if (!event.isTrusted || !lastTap || event.detail === 0) return;
-    const age = Date.now() - lastTap.time;
-    const nearTap = Math.abs(event.clientX - lastTap.x) < 28 && Math.abs(event.clientY - lastTap.y) < 28;
-    if (age < 900 && nearTap) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      lastTap = null;
-    } else if (age >= 900) {
-      lastTap = null;
-    }
-  }, true);
-})();
 </script>
 </body></html>

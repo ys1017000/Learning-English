@@ -33,49 +33,5 @@ $('saveAnalysis').onclick=()=>{const x=selected();if(!x){$('analysisStatus').hid
 function render(){const old=$('promptEntry').value;$('count').textContent=logs.length+'件';$('promptEntry').innerHTML=logs.map(x=>`<option value="${esc(x.id)}">${esc(x.date)}｜${esc(x.topic||x.memory.slice(0,30)||'会話メモ')}</option>`).join('');if(logs.some(x=>x.id===old))$('promptEntry').value=old;const x=selected();$('analysis').value=x?.analysis||'';if(!logs.length){$('entries').className='empty';$('entries').textContent='まだ会話ログがありません。最初のメモを追加しよう！';return}$('entries').className='';$('entries').innerHTML=logs.map(x=>`<article class="entry"><div class="small">${esc(x.date)}</div><h3>${esc(x.topic||'会話メモ')}</h3>${x.tags?x.tags.split(/[、,]/).map(t=>`<span class="pill">${esc(t.trim())}</span>`).join(''):''}${[['会話の要点',x.memory],['言えなかったこと',x.stuck],['相手の表現',x.partner],['自分の英語',x.own]].filter(a=>a[1]).map(a=>`<p><strong>${a[0]}：</strong>${esc(a[1])}</p>`).join('')}${x.analysis?`<details><summary>分析結果を見る</summary><p>${esc(x.analysis)}</p></details>`:''}<div class="row" style="margin-top:8px"><button data-select="${esc(x.id)}">分析対象に選ぶ</button><button data-delete="${esc(x.id)}">削除</button></div></article>`).join('');$('entries').querySelectorAll('[data-select]').forEach(b=>b.onclick=()=>{$('promptEntry').value=b.dataset.select;$('analysis').value=selected()?.analysis||'';window.scrollTo({top:$('promptEntry').getBoundingClientRect().top+scrollY-30,behavior:'smooth'})});$('entries').querySelectorAll('[data-delete]').forEach(b=>b.onclick=()=>{if(confirm('この会話ログを削除する？')){logs=logs.filter(x=>x.id!==b.dataset.delete);save()}})}
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'feelEnglishConversationLogsV1',exportedAt:new Date().toISOString(),logs},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='english-conversation-logs-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);$('backupStatus').hidden=false;$('backupStatus').textContent='バックアップファイルを作成したよ。安全な場所に保存してね。'};$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());const incoming=Array.isArray(data)?data:data.logs;if(!Array.isArray(incoming))throw Error('形式が違います');const existing=new Set(logs.map(x=>x.id));let added=0;incoming.forEach(x=>{if(x&&typeof x==='object'){const y={...x,id:x.id||'i'+Date.now()+Math.random().toString(36).slice(2)};if(existing.has(y.id))y.id='i'+Date.now()+Math.random().toString(36).slice(2);logs.push(y);existing.add(y.id);added++}});logs.sort((a,b)=>(b.date||'').localeCompare(a.date||''));save();$('backupStatus').hidden=false;$('backupStatus').textContent=added+'件を取り込んだよ。'}catch(err){$('backupStatus').hidden=false;$('backupStatus').textContent='取り込めなかったよ。会話ログのJSONファイルか確認してね。'}e.target.value=''};
 render();
-</script><script>
-/* Touch handling v2:
-   Prefer invoking the existing onclick handler directly. Some controls redraw their DOM
-   during the handler, which makes synthetic-click + native-click suppression unreliable.
-   For listener-only controls, use click() as a fallback and suppress the paired native click. */
-(function installTouchTapFallbackV2(){
-  if (window.__touchTapFallbackV2Installed) return;
-  window.__touchTapFallbackV2Installed = true;
-  let lastTap = null;
-  const getTarget = node => {
-    const el = node instanceof Element ? node : node && node.parentElement;
-    return el && el.closest('button, a[href], [role="button"]');
-  };
-  document.addEventListener('pointerup', event => {
-    if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
-    const target = getTarget(event.target);
-    if (!target || target.matches(':disabled') || target.getAttribute('aria-disabled') === 'true') return;
-    /* Real links should keep the browser's normal navigation behaviour. */
-    if (target.matches('a[href]')) return;
-    lastTap = { x: event.clientX, y: event.clientY, time: Date.now() };
-    try {
-      if (typeof target.onclick === 'function') {
-        target.onclick.call(target, event);
-      } else {
-        target.click();
-      }
-      event.preventDefault();
-    } catch (error) {
-      console.error('Touch tap handler failed:', error);
-    }
-  }, { capture: true, passive: false });
-  document.addEventListener('click', event => {
-    if (!event.isTrusted || !lastTap || event.detail === 0) return;
-    const age = Date.now() - lastTap.time;
-    const nearTap = Math.abs(event.clientX - lastTap.x) < 28 && Math.abs(event.clientY - lastTap.y) < 28;
-    if (age < 900 && nearTap) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      lastTap = null;
-    } else if (age >= 900) {
-      lastTap = null;
-    }
-  }, true);
-})();
 </script>
 </body></html>
