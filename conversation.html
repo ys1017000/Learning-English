@@ -34,12 +34,14 @@ function render(){const old=$('promptEntry').value;$('count').textContent=logs.l
 $('export').onclick=()=>{const blob=new Blob([JSON.stringify({schema:'feelEnglishConversationLogsV1',exportedAt:new Date().toISOString(),logs},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='english-conversation-logs-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);$('backupStatus').hidden=false;$('backupStatus').textContent='バックアップファイルを作成したよ。安全な場所に保存してね。'};$('importBtn').onclick=()=>$('importFile').click();$('importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());const incoming=Array.isArray(data)?data:data.logs;if(!Array.isArray(incoming))throw Error('形式が違います');const existing=new Set(logs.map(x=>x.id));let added=0;incoming.forEach(x=>{if(x&&typeof x==='object'){const y={...x,id:x.id||'i'+Date.now()+Math.random().toString(36).slice(2)};if(existing.has(y.id))y.id='i'+Date.now()+Math.random().toString(36).slice(2);logs.push(y);existing.add(y.id);added++}});logs.sort((a,b)=>(b.date||'').localeCompare(a.date||''));save();$('backupStatus').hidden=false;$('backupStatus').textContent=added+'件を取り込んだよ。'}catch(err){$('backupStatus').hidden=false;$('backupStatus').textContent='取り込めなかったよ。会話ログのJSONファイルか確認してね。'}e.target.value=''};
 render();
 </script><script>
-/* Touch interaction fallback: run existing click handlers from the trusted touch pointerup,
-   then suppress the matching browser-generated click to avoid double actions. */
-(function installTouchTapFallback(){
-  if (window.__touchTapFallbackInstalled) return;
-  window.__touchTapFallbackInstalled = true;
-  const recent = new WeakMap();
+/* Touch handling v2:
+   Prefer invoking the existing onclick handler directly. Some controls redraw their DOM
+   during the handler, which makes synthetic-click + native-click suppression unreliable.
+   For listener-only controls, use click() as a fallback and suppress the paired native click. */
+(function installTouchTapFallbackV2(){
+  if (window.__touchTapFallbackV2Installed) return;
+  window.__touchTapFallbackV2Installed = true;
+  let lastTap = null;
   const getTarget = node => {
     const el = node instanceof Element ? node : node && node.parentElement;
     return el && el.closest('button, a[href], [role="button"]');
@@ -48,25 +50,30 @@ render();
     if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
     const target = getTarget(event.target);
     if (!target || target.matches(':disabled') || target.getAttribute('aria-disabled') === 'true') return;
-    if (target.closest('label') && !target.matches('button, a[href], [role="button"]')) return;
-    const stamp = Date.now();
-    recent.set(target, stamp);
+    /* Real links should keep the browser's normal navigation behaviour. */
+    if (target.matches('a[href]')) return;
+    lastTap = { x: event.clientX, y: event.clientY, time: Date.now() };
     try {
-      target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      if (typeof target.onclick === 'function') {
+        target.onclick.call(target, event);
+      } else {
+        target.click();
+      }
+      event.preventDefault();
     } catch (error) {
-      console.error('Touch tap fallback failed:', error);
+      console.error('Touch tap handler failed:', error);
     }
-    setTimeout(() => { if (recent.get(target) === stamp) recent.delete(target); }, 900);
-  }, true);
+  }, { capture: true, passive: false });
   document.addEventListener('click', event => {
-    if (!event.isTrusted) return;
-    const target = getTarget(event.target);
-    if (!target) return;
-    const stamp = recent.get(target);
-    if (stamp && Date.now() - stamp < 900) {
+    if (!event.isTrusted || !lastTap || event.detail === 0) return;
+    const age = Date.now() - lastTap.time;
+    const nearTap = Math.abs(event.clientX - lastTap.x) < 28 && Math.abs(event.clientY - lastTap.y) < 28;
+    if (age < 900 && nearTap) {
       event.preventDefault();
       event.stopImmediatePropagation();
-      recent.delete(target);
+      lastTap = null;
+    } else if (age >= 900) {
+      lastTap = null;
     }
   }, true);
 })();

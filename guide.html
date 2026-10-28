@@ -29,12 +29,14 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 new MutationObserver(ms=>{if(lang!=='en')return;for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1)process(n);}).observe(document.documentElement,{childList:true,subtree:true});
 })();
 </script><script>
-/* Touch interaction fallback: run existing click handlers from the trusted touch pointerup,
-   then suppress the matching browser-generated click to avoid double actions. */
-(function installTouchTapFallback(){
-  if (window.__touchTapFallbackInstalled) return;
-  window.__touchTapFallbackInstalled = true;
-  const recent = new WeakMap();
+/* Touch handling v2:
+   Prefer invoking the existing onclick handler directly. Some controls redraw their DOM
+   during the handler, which makes synthetic-click + native-click suppression unreliable.
+   For listener-only controls, use click() as a fallback and suppress the paired native click. */
+(function installTouchTapFallbackV2(){
+  if (window.__touchTapFallbackV2Installed) return;
+  window.__touchTapFallbackV2Installed = true;
+  let lastTap = null;
   const getTarget = node => {
     const el = node instanceof Element ? node : node && node.parentElement;
     return el && el.closest('button, a[href], [role="button"]');
@@ -43,25 +45,30 @@ new MutationObserver(ms=>{if(lang!=='en')return;for(const m of ms)for(const n of
     if (event.pointerType !== 'touch' && event.pointerType !== 'pen') return;
     const target = getTarget(event.target);
     if (!target || target.matches(':disabled') || target.getAttribute('aria-disabled') === 'true') return;
-    if (target.closest('label') && !target.matches('button, a[href], [role="button"]')) return;
-    const stamp = Date.now();
-    recent.set(target, stamp);
+    /* Real links should keep the browser's normal navigation behaviour. */
+    if (target.matches('a[href]')) return;
+    lastTap = { x: event.clientX, y: event.clientY, time: Date.now() };
     try {
-      target.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+      if (typeof target.onclick === 'function') {
+        target.onclick.call(target, event);
+      } else {
+        target.click();
+      }
+      event.preventDefault();
     } catch (error) {
-      console.error('Touch tap fallback failed:', error);
+      console.error('Touch tap handler failed:', error);
     }
-    setTimeout(() => { if (recent.get(target) === stamp) recent.delete(target); }, 900);
-  }, true);
+  }, { capture: true, passive: false });
   document.addEventListener('click', event => {
-    if (!event.isTrusted) return;
-    const target = getTarget(event.target);
-    if (!target) return;
-    const stamp = recent.get(target);
-    if (stamp && Date.now() - stamp < 900) {
+    if (!event.isTrusted || !lastTap || event.detail === 0) return;
+    const age = Date.now() - lastTap.time;
+    const nearTap = Math.abs(event.clientX - lastTap.x) < 28 && Math.abs(event.clientY - lastTap.y) < 28;
+    if (age < 900 && nearTap) {
       event.preventDefault();
       event.stopImmediatePropagation();
-      recent.delete(target);
+      lastTap = null;
+    } else if (age >= 900) {
+      lastTap = null;
     }
   }, true);
 })();
