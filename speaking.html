@@ -327,57 +327,326 @@
 
   <script>
     const basePhrases = [
-  ["恋人・パートナーへの思いやり", "I'm always on your side.", "私はどんな時もあなたの味方だよ。"],
-  ["恋人・パートナーへの思いやり", "Take your time, there's no rush.", "焦らなくていいから、あなたのペースで大丈夫だよ。"],
-  ["恋人・パートナーへの思いやり", "Thank you for being you.", "そのままのあなたでいてくれてありがとう。"],
-  ["恋人・パートナーへの思いやり", "How was your day? I'm here if you want to talk.", "今日はどんな一日だった？ 話したいことがあったらいつでも聞くよ。"],
-  ["恋人・パートナーへの思いやり", "You don't have to carry it all by yourself.", "一人で全部抱え込まなくていいんだよ。"],
-  ["恋人・パートナーへの思いやり", "You did your best today. Get some good rest.", "今日も一日本当によくがんばったね。ゆっくり休んでね。"],
-  ["愛情・絆を深める表現", "I'm so grateful to have you in my life.", "あなたと一緒にいられて、心から幸せだよ。"],
-  ["愛情・絆を深める表現", "I feel safest when I'm with you.", "あなたと一緒にいる時が一番安心できるよ。"],
-  ["愛情・絆を深める表現", "You make every ordinary day feel special.", "あなたといると、何気ない毎日が特別な日になるよ。"],
-  ["愛情・絆を深める表現", "I love how we can just be ourselves together.", "お互い素のままでいられる関係がすごく愛おしいよ。"],
-  ["愛情・絆を深める表現", "Text me when you get home so I know you're safe.", "無事に着いたか心配だから、家に着いたらLINEしてね。"],
-  ["would / could 恋人同士の会話", "Would you like to stay in and relax tonight?", "今夜はお家でまったり過ごさない？"],
-  ["would / could 恋人同士の会話", "I would do anything to make you feel better.", "あなたの気持ちが少しでも楽になるなら、何でもするよ。"],
-  ["would / could 恋人同士の会話", "Could I get a hug?", "ぎゅーってハグしてもいい？"],
-  ["would / could 恋人同士の会話", "Would you mind if I held your hand?", "手を繋いでもいいかな？"],
-  ["would / could 恋人同士の会話", "Could you let me know if you need anything?", "何か必要なものがあったら教えてくれる？"],
-  ["would / could 恋人同士の会話", "Where would you like to go on our next day off?", "次の休みはどこにお出かけしたい？"],
-  ["単語 (単体)", "affection", "愛情、慈しみ"],
-  ["単語 (単体)", "intimacy", "親密さ、親交"],
-  ["単語 (単体)", "devotion", "献身、深い愛情"],
-  ["単語 (単体)", "comfort", "慰め、心地よさ"],
-  ["単語 (単体)", "cherish", "大事にする、心に抱く"],
-  ["単語 (単体)", "trust", "信頼、信用"],
-  ["単語 (単体)", "passion", "情熱、熱中"],
-  ["単語 (単体)", "warmth", "温かみ、思いやり"],
-  ["熟語 (イディオム)", "back someone up", "（人を）バックアップする、支持する"],
-  ["熟語 (イディオム)", "open up", "心を開く、本音を話す"],
-  ["熟語 (イディオム)", "lean on", "（人に）頼る、寄りかかる"],
-  ["熟語 (イディオム)", "count on", "〜を当てにする、頼りにする"],
-  ["熟語 (イディオム)", "get along", "仲良くやっていく"],
-  ["熟語 (イディオム)", "fall for", "〜に夢中になる、惚れ込む"],
-  ["熟語 (イディオム)", "cuddle up", "寄り添う、抱き合う"],
-  ["熟語 (イディオム)", "cheer up", "元気を出す、励ます"],
-  ["単語・熟語 (形容詞＋名詞)", "strong coffee", "濃いコーヒー"],
-  ["単語・熟語 (形容詞＋名詞)", "difficult decision", "難しい決断"],
-  ["単語・熟語 (形容詞＋名詞)", "heavy rain", "激しい雨"],
-  ["単語・熟語 (形容詞＋名詞)", "bright idea", "素晴らしい閃き・グッドアイデア"],
-  ["単語・熟語 (形容詞＋名詞)", "golden opportunity", "絶好の機会・チャンス"],
-  ["単語・熟語 (副詞＋動詞)", "clearly understand", "明確に理解する"],
-  ["単語・熟語 (副詞＋動詞)", "deeply regret", "深く後悔する"],
-  ["単語・熟語 (副詞＋動詞)", "strongly recommend", "強くお勧めする"],
-  ["単語・熟語 (副詞＋動詞)", "sincerely hope", "心から願う"],
-  ["友達・カジュアル雑談", "What have you been up to?", "最近どう過ごしてた？"],
-  ["友達・カジュアル雑談", "We should totally hang out this weekend!", "今週末、絶対遊びに行こうよ！"],
-  ["友達・カジュアル雑談", "That's hilarious!", "それ超ウケる／めちゃくちゃ面白いね！"],
-  ["友達・カジュアル雑談", "Let me know when you're free.", "手が空いたら教えてね。"],
-  ["共感する・寄り添う", "I understand how you feel.", "あなたの気持ち、すごくよく分かるよ。"],
-  ["共感する・寄り添う", "That must have been really hard.", "それは本当につらかったね。"],
-  ["共感する・寄り添う", "I'd feel the same way if I were in your shoes.", "もし私があなたの立場でも、きっと同じように感じると思う。"],
-  ["励ます・応援する", "Don't be so hard on yourself.", "自分を責めすぎないでね。"],
-  ["励ます・応援する", "Take all the time you need.", "焦らず、必要なだけ時間をかけてね。"]
+  [
+    "恋人・パートナーへの思いやり",
+    "I'm always on your side.",
+    "私はどんな時もあなたの味方だよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "Take your time, there's no rush.",
+    "焦らなくていいから、あなたのペースで大丈夫だよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "Thank you for being you.",
+    "そのままのあなたでいてくれてありがとう。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "How was your day? I'm here if you want to talk.",
+    "今日はどんな一日だった？ 話したいことがあったらいつでも聞くよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "You don't have to carry it all by yourself.",
+    "一人で全部抱え込まなくていいんだよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "You did your best today. Get some good rest.",
+    "今日も一日本当によくがんばったね。ゆっくり休んでね。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "I'm so grateful to have you in my life.",
+    "あなたと一緒にいられて、心から幸せだよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "I feel safest when I'm with you.",
+    "あなたと一緒にいる時が一番安心できるよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "You make every ordinary day feel special.",
+    "あなたといると、何気ない毎日が特別な日になるよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "I love how we can just be ourselves together.",
+    "お互い素のままでいられる関係がすごく愛おしいよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "Text me when you get home so I know you're safe.",
+    "無事に着いたか心配だから、家に着いたらLINEしてね。"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Would you like to stay in and relax tonight?",
+    "今夜はお家でまったり過ごさない？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "I would do anything to make you feel better.",
+    "あなたの気持ちが少しでも楽になるなら、何でもするよ。"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Could I get a hug?",
+    "ぎゅーってハグしてもいい？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Would you mind if I held your hand?",
+    "手を繋いでもいいかな？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Could you let me know if you need anything?",
+    "何か必要なものがあったら教えてくれる？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Where would you like to go on our next day off?",
+    "次の休みはどこにお出かけしたい？"
+  ],
+  [
+    "単語 (単体)",
+    "affection",
+    "愛情、慈しみ"
+  ],
+  [
+    "単語 (単体)",
+    "intimacy",
+    "親密さ、親交"
+  ],
+  [
+    "単語 (単体)",
+    "devotion",
+    "献身、深い愛情"
+  ],
+  [
+    "単語 (単体)",
+    "comfort",
+    "慰め、心地よさ"
+  ],
+  [
+    "単語 (単体)",
+    "cherish",
+    "大事にする、心に抱く"
+  ],
+  [
+    "単語 (単体)",
+    "trust",
+    "信頼、信用"
+  ],
+  [
+    "単語 (単体)",
+    "passion",
+    "情熱、熱中"
+  ],
+  [
+    "単語 (単体)",
+    "warmth",
+    "温かみ、思いやり"
+  ],
+  [
+    "熟語 (イディオム)",
+    "back someone up",
+    "（人を）バックアップする、支持する"
+  ],
+  [
+    "熟語 (イディオム)",
+    "open up",
+    "心を開く、本音を話す"
+  ],
+  [
+    "熟語 (イディオム)",
+    "lean on",
+    "（人に）頼る、寄りかかる"
+  ],
+  [
+    "熟語 (イディオム)",
+    "count on",
+    "〜を当てにする、頼りにする"
+  ],
+  [
+    "熟語 (イディオム)",
+    "get along",
+    "仲良くやっていく"
+  ],
+  [
+    "熟語 (イディオム)",
+    "fall for",
+    "〜に夢中になる、惚れ込む"
+  ],
+  [
+    "熟語 (イディオム)",
+    "cuddle up",
+    "寄り添う、抱き合う"
+  ],
+  [
+    "熟語 (イディオム)",
+    "cheer up",
+    "元気を出す、励ます"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "strong coffee",
+    "濃いコーヒー"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "difficult decision",
+    "難しい決断"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "heavy rain",
+    "激しい雨"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "bright idea",
+    "素晴らしい閃き・グッドアイデア"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "golden opportunity",
+    "絶好の機会・チャンス"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "clearly understand",
+    "明確に理解する"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "deeply regret",
+    "深く後悔する"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "strongly recommend",
+    "強くお勧めする"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "sincerely hope",
+    "心から願う"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "What have you been up to?",
+    "最近どう過ごしてた？"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "We should totally hang out this weekend!",
+    "今週末、絶対遊びに行こうよ！"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "That's hilarious!",
+    "それ超ウケる／めちゃくちゃ面白いね！"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "Let me know when you're free.",
+    "手が空いたら教えてね。"
+  ],
+  [
+    "共感する・寄り添う",
+    "I understand how you feel.",
+    "あなたの気持ち、すごくよく分かるよ。"
+  ],
+  [
+    "共感する・寄り添う",
+    "That must have been really hard.",
+    "それは本当につらかったね。"
+  ],
+  [
+    "共感する・寄り添う",
+    "I'd feel the same way if I were in your shoes.",
+    "もし私があなたの立場でも、きっと同じように感じると思う。"
+  ],
+  [
+    "励ます・応援する",
+    "Don't be so hard on yourself.",
+    "自分を責めすぎないでね。"
+  ],
+  [
+    "励ます・応援する",
+    "Take all the time you need.",
+    "焦らず、必要なだけ時間をかけてね。"
+  ],
+  [
+    "文法・文型",
+    "I've been busy this week.",
+    "今週はバタバタしていて忙しかったよ。（応用: I've been busy with work lately. 最近仕事で忙しいんだ）"
+  ],
+  [
+    "文法・文型",
+    "I'm glad you got to relax today.",
+    "今日はゆっくりできたみたいでよかった。"
+  ],
+  [
+    "文法・文型",
+    "I got to talk to her today.",
+    "今日は彼女と話すことができた。（get to + 動詞：〜する機会がある／〜できる）"
+  ],
+  [
+    "文法・文型",
+    "I got my leg hair removed.",
+    "脚の脱毛をしてもらった。（get + 目的語 + 過去分詞：施術や修理などを受ける）"
+  ],
+  [
+    "会話フレーズ",
+    "No worries about the late reply!",
+    "返信が遅くなったことは気にしないでね！"
+  ],
+  [
+    "会話フレーズ",
+    "I hope you can get some rest.",
+    "少しでも休めるといいね。（Make sure to take breaks. などのニュアンス）"
+  ],
+  [
+    "会話フレーズ",
+    "I'm looking forward to Sunday.",
+    "日曜日を楽しみにしているよ。（look forward to の後は名詞・動名詞）"
+  ],
+  [
+    "会話フレーズ",
+    "Which burger place should we go to?",
+    "ハンバーガー屋さんはどこにする？"
+  ],
+  [
+    "会話フレーズ",
+    "One of your favorites?",
+    "あなたのお気に入りのひとつ？（会話中の省略表現）"
+  ],
+  [
+    "会話フレーズ",
+    "I'm going out for drinks with my coworkers on Friday.",
+    "金曜日に同僚と飲みに行くんだ。（go out for drinks with someone）"
+  ],
+  [
+    "会話フレーズ",
+    "No, sorry, I didn't mean that. That was a poor choice of words.",
+    "いや、ごめん、そういう意味じゃなくて。言い方が悪かったね。"
+  ],
+  [
+    "語彙・コロケーション",
+    "I've been doing a lot of overtime this week.",
+    "今週は残業がかなり多いんだ。（overtime: 残業）"
+  ],
+  [
+    "語彙・コロケーション",
+    "renew my driver's license",
+    "運転免許を更新する"
+  ]
 ];
 
     function getCustomPhrases() {
