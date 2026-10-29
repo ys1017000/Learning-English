@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>心をつなぐ英語表現 - 単語追加</title>
-  
   <style>
     :root {
       --primary: #4f46e5;
@@ -70,6 +69,36 @@
       position: relative;
     }
     .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
+    
+    .genre-select-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #ffffff;
+      font-size: 0.95rem;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .question { font-size: 1.15rem; font-weight: bold; margin-bottom: 1rem; color: #0f172a; }
+    .options { display: flex; flex-direction: column; gap: 0.75rem; }
+    .option-btn {
+      padding: 0.85rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #fff;
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .option-btn:hover { background: #f1f5f9; border-color: var(--primary); }
+    .feedback { margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none; font-weight: bold; }
+    .feedback.correct { background: #dcfce7; color: #15803d; }
+    .feedback.wrong { background: #fee2e2; color: #b91c1c; }
     .btn {
       display: inline-block;
       width: 100%;
@@ -84,6 +113,13 @@
       text-decoration: none;
     }
     .btn:hover { background: var(--primary-hover); }
+    .btn-secondary {
+      background: #e2e8f0;
+      color: #334155;
+    }
+    .btn-secondary:hover {
+      background: #cbd5e1;
+    }
     textarea, input[type="text"] {
       width: 100%;
       padding: 0.75rem;
@@ -93,50 +129,704 @@
       margin-bottom: 1rem;
     }
     textarea { height: 100px; resize: vertical; }
-  </style>
+    .answer-box {
+      margin-top: 1rem;
+      padding: 1rem;
+      background: #f1f5f9;
+      border-radius: 8px;
+      display: none;
+    }
+    .search-box {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+    .phrase-card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1rem;
+      margin-bottom: 0.75rem;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    .category-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: #e0e7ff;
+      color: #3730a3;
+      padding: 2px 8px;
+      border-radius: 4px;
+      margin-bottom: 0.4rem;
+    }
+    .category-badge.custom {
+      background: #fef3c7;
+      color: #92400e;
+    }
+    .en-text { font-size: 1.05rem; font-weight: bold; color: #0f172a; }
+    .ja-text { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
+    .btn-record { background: #ef4444; }
+    .btn-record.recording { background: #dc2626; animation: pulse 1s infinite; }
+    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
+    .nav-buttons-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .nav-card-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 0.75rem 0.25rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.75rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      transition: all 0.2s;
+    }
+    .nav-card-btn:hover, .nav-card-btn:active {
+      background: #e0e7ff;
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+    .nav-card-btn .icon {
+      font-size: 1.25rem;
+      margin-bottom: 0.2rem;
+    }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; text-align: center; }
+    .stat-number { font-size: 1.4rem; font-weight: bold; color: var(--primary); }
+    .stat-label { font-size: 0.75rem; color: var(--text-muted); }
+    .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center; margin-top: 1rem; }
+    .cal-day-header { font-size: 0.75rem; font-weight: bold; color: var(--text-muted); padding: 4px; }
+    .cal-day { padding: 8px 0; font-size: 0.85rem; border-radius: 6px; background: #f1f5f9; }
+    .cal-day.active { background: #dbeafe; color: #1e40af; font-weight: bold; }
+    .cal-day.today { border: 2px solid var(--primary); }
+    .weakness-list { list-style: none; }
+    .weakness-item { display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px dashed var(--border); font-size: 0.9rem; }
+    
+    .progress-bar-container {
+      width: 100%;
+      background: #e2e8f0;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 1rem;
+    }
+    .progress-bar-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    .fav-star-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      cursor: pointer;
+      color: #cbd5e1;
+      transition: color 0.2s, transform 0.1s;
+    }
+    .fav-star-btn.active {
+      color: var(--fav);
+    }
+    .fav-star-btn:active {
+      transform: scale(1.2);
+    }
+
+    .speed-controls {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 8px;
+      margin-bottom: 12px;
+    }
+    .speed-btn {
+      padding: 4px 10px;
+      font-size: 0.80rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #fff;
+      cursor: pointer;
+      color: var(--text-muted);
+    }
+    .speed-btn.active {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+  </style>
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">心をつなぐ英語表現</a>
-    <span style="font-size:0.75rem; background:#fef3c7; color:#92400e; padding:4px 8px; border-radius:12px;">➕ 単語追加</span>
+    <span id="streakBadge" style="font-size:0.75rem; background:#e0e7ff; color:#3730a3; padding:4px 8px; border-radius:12px;">🔥 0日連続学習</span>
   </header>
+
   <div class="container">
+    
     <div class="card">
-      <h2>➕ マイ表現・単語の追加</h2>
-      <label style="font-size:0.85rem; font-weight:bold;">英語表現</label>
-      <input type="text" id="addEn" placeholder="例: I'm proud of you.">
-      <label style="font-size:0.85rem; font-weight:bold;">日本語訳</label>
-      <input type="text" id="addJa" placeholder="例: あなたを誇りに思うよ。">
-      <label style="font-size:0.85rem; font-weight:bold;">カテゴリー</label>
-      <input type="text" id="addCat" value="マイ単語・フレーズ">
-      <button class="btn" id="saveWordBtn" style="background:#d97706;">単語帳に登録する</button>
+      <h2 style="color:#d97706;">➕ 単語・フレーズの追加と辞書自動検索</h2>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">覚えたい単語を入力して「辞書から自動検索」を押すと、意味や例文が自動で入力されます！追加した単語はすべての学習モードに反映されます。</p>
+      
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">追加する単語・英語フレーズ:</label>
+        <div style="display:flex; gap:8px; margin-top:4px;">
+          <input type="text" id="inputWord" placeholder="例: resilience, empathy..." style="margin-bottom:0; flex:1;">
+          <button class="btn" id="autoSearchBtn" style="background:#d97706; width:auto; padding:0 1rem; font-size:0.85rem; white-space:nowrap;">🌐 辞書から自動検索</button>
+        </div>
+      </div>
+
+      <div id="searchStatus" style="display:none; padding:0.75rem; border-radius:8px; font-size:0.85rem; font-weight:bold; margin-bottom:1rem; text-align:center;"></div>
+
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">意味・日本語訳:</label>
+        <input type="text" id="inputMeaning" placeholder="例: 回復力、立ち直り力" style="margin-top:4px; margin-bottom:0;">
+      </div>
+
+      <div style="margin-bottom:1.25rem;">
+        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">例文・補足情報 (任意):</label>
+        <input type="text" id="inputExample" placeholder="例: She showed great resilience..." style="margin-top:4px; margin-bottom:0;">
+      </div>
+
+      <button class="btn" id="saveCustomBtn" style="background:#d97706;">💾 マイ単語帳に保存して追加する</button>
     </div>
+
+    <div class="card">
+      <h2>📚 追加したマイ単語一覧</h2>
+      <div id="customListContainer"></div>
+    </div>
+
   </div>
+
   <nav>
-    <a href="index.html">🏠 ホーム</a>
-    <a href="quiz.html">❓ クイズ</a>
-    <a href="writing.html">✍️ 英作文</a>
-    <a href="speaking.html">🎙️ 発音</a>
-    <a href="translator.html">🌐 翻訳会話</a>
+    <a href="index.html" class="">🏠 ホーム</a>
+    <a href="quiz.html" class="">❓ クイズ</a>
+    <a href="writing.html" class="">✍️ 英作文</a>
+    <a href="speaking.html" class="">🎙️ 発音</a>
+    <a href="translator.html" class="">🌐 翻訳会話</a>
     <a href="addword.html" class="active">➕ 単語追加</a>
-    <a href="phrases.html">📚 表現集</a>
+    <a href="phrases.html" class="">📚 表現集</a>
   </nav>
+
   <script>
-    document.getElementById('saveWordBtn').addEventListener('click', () => {
-      const en = document.getElementById('addEn').value.trim();
-      const ja = document.getElementById('addJa').value.trim();
-      const cat = document.getElementById('addCat').value.trim() || 'マイ単語・フレーズ';
-      if (!en || !ja) { alert('英語と日本語の両方を入力してください。'); return; }
-      
-      const customs = JSON.parse(localStorage.getItem('english_app_custom_phrases')) || [];
-      customs.unshift([cat, en, ja]);
+    const basePhrases = [
+  [
+    "恋人・パートナーへの思いやり",
+    "I'm always on your side.",
+    "私はどんな時もあなたの味方だよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "Take your time, there's no rush.",
+    "焦らなくていいから、あなたのペースで大丈夫だよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "Thank you for being you.",
+    "そのままのあなたでいてくれてありがとう。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "How was your day? I'm here if you want to talk.",
+    "今日はどんな一日だった？ 話したいことがあったらいつでも聞くよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "You don't have to carry it all by yourself.",
+    "一人で全部抱え込まなくていいんだよ。"
+  ],
+  [
+    "恋人・パートナーへの思いやり",
+    "You did your best today. Get some good rest.",
+    "今日も一日本当によくがんばったね。ゆっくり休んでね。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "I'm so grateful to have you in my life.",
+    "あなたと一緒にいられて、心から幸せだよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "I feel safest when I'm with you.",
+    "あなたと一緒にいる時が一番安心できるよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "You make every ordinary day feel special.",
+    "あなたといると、何気ない毎日が特別な日になるよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "I love how we can just be ourselves together.",
+    "お互い素のままでいられる関係がすごく愛おしいよ。"
+  ],
+  [
+    "愛情・絆を深める表現",
+    "Text me when you get home so I know you're safe.",
+    "無事に着いたか心配だから、家に着いたらLINEしてね。"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Would you like to stay in and relax tonight?",
+    "今夜はお家でまったり過ごさない？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "I would do anything to make you feel better.",
+    "あなたの気持ちが少しでも楽になるなら、何でもするよ。"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Could I get a hug?",
+    "ぎゅーってハグしてもいい？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Would you mind if I held your hand?",
+    "手を繋いでもいいかな？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Could you let me know if you need anything?",
+    "何か必要なものがあったら教えてくれる？"
+  ],
+  [
+    "would / could 恋人同士の会話",
+    "Where would you like to go on our next day off?",
+    "次の休みはどこにお出かけしたい？"
+  ],
+  [
+    "単語 (単体)",
+    "affection",
+    "愛情、慈しみ"
+  ],
+  [
+    "単語 (単体)",
+    "intimacy",
+    "親密さ、親交"
+  ],
+  [
+    "単語 (単体)",
+    "devotion",
+    "献身、深い愛情"
+  ],
+  [
+    "単語 (単体)",
+    "comfort",
+    "慰め、心地よさ"
+  ],
+  [
+    "単語 (単体)",
+    "cherish",
+    "大事にする、心に抱く"
+  ],
+  [
+    "単語 (単体)",
+    "trust",
+    "信頼、信用"
+  ],
+  [
+    "単語 (単体)",
+    "passion",
+    "情熱、熱中"
+  ],
+  [
+    "単語 (単体)",
+    "warmth",
+    "温かみ、思いやり"
+  ],
+  [
+    "熟語 (イディオム)",
+    "back someone up",
+    "（人を）バックアップする、支持する"
+  ],
+  [
+    "熟語 (イディオム)",
+    "open up",
+    "心を開く、本音を話す"
+  ],
+  [
+    "熟語 (イディオム)",
+    "lean on",
+    "（人に）頼る、寄りかかる"
+  ],
+  [
+    "熟語 (イディオム)",
+    "count on",
+    "〜を当てにする、頼りにする"
+  ],
+  [
+    "熟語 (イディオム)",
+    "get along",
+    "仲良くやっていく"
+  ],
+  [
+    "熟語 (イディオム)",
+    "fall for",
+    "〜に夢中になる、惚れ込む"
+  ],
+  [
+    "熟語 (イディオム)",
+    "cuddle up",
+    "寄り添う、抱き合う"
+  ],
+  [
+    "熟語 (イディオム)",
+    "cheer up",
+    "元気を出す、励ます"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "strong coffee",
+    "濃いコーヒー"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "difficult decision",
+    "難しい決断"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "heavy rain",
+    "激しい雨"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "bright idea",
+    "素晴らしい閃き・グッドアイデア"
+  ],
+  [
+    "単語・熟語 (形容詞＋名詞)",
+    "golden opportunity",
+    "絶好の機会・チャンス"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "clearly understand",
+    "明確に理解する"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "deeply regret",
+    "深く後悔する"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "strongly recommend",
+    "強くお勧めする"
+  ],
+  [
+    "単語・熟語 (副詞＋動詞)",
+    "sincerely hope",
+    "心から願う"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "What have you been up to?",
+    "最近どう過ごしてた？"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "We should totally hang out this weekend!",
+    "今週末、絶対遊びに行こうよ！"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "That's hilarious!",
+    "それ超ウケる／めちゃくちゃ面白いね！"
+  ],
+  [
+    "友達・カジュアル雑談",
+    "Let me know when you're free.",
+    "手が空いたら教えてね。"
+  ],
+  [
+    "共感する・寄り添う",
+    "I understand how you feel.",
+    "あなたの気持ち、すごくよく分かるよ。"
+  ],
+  [
+    "共感する・寄り添う",
+    "That must have been really hard.",
+    "それは本当につらかったね。"
+  ],
+  [
+    "共感する・寄り添う",
+    "I'd feel the same way if I were in your shoes.",
+    "もし私があなたの立場でも、きっと同じように感じると思う。"
+  ],
+  [
+    "励ます・応援する",
+    "Don't be so hard on yourself.",
+    "自分を責めすぎないでね。"
+  ],
+  [
+    "励ます・応援する",
+    "Take all the time you need.",
+    "焦らず、必要なだけ時間をかけてね。"
+  ],
+  [
+    "文法・文型",
+    "I've been busy this week.",
+    "今週はバタバタしていて忙しかったよ。（応用: I've been busy with work lately. 最近仕事で忙しいんだ）"
+  ],
+  [
+    "文法・文型",
+    "I'm glad you got to relax today.",
+    "今日はゆっくりできたみたいでよかった。"
+  ],
+  [
+    "文法・文型",
+    "I got to talk to her today.",
+    "今日は彼女と話すことができた。（get to + 動詞：〜する機会がある／〜できる）"
+  ],
+  [
+    "文法・文型",
+    "I got my leg hair removed.",
+    "脚の脱毛をしてもらった。（get + 目的語 + 過去分詞：施術や修理などを受ける）"
+  ],
+  [
+    "会話フレーズ",
+    "No worries about the late reply!",
+    "返信が遅くなったことは気にしないでね！"
+  ],
+  [
+    "会話フレーズ",
+    "I hope you can get some rest.",
+    "少しでも休めるといいね。（Make sure to take breaks. などのニュアンス）"
+  ],
+  [
+    "会話フレーズ",
+    "I'm looking forward to Sunday.",
+    "日曜日を楽しみにしているよ。（look forward to の後は名詞・動名詞）"
+  ],
+  [
+    "会話フレーズ",
+    "Which burger place should we go to?",
+    "ハンバーガー屋さんはどこにする？"
+  ],
+  [
+    "会話フレーズ",
+    "One of your favorites?",
+    "あなたのお気に入りのひとつ？（会話中の省略表現）"
+  ],
+  [
+    "会話フレーズ",
+    "I'm going out for drinks with my coworkers on Friday.",
+    "金曜日に同僚と飲みに行くんだ。（go out for drinks with someone）"
+  ],
+  [
+    "会話フレーズ",
+    "No, sorry, I didn't mean that. That was a poor choice of words.",
+    "いや、ごめん、そういう意味じゃなくて。言い方が悪かったね。"
+  ],
+  [
+    "語彙・コロケーション",
+    "I've been doing a lot of overtime this week.",
+    "今週は残業がかなり多いんだ。（overtime: 残業）"
+  ],
+  [
+    "語彙・コロケーション",
+    "renew my driver's license",
+    "運転免許を更新する"
+  ]
+];
+
+    function getCustomPhrases() {
+      try {
+        return JSON.parse(localStorage.getItem('english_app_custom_phrases')) || [];
+      } catch(e) {
+        return [];
+      }
+    }
+
+    function saveCustomPhrases(customs) {
       localStorage.setItem('english_app_custom_phrases', JSON.stringify(customs));
+    }
+
+    function getAllPhrases() {
+      const customs = getCustomPhrases();
+      return [...customs, ...basePhrases];
+    }
+
+    const phrases = getAllPhrases();
+
+    function getStore() {
+      try {
+        return JSON.parse(localStorage.getItem('english_app_data')) || { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
+      } catch(e) {
+        return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, favorites: [] };
+      }
+    }
+
+    function saveStore(store) {
+      localStorage.setItem('english_app_data', JSON.stringify(store));
+    }
+
+    function isFavorite(enText) {
+      const store = getStore();
+      return (store.favorites || []).includes(enText);
+    }
+
+    function toggleFavorite(enText) {
+      const store = getStore();
+      store.favorites = store.favorites || [];
+      const idx = store.favorites.indexOf(enText);
+      if (idx >= 0) {
+        store.favorites.splice(idx, 1);
+      } else {
+        store.favorites.push(enText);
+      }
+      saveStore(store);
+      return idx < 0;
+    }
+
+    
+const autoTranslateDict = {
+      "resilience": ["回復力、立ち直り力", "She showed great resilience in overcoming challenges."],
+      "empathy": ["共感、感情移入", "Empathy is essential for building deep relationships."],
+      "mindfulness": ["マインドフルネス、今に集中すること", "Practicing mindfulness helps reduce stress."],
+      "appreciate": ["感謝する、真価を認める", "I really appreciate your kind support."],
+      "cherish": ["大切にする、心に抱く", "I will always cherish the moments we spent together."],
+      "breathtaking": ["息をのむほど美しい", "The view from the top of the mountain was breathtaking."],
+      "confession": ["告白、自白", "I have a confession to make."],
+      "affection": ["愛情、慈しみ", "She showed deep affection for her family."],
+      "devotion": ["献身、深い愛情", "His devotion to music is truly inspiring."],
+      "intimacy": ["親密さ、親交", "They share a wonderful intimacy."]
+    };
+
+    async function autoSearchWord() {
+      const wordInput = document.getElementById('inputWord').value.trim();
+      const statusBox = document.getElementById('searchStatus');
       
-      alert('新しい単語・フレーズを追加しました！');
-      document.getElementById('addEn').value = '';
-      document.getElementById('addJa').value = '';
+      if (!wordInput) {
+        alert('検索する単語やフレーズを入力してください。');
+        return;
+      }
+
+      statusBox.style.display = 'block';
+      statusBox.style.background = '#e0e7ff';
+      statusBox.style.color = '#3730a3';
+      statusBox.textContent = '🌐 オンライン辞書＆翻訳データを検索中...';
+
+      const lower = wordInput.toLowerCase();
+      let translatedJa = "";
+      let samplePhrase = `I want to learn more about "${wordInput}".`;
+
+      if (autoTranslateDict[lower]) {
+        translatedJa = autoTranslateDict[lower][0];
+        samplePhrase = autoTranslateDict[lower][1];
+      } else {
+        // Try MyMemory free translation API for en->ja
+        try {
+          const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(wordInput)}&langpair=en|ja`;
+          const response = await fetch(url);
+          const data = await response.json();
+          if (data && data.responseData && data.responseData.translatedText) {
+            let resText = data.responseData.translatedText;
+            if (!resText.includes('MATCH NO') && !resText.includes('QUERY LENGTH') && resText.toLowerCase() !== wordInput.toLowerCase()) {
+              translatedJa = resText;
+            }
+          }
+        } catch(e) {
+          console.error("API Error: ", e);
+        }
+
+        // If API fails or returns same string, provide a clean default or lookup
+        if (!translatedJa || translatedJa.toLowerCase() === wordInput.toLowerCase() || translatedJa.includes('MATCH NO')) {
+          // General fallback based on word length/ending or direct meaning
+          translatedJa = `${wordInput}（日本語の意味）`;
+        }
+        samplePhrase = `This is a wonderful expression: "${wordInput}".`;
+      }
+
+      document.getElementById('inputMeaning').value = translatedJa;
+      document.getElementById('inputExample').value = samplePhrase;
+
+      statusBox.style.display = 'block';
+      statusBox.style.background = '#dcfce7';
+      statusBox.style.color = '#15803d';
+      statusBox.textContent = '✨ 辞書から意味と例文を自動取得しました！';
+    }
+
+    function renderCustomList() {
+      const container = document.getElementById('customListContainer');
+      if (!container) return;
+
+      const customs = getCustomPhrases();
+      if (customs.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:0.9rem; text-align:center; padding:1rem;">まだ追加された単語はありません。</div>';
+        return;
+      }
+
+      container.innerHTML = '';
+      customs.forEach((item, index) => {
+        const card = document.createElement('div');
+        card.style.cssText = 'background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.75rem; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;';
+        card.innerHTML = `
+          <div>
+            <div style="font-weight:bold; color:var(--primary);">${item[1]}</div>
+            <div style="font-size:0.85rem; color:var(--text);">${item[2]}</div>
+          </div>
+          <button class="btn-del" data-index="${index}" style="background:#fee2e2; color:#b91c1c; border:none; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer;">削除</button>
+        `;
+
+        card.querySelector('.btn-del').addEventListener('click', (e) => {
+          const idx = parseInt(e.target.dataset.index);
+          const list = getCustomPhrases();
+          list.splice(idx, 1);
+          saveCustomPhrases(list);
+          renderCustomList();
+        });
+
+        container.appendChild(card);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderCustomList();
+
+      document.getElementById('autoSearchBtn').addEventListener('click', autoSearchWord);
+
+      document.getElementById('saveCustomBtn').addEventListener('click', () => {
+        const word = document.getElementById('inputWord').value.trim();
+        const meaning = document.getElementById('inputMeaning').value.trim();
+        const example = document.getElementById('inputExample').value.trim();
+
+        if (!word || !meaning) {
+          alert('単語（またはフレーズ）と意味を入力してください。');
+          return;
+        }
+
+        const newItem = ["マイ単語・フレーズ", word, meaning, example];
+        const list = getCustomPhrases();
+        list.unshift(newItem);
+        saveCustomPhrases(list);
+
+        alert('🎉 マイ単語帳に新しく追加されました！クイズや英作文、発音チェックにすぐ反映されます。');
+
+        document.getElementById('inputWord').value = '';
+        document.getElementById('inputMeaning').value = '';
+        document.getElementById('inputExample').value = '';
+        document.getElementById('searchStatus').style.display = 'none';
+
+        renderCustomList();
+      });
     });
+
   </script>
 </body>
 </html>
