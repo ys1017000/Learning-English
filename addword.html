@@ -2,38 +2,25 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英単語学習 App - 単語追加</title>
+    <title>単語追加</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #2c3e50; }
-        nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px; }
-        nav a { text-decoration: none; padding: 10px 15px; background: #3498db; color: white; border-radius: 5px; font-weight: bold; }
-        nav a:hover { background: #2980b9; }
-        input { width: 100%; padding: 10px; margin: 10px 0; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { width: 100%; padding: 12px; background: #2ecc71; color: white; border: none; border-radius: 5px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 10px; color: #3498db; text-decoration: none; font-weight: bold; }
+        input, button { padding: 10px; margin: 5px 0; width: 100%; box-sizing: border-box; border-radius: 5px; border: 1px solid #ccc; }
+        button { background-color: #3498db; color: white; border: none; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>単語追加</h1>
-        <nav>
-            <a href="index.html">ホーム</a>
-            <a href="quiz.html">単語クイズ</a>
-            <a href="writing.html">ライティング</a>
-            <a href="speaking.html">スピーキング</a>
-            <a href="translator.html">翻訳ツール</a>
-            <a href="addword.html">単語追加</a>
-            <a href="phrases.html">フレーズ集</a>
-        </nav>
-        <form onsubmit="alert('単語を辞書に追加しました！'); return false;">
-            <label>英単語</label>
-            <input type="text" placeholder="例: persistent" required>
-            <label>意味</label>
-            <input type="text" placeholder="例: 粘り強い、持続する" required>
-            <button type="submit">辞書に追加する</button>
-        </form>
+        <div class="nav"><a href="index.html">← ホームへ戻る</a></div>
+        <h1>新しい単語を追加</h1>
+        <input type="text" id="newWord" placeholder="英単語 (例: apple)">
+        <input type="text" id="newMeaning" placeholder="意味 (例: りんご)">
+        <button onclick="addWord()">追加</button>
     </div>
+    <script src="app.js"></script>
 </body>
 </html>

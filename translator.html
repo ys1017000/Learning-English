@@ -2,35 +2,20 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>英単語学習 App - 翻訳ツール</title>
+    <title>翻訳ツール</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
-        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f4f7f6; padding: 20px; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         h1 { text-align: center; color: #2c3e50; }
-        nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px; }
-        nav a { text-decoration: none; padding: 10px 15px; background: #3498db; color: white; border-radius: 5px; font-weight: bold; }
-        nav a:hover { background: #2980b9; }
-        textarea { width: 100%; height: 80px; padding: 10px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
-        button { padding: 10px 20px; background: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer; margin: 10px 0; }
-        .result { padding: 15px; background: #eef2f5; border-radius: 5px; min-height: 50px; }
+        .nav { margin-bottom: 20px; }
+        .nav a { margin-right: 10px; color: #3498db; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
+        <div class="nav"><a href="index.html">← ホームへ戻る</a></div>
         <h1>翻訳ツール</h1>
-        <nav>
-            <a href="index.html">ホーム</a>
-            <a href="quiz.html">単語クイズ</a>
-            <a href="writing.html">ライティング</a>
-            <a href="speaking.html">スピーキング</a>
-            <a href="translator.html">翻訳ツール</a>
-            <a href="addword.html">単語追加</a>
-            <a href="phrases.html">フレーズ集</a>
-        </nav>
-        <textarea id="transInput" placeholder="翻訳したいテキストを入力..."></textarea>
-        <button onclick="document.getElementById('transOutput').innerText = '【翻訳結果】 ' + document.getElementById('transInput').value">翻訳実行</button>
-        <div class="result" id="transOutput">結果がここに表示されます。</div>
     </div>
+    <script src="app.js"></script>
 </body>
 </html>
