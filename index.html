@@ -3,86 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Learning App</title>
+    <title>英単語学習 App - ホーム</title>
     <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f7f6;
-            margin: 0;
-            padding: 20px;
-            color: #333;
-        }
-        .container {
-            max-width: 600px;
-            margin: 0 auto;
-            background: #fff;
-            padding: 25px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .section {
-            margin-bottom: 25px;
-        }
-        input, button {
-            padding: 10px;
-            margin: 5px 0;
-            width: 100%;
-            box-sizing: border-box;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-        }
-        button {
-            background-color: #3498db;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-        }
-        button:hover {
-            background-color: #2980b9;
-        }
-        .card {
-            border: 1px solid #e0e0e0;
-            padding: 15px;
-            border-radius: 8px;
-            background-color: #fafafa;
-            margin-top: 10px;
-        }
-        .word {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-        .meaning {
-            font-size: 1.1em;
-            color: #555;
-            margin-top: 5px;
-        }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; color: #333; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 25px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #2c3e50; }
+        nav { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-bottom: 25px; }
+        nav a { text-decoration: none; padding: 10px 15px; background: #3498db; color: white; border-radius: 5px; font-weight: bold; }
+        nav a:hover { background: #2980b9; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px; }
+        .card { border: 1px solid #e0e0e0; padding: 20px; border-radius: 8px; background: #fafafa; text-align: center; }
+        .card h3 { margin-top: 0; color: #2c3e50; }
+        .card a { display: inline-block; margin-top: 10px; text-decoration: none; padding: 8px 12px; background: #2ecc71; color: white; border-radius: 4px; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>英単語学習 App</h1>
-        
-        <div class="section">
-            <h2>単語検索</h2>
-            <input type="text" id="searchInput" placeholder="単語または意味を入力...">
-            <button onclick="searchWord()">検索</button>
-            <div id="searchResult"></div>
-        </div>
-
-        <div class="section">
-            <h2>新しい単語を追加</h2>
-            <input type="text" id="newWord" placeholder="英単語 (例: apple)">
-            <input type="text" id="newMeaning" placeholder="意味 (例: りんご)">
-            <button onclick="addWord()">追加</button>
+        <nav>
+            <a href="index.html">ホーム</a>
+            <a href="quiz.html">単語クイズ</a>
+            <a href="writing.html">ライティング</a>
+            <a href="speaking.html">スピーキング</a>
+            <a href="translator.html">翻訳ツール</a>
+            <a href="addword.html">単語追加</a>
+            <a href="phrases.html">フレーズ集</a>
+        </nav>
+        <h2>メインメニュー</h2>
+        <div class="grid">
+            <div class="card">
+                <h3>単語クイズ</h3>
+                <p>クイズ形式で英単語をチェック</p>
+                <a href="quiz.html">スタート</a>
+            </div>
+            <div class="card">
+                <h3>ライティング</h3>
+                <p>英文作成トレーニング</p>
+                <a href="writing.html">スタート</a>
+            </div>
+            <div class="card">
+                <h3>スピーキング</h3>
+                <p>発音とスピーキングの練習</p>
+                <a href="speaking.html">スタート</a>
+            </div>
+            <div class="card">
+                <h3>翻訳ツール</h3>
+                <p>単語や文章の相互翻訳</p>
+                <a href="translator.html">開く</a>
+            </div>
+            <div class="card">
+                <h3>単語追加</h3>
+                <p>新しい単語を辞書に登録</p>
+                <a href="addword.html">追加する</a>
+            </div>
+            <div class="card">
+                <h3>フレーズ集</h3>
+                <p>日常会話で使える表現集</p>
+                <a href="phrases.html">見る</a>
+            </div>
         </div>
     </div>
-
-    <script src="app.js"></script>
 </body>
 </html>
