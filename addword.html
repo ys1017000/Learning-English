@@ -277,36 +277,32 @@
 
   <div class="container">
     
-    <div class="card">
-      <h2 style="color:#d97706;">➕ 単語・フレーズの追加と辞書自動検索</h2>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">覚えたい単語を入力して「辞書から自動検索」を押すと、意味や例文が自動で入力されます！追加した単語はすべての学習モードに反映されます。</p>
-      
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">追加する単語・英語フレーズ:</label>
-        <div style="display:flex; gap:8px; margin-top:4px;">
-          <input type="text" id="inputWord" placeholder="例: resilience, empathy..." style="margin-bottom:0; flex:1;">
-          <button class="btn" id="autoSearchBtn" style="background:#d97706; width:auto; padding:0 1rem; font-size:0.85rem; white-space:nowrap;">🌐 辞書から自動検索</button>
-        </div>
+    <select id="genreSelect" class="genre-select-box"></select>
+
+    <div class="card" id="quizCard">
+      <button class="fav-star-btn" id="quizFavBtn">★</button>
+
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; padding-right:2rem;">
+        <span id="categoryLabel" style="font-size:0.8rem; color:#64748b;">カテゴリー</span>
+        <span id="quizStepText" style="font-size:0.85rem; font-weight:bold; color:var(--primary);">第 1 問 / 全 10 問</span>
       </div>
 
-      <div id="searchStatus" style="display:none; padding:0.75rem; border-radius:8px; font-size:0.85rem; font-weight:bold; margin-bottom:1rem; text-align:center;"></div>
-
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">意味・日本語訳:</label>
-        <input type="text" id="inputMeaning" placeholder="例: 回復力、立ち直り力" style="margin-top:4px; margin-bottom:0;">
+      <div class="progress-bar-container">
+        <div class="progress-bar-fill" id="progressBarFill"></div>
       </div>
 
-      <div style="margin-bottom:1.25rem;">
-        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">例文・補足情報 (任意):</label>
-        <input type="text" id="inputExample" placeholder="例: She showed great resilience..." style="margin-top:4px; margin-bottom:0;">
-      </div>
-
-      <button class="btn" id="saveCustomBtn" style="background:#d97706;">💾 マイ単語帳に保存して追加する</button>
+      <div class="question" id="questionText">問題文を読み込み中...</div>
+      <div class="options" id="optionsContainer"></div>
+      <div class="feedback" id="feedbackArea"></div>
+      <button class="btn" id="nextBtn" style="display:none; margin-top:1rem;">次の問題へ</button>
     </div>
 
-    <div class="card">
-      <h2>📚 追加したマイ単語一覧</h2>
-      <div id="customListContainer"></div>
+    <div class="card" id="resultCard" style="display:none; text-align:center;">
+      <div style="font-size:2.5rem; margin-bottom:0.5rem;">🏆</div>
+      <h2>クイズ完了！</h2>
+      <div id="resultScoreText" style="font-size:1.4rem; font-weight:bold; color:var(--primary); margin:0.75rem 0;">10 問中 10 問 正解！</div>
+      <p id="resultMessage" style="color:var(--text-muted); margin-bottom:1.5rem;">パーフェクト！素晴らしいです！🌟</p>
+      <button class="btn" id="restartBtn">🔄 もう一度 10問挑戦する</button>
     </div>
 
   </div>
@@ -695,136 +691,195 @@
     }
 
     
-const autoTranslateDict = {
-      "resilience": ["回復力、立ち直り力", "She showed great resilience in overcoming challenges."],
-      "empathy": ["共感、感情移入", "Empathy is essential for building deep relationships."],
-      "mindfulness": ["マインドフルネス、今に集中すること", "Practicing mindfulness helps reduce stress."],
-      "appreciate": ["感謝する、真価を認める", "I really appreciate your kind support."],
-      "cherish": ["大切にする、心に抱く", "I will always cherish the moments we spent together."],
-      "breathtaking": ["息をのむほど美しい", "The view from the top of the mountain was breathtaking."],
-      "confession": ["告白、自白", "I have a confession to make."],
-      "affection": ["愛情、慈しみ", "She showed deep affection for her family."],
-      "devotion": ["献身、深い愛情", "His devotion to music is truly inspiring."],
-      "intimacy": ["親密さ、親交", "They share a wonderful intimacy."]
-    };
+    function populateGenreSelect() {
+      const select = document.getElementById('genreSelect');
+      if (!select) return;
 
-    async function autoSearchWord() {
-      const wordInput = document.getElementById('inputWord').value.trim();
-      const statusBox = document.getElementById('searchStatus');
-      
-      if (!wordInput) {
-        alert('検索する単語やフレーズを入力してください。');
-        return;
-      }
-
-      statusBox.style.display = 'block';
-      statusBox.style.background = '#e0e7ff';
-      statusBox.style.color = '#3730a3';
-      statusBox.textContent = '🌐 オンライン辞書＆翻訳データを検索中...';
-
-      const lower = wordInput.toLowerCase();
-      let translatedJa = "";
-      let samplePhrase = `I want to learn more about "${wordInput}".`;
-
-      if (autoTranslateDict[lower]) {
-        translatedJa = autoTranslateDict[lower][0];
-        samplePhrase = autoTranslateDict[lower][1];
-      } else {
-        // Try MyMemory free translation API for en->ja
-        try {
-          const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(wordInput)}&langpair=en|ja`;
-          const response = await fetch(url);
-          const data = await response.json();
-          if (data && data.responseData && data.responseData.translatedText) {
-            let resText = data.responseData.translatedText;
-            if (!resText.includes('MATCH NO') && !resText.includes('QUERY LENGTH') && resText.toLowerCase() !== wordInput.toLowerCase()) {
-              translatedJa = resText;
-            }
-          }
-        } catch(e) {
-          console.error("API Error: ", e);
-        }
-
-        // If API fails or returns same string, provide a clean default or lookup
-        if (!translatedJa || translatedJa.toLowerCase() === wordInput.toLowerCase() || translatedJa.includes('MATCH NO')) {
-          // General fallback based on word length/ending or direct meaning
-          translatedJa = `${wordInput}（日本語の意味）`;
-        }
-        samplePhrase = `This is a wonderful expression: "${wordInput}".`;
-      }
-
-      document.getElementById('inputMeaning').value = translatedJa;
-      document.getElementById('inputExample').value = samplePhrase;
-
-      statusBox.style.display = 'block';
-      statusBox.style.background = '#dcfce7';
-      statusBox.style.color = '#15803d';
-      statusBox.textContent = '✨ 辞書から意味と例文を自動取得しました！';
+      const currentPhrases = getAllPhrases();
+      const categories = Array.from(new Set(currentPhrases.map(p => p[0])));
+      select.innerHTML = '<option value="ALL">✨ 全ジャンル (ランダム出題)</option><option value="FAV">⭐ お気に入りフレーズのみ</option>';
+      categories.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = cat;
+        opt.textContent = (cat === 'マイ単語・フレーズ') ? `⭐ ${cat}` : `📁 ${cat}`;
+        select.appendChild(opt);
+      });
     }
 
-    function renderCustomList() {
-      const container = document.getElementById('customListContainer');
-      if (!container) return;
+    function getFilteredPhrases() {
+      const select = document.getElementById('genreSelect');
+      const selectedGenre = select ? select.value : 'ALL';
+      const currentPhrases = getAllPhrases();
 
-      const customs = getCustomPhrases();
-      if (customs.length === 0) {
-        container.innerHTML = '<div style="color:var(--text-muted); font-size:0.9rem; text-align:center; padding:1rem;">まだ追加された単語はありません。</div>';
+      if (selectedGenre === 'FAV') {
+        const store = getStore();
+        const favs = store.favorites || [];
+        return currentPhrases.filter(p => Array.isArray(p) && p.length >= 3 && favs.includes(p[1]));
+      }
+      if (selectedGenre === 'ALL') {
+        return currentPhrases.filter(p => Array.isArray(p) && p.length >= 3);
+      }
+      return currentPhrases.filter(p => Array.isArray(p) && p.length >= 3 && p[0] === selectedGenre);
+    }
+
+    let quizSet = [];
+    let currentIndex = 0;
+    let score = 0;
+    let quizLength = 10;
+
+    function recordAnswer(isCorrect, item) {
+      if (!item || !Array.isArray(item)) return;
+      const store = getStore();
+      const todayStr = new Date().toISOString().split('T')[0];
+
+      store.history = store.history || {};
+      store.history[todayStr] = true;
+
+      store.quizStats = store.quizStats || { correct: 0, total: 0 };
+      store.quizStats.total += 1;
+      if (isCorrect) {
+        store.quizStats.correct += 1;
+      } else {
+        store.weaknesses = store.weaknesses || {};
+        const cat = item[0] || "共通";
+        store.weaknesses[cat] = (store.weaknesses[cat] || 0) + 1;
+      }
+
+      store.studied = store.studied || [];
+      if (!store.studied.includes(item[1])) {
+        store.studied.push(item[1]);
+      }
+
+      saveStore(store);
+    }
+
+    function startNewQuizSession() {
+      const filtered = getFilteredPhrases();
+      if (filtered.length === 0) {
+        const select = document.getElementById('genreSelect');
+        if (select && select.value === 'FAV') {
+          alert('⭐ お気に入りに登録されているフレーズがありません。');
+        } else {
+          alert('出題できるフレーズがありません。「単語追加」タブから単語を追加してみてください！');
+        }
         return;
       }
 
-      container.innerHTML = '';
-      customs.forEach((item, index) => {
-        const card = document.createElement('div');
-        card.style.cssText = 'background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.75rem; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;';
-        card.innerHTML = `
-          <div>
-            <div style="font-weight:bold; color:var(--primary);">${item[1]}</div>
-            <div style="font-size:0.85rem; color:var(--text);">${item[2]}</div>
-          </div>
-          <button class="btn-del" data-index="${index}" style="background:#fee2e2; color:#b91c1c; border:none; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer;">削除</button>
-        `;
+      const shuffled = [...filtered].sort(() => Math.random() - 0.5);
+      quizSet = shuffled.slice(0, Math.min(quizLength, shuffled.length));
+      currentIndex = 0;
+      score = 0;
 
-        card.querySelector('.btn-del').addEventListener('click', (e) => {
-          const idx = parseInt(e.target.dataset.index);
-          const list = getCustomPhrases();
-          list.splice(idx, 1);
-          saveCustomPhrases(list);
-          renderCustomList();
-        });
+      document.getElementById('quizCard').style.display = 'block';
+      document.getElementById('resultCard').style.display = 'none';
 
-        container.appendChild(card);
+      showQuestion();
+    }
+
+    function showQuestion() {
+      if (currentIndex >= quizSet.length) {
+        showResults();
+        return;
+      }
+
+      const current = quizSet[currentIndex];
+      const allValid = getAllPhrases().filter(p => Array.isArray(p) && p.length >= 3);
+
+      const stepNum = currentIndex + 1;
+      const totalNum = quizSet.length;
+      document.getElementById('quizStepText').textContent = `第 ${stepNum} 問 / 全 ${totalNum} 問`;
+      document.getElementById('progressBarFill').style.width = `${(stepNum / totalNum) * 100}%`;
+
+      document.getElementById('categoryLabel').textContent = current[0];
+      document.getElementById('questionText').textContent = `「${current[2]}」に対応する自然な表現は？`;
+
+      const favBtn = document.getElementById('quizFavBtn');
+      if (favBtn) {
+        favBtn.classList.toggle('active', isFavorite(current[1]));
+        favBtn.onclick = () => {
+          const added = toggleFavorite(current[1]);
+          favBtn.classList.toggle('active', added);
+        };
+      }
+
+      const optionsContainer = document.getElementById('optionsContainer');
+      optionsContainer.innerHTML = '';
+
+      const choices = [current[1]];
+      while (choices.length < 3 && allValid.length > choices.length) {
+        const rand = allValid[Math.floor(Math.random() * allValid.length)][1];
+        if (!choices.includes(rand)) choices.push(rand);
+      }
+      choices.sort(() => Math.random() - 0.5);
+
+      const feedbackArea = document.getElementById('feedbackArea');
+      feedbackArea.style.display = 'none';
+      document.getElementById('nextBtn').style.display = 'none';
+
+      choices.forEach(choice => {
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        btn.textContent = choice;
+        btn.addEventListener('click', () => handleAnswer(choice, current, btn));
+        optionsContainer.appendChild(btn);
       });
+    }
+
+    function handleAnswer(choice, item, btn) {
+      const isCorrect = (choice === item[1]);
+      if (isCorrect) score++;
+
+      recordAnswer(isCorrect, item);
+
+      document.querySelectorAll('.option-btn').forEach(b => b.disabled = true);
+
+      const feedbackArea = document.getElementById('feedbackArea');
+      if (isCorrect) {
+        feedbackArea.className = 'feedback correct';
+        feedbackArea.textContent = '⭕ 正解です！';
+      } else {
+        feedbackArea.className = 'feedback wrong';
+        feedbackArea.textContent = `❌ 残念！ 正解: ${item[1]}`;
+      }
+      feedbackArea.style.display = 'block';
+
+      const nextBtn = document.getElementById('nextBtn');
+      if (currentIndex === quizSet.length - 1) {
+        nextBtn.textContent = '🎉 結果を見る';
+      } else {
+        nextBtn.textContent = '次の問題へ ➔';
+      }
+      nextBtn.style.display = 'block';
+    }
+
+    function showResults() {
+      document.getElementById('quizCard').style.display = 'none';
+      document.getElementById('resultCard').style.display = 'block';
+
+      const total = quizSet.length;
+      document.getElementById('resultScoreText').textContent = `${total} 問中 ${score} 問 正解！`;
+
+      let msg = "";
+      if (score === total) {
+        msg = "パーフェクト！素晴らしいです！🌟";
+      } else if (score >= Math.ceil(total * 0.7)) {
+        msg = "ナイスチャレンジ！この調子で続けましょう！💪";
+      } else {
+        msg = "もう一回挑戦して復習してみましょう！✨";
+      }
+      document.getElementById('resultMessage').textContent = msg;
     }
 
     document.addEventListener('DOMContentLoaded', () => {
-      renderCustomList();
+      populateGenreSelect();
+      startNewQuizSession();
 
-      document.getElementById('autoSearchBtn').addEventListener('click', autoSearchWord);
-
-      document.getElementById('saveCustomBtn').addEventListener('click', () => {
-        const word = document.getElementById('inputWord').value.trim();
-        const meaning = document.getElementById('inputMeaning').value.trim();
-        const example = document.getElementById('inputExample').value.trim();
-
-        if (!word || !meaning) {
-          alert('単語（またはフレーズ）と意味を入力してください。');
-          return;
-        }
-
-        const newItem = ["マイ単語・フレーズ", word, meaning, example];
-        const list = getCustomPhrases();
-        list.unshift(newItem);
-        saveCustomPhrases(list);
-
-        alert('🎉 マイ単語帳に新しく追加されました！クイズや英作文、発音チェックにすぐ反映されます。');
-
-        document.getElementById('inputWord').value = '';
-        document.getElementById('inputMeaning').value = '';
-        document.getElementById('inputExample').value = '';
-        document.getElementById('searchStatus').style.display = 'none';
-
-        renderCustomList();
+      document.getElementById('genreSelect').addEventListener('change', startNewQuizSession);
+      document.getElementById('nextBtn').addEventListener('click', () => {
+        currentIndex++;
+        showQuestion();
       });
+      document.getElementById('restartBtn').addEventListener('click', startNewQuizSession);
     });
 
   </script>
