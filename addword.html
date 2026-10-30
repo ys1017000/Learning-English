@@ -3,108 +3,166 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>心をつなぐ英語表現 - 単語追加</title>
   <style>
-    :root { --primary: #4f46e5; --primary-hover: #4338ca; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --radius: 12px; --fav: #f59e0b; }
+    :root {
+      --primary: #4f46e5;
+      --primary-hover: #4338ca;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --radius: 12px;
+    }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: 90px; }
-    header { background: var(--card-bg); padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding-bottom: 90px;
+    }
+    header {
+      background: var(--card-bg);
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
     .logo { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
-    nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); display: flex; justify-content: space-around; padding: 0.6rem 0; border-top: 1px solid var(--border); z-index: 100; }
-    nav a { color: var(--text-muted); text-decoration: none; font-size: 0.6rem; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      display: flex;
+      justify-content: space-around;
+      padding: 0.6rem 0;
+      border-top: 1px solid var(--border);
+      z-index: 100;
+    }
+    nav a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
     nav a.active { color: var(--primary); font-weight: bold; }
     .container { max-width: 600px; margin: 0 auto; padding: 1.25rem; }
-    .card { background: var(--card-bg); border-radius: var(--radius); padding: 1.25rem; margin-bottom: 1.25rem; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(0,0,0,0.05); position: relative; }
+    .card {
+      background: var(--card-bg);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      position: relative;
+    }
     .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
-    .genre-select-box { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: #ffffff; font-size: 0.95rem; color: var(--text); margin-bottom: 1.25rem; font-weight: 600; cursor: pointer; }
-    .question { font-size: 1.15rem; font-weight: bold; margin-bottom: 1rem; color: #0f172a; }
-    .options { display: flex; flex-direction: column; gap: 0.75rem; }
-    .option-btn { padding: 0.85rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: #fff; text-align: left; font-size: 0.95rem; cursor: pointer; transition: all 0.2s; }
-    .option-btn:hover { background: #f1f5f9; border-color: var(--primary); }
-    .feedback { margin-top: 1rem; padding: 1rem; border-radius: 8px; display: none; font-weight: bold; }
-    .feedback.correct { background: #dcfce7; color: #15803d; }
-    .feedback.wrong { background: #fee2e2; color: #b91c1c; }
-    .btn { display: inline-block; width: 100%; padding: 0.85rem; background: var(--primary); color: white; text-align: center; border-radius: 8px; font-weight: 600; border: none; cursor: pointer; text-decoration: none; }
+    .btn {
+      display: inline-block;
+      width: 100%;
+      padding: 0.85rem;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      text-decoration: none;
+    }
     .btn:hover { background: var(--primary-hover); }
-    .btn-secondary { background: #e2e8f0; color: #334155; }
-    .btn-secondary:hover { background: #cbd5e1; }
-    textarea, input[type="text"] { width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; margin-bottom: 1rem; }
-    textarea { height: 100px; resize: vertical; }
-    .answer-box { margin-top: 1rem; padding: 1rem; background: #f1f5f9; border-radius: 8px; display: none; }
-    .search-box { width: 100%; padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1rem; font-size: 0.95rem; }
-    .phrase-card { background: var(--card-bg); border-radius: var(--radius); padding: 1rem; margin-bottom: 0.75rem; border: 1px solid var(--border); position: relative; }
-    .category-badge { display: inline-block; font-size: 0.75rem; background: #e0e7ff; color: #3730a3; padding: 2px 8px; border-radius: 4px; margin-bottom: 0.4rem; }
-    .category-badge.custom { background: #fef3c7; color: #92400e; }
-    .en-text { font-size: 1.05rem; font-weight: bold; color: #0f172a; }
-    .ja-text { font-size: 0.9rem; color: #475569; margin-top: 0.2rem; }
-    .btn-record { background: #ef4444; }
-    .btn-record.recording { background: #dc2626; animation: pulse 1s infinite; }
-    @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
-    .progress-bar-container { width: 100%; background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden; margin-bottom: 1rem; }
-    .progress-bar-fill { height: 100%; background: var(--primary); width: 0%; transition: width 0.3s ease; }
-    .fav-star-btn { position: absolute; top: 12px; right: 12px; background: none; border: none; font-size: 1.4rem; cursor: pointer; color: #cbd5e1; transition: color 0.2s, transform 0.1s; }
-    .fav-star-btn.active { color: var(--fav); }
-    .fav-star-btn:active { transform: scale(1.2); }
-    .speed-controls { display: flex; justify-content: center; gap: 8px; margin-top: 8px; margin-bottom: 12px; }
-    .speed-btn { padding: 4px 10px; font-size: 0.80rem; border: 1px solid var(--border); border-radius: 12px; background: #fff; cursor: pointer; color: var(--text-muted); }
-    .speed-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    input[type="text"] {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-size: 1rem;
+      margin-bottom: 1rem;
+    }
   </style>
-
-<title>心をつなぐ英語表現 - 単語追加</title>
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">心をつなぐ英語表現</a>
     <span id="streakBadge" style="font-size:0.75rem; background:#e0e7ff; color:#3730a3; padding:4px 8px; border-radius:12px;">🔥 0日連続学習</span>
   </header>
+
   <div class="container">
     <div class="card">
       <h2 style="color:#d97706;">➕ 単語・フレーズの追加と辞書自動検索</h2>
       <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">覚えたい単語を入力して「辞書から自動検索」を押すと、意味や例文が自動で入力されます！</p>
+      
       <div style="margin-bottom:1rem;">
         <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">追加する単語・英語フレーズ:</label>
         <div style="display:flex; gap:8px; margin-top:4px;">
-          <input type="text" id="inputWord" placeholder="例: resilience, empathy..." style="margin-bottom:0; flex:1;">
+          <input type="text" id="inputWord" placeholder="例: resilience, confession..." style="margin-bottom:0; flex:1;">
           <button class="btn" id="autoSearchBtn" style="background:#d97706; width:auto; padding:0 1rem; font-size:0.85rem; white-space:nowrap;">🌐 辞書から自動検索</button>
         </div>
       </div>
+
       <div id="searchStatus" style="display:none; padding:0.75rem; border-radius:8px; font-size:0.85rem; font-weight:bold; margin-bottom:1rem; text-align:center;"></div>
+
       <div style="margin-bottom:1rem;">
         <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">意味・日本語訳:</label>
-        <input type="text" id="inputMeaning" placeholder="例: 回復力、立ち直り力" style="margin-top:4px; margin-bottom:0;">
+        <input type="text" id="inputMeaning" placeholder="例: 告白、自白、打ち明け話" style="margin-top:4px; margin-bottom:0;">
       </div>
+
       <div style="margin-bottom:1.25rem;">
         <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">例文・補足情報 (任意):</label>
-        <input type="text" id="inputExample" placeholder="例: She showed great resilience..." style="margin-top:4px; margin-bottom:0;">
+        <input type="text" id="inputExample" placeholder="例: She made a full confession." style="margin-top:4px; margin-bottom:0;">
       </div>
+
       <button class="btn" id="saveCustomBtn" style="background:#d97706;">💾 マイ単語帳に保存して追加する</button>
     </div>
+
     <div class="card">
       <h2>📚 追加したマイ単語一覧</h2>
       <div id="customListContainer"></div>
     </div>
   </div>
+
   <nav>
-    <a href="index.html">🏠 ホーム</a>
-    <a href="quiz.html">❓ クイズ</a>
-    <a href="writing.html">✍️ 英作文</a>
-    <a href="speaking.html">🎙️ 発音</a>
-    <a href="translator.html">🌐 翻訳会話</a>
+    <a href="index.html" class="">🏠 ホーム</a>
+    <a href="quiz.html" class="">❓ クイズ</a>
+    <a href="writing.html" class="">✍️ 英作文</a>
+    <a href="speaking.html" class="">🎙️ 発音</a>
+    <a href="translator.html" class="">🌐 翻訳会話</a>
     <a href="addword.html" class="active">➕ 単語追加</a>
-    <a href="phrases.html">📚 表現集</a>
+    <a href="phrases.html" class="">📚 表現集</a>
   </nav>
+
   <script>
-    function getCustomPhrases() { try { return JSON.parse(localStorage.getItem('english_app_custom_phrases')) || []; } catch(e) { return []; } }
-    function saveCustomPhrases(list) { localStorage.setItem('english_app_custom_phrases', JSON.stringify(list)); }
+    function getCustomPhrases() {
+      try { return JSON.parse(localStorage.getItem('english_app_custom_phrases')) || []; } catch(e) { return []; }
+    }
+    function saveCustomPhrases(list) {
+      localStorage.setItem('english_app_custom_phrases', JSON.stringify(list));
+    }
+
     function renderCustomList() {
       const container = document.getElementById('customListContainer');
       const customs = getCustomPhrases();
-      if (customs.length === 0) { container.innerHTML = '<div style="color:var(--text-muted); font-size:0.9rem; text-align:center; padding:1rem;">まだ追加された単語はありません。</div>'; return; }
+      if (customs.length === 0) {
+        container.innerHTML = '<div style="color:var(--text-muted); font-size:0.9rem; text-align:center; padding:1rem;">まだ追加された単語はありません。</div>';
+        return;
+      }
       container.innerHTML = '';
       customs.forEach((item, index) => {
         const card = document.createElement('div');
         card.style.cssText = 'background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.75rem; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;';
-        card.innerHTML = `<div><div style="font-weight:bold; color:var(--primary);">${item[1]}</div><div style="font-size:0.85rem; color:var(--text);">${item[2]}</div></div><button class="btn-del" data-index="${index}" style="background:#fee2e2; color:#b91c1c; border:none; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer;">削除</button>`;
-        card.querySelector('.btn-del').addEventListener('click', (e) => {
+        card.innerHTML = `<div><div style="font-weight:bold; color:var(--primary);">${item[1]}</div><div style="font-size:0.85rem; color:var(--text);">${item[2]}</div>${item[3] ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">例文: ${item[3]}</div>` : ''}</div><button class="btn-del" data-index="${index}" style="background:#fee2e2; color:#b91c1c; border:none; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer;">削除</button>`;
+        card.querySelector('.btn-del').addEventListener('click', () => {
           const list = getCustomPhrases();
           list.splice(index, 1);
           saveCustomPhrases(list);
@@ -113,13 +171,79 @@
         container.appendChild(card);
       });
     }
+
+    async function lookupDictionary(word) {
+      const status = document.getElementById('searchStatus');
+      status.style.display = 'block';
+      status.style.background = '#e0e7ff';
+      status.style.color = '#3730a3';
+      status.textContent = '🌐 辞書を検索中...';
+
+      try {
+        // フリーの英英辞書API (Free Dictionary API) を利用
+        const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+        if (!res.ok) throw new Error('Dict API error');
+        const data = await res.json();
+        
+        if (data && data.length > 0 && data[0].meanings && data[0].meanings.length > 0) {
+          const meaningObj = data[0].meanings[0];
+          const definition = meaningObj.definitions[0];
+          const enDef = definition.definition || '';
+          const enEx = definition.example || '';
+
+          // 翻訳APIを使って日本語に変換
+          const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(enDef)}&langpair=en|ja`);
+          const transData = await transRes.json();
+          const jaMeaning = (transData && transData.responseData) ? transData.responseData.translatedText : enDef;
+
+          document.getElementById('inputMeaning').value = jaMeaning;
+          document.getElementById('inputExample').value = enEx;
+
+          status.style.background = '#dcfce7';
+          status.style.color = '#15803d';
+          status.textContent = '✅ 辞書から意味と例文を自動取得しました！';
+          return;
+        }
+      } catch(e) {
+        // フォールバック: 翻訳APIのみで直訳・解説を取得
+        try {
+          const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|ja`);
+          const transData = await transRes.json();
+          if (transData && transData.responseData) {
+            document.getElementById('inputMeaning').value = transData.responseData.translatedText;
+            status.style.background = '#dcfce7';
+            status.style.color = '#15803d';
+            status.textContent = '✅ 翻訳データを自動入力しました！';
+            return;
+          }
+        } catch(err) {}
+      }
+
+      status.style.background = '#fee2e2';
+      status.style.color = '#b91c1c';
+      status.textContent = '❌ 辞書が見つかりませんでした。手動で入力してください。';
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
       renderCustomList();
+
+      document.getElementById('autoSearchBtn').addEventListener('click', () => {
+        const word = document.getElementById('inputWord').value.trim();
+        if (!word) {
+          alert('検索する単語を入力してください。');
+          return;
+        }
+        lookupDictionary(word);
+      });
+
       document.getElementById('saveCustomBtn').addEventListener('click', () => {
         const word = document.getElementById('inputWord').value.trim();
         const meaning = document.getElementById('inputMeaning').value.trim();
         const example = document.getElementById('inputExample').value.trim();
-        if (!word || !meaning) { alert('単語と意味を入力してください。'); return; }
+        if (!word || !meaning) {
+          alert('単語と意味を入力してください。');
+          return;
+        }
         const list = getCustomPhrases();
         list.unshift(["マイ単語・フレーズ", word, meaning, example]);
         saveCustomPhrases(list);
@@ -127,6 +251,7 @@
         document.getElementById('inputWord').value = '';
         document.getElementById('inputMeaning').value = '';
         document.getElementById('inputExample').value = '';
+        document.getElementById('searchStatus').style.display = 'none';
         renderCustomList();
       });
     });
