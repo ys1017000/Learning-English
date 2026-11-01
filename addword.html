@@ -2,130 +2,37 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>心をつなぐ英語表現 - 単語追加</title>
-  <style>
-    :root {
-      --primary: #4f46e5;
-      --primary-hover: #4338ca;
-      --bg: #f8fafc;
-      --card-bg: #ffffff;
-      --text: #1e293b;
-      --text-muted: #64748b;
-      --border: #e2e8f0;
-      --radius: 12px;
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      padding-bottom: 90px;
-    }
-    header {
-      background: var(--card-bg);
-      padding: 1rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
-    .logo { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
-    nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--card-bg);
-      display: flex;
-      justify-content: space-around;
-      padding: 0.6rem 0;
-      border-top: 1px solid var(--border);
-      z-index: 100;
-    }
-    nav a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 0.6rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-    }
-    nav a.active { color: var(--primary); font-weight: bold; }
-    .container { max-width: 600px; margin: 0 auto; padding: 1.25rem; }
-    .card {
-      background: var(--card-bg);
-      border-radius: var(--radius);
-      padding: 1.25rem;
-      margin-bottom: 1.25rem;
-      border: 1px solid var(--border);
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-      position: relative;
-    }
-    .card h2 { font-size: 1.05rem; margin-bottom: 1rem; color: var(--text); }
-    .btn {
-      display: inline-block;
-      width: 100%;
-      padding: 0.85rem;
-      background: var(--primary);
-      color: white;
-      text-align: center;
-      border-radius: 8px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      text-decoration: none;
-    }
-    .btn:hover { background: var(--primary-hover); }
-    input[type="text"] {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-size: 1rem;
-      margin-bottom: 1rem;
-    }
-  </style>
+  <link rel="stylesheet" href="common.css?v=3">
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">心をつなぐ英語表現</a>
-    <span id="streakBadge" style="font-size:0.75rem; background:#e0e7ff; color:#3730a3; padding:4px 8px; border-radius:12px;">🔥 0日連続学習</span>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
-
   <div class="container">
     <div class="card">
       <h2 style="color:#d97706;">➕ 単語・フレーズの追加と辞書自動検索</h2>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">覚えたい単語を入力して「辞書から自動検索」を押すと、意味や例文が自動で入力されます！</p>
-      
+      <p class="muted" style="margin-bottom:1rem;">覚えたい単語を入力して「辞書から自動検索」を押すと、意味や例文が自動で入力されます。</p>
       <div style="margin-bottom:1rem;">
-        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">追加する単語・英語フレーズ:</label>
+        <label for="inputWord" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">追加する単語・英語フレーズ:</label>
         <div style="display:flex; gap:8px; margin-top:4px;">
-          <input type="text" id="inputWord" placeholder="例: resilience, confession..." style="margin-bottom:0; flex:1;">
+          <input type="text" id="inputWord" placeholder="例: resilience, confession..." autocapitalize="none" autocorrect="off" spellcheck="false" style="margin-bottom:0; flex:1;">
           <button class="btn" id="autoSearchBtn" style="background:#d97706; width:auto; padding:0 1rem; font-size:0.85rem; white-space:nowrap;">🌐 辞書から自動検索</button>
         </div>
       </div>
-
-      <div id="searchStatus" style="display:none; padding:0.75rem; border-radius:8px; font-size:0.85rem; font-weight:bold; margin-bottom:1rem; text-align:center;"></div>
-
-      <div style="margin-bottom:1rem;">
-        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">意味・日本語訳:</label>
+      <div class="status-msg" id="searchStatus" role="status"></div>
+      <div style="margin:1rem 0;">
+        <label for="inputMeaning" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">意味・日本語訳:</label>
         <input type="text" id="inputMeaning" placeholder="例: 告白、自白、打ち明け話" style="margin-top:4px; margin-bottom:0;">
       </div>
-
       <div style="margin-bottom:1.25rem;">
-        <label style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">例文・補足情報 (任意):</label>
+        <label for="inputExample" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">例文・補足情報 (任意):</label>
         <input type="text" id="inputExample" placeholder="例: She made a full confession." style="margin-top:4px; margin-bottom:0;">
       </div>
-
       <button class="btn" id="saveCustomBtn" style="background:#d97706;">💾 マイ単語帳に保存して追加する</button>
     </div>
-
     <div class="card">
       <h2>📚 追加したマイ単語一覧</h2>
       <div id="customListContainer"></div>
@@ -133,128 +40,140 @@
   </div>
 
   <nav>
-    <a href="index.html" class="">🏠 ホーム</a>
-    <a href="quiz.html" class="">❓ クイズ</a>
-    <a href="writing.html" class="">✍️ 英作文</a>
-    <a href="speaking.html" class="">🎙️ 発音</a>
-    <a href="translator.html" class="">🌐 翻訳会話</a>
-    <a href="addword.html" class="active">➕ 単語追加</a>
-    <a href="phrases.html" class="">📚 表現集</a>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="quiz.html">❓ クイズ</a>
+    <a href="writing.html">✍️ 英作文</a>
+    <a href="speaking.html">🎙️ 発音</a>
+    <a href="translator.html">🌐 翻訳会話</a>
+    <a href="addword.html" class="active" aria-current="page">➕ 単語追加</a>
+    <a href="phrases.html">📚 表現集</a>
   </nav>
-
+  <script src="common.js?v=3"></script>
   <script>
-    function getCustomPhrases() {
-      try { return JSON.parse(localStorage.getItem('english_app_custom_phrases')) || []; } catch(e) { return []; }
+    const JP_CHAR = /[\u3040-\u30ff\u3400-\u9fff]/;
+
+    function setStatus(type, msg) {
+      const el = document.getElementById('searchStatus');
+      el.className = 'status-msg ' + type;
+      el.textContent = msg;
     }
-    function saveCustomPhrases(list) {
-      localStorage.setItem('english_app_custom_phrases', JSON.stringify(list));
-    }
+    function hideStatus() { document.getElementById('searchStatus').className = 'status-msg'; }
 
     function renderCustomList() {
       const container = document.getElementById('customListContainer');
-      const customs = getCustomPhrases();
+      const customs = EA.getCustomPhrases();
+      container.innerHTML = '';
       if (customs.length === 0) {
-        container.innerHTML = '<div style="color:var(--text-muted); font-size:0.9rem; text-align:center; padding:1rem;">まだ追加された単語はありません。</div>';
+        container.innerHTML = '<div class="muted" style="text-align:center; padding:1rem;">まだ追加された単語はありません。</div>';
         return;
       }
-      container.innerHTML = '';
       customs.forEach((item, index) => {
         const card = document.createElement('div');
-        card.style.cssText = 'background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.75rem; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;';
-        card.innerHTML = `<div><div style="font-weight:bold; color:var(--primary);">${item[1]}</div><div style="font-size:0.85rem; color:var(--text);">${item[2]}</div>${item[3] ? `<div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">例文: ${item[3]}</div>` : ''}</div><button class="btn-del" data-index="${index}" style="background:#fee2e2; color:#b91c1c; border:none; padding:4px 8px; border-radius:6px; font-size:0.75rem; cursor:pointer;">削除</button>`;
-        card.querySelector('.btn-del').addEventListener('click', () => {
-          const list = getCustomPhrases();
-          list.splice(index, 1);
-          saveCustomPhrases(list);
+        card.style.cssText = 'background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.75rem; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center; gap:8px;';
+        const info = document.createElement('div');
+        info.innerHTML = '<div style="font-weight:bold; color:var(--primary);">' + EA.esc(item[1]) + '</div>' +
+          '<div style="font-size:0.85rem;">' + EA.esc(item[2]) + '</div>' +
+          (item[3] ? '<div style="font-size:0.75rem; color:var(--text-muted); margin-top:2px;">例文: ' + EA.esc(item[3]) + '</div>' : '');
+        const del = document.createElement('button');
+        del.textContent = '削除';
+        del.style.cssText = 'background:#fee2e2; color:#b91c1c; border:none; padding:6px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer; flex-shrink:0;';
+        del.addEventListener('click', () => {
+          if (!confirm('「' + item[1] + '」を削除しますか？')) return;
+          // 並び順が変わっていても正しく消せるよう、英文で特定する
+          const list = EA.getCustomPhrases();
+          const i = list.findIndex(p => p[1] === item[1]);
+          if (i >= 0) { list.splice(i, 1); EA.saveCustomPhrases(list); }
           renderCustomList();
         });
+        card.appendChild(info);
+        card.appendChild(del);
         container.appendChild(card);
       });
     }
 
-    async function lookupDictionary(word) {
-      const status = document.getElementById('searchStatus');
-      status.style.display = 'block';
-      status.style.background = '#e0e7ff';
-      status.style.color = '#3730a3';
-      status.textContent = '🌐 辞書を検索中...';
-
+    async function fetchJson(url) {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 8000);
       try {
-        // フリーの英英辞書API (Free Dictionary API) を利用
-        const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-        if (!res.ok) throw new Error('Dict API error');
-        const data = await res.json();
-        
-        if (data && data.length > 0 && data[0].meanings && data[0].meanings.length > 0) {
-          const meaningObj = data[0].meanings[0];
-          const definition = meaningObj.definitions[0];
-          const enDef = definition.definition || '';
-          const enEx = definition.example || '';
-
-          // 翻訳APIを使って日本語に変換
-          const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(enDef)}&langpair=en|ja`);
-          const transData = await transRes.json();
-          const jaMeaning = (transData && transData.responseData) ? transData.responseData.translatedText : enDef;
-
-          document.getElementById('inputMeaning').value = jaMeaning;
-          document.getElementById('inputExample').value = enEx;
-
-          status.style.background = '#dcfce7';
-          status.style.color = '#15803d';
-          status.textContent = '✅ 辞書から意味と例文を自動取得しました！';
-          return;
-        }
-      } catch(e) {
-        // フォールバック: 翻訳APIのみで直訳・解説を取得
-        try {
-          const transRes = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(word)}&langpair=en|ja`);
-          const transData = await transRes.json();
-          if (transData && transData.responseData) {
-            document.getElementById('inputMeaning').value = transData.responseData.translatedText;
-            status.style.background = '#dcfce7';
-            status.style.color = '#15803d';
-            status.textContent = '✅ 翻訳データを自動入力しました！';
-            return;
-          }
-        } catch(err) {}
+        const res = await fetch(url, { signal: ctrl.signal });
+        if (!res.ok) return null;
+        return await res.json();
+      } catch (e) { return null; } finally { clearTimeout(timer); }
+    }
+    function decodeEntities(s) { return new DOMParser().parseFromString(String(s), 'text/html').documentElement.textContent || ''; }
+    async function toJapanese(text) {
+      const data = await fetchJson('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=en|ja');
+      if (data && Number(data.responseStatus) === 200 && data.responseData && data.responseData.translatedText) {
+        return decodeEntities(data.responseData.translatedText);
       }
+      return '';
+    }
 
-      status.style.background = '#fee2e2';
-      status.style.color = '#b91c1c';
-      status.textContent = '❌ 辞書が見つかりませんでした。手動で入力してください。';
+    async function lookupDictionary(word) {
+      if (JP_CHAR.test(word)) { setStatus('error', '❌ 英語の単語・フレーズを入力してください。日本語の意味は下の欄に入力します。'); return; }
+      const btn = document.getElementById('autoSearchBtn');
+      btn.disabled = true;
+      setStatus('info', '🌐 辞書を検索中...');
+      try {
+        // 英英辞書（定義・例文）と翻訳（日本語の意味）を同時に取得
+        const [dict, jaWord] = await Promise.all([
+          fetchJson('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word)),
+          toJapanese(word)
+        ]);
+        let enDef = '', enEx = '';
+        if (Array.isArray(dict)) {
+          outer: for (const entry of dict) {
+            for (const m of (entry.meanings || [])) {
+              for (const d of (m.definitions || [])) {
+                if (!enDef && d.definition) enDef = d.definition;
+                if (d.example) { enEx = d.example; break outer; }
+              }
+            }
+          }
+        }
+        let meaning = jaWord && jaWord.toLowerCase() !== word.toLowerCase() ? jaWord : '';
+        if (!meaning && enDef) meaning = await toJapanese(enDef);   // 単語訳が取れないときは定義を翻訳
+        const example = enEx || (enDef ? 'Definition: ' + enDef : '');
+
+        if (!meaning && !example) { setStatus('error', '❌ 見つかりませんでした。意味を手動で入力してください。'); return; }
+        if (meaning) document.getElementById('inputMeaning').value = meaning;
+        if (example) document.getElementById('inputExample').value = example;
+        setStatus('ok', enEx ? '✅ 意味と例文を自動入力しました。内容を確認して保存してください。'
+          : '✅ 自動入力しました（例文は見つからなかったため英語の定義を入れています）。必要に応じて修正してください。');
+      } finally { btn.disabled = false; }
     }
 
     document.addEventListener('DOMContentLoaded', () => {
       renderCustomList();
-
-      document.getElementById('autoSearchBtn').addEventListener('click', () => {
-        const word = document.getElementById('inputWord').value.trim();
-        if (!word) {
-          alert('検索する単語を入力してください。');
-          return;
-        }
+      const wordInput = document.getElementById('inputWord');
+      const search = () => {
+        const word = wordInput.value.trim();
+        if (!word) { setStatus('error', '検索する単語を入力してください。'); return; }
         lookupDictionary(word);
-      });
+      };
+      document.getElementById('autoSearchBtn').addEventListener('click', search);
+      wordInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); search(); } });
 
       document.getElementById('saveCustomBtn').addEventListener('click', () => {
-        const word = document.getElementById('inputWord').value.trim();
+        const word = wordInput.value.trim();
         const meaning = document.getElementById('inputMeaning').value.trim();
         const example = document.getElementById('inputExample').value.trim();
-        if (!word || !meaning) {
-          alert('単語と意味を入力してください。');
-          return;
-        }
-        const list = getCustomPhrases();
-        list.unshift(["マイ単語・フレーズ", word, meaning, example]);
-        saveCustomPhrases(list);
-        alert('🎉 マイ単語帳に追加されました！');
-        document.getElementById('inputWord').value = '';
+        if (!word || !meaning) { setStatus('error', '単語と意味を入力してください。'); return; }
+        const list = EA.getCustomPhrases();
+        const dupIdx = list.findIndex(p => p[1].toLowerCase() === word.toLowerCase());
+        if (dupIdx >= 0 && !confirm('「' + word + '」はすでに登録されています。内容を上書きしますか？')) return;
+        if (dupIdx >= 0) list.splice(dupIdx, 1);
+        // 同じ英文が標準フレーズにある場合も重複扱いにならないよう、マイ単語側のカテゴリで保持
+        list.unshift([EA.CUSTOM_CAT, word, meaning, example]);
+        if (!EA.saveCustomPhrases(list)) { setStatus('error', '❌ 保存に失敗しました。ブラウザの保存領域を確認してください。'); return; }
+        wordInput.value = '';
         document.getElementById('inputMeaning').value = '';
         document.getElementById('inputExample').value = '';
-        document.getElementById('searchStatus').style.display = 'none';
+        setStatus('ok', '🎉 マイ単語帳に追加しました！');
         renderCustomList();
       });
     });
+
   </script>
 </body>
 </html>
