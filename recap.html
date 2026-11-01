@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 会話ふり返り</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=4">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="translator.html">💬 会話</a>
+    <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
+  </div>
+  <div class="container">
+    <div class="card">
+      <h2>📝 会話のふり返り</h2>
+      <p class="muted" id="recapSummary"></p>
+      <div class="chip-row" style="margin-top:0.75rem;" id="whoChips">
+        <button class="chip active" data-who="all">すべて</button>
+        <button class="chip" data-who="partner">相手の英語</button>
+        <button class="chip" data-who="me">自分の英語</button>
+      </div>
+      <div style="display:flex; gap:8px;">
+        <a href="speaking.html?mode=weak" class="btn weak-cta" style="margin-top:0; flex:1; font-size:0.85rem;" id="reviewSpeakBtn">🎙️ 発音で復習</a>
+        <a href="quiz.html?mode=weak" class="btn weak-cta" style="margin-top:0; flex:1; font-size:0.85rem;" id="reviewQuizBtn">❓ クイズで復習</a>
+      </div>
+      <p class="muted" style="margin-top:0.5rem;">各フレーズの 🔁 を押すと「復習」に追加され、上のボタンから練習できます。</p>
+    </div>
+    <div id="days"></div>
+    <div id="dangerZone" style="text-align:center; margin-top:1rem;"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html" class="active" aria-current="page">💬 翻訳会話</a>
+    <a href="scenes.html">💞 気持ちから</a>
+    <a href="quiz.html">✍️ 練習</a>
+    <a href="phrases.html">📚 表現集</a>
+  </nav>
+  <script src="common.js?v=4"></script>
+  <script>
+    let whoFilter = 'all';
+    const WEEK = ['日', '月', '火', '水', '木', '金', '土'];
+
+    function toast(msg) {
+      let el = document.getElementById('toast');
+      if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+      el.textContent = msg; el.classList.add('show');
+      clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 2200);
+    }
+    function dayLabel(key) {
+      const [y, m, d] = key.split('-').map(Number);
+      const dt = new Date(y, m - 1, d);
+      return m + '月' + d + '日(' + WEEK[dt.getDay()] + ')';
+    }
+
+    function render() {
+      const log = EA.getTalkLog();
+      const wrap = document.getElementById('days');
+      wrap.innerHTML = '';
+      const mine = log.filter(e => e.who === 'me').length, partner = log.length - mine;
+      document.getElementById('recapSummary').textContent = log.length
+        ? '全 ' + log.length + ' 件の会話（自分 ' + mine + ' / 相手 ' + partner + '）。フレーズを保存して、次の会話に活かしましょう。'
+        : 'まだ会話の記録がありません。「翻訳会話」で話すと、ここに自動で溜まります。';
+      const weak = EA.getWeakPhrases().length > 0;
+      ['reviewSpeakBtn', 'reviewQuizBtn'].forEach(id => { const el = document.getElementById(id); el.style.opacity = weak ? '1' : '0.45'; el.style.pointerEvents = weak ? 'auto' : 'none'; });
+
+      const byDay = {};
+      log.filter(e => whoFilter === 'all' || e.who === whoFilter).forEach(e => { (byDay[EA.dateKey(new Date(e.t))] = byDay[EA.dateKey(new Date(e.t))] || []).push(e); });
+      const keys = Object.keys(byDay).sort().reverse();
+      if (!keys.length && log.length) wrap.innerHTML = '<div class="chat-empty">該当する会話がありません。</div>';
+      keys.forEach((key, idx) => {
+        const items = byDay[key];
+        const det = document.createElement('details');
+        det.className = 'day';
+        if (idx === 0) det.open = true;
+        const sum = document.createElement('summary');
+        sum.textContent = dayLabel(key) + '  ·  ' + items.length + '件';
+        det.appendChild(sum);
+        items.slice().sort((a, b) => a.t - b.t).forEach(e => det.appendChild(item(e)));
+        const del = document.createElement('div');
+        del.style.cssText = 'padding:0.6rem 1rem; text-align:right;';
+        const b = document.createElement('button'); b.className = 'tiny-btn'; b.textContent = 'この日の記録を削除';
+        b.addEventListener('click', () => {
+          if (!confirm(dayLabel(key) + ' の会話記録を削除しますか？（保存したマイ単語は消えません）')) return;
+          EA.saveTalkLog(EA.getTalkLog().filter(x => EA.dateKey(new Date(x.t)) !== key));
+          render();
+        });
+        del.appendChild(b); det.appendChild(del);
+        wrap.appendChild(det);
+      });
+
+      const dz = document.getElementById('dangerZone');
+      dz.innerHTML = '';
+      if (log.length) {
+        const b = document.createElement('button'); b.className = 'tiny-btn'; b.textContent = '🗑 すべての会話記録を削除';
+        b.addEventListener('click', () => { if (confirm('すべての会話記録を削除しますか？この操作は元に戻せません。')) { EA.saveTalkLog([]); render(); } });
+        dz.appendChild(b);
+      }
+    }
+
+    function item(e) {
+      const d = document.createElement('div');
+      d.className = 'talk-item';
+      const time = new Date(e.t);
+      const head = document.createElement('div');
+      head.innerHTML = '<span class="who ' + e.who + '">' + (e.who === 'me' ? '自分' : '相手') + '</span> <span class="muted">' +
+        String(time.getHours()).padStart(2, '0') + ':' + String(time.getMinutes()).padStart(2, '0') + '</span>';
+      const en = document.createElement('div'); en.className = 'en-text'; en.textContent = e.en; en.style.marginTop = '0.3rem';
+      const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = e.ja;
+      const kana = document.createElement('div'); kana.className = 'kana-line'; EA.renderKana(kana, e.en);
+      const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem;';
+      const play = document.createElement('button'); play.className = 'icon-btn'; play.textContent = '🔊'; play.setAttribute('aria-label', '再生');
+      play.addEventListener('click', () => EA.speak(e.en, 'en-US', 1.0));
+      const slow = document.createElement('button'); slow.className = 'icon-btn'; slow.textContent = '🐢'; slow.setAttribute('aria-label', 'ゆっくり再生');
+      slow.addEventListener('click', () => EA.speak(e.en, 'en-US', 0.7));
+      const save = document.createElement('button'); save.className = 'icon-btn'; save.setAttribute('aria-label', 'マイ単語に保存');
+      const saved = EA.hasPhrase(e.en);
+      save.textContent = saved ? '✅' : '💾'; if (saved) save.classList.add('done');
+      save.addEventListener('click', () => {
+        const r = EA.addCustomPhrase(e.en, e.ja);
+        if (r.added) { save.textContent = '✅'; save.classList.add('done'); toast('マイ単語に保存しました'); }
+        else toast(r.reason === 'exists' ? 'すでに保存されています' : '保存できませんでした');
+      });
+      const rev = document.createElement('button'); rev.className = 'icon-btn'; rev.textContent = '🔁'; rev.setAttribute('aria-label', '復習に追加');
+      rev.addEventListener('click', () => {
+        const r = EA.addToReview(e.en, e.ja);
+        if (r.added) { toast('復習に追加しました'); save.textContent = '✅'; save.classList.add('done'); render(); }
+        else toast('追加できませんでした');
+      });
+      act.appendChild(play); act.appendChild(slow); act.appendChild(save); act.appendChild(rev);
+      d.appendChild(head); d.appendChild(en); d.appendChild(ja); d.appendChild(kana); d.appendChild(act);
+      return d;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      render();
+      document.querySelectorAll('#whoChips .chip').forEach(c => c.addEventListener('click', () => {
+        document.querySelectorAll('#whoChips .chip').forEach(x => x.classList.remove('active'));
+        c.classList.add('active'); whoFilter = c.dataset.who; render();
+      }));
+    });
+
+  </script>
+</body>
+</html>

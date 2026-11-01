@@ -4,7 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>心をつなぐ英語表現 - ホーム</title>
-  <link rel="stylesheet" href="common.css?v=3">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=4">
 </head>
 <body>
   <header>
@@ -13,12 +16,15 @@
   </header>
   <div class="container">
     <div class="nav-buttons-grid">
+      <a href="translator.html" class="nav-card-btn" style="background:#ccfbf1; border-color:#14b8a6; color:#115e59;"><span class="icon">💬</span><span>翻訳会話</span></a>
+      <a href="scenes.html" class="nav-card-btn" style="background:#fce7f3; border-color:#ec4899; color:#9d174d;"><span class="icon">💞</span><span>気持ちから探す</span></a>
+      <a href="recap.html" class="nav-card-btn"><span class="icon">📝</span><span>会話ふり返り</span></a>
       <a href="quiz.html" class="nav-card-btn"><span class="icon">❓</span><span>クイズ (10問)</span></a>
       <a href="writing.html" class="nav-card-btn"><span class="icon">✍️</span><span>英作文</span></a>
       <a href="speaking.html" class="nav-card-btn"><span class="icon">🎙️</span><span>発音チェック</span></a>
-      <a href="translator.html" class="nav-card-btn"><span class="icon">🌐</span><span>翻訳ツール</span></a>
       <a href="addword.html" class="nav-card-btn" style="background:#fef3c7; border-color:#f59e0b; color:#92400e;"><span class="icon">➕</span><span>単語追加</span></a>
       <a href="phrases.html" class="nav-card-btn"><span class="icon">📚</span><span>表現集一覧</span></a>
+      <a href="quiz.html?mode=weak" class="nav-card-btn"><span class="icon">🎯</span><span>弱点復習</span></a>
     </div>
 
     <div class="card">
@@ -62,7 +68,7 @@
 
     <div class="card">
       <h2>💾 データのバックアップ</h2>
-      <p class="muted" style="margin-bottom:0.75rem;">マイ単語・お気に入り・学習履歴をファイルに保存できます。機種変更やブラウザのデータ削除の前に書き出しておくと安心です。</p>
+      <p class="muted" style="margin-bottom:0.75rem;">マイ単語・お気に入り・学習履歴・会話の記録をファイルに保存できます。機種変更やブラウザのデータ削除の前に書き出しておくと安心です。</p>
       <div class="backup-row">
         <button class="btn" id="exportBtn">⬇️ 書き出し</button>
         <button class="btn btn-secondary" id="importBtn">⬆️ 読み込み</button>
@@ -75,20 +81,16 @@
       <div class="status-msg" id="backupStatus" role="status"></div>
     </div>
 
-    <a href="addword.html" class="btn" style="background:#d97706; margin-bottom:0.75rem;">➕ 覚えたい単語・フレーズを追加する</a>
-    <a href="translator.html" class="btn" style="background:#4338ca;">🌐 リアルタイム翻訳会話ツールを使う</a>
   </div>
 
   <nav>
     <a href="index.html" class="active" aria-current="page">🏠 ホーム</a>
-    <a href="quiz.html">❓ クイズ</a>
-    <a href="writing.html">✍️ 英作文</a>
-    <a href="speaking.html">🎙️ 発音</a>
-    <a href="translator.html">🌐 翻訳会話</a>
-    <a href="addword.html">➕ 単語追加</a>
+    <a href="translator.html">💬 翻訳会話</a>
+    <a href="scenes.html">💞 気持ちから</a>
+    <a href="quiz.html">✍️ 練習</a>
     <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=3"></script>
+  <script src="common.js?v=4"></script>
   <script>
     let viewDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // 月初固定（31日からの月送りで飛ぶのを防ぐ）
 
@@ -202,7 +204,7 @@
         reader.onload = () => {
           try {
             const r = EA.importBackup(String(reader.result), mode);
-            showBackupStatus('ok', '✅ 読み込みました（マイ単語 ' + r.custom + '件 / 学習済み ' + r.studied + '件 / お気に入り ' + r.favorites + '件）');
+            showBackupStatus('ok', '✅ 読み込みました（マイ単語 ' + r.custom + '件 / 学習済み ' + r.studied + '件 / お気に入り ' + r.favorites + '件 / 会話 ' + r.talk + '件）');
             EA.updateStreakBadge();
             renderDashboard();
           } catch (e) {

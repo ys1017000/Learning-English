@@ -1,0 +1,15 @@
+{
+  "name": "心をつなぐ英語表現",
+  "short_name": "英語表現",
+  "description": "恋人との会話に使える英語学習・翻訳アプリ",
+  "start_url": "index.html",
+  "scope": ".",
+  "display": "browser",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "lang": "ja",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ]
+}

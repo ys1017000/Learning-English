@@ -405,10 +405,11 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 1,
+      version: 2,
       exportedAt: new Date().toISOString(),
       data: getStore(),
-      customPhrases: getCustomPhrases()
+      customPhrases: getCustomPhrases(),
+      talkLog: getTalkLog()
     };
   }
   function downloadBackup() {
@@ -450,9 +451,10 @@
     }
     const inc = normalizeStore(obj.data);
     const incCustom = sanitizeCustom(obj.customPhrases);
-    let store, custom;
+    const incTalk = sanitizeTalk(obj.talkLog);
+    let store, custom, talk;
     if (mode === 'replace') {
-      store = inc; custom = incCustom;
+      store = inc; custom = incCustom; talk = incTalk;
     } else {
       const cur = getStore();
       store = {
@@ -468,9 +470,126 @@
         weakPhrases: maxMerge(cur.weakPhrases, inc.weakPhrases)
       };
       custom = sanitizeCustom(getCustomPhrases().concat(incCustom));
+      talk = sanitizeTalk(getTalkLog().concat(incTalk));
     }
-    if (!saveStore(store) || !saveCustomPhrases(custom)) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
-    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length };
+    if (!saveStore(store) || !saveCustomPhrases(custom) || !saveTalkLog(talk)) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
+    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length };
+  }
+
+
+  /* ---------- 設定（端末ごと・バックアップ対象外） ---------- */
+  const KEY_PREFS = 'english_app_prefs';
+  const DEFAULT_PREFS = { speakMine: true, speakPartner: false, kana: true };
+  function getPrefs() {
+    try { return Object.assign({}, DEFAULT_PREFS, JSON.parse(safeGet(KEY_PREFS)) || {}); } catch (e) { return Object.assign({}, DEFAULT_PREFS); }
+  }
+  function setPref(key, val) { const p = getPrefs(); p[key] = val; safeSet(KEY_PREFS, JSON.stringify(p)); }
+
+  /* ---------- マイ単語・復習への追加 ---------- */
+  function hasPhrase(en) {
+    const k = String(en).trim().toLowerCase();
+    return getAllPhrases().some(p => p[1].toLowerCase() === k);
+  }
+  // マイ単語に追加。すでにある場合は added:false
+  function addCustomPhrase(en, ja, example) {
+    en = String(en || '').trim(); ja = String(ja || '').trim();
+    if (!en || !ja) return { added: false, reason: 'empty' };
+    if (hasPhrase(en)) return { added: false, reason: 'exists' };
+    const list = getCustomPhrases();
+    list.unshift([CUSTOM_CAT, en, ja, example ? String(example).trim() : '']);
+    return saveCustomPhrases(list) ? { added: true } : { added: false, reason: 'storage' };
+  }
+  // 苦手（要復習）に登録。フレーズ集に無ければマイ単語にも追加する
+  function addToReview(en, ja) {
+    const r = addCustomPhrase(en, ja);
+    if (!r.added && r.reason !== 'exists') return r;
+    const s = getStore();
+    const key = getAllPhrases().find(p => p[1].toLowerCase() === String(en).trim().toLowerCase());
+    if (!key) return { added: false, reason: 'notfound' };
+    s.weakPhrases[key[1]] = Math.max(s.weakPhrases[key[1]] || 0, 1);
+    saveStore(s);
+    return { added: true, newCustom: r.added };
+  }
+
+  /* ---------- 会話ログ ---------- */
+  const KEY_TALK = 'english_app_talk_log';
+  const TALK_MAX = 1000;
+  function sanitizeTalk(list) {
+    const seen = new Set(), out = [];
+    (Array.isArray(list) ? list : []).forEach(e => {
+      if (!e || typeof e !== 'object') return;
+      const t = Number(e.t), en = typeof e.en === 'string' ? e.en.trim() : '', ja = typeof e.ja === 'string' ? e.ja.trim() : '';
+      if (!isFinite(t) || (e.who !== 'me' && e.who !== 'partner') || !en || !ja) return;
+      const k = t + '|' + e.who + '|' + en;
+      if (seen.has(k)) return;
+      seen.add(k);
+      out.push({ t, who: e.who, en, ja });
+    });
+    out.sort((a, b) => a.t - b.t);
+    return out.slice(-TALK_MAX);
+  }
+  function getTalkLog() { try { return sanitizeTalk(JSON.parse(safeGet(KEY_TALK))); } catch (e) { return []; } }
+  function saveTalkLog(list) { return safeSet(KEY_TALK, JSON.stringify(sanitizeTalk(list))); }
+  // who: 'me'（自分の日本語→英訳）/ 'partner'（相手の英語→日本語訳）
+  function addTalkEntry(who, en, ja) {
+    const entry = { t: Date.now(), who, en: String(en).trim(), ja: String(ja).trim() };
+    const list = getTalkLog();
+    list.push(entry);
+    saveTalkLog(list);
+    const s = getStore(); touchToday(s); saveStore(s);   // 会話も学習カレンダー・連続日数に反映
+    return entry;
+  }
+
+  /* ---------- カタカナ発音ヒント（目安） ---------- */
+  const KANA = {
+    affection: 'アフェクション', intimacy: 'インティマシー', devotion: 'ディヴォウション', comfort: 'カンフォート', comfortable: 'カンフタブル',
+    cherish: 'チェリッシュ', trust: 'トラスト', passion: 'パッション', warmth: 'ウォームス', grateful: 'グレイトフル', thankful: 'サンクフル',
+    appreciate: 'アプリーシエイト', thoughtful: 'ソートフル', admire: 'アドマイア', anxious: 'アンクシャス', honestly: 'アネストリー', honest: 'アネスト',
+    swamped: 'スワンプト', vent: 'ヴェント', support: 'サポート', anniversary: 'アニヴァーサリー', congrats: 'コングラッツ', celebrate: 'セレブレイト',
+    ordinary: 'オーディネリー', special: 'スペシャル', safest: 'セイフェスト', safe: 'セイフ', hilarious: 'ヒレアリアス', sincerely: 'シンセアリー',
+    deeply: 'ディープリー', regret: 'リグレット', recommend: 'レコメンド', opportunity: 'アパチューニティ', golden: 'ゴウルデン',
+    difficult: 'ディフィカルト', decision: 'ディシジョン', license: 'ライセンス', renew: 'リニュー', overtime: 'オウヴァタイム', coworkers: 'コウワーカーズ',
+    favorites: 'フェイヴァリッツ', favorite: 'フェイヴァリット', carry: 'キャリー', yourself: 'ユアセルフ', 
+    relax: 'リラックス', cozy: 'コウジー', café: 'キャフェイ', cafe: 'キャフェイ', weekend: 'ウィークエンド', tonight: 'トゥナイト',
+    together: 'トゥゲザー', through: 'スルー', thought: 'ソート', thinking: 'シンキング', worried: 'ワーリド', worry: 'ワーリー', anything: 'エニシング',
+    everything: 'エヴリシング', amazing: 'アメイジング', proud: 'プラウド', dreams: 'ドリームズ', morning: 'モーニング',
+    apart: 'アパート', hurt: 'ハート', argue: 'アーギュー', understand: 'アンダスタンド', relationship: 'リレイションシップ', matters: 'マタァズ',
+    feelings: 'フィーリングズ', wish: 'ウィッシュ', thanks: 'サンクス', whatever: 'ワットエヴァー', happen: 'ハプン',
+    reply: 'リプライ', totally: 'トウタリー', 
+    clearly: 'クリアリー', cuddle: 'カドゥル', forward: 'フォーワード',
+    someone: 'サムワン', beautiful: 'ビューティフル', definitely: 'デフィニットリー', actually: 'アクチュアリー',
+    probably: 'プロバブリー', really: 'リアリー', important: 'インポータント', remember: 'リメンバー', surprise: 'サプライズ', exciting: 'イクサイティング',
+    awesome: 'オーサム', gorgeous: 'ゴージャス', lonely: 'ロウンリー', worth: 'ワース', world: 'ワールド',
+    thoroughly: 'サラリー', schedule: 'スケジュール', vacation: 'ヴェイケイション', birthday: 'バースデイ', either: 'イーザー', rather: 'ラザー',
+    answer: 'アンサー', listen: 'リスン', whole: 'ホウル', enough: 'イナフ', laugh: 'ラフ', daughter: 'ドーター', nervous: 'ナーヴァス',
+    stress: 'ストレス', stressed: 'ストレスト', exhausted: 'イグゾースティド', overwhelmed: 'オウヴァウェルムド', upset: 'アプセット', disappointed: 'ディサポインティド',
+    misunderstanding: 'ミスアンダスタンディング', apologize: 'アパロジャイズ', forgive: 'フォーギヴ', 
+    fiancé: 'フィーアンセイ', cuddling: 'カドゥリング', 
+    adore: 'アドー', treasure: 'トレジャー', pressure: 'プレッシャー', patient: 'ペイシェント',
+    available: 'アヴェイラブル', convenient: 'コンヴィーニエント', exactly: 'イグザクトリ', certainly: 'サートゥンリー', fortunate: 'フォーチュネット', lucky: 'ラッキー'
+  };
+  // 英文に含まれる難しめの単語 → [単語, カタカナ] の配列
+  function kanaHints(text) {
+    const seen = new Set(), out = [];
+    String(text || '').toLowerCase().replace(/[’‘]/g, "'").split(/[^a-zé']+/).forEach(w => {
+      w = w.replace(/^'+|'+$/g, '');
+      if (KANA[w] && !seen.has(w)) { seen.add(w); out.push([w, KANA[w]]); }
+    });
+    return out;
+  }
+  // container にヒントを描画（設定OFF・該当なしなら何も出さない）
+  function renderKana(container, text) {
+    container.innerHTML = '';
+    if (!getPrefs().kana) { container.style.display = 'none'; return; }
+    const hints = kanaHints(text).slice(0, 6);
+    if (!hints.length) { container.style.display = 'none'; return; }
+    container.style.display = 'block';
+    container.textContent = '🔤 ' + hints.map(h => h[0] + '＝' + h[1]).join('  ／  ');
+  }
+
+  /* ---------- オフライン対応（Service Worker） ---------- */
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
   }
 
   /* ---------- 公開 ---------- */
@@ -480,7 +599,9 @@
     isFavorite, toggleFavorite, markStudied, recordResult, countSpeak, getWeakPhrases, calcStreak, updateStreakBadge,
     splitJa, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
-    downloadBackup, importBackup
+    downloadBackup, importBackup,
+    getPrefs, setPref, hasPhrase, addCustomPhrase, addToReview,
+    getTalkLog, saveTalkLog, addTalkEntry, kanaHints, renderKana
   };
 
   document.addEventListener('DOMContentLoaded', updateStreakBadge);

@@ -4,13 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>心をつなぐ英語表現 - 単語追加</title>
-  <link rel="stylesheet" href="common.css?v=3">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=4">
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">心をつなぐ英語表現</a>
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
+  <div class="subnav">
+    <a href="quiz.html">❓ クイズ</a>
+    <a href="writing.html">✍️ 英作文</a>
+    <a href="speaking.html">🎙️ 発音</a>
+    <a href="addword.html" class="active" aria-current="page">➕ 単語追加</a>
+  </div>
   <div class="container">
     <div class="card">
       <h2 style="color:#d97706;">➕ 単語・フレーズの追加と辞書自動検索</h2>
@@ -41,14 +50,12 @@
 
   <nav>
     <a href="index.html">🏠 ホーム</a>
-    <a href="quiz.html">❓ クイズ</a>
-    <a href="writing.html">✍️ 英作文</a>
-    <a href="speaking.html">🎙️ 発音</a>
-    <a href="translator.html">🌐 翻訳会話</a>
-    <a href="addword.html" class="active" aria-current="page">➕ 単語追加</a>
+    <a href="translator.html">💬 翻訳会話</a>
+    <a href="scenes.html">💞 気持ちから</a>
+    <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
     <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=3"></script>
+  <script src="common.js?v=4"></script>
   <script>
     const JP_CHAR = /[\u3040-\u30ff\u3400-\u9fff]/;
 

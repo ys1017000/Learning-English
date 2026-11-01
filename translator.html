@@ -4,69 +4,82 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>心をつなぐ英語表現 - 翻訳会話</title>
-  <link rel="stylesheet" href="common.css?v=3">
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=4">
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">心をつなぐ英語表現</a>
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
+  <div class="subnav">
+    <a href="translator.html" class="active" aria-current="page">💬 会話</a>
+    <a href="recap.html">📝 ふり返り</a>
+  </div>
   <div class="container">
-    <div class="card">
-      <h2>🌐 リアルタイム会話・音声翻訳ツール</h2>
-      <p class="muted" style="margin-bottom:1rem;">日本語または英語を入力・発話すると、オンライン翻訳で変換しネイティブ音声で読み上げます。🎙️を押して話すと、話し終えた時点で自動的に翻訳します。</p>
-      <div style="margin-bottom:1rem;">
-        <label for="transDirection" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">翻訳モード:</label>
-        <div style="display:flex; gap:8px; margin-top:4px;">
-          <select id="transDirection" class="genre-select-box" style="margin-bottom:0; flex:1;">
-            <option value="en2ja">🇬🇧 英語 ➔ 🇯🇵 日本語</option>
-            <option value="ja2en">🇯🇵 日本語 ➔ 🇬🇧 英語</option>
-          </select>
-          <button class="btn btn-secondary" id="swapBtn" style="width:auto; padding:0 1rem;" aria-label="翻訳の向きを入れ替える">⇄</button>
-        </div>
+    <div id="offlineNotice" class="notice error" style="display:none;">📴 オフラインです。翻訳には通信が必要です。<a href="scenes.html">「気持ちから探す」</a>や表現集はオフラインでも使えます。</div>
+    <div id="micNotice" class="notice" style="display:none;"></div>
+    <details style="margin-bottom:0.75rem;">
+      <summary class="muted" style="cursor:pointer;">⚙️ 設定</summary>
+      <div class="radio-row" style="margin-top:0.5rem;">
+        <label><input type="checkbox" id="optSpeakMine"> 自分の英訳を読み上げる</label>
+        <label><input type="checkbox" id="optSpeakPartner"> 相手の日本語訳を読み上げる</label>
+        <label><input type="checkbox" id="optKana"> カタカナ発音ヒントを表示する</label>
       </div>
-      <div id="micNotice" class="notice" style="display:none;"></div>
-      <textarea id="transInput" placeholder="翻訳したい文章を入力するか、音声ボタンを押してください..." aria-label="翻訳したい文章"></textarea>
-      <div style="display:flex; gap:8px; margin-bottom:1rem;">
-        <button class="btn" id="translateBtn" style="flex:1;">🔄 翻訳を実行</button>
-        <button class="btn btn-record" id="transMicBtn" style="flex:1;">🎙️ 音声入力</button>
+    </details>
+    <div id="chat" class="chat" aria-live="polite"></div>
+  </div>
+
+  <div class="talk-bar">
+    <div class="talk-bar-inner">
+      <div class="live-box" id="liveBox"></div>
+      <div class="mic-row">
+        <button class="btn btn-me" id="micMe">🎙️ 自分（日本語で話す）</button>
+        <button class="btn btn-partner" id="micPartner">🎙️ 相手（英語を聞く）</button>
       </div>
-      <div class="answer-box" id="resultContainer" style="display:block; background:#f8fafc; border:1px solid var(--border);">
-        <div style="font-size:0.8rem; color:var(--text-muted);">翻訳結果:</div>
-        <div id="transOutput" style="font-size:1.1rem; font-weight:bold; color:var(--primary); margin:0.5rem 0;">（ここに結果が表示されます）</div>
-        <button class="btn" id="transSpeakBtn" style="background:#4338ca; margin-top:0.5rem;" disabled>🔊 ネイティブ音声で読み上げる</button>
+      <button class="tiny-btn text-toggle" id="textToggle">⌨️ 文字で入力</button>
+      <div class="text-row" id="textRow">
+        <input type="text" id="textInput" placeholder="文章を入力..." aria-label="翻訳したい文章">
+        <button class="btn btn-me" id="sendMe">日→英</button>
+        <button class="btn btn-partner" id="sendPartner">英→日</button>
       </div>
     </div>
   </div>
 
   <nav>
     <a href="index.html">🏠 ホーム</a>
-    <a href="quiz.html">❓ クイズ</a>
-    <a href="writing.html">✍️ 英作文</a>
-    <a href="speaking.html">🎙️ 発音</a>
-    <a href="translator.html" class="active" aria-current="page">🌐 翻訳会話</a>
-    <a href="addword.html">➕ 単語追加</a>
+    <a href="translator.html" class="active" aria-current="page">💬 翻訳会話</a>
+    <a href="scenes.html">💞 気持ちから</a>
+    <a href="quiz.html">✍️ 練習</a>
     <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=3"></script>
+  <script src="common.js?v=4"></script>
   <script>
-    let lastTranslation = '', lastLang = 'en-US', translateSeq = 0, recognizer = null;
+    // 自分(me): 日本語で話す → 英訳して表示/読み上げ。相手(partner): 英語を聞く → 日本語訳を表示
+    const MODE = {
+      me: { src: 'ja-JP', dst: 'en-US', pair: 'ja|en', label: '自分' },
+      partner: { src: 'en-US', dst: 'ja-JP', pair: 'en|ja', label: '相手' }
+    };
+    let recognizer = null, activeWho = null, hiddenBefore = 0, busy = false;
 
-    const dirLang = dir => dir === 'ja2en' ? { src: 'ja-JP', dst: 'en-US' } : { src: 'en-US', dst: 'ja-JP' };
-
-    function decodeEntities(s) {
-      const doc = new DOMParser().parseFromString(String(s), 'text/html');
-      return doc.documentElement.textContent || '';
+    function toast(msg) {
+      let el = document.getElementById('toast');
+      if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+      el.textContent = msg; el.classList.add('show');
+      clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 2200);
     }
 
-    // 戻り値: { ok: boolean, text: string }
-    async function translateText(text, dir) {
-      if (!text.trim()) return { ok: false, text: '（テキストを入力してください）' };
-      const langpair = dir === 'ja2en' ? 'ja|en' : 'en|ja';
+    function decodeEntities(s) { return new DOMParser().parseFromString(String(s), 'text/html').documentElement.textContent || ''; }
+
+    // 戻り値: { ok, text }
+    async function translate(text, pair) {
+      if (!navigator.onLine) return { ok: false, text: 'オフラインのため翻訳できません。' };
       try {
         const ctrl = new AbortController();
         const timer = setTimeout(() => ctrl.abort(), 10000);
-        const res = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + langpair, { signal: ctrl.signal });
+        const res = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + pair, { signal: ctrl.signal });
         clearTimeout(timer);
         if (!res.ok) throw new Error('http ' + res.status);
         const data = await res.json();
@@ -76,79 +89,143 @@
         if (status === 429) return { ok: false, text: '無料翻訳の1日の利用上限に達しました。しばらくしてからお試しください。' };
         if (/QUERY LENGTH LIMIT/i.test(String(out))) return { ok: false, text: '文章が長すぎます（500文字以内にしてください）。' };
       } catch (e) {}
-      return { ok: false, text: '翻訳エラーが発生しました。通信状況を確認してもう一度お試しください。' };
+      return { ok: false, text: '翻訳に失敗しました。通信状況を確認してもう一度お試しください。' };
     }
 
-    async function runTranslate() {
-      const input = document.getElementById('transInput');
-      const output = document.getElementById('transOutput');
-      const dir = document.getElementById('transDirection').value;
-      const seq = ++translateSeq;     // 連打しても最後の結果だけを表示
-      output.textContent = '🔄 翻訳中...';
-      document.getElementById('transSpeakBtn').disabled = true;
-      const r = await translateText(input.value, dir);
-      if (seq !== translateSeq) return;
-      output.textContent = r.text;
-      lastTranslation = r.ok ? r.text : '';
-      lastLang = dirLang(dir).dst;
-      document.getElementById('transSpeakBtn').disabled = !r.ok;
-      if (r.ok) EA.speak(lastTranslation, lastLang, 1.0);
+    /* ---- 表示 ---- */
+    function renderChat() {
+      const chat = document.getElementById('chat');
+      const today = EA.dateKey();
+      const list = EA.getTalkLog().filter(e => e.t >= hiddenBefore && EA.dateKey(new Date(e.t)) === today);
+      chat.innerHTML = '';
+      if (!list.length) {
+        chat.innerHTML = '<div class="chat-empty">下のボタンで会話をはじめましょう。<br>🎙️自分＝日本語で話すと英語に、🎙️相手＝相手の英語を日本語にします。<br>会話は自動で保存され、「ふり返り」から復習できます。</div>';
+        return;
+      }
+      list.forEach(e => chat.appendChild(bubble(e)));
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
+    function bubble(e) {
+      const b = document.createElement('div');
+      b.className = 'bubble ' + e.who;
+      const who = document.createElement('div'); who.className = 'b-who'; who.textContent = e.who === 'me' ? '自分' : '相手';
+      const en = document.createElement('div'); en.className = 'b-en'; en.textContent = e.en;
+      const ja = document.createElement('div'); ja.className = 'b-ja'; ja.textContent = e.ja;
+      const kana = document.createElement('div'); kana.className = 'kana-line';
+      EA.renderKana(kana, e.en);
+      const act = document.createElement('div'); act.className = 'b-actions';
+      const play = document.createElement('button'); play.className = 'icon-btn'; play.textContent = '🔊'; play.setAttribute('aria-label', '英語を再生');
+      play.addEventListener('click', () => EA.speak(e.en, 'en-US', 1.0));
+      const slow = document.createElement('button'); slow.className = 'icon-btn'; slow.textContent = '🐢'; slow.setAttribute('aria-label', 'ゆっくり再生');
+      slow.addEventListener('click', () => EA.speak(e.en, 'en-US', 0.7));
+      const save = document.createElement('button'); save.className = 'icon-btn'; save.textContent = '💾'; save.setAttribute('aria-label', 'マイ単語に保存');
+      if (EA.hasPhrase(e.en)) { save.classList.add('done'); save.textContent = '✅'; }
+      save.addEventListener('click', () => {
+        const r = EA.addCustomPhrase(e.en, e.ja);
+        if (r.added) { save.textContent = '✅'; save.classList.add('done'); toast('マイ単語に保存しました'); }
+        else toast(r.reason === 'exists' ? 'すでに保存されています' : '保存できませんでした');
+      });
+      act.appendChild(play); act.appendChild(slow); act.appendChild(save);
+      b.appendChild(who); b.appendChild(en); b.appendChild(ja); b.appendChild(kana); b.appendChild(act);
+      return b;
+    }
+
+    /* ---- 翻訳して追加 ---- */
+    async function handleUtterance(who, text) {
+      text = text.trim();
+      if (!text || busy) return;
+      busy = true;
+      setButtonsDisabled(true);
+      document.getElementById('liveBox').textContent = '🔄 翻訳中... 「' + text + '」';
+      const r = await translate(text, MODE[who].pair);
+      busy = false;
+      setButtonsDisabled(false);
+      if (!r.ok) {
+        document.getElementById('liveBox').textContent = '';
+        const input = document.getElementById('textInput');
+        input.value = text;                       // 再試行できるよう入力欄に残す
+        document.getElementById('textRow').classList.add('open');
+        toast(r.text);
+        return;
+      }
+      const en = who === 'me' ? r.text : text;
+      const ja = who === 'me' ? text : r.text;
+      EA.addTalkEntry(who, en, ja);
+      EA.updateStreakBadge();
+      document.getElementById('liveBox').textContent = '';
+      document.getElementById('textInput').value = '';
+      renderChat();
+      const prefs = EA.getPrefs();
+      if (who === 'me' && prefs.speakMine) EA.speak(en, 'en-US', 1.0);
+      if (who === 'partner' && prefs.speakPartner) EA.speak(ja, 'ja-JP', 1.0);
+    }
+
+    function setButtonsDisabled(d) {
+      ['sendMe', 'sendPartner'].forEach(id => { document.getElementById(id).disabled = d; });
+    }
+
+    /* ---- 音声入力 ---- */
     function setMicUI(on) {
-      const btn = document.getElementById('transMicBtn');
-      btn.classList.toggle('recording', on);
-      btn.textContent = on ? '⏹ 聞き取り中…' : '🎙️ 音声入力';
-    }
-    function showMicError(msg) {
-      const n = document.getElementById('micNotice');
-      n.className = 'notice error';
-      n.textContent = msg;
-      n.style.display = 'block';
+      const who = activeWho;
+      document.getElementById('micMe').classList.toggle('recording', on && who === 'me');
+      document.getElementById('micPartner').classList.toggle('recording', on && who === 'partner');
+      document.getElementById('micMe').textContent = on && who === 'me' ? '⏹ 聞き取り中…' : '🎙️ 自分（日本語で話す）';
+      document.getElementById('micPartner').textContent = on && who === 'partner' ? '⏹ 聞き取り中…' : '🎙️ 相手（英語を聞く）';
+      if (on) document.getElementById('liveBox').textContent = who === 'me' ? '🎙️ 日本語でどうぞ…' : '🎙️ 相手の英語を聞いています…';
     }
 
     function setupMic() {
-      const btn = document.getElementById('transMicBtn');
       if (!EA.recognitionSupported) {
         const n = document.getElementById('micNotice');
-        n.textContent = 'このブラウザは音声入力に対応していません。iPhoneはSafari、AndroidやPCはChromeでお試しください。文字入力は使えます。';
+        n.textContent = 'このブラウザは音声入力に対応していません。iPhoneはSafari、AndroidやPCはChromeでお試しください。「⌨️ 文字で入力」は使えます。';
         n.style.display = 'block';
-        btn.disabled = true;
+        document.getElementById('micMe').disabled = true;
+        document.getElementById('micPartner').disabled = true;
         return;
       }
-      const input = document.getElementById('transInput');
       recognizer = EA.createRecognizer({
-        lang: dirLang(document.getElementById('transDirection').value).src,
+        lang: 'ja-JP',
         onState: setMicUI,
-        onInterim: text => { input.value = text; },
-        onFinal: alts => { input.value = alts[0]; runTranslate(); },   // 話し終えたら自動で翻訳
-        onError: showMicError
+        onInterim: text => { document.getElementById('liveBox').textContent = '🎙️ ' + text; },
+        onFinal: alts => { const who = activeWho; handleUtterance(who, alts[0]); },
+        onError: msg => { document.getElementById('liveBox').textContent = ''; const n = document.getElementById('micNotice'); n.className = 'notice error'; n.textContent = msg; n.style.display = 'block'; }
       });
-      btn.addEventListener('click', () => {
-        if (recognizer.listening) { recognizer.stop(); return; }
-        document.getElementById('micNotice').style.display = 'none';
-        recognizer.setLang(dirLang(document.getElementById('transDirection').value).src);
-        recognizer.start();
+      ['me', 'partner'].forEach(who => {
+        document.getElementById(who === 'me' ? 'micMe' : 'micPartner').addEventListener('click', () => {
+          if (busy) return;
+          if (recognizer.listening) { recognizer.stop(); return; }
+          document.getElementById('micNotice').style.display = 'none';
+          activeWho = who;
+          recognizer.setLang(MODE[who].src);
+          recognizer.start();
+        });
       });
     }
 
+    function syncOnline() { document.getElementById('offlineNotice').style.display = navigator.onLine ? 'none' : 'block'; }
+
     document.addEventListener('DOMContentLoaded', () => {
-      const dirSelect = document.getElementById('transDirection');
-      document.getElementById('translateBtn').addEventListener('click', runTranslate);
-      document.getElementById('transInput').addEventListener('keydown', e => { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') runTranslate(); });
-      document.getElementById('transSpeakBtn').addEventListener('click', () => { if (lastTranslation) EA.speak(lastTranslation, lastLang, 1.0); });
-      document.getElementById('swapBtn').addEventListener('click', () => {
-        // 向きを入れ替え、直前の翻訳結果を入力欄に移す（往復の会話がしやすい）
-        const input = document.getElementById('transInput');
-        dirSelect.value = dirSelect.value === 'en2ja' ? 'ja2en' : 'en2ja';
-        if (lastTranslation) input.value = lastTranslation;
-        lastTranslation = '';
-        document.getElementById('transOutput').textContent = '（ここに結果が表示されます）';
-        document.getElementById('transSpeakBtn').disabled = true;
-        if (recognizer) recognizer.setLang(dirLang(dirSelect.value).src);
-      });
-      dirSelect.addEventListener('change', () => { if (recognizer) recognizer.setLang(dirLang(dirSelect.value).src); });
+      const prefs = EA.getPrefs();
+      const bind = (id, key) => {
+        const el = document.getElementById(id);
+        el.checked = !!prefs[key];
+        el.addEventListener('change', () => { EA.setPref(key, el.checked); if (key === 'kana') renderChat(); });
+      };
+      bind('optSpeakMine', 'speakMine'); bind('optSpeakPartner', 'speakPartner'); bind('optKana', 'kana');
+
+      renderChat();
       setupMic();
+      syncOnline();
+      window.addEventListener('online', syncOnline);
+      window.addEventListener('offline', syncOnline);
+
+      const toggle = document.getElementById('textToggle');
+      const row = document.getElementById('textRow');
+      toggle.addEventListener('click', () => { row.classList.toggle('open'); if (row.classList.contains('open')) document.getElementById('textInput').focus(); });
+      const input = document.getElementById('textInput');
+      document.getElementById('sendMe').addEventListener('click', () => handleUtterance('me', input.value));
+      document.getElementById('sendPartner').addEventListener('click', () => handleUtterance('partner', input.value));
     });
 
   </script>
