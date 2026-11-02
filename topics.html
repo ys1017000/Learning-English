@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 話題カード</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=5">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="translator.html">💬 会話</a>
+    <a href="topics.html" class="active" aria-current="page">🎲 話題</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="keepsake.html">💝 言葉</a>
+  </div>
+  <div class="container">
+    <div class="chip-row" id="lvChips" role="group" aria-label="話題の深さ">
+      <button class="chip active" data-lv="0">🎲 ぜんぶ</button>
+      <button class="chip" data-lv="1">😄 軽い</button>
+      <button class="chip" data-lv="2">🙂 ふつう</button>
+      <button class="chip" data-lv="3">💞 深い</button>
+    </div>
+    <div class="card topic-card" aria-live="polite">
+      <div><span class="badge-lv" id="lvBadge"></span></div>
+      <div class="q-en" id="qEn"></div>
+      <div class="q-ja" id="qJa"></div>
+      <div id="qKana" class="kana-line" style="margin-top:0.8rem;"></div>
+      <div style="display:flex; justify-content:center; gap:6px; margin-top:1rem;">
+        <button class="icon-btn" id="qPlay" aria-label="再生">🔊</button>
+        <button class="icon-btn" id="qSlow" aria-label="ゆっくり再生">🐢</button>
+        <button class="icon-btn" id="qPin" aria-label="ピン留め">📍</button>
+      </div>
+    </div>
+    <button class="btn" id="nextTopic">🎲 次の質問をひく</button>
+    <p class="muted" style="margin:0.75rem 0 0; text-align:center;" id="deckInfo"></p>
+
+    <div class="section-title">💬 会話をつなぐ一言</div>
+    <div id="chatterList"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html" class="active" aria-current="page">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="quiz.html">✍️ 練習</a>
+    <a href="phrases.html">📚 表現集</a>
+  </nav>
+  <script src="common.js?v=5"></script>
+  <script src="content.js?v=5"></script>
+  <script>
+    const T = CONTENT.TOPICS, LV_LABEL = { 1: '😄 軽い話題', 2: '🙂 ふつうの話題', 3: '💞 深い話題' };
+    let level = 0, deck = [], current = null;
+
+    function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function refillDeck() { deck = shuffle(T.filter(t => level === 0 || t[0] === level)); }
+
+    function draw() {
+      if (!deck.length) refillDeck();
+      current = deck.pop();
+      const [lv, en, ja] = current;
+      const badge = document.getElementById('lvBadge');
+      badge.textContent = LV_LABEL[lv]; badge.className = 'badge-lv lv' + lv;
+      document.getElementById('qEn').textContent = en;
+      document.getElementById('qJa').textContent = ja;
+      EA.renderKana(document.getElementById('qKana'), en);
+      document.getElementById('qPin').textContent = EA.isPinned(en) ? '📌' : '📍';
+      document.getElementById('deckInfo').textContent = '残り ' + deck.length + ' 枚';
+    }
+
+    function chatterRow(en, ja) {
+      const r = document.createElement('div'); r.className = 'phrase-card';
+      r.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:8px;';
+      const l = document.createElement('div');
+      const e = document.createElement('div'); e.className = 'en-text'; e.textContent = en;
+      const j = document.createElement('div'); j.className = 'ja-text'; j.textContent = ja;
+      l.appendChild(e); l.appendChild(j);
+      const a = document.createElement('div'); a.style.cssText = 'display:flex; flex-shrink:0;';
+      const play = document.createElement('button'); play.className = 'icon-btn'; play.textContent = '🔊'; play.setAttribute('aria-label', '再生');
+      play.addEventListener('click', () => EA.speak(en, 'en-US', 1.0));
+      const pin = document.createElement('button'); pin.className = 'icon-btn'; pin.textContent = EA.isPinned(en) ? '📌' : '📍'; pin.setAttribute('aria-label', 'ピン留め');
+      pin.addEventListener('click', () => { const on = EA.togglePin(en, ja); pin.textContent = on ? '📌' : '📍'; EA.toast(on ? 'ピン留めしました' : 'ピン留めを外しました'); });
+      a.appendChild(play); a.appendChild(pin); r.appendChild(l); r.appendChild(a); return r;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      refillDeck(); draw();
+      document.getElementById('nextTopic').addEventListener('click', () => { draw(); EA.speak(current[1], 'en-US', 1.0); });
+      document.getElementById('qPlay').addEventListener('click', () => EA.speak(current[1], 'en-US', 1.0));
+      document.getElementById('qSlow').addEventListener('click', () => EA.speak(current[1], 'en-US', 0.7));
+      document.getElementById('qPin').addEventListener('click', () => {
+        const on = EA.togglePin(current[1], current[2]);
+        document.getElementById('qPin').textContent = on ? '📌' : '📍';
+        EA.toast(on ? 'ピン留めしました（会話画面から開けます）' : 'ピン留めを外しました');
+      });
+      document.querySelectorAll('#lvChips .chip').forEach(c => c.addEventListener('click', () => {
+        document.querySelectorAll('#lvChips .chip').forEach(x => x.classList.remove('active'));
+        c.classList.add('active'); level = Number(c.dataset.lv); refillDeck(); draw();
+      }));
+      const list = document.getElementById('chatterList');
+      CONTENT.CHATTER.forEach(c => list.appendChild(chatterRow(c[0], c[1])));
+    });
+
+  </script>
+</body>
+</html>

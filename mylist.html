@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 言いたいこと</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=5">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="plan.html">📅 予習</a>
+    <a href="roleplay.html">🎭 ロール</a>
+    <a href="mylist.html" class="active" aria-current="page">🗒 リスト</a>
+    <a href="scenes.html">💞 気持ち</a>
+  </div>
+  <div class="container">
+    <div class="chip-row" id="kindChips" role="group" aria-label="リストの種類">
+      <button class="chip active" data-kind="say">🗣 言いたいこと</button>
+      <button class="chip" data-kind="ask">❓ 聞きたいこと</button>
+    </div>
+    <div class="card">
+      <h2 id="formTitle">会ったら伝えたいことを日本語で</h2>
+      <textarea id="jaInput" style="height:70px;" placeholder="例: 先週、仕事で新しいプロジェクトを任されたんだ" aria-label="日本語"></textarea>
+      <button class="btn btn-secondary" id="translateBtn" style="margin-bottom:0.75rem;">🌐 英語にする</button>
+      <input type="text" id="enInput" placeholder="英語（自動で入ります。直接入力・修正もできます）" aria-label="英語" autocapitalize="sentences" spellcheck="false">
+      <button class="btn" id="addBtn">＋ リストに追加</button>
+    </div>
+    <div class="muted" id="listInfo" style="margin-bottom:0.5rem;"></div>
+    <div id="listBox"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html" class="active" aria-current="page">📅 予習</a>
+    <a href="quiz.html">✍️ 練習</a>
+    <a href="phrases.html">📚 表現集</a>
+  </nav>
+  <script src="common.js?v=5"></script>
+  <script>
+    let kind = 'say';
+    const PLACE = {
+      say: ['会ったら伝えたいことを日本語で', '例: 先週、仕事で新しいプロジェクトを任されたんだ'],
+      ask: ['会ったら聞きたいことを日本語で', '例: 子どものころの一番の思い出を教えてほしい']
+    };
+    function uid() { return 'i' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+
+    function render() {
+      const lists = EA.getLists(), arr = lists[kind];
+      document.getElementById('formTitle').textContent = PLACE[kind][0];
+      document.getElementById('jaInput').placeholder = PLACE[kind][1];
+      const open = arr.filter(x => !x.done).length;
+      document.getElementById('listInfo').textContent = arr.length ? ((kind === 'say' ? '伝えた' : '聞けた') + '：' + (arr.length - open) + ' / ' + arr.length) : '';
+      const box = document.getElementById('listBox'); box.innerHTML = '';
+      if (!arr.length) { box.innerHTML = '<div class="chat-empty">まだありません。上のフォームから追加しましょう。</div>'; return; }
+      arr.slice().sort((a, b) => Number(a.done) - Number(b.done) || b.t - a.t).forEach(it => box.appendChild(row(it)));
+    }
+
+    function mutate(fn) { const l = EA.getLists(); fn(l[kind]); EA.saveLists(l); render(); }
+
+    function row(it) {
+      const d = document.createElement('div'); d.className = 'item-row' + (it.done ? ' done' : '');
+      const e = document.createElement('div'); e.className = 'en-text'; e.textContent = it.en;
+      const j = document.createElement('div'); j.className = 'ja-text'; j.textContent = it.ja;
+      const kana = document.createElement('div'); kana.className = 'kana-line'; EA.renderKana(kana, it.en);
+      const chips = document.createElement('div'); chips.className = 'word-chips'; chips.style.justifyContent = 'flex-start';
+      const score = document.createElement('div'); score.className = 'mini-score';
+      const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem; align-items:center; flex-wrap:wrap;';
+      const mk = (label, aria, fn) => { const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); if (fn) b.addEventListener('click', fn); return b; };
+      const mic = mk('🎙️', '発音チェック');
+      const pin = mk(EA.isPinned(it.en) ? '📌' : '📍', 'ピン留め', () => { const on = EA.togglePin(it.en, it.ja); pin.textContent = on ? '📌' : '📍'; EA.toast(on ? 'ピン留めしました（会話画面から開けます）' : 'ピン留めを外しました'); });
+      const done = mk(it.done ? '↩️' : '✅', it.done ? '未完了に戻す' : (kind === 'say' ? '伝えた' : '聞けた'), () => mutate(a => { const x = a.find(y => y.id === it.id); if (x) x.done = !x.done; }));
+      const del = mk('🗑', '削除', () => { if (confirm('削除しますか？')) mutate(a => { const i = a.findIndex(y => y.id === it.id); if (i >= 0) a.splice(i, 1); }); });
+      [mk('🔊', '再生', () => EA.speak(it.en, 'en-US', 1.0)), mk('🐢', 'ゆっくり再生', () => EA.speak(it.en, 'en-US', 0.7)), mic, pin, done, del].forEach(b => act.appendChild(b));
+      EA.attachPronunciation(mic, () => it.en, {
+        onInterim: t => { score.textContent = '🎙️ ' + t; },
+        onResult: r => { EA.renderChips(chips, r.words); score.textContent = 'スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉' : '  もう一度！'); EA.countSpeak(); EA.updateStreakBadge(); },
+        onError: m => { score.textContent = m; }
+      });
+      d.appendChild(e); d.appendChild(j); d.appendChild(kana); d.appendChild(chips); d.appendChild(score); d.appendChild(act);
+      return d;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      render();
+      document.querySelectorAll('#kindChips .chip').forEach(c => c.addEventListener('click', () => {
+        document.querySelectorAll('#kindChips .chip').forEach(x => x.classList.remove('active'));
+        c.classList.add('active'); kind = c.dataset.kind; render();
+      }));
+      const ja = document.getElementById('jaInput'), en = document.getElementById('enInput');
+      document.getElementById('translateBtn').addEventListener('click', async () => {
+        const text = ja.value.trim();
+        if (!text) { EA.toast('日本語を入力してください'); return; }
+        const b = document.getElementById('translateBtn'); b.disabled = true; b.textContent = '🔄 翻訳中...';
+        const r = await EA.translate(text, 'ja|en');
+        b.disabled = false; b.textContent = '🌐 英語にする';
+        if (r.ok) { en.value = r.text; EA.toast('英語を確認して「リストに追加」を押してください'); }
+        else EA.toast(r.text + ' 英語を直接入力してもOKです。');
+      });
+      document.getElementById('addBtn').addEventListener('click', () => {
+        const j = ja.value.trim(), e = en.value.trim();
+        if (!j || !e) { EA.toast('日本語と英語の両方を入れてください（「英語にする」で自動入力）'); return; }
+        const l = EA.getLists();
+        if (l[kind].some(x => x.en.toLowerCase() === e.toLowerCase())) { EA.toast('同じ英文がすでにあります'); return; }
+        l[kind].unshift({ id: uid(), ja: j, en: e, done: false, t: Date.now() });
+        EA.saveLists(l); ja.value = ''; en.value = ''; render(); EA.toast('追加しました');
+      });
+    });
+
+  </script>
+</body>
+</html>

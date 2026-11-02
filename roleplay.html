@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - ロールプレイ</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=5">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="plan.html">📅 予習</a>
+    <a href="roleplay.html" class="active" aria-current="page">🎭 ロール</a>
+    <a href="mylist.html">🗒 リスト</a>
+    <a href="scenes.html">💞 気持ち</a>
+  </div>
+  <div class="container">
+    <div id="listView">
+      <p class="muted" style="margin-bottom:0.75rem;">相手役のセリフを聞いて、日本語の指示どおりに英語で答えましょう。模範解答と照合して採点します。</p>
+      <div class="chip-row" id="sceneFilter"></div>
+      <div id="rpList"></div>
+    </div>
+
+    <div id="playView" style="display:none;">
+      <button class="tiny-btn" id="backBtn" style="margin-bottom:0.75rem;">◀ 台本の一覧へ</button>
+      <div class="card">
+        <h2 id="rpTitle"></h2>
+        <p class="muted" id="rpSituation"></p>
+        <div class="step-dots" id="dots"></div>
+        <div id="chatLog" class="chat" style="padding-bottom:0; margin-bottom:0.75rem;"></div>
+        <div id="turnBox" style="display:none;">
+          <div class="hint-box"><div class="t">あなたの番</div><div id="hintJa"></div></div>
+          <div id="modelBox" class="answer-box" style="display:none; margin-top:0;">
+            <div class="muted">模範解答</div>
+            <div id="modelEn" style="font-weight:bold; color:var(--primary);"></div>
+            <div id="modelKana" class="kana-line"></div>
+          </div>
+          <div id="liveText" class="muted" style="min-height:1.4em; text-align:center;"></div>
+          <div id="chipsBox" class="word-chips"></div>
+          <div id="scoreText" style="text-align:center; font-weight:bold; font-size:1.1rem; color:#047857;"></div>
+          <div id="micNotice" class="notice" style="display:none;"></div>
+          <button class="btn btn-record" id="rpMic" style="margin:0.5rem 0;">🎙️ 英語で答える</button>
+          <div id="selfRow" style="display:none; gap:8px; margin-bottom:0.5rem;">
+            <button class="btn" id="selfOk" style="background:#16a34a; flex:1;">✅ 言えた</button>
+            <button class="btn" id="selfNg" style="background:#be123c; flex:1;">❌ 難しかった</button>
+          </div>
+          <div class="bar-row">
+            <button class="tiny-btn" id="showAns">💡 答えを見る</button>
+            <button class="tiny-btn" id="replayLine">🔊 もう一度聞く</button>
+            <button class="tiny-btn" id="nextStep">次へ ➔</button>
+          </div>
+        </div>
+        <div id="summary" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html" class="active" aria-current="page">📅 予習</a>
+    <a href="quiz.html">✍️ 練習</a>
+    <a href="phrases.html">📚 表現集</a>
+  </nav>
+  <script src="common.js?v=5"></script>
+  <script src="content.js?v=5"></script>
+  <script>
+    const C = CONTENT, PASS = 70;
+    let rp = null, idx = 0, results = [], sceneFilter = new URLSearchParams(location.search).get('scene') || 'all';
+    let rec = null;
+
+    function bestRp() { try { return JSON.parse(localStorage.getItem('english_app_rp')) || {}; } catch (e) { return {}; } }
+    function saveBest(id, score) { try { const b = bestRp(); b[id] = Math.max(b[id] || 0, score); localStorage.setItem('english_app_rp', JSON.stringify(b)); } catch (e) {} }
+
+    function renderList() {
+      const f = document.getElementById('sceneFilter'); f.innerHTML = '';
+      [['all', '🎭 ぜんぶ']].concat(Object.keys(C.MEET).map(k => [k, C.MEET[k].emoji + ' ' + C.MEET[k].label])).forEach(([id, label]) => {
+        const b = document.createElement('button'); b.className = 'chip' + (sceneFilter === id ? ' active' : ''); b.textContent = label;
+        b.addEventListener('click', () => { sceneFilter = id; renderList(); }); f.appendChild(b);
+      });
+      const best = bestRp(), list = document.getElementById('rpList'); list.innerHTML = '';
+      C.ROLEPLAYS.filter(r => sceneFilter === 'all' || r.scene === sceneFilter).forEach(r => {
+        const c = document.createElement('div'); c.className = 'phrase-card rp-card'; c.tabIndex = 0; c.setAttribute('role', 'button');
+        const badge = document.createElement('span'); badge.className = 'category-badge'; badge.textContent = C.MEET[r.scene].emoji + ' ' + C.MEET[r.scene].label;
+        const t = document.createElement('div'); t.className = 'en-text'; t.textContent = r.title;
+        const s = document.createElement('div'); s.className = 'ja-text'; s.textContent = r.situation + '（' + r.steps.filter(x => x.m).length + 'ターン）';
+        c.appendChild(badge); c.appendChild(t); c.appendChild(s);
+        if (best[r.id]) { const b = document.createElement('div'); b.className = 'mini-score'; b.textContent = '🏅 ベスト ' + best[r.id] + '点'; c.appendChild(b); }
+        const go = () => start(r);
+        c.addEventListener('click', go); c.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+        list.appendChild(c);
+      });
+    }
+
+    function bubble(who, en, ja, mine) {
+      const b = document.createElement('div'); b.className = 'bubble ' + (mine ? 'me' : 'partner');
+      const w = document.createElement('div'); w.className = 'b-who'; w.textContent = mine ? 'あなた' : who;
+      const e = document.createElement('div'); e.className = 'b-en'; e.textContent = en;
+      const j = document.createElement('div'); j.className = 'b-ja'; j.textContent = ja;
+      b.appendChild(w); b.appendChild(e); if (ja) b.appendChild(j); return b;
+    }
+    function dots() {
+      const d = document.getElementById('dots'); d.innerHTML = '';
+      const turns = rp.steps.filter(s => s.m).length;
+      for (let i = 0; i < turns; i++) {
+        const s = document.createElement('span');
+        if (results[i]) s.className = (results[i].score >= PASS && !results[i].usedAnswer) ? 'done' : 'fail';
+        else if (i === results.length) s.className = 'now';
+        d.appendChild(s);
+      }
+    }
+
+    function start(r) {
+      rp = r; idx = 0; results = []; stepResult = null;
+      document.getElementById('listView').style.display = 'none';
+      document.getElementById('playView').style.display = 'block';
+      document.getElementById('rpTitle').textContent = r.title;
+      document.getElementById('rpSituation').textContent = r.situation;
+      document.getElementById('chatLog').innerHTML = '';
+      document.getElementById('summary').style.display = 'none';
+      showStep();
+    }
+
+    function showStep() {
+      const step = rp.steps[idx];
+      const log = document.getElementById('chatLog');
+      log.appendChild(bubble(step.who, step.p[0], step.p[1], false));
+      EA.speak(step.p[0], 'en-US', 1.0);
+      dots();
+      if (!step.m) { finish(); return; }
+      document.getElementById('turnBox').style.display = 'block';
+      document.getElementById('hintJa').textContent = step.m.ja;
+      document.getElementById('modelBox').style.display = 'none';
+      document.getElementById('chipsBox').innerHTML = '';
+      document.getElementById('scoreText').textContent = '';
+      document.getElementById('liveText').textContent = '';
+      document.getElementById('micNotice').style.display = 'none';
+      document.getElementById('selfRow').style.display = EA.recognitionSupported ? 'none' : 'flex';
+      document.getElementById('nextStep').textContent = idx === rp.steps.length - 1 || !rp.steps.slice(idx + 1).some(s => s.m) ? '結果を見る ➔' : '次へ ➔';
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    function revealModel() {
+      const m = rp.steps[idx].m;
+      document.getElementById('modelEn').textContent = m.en[0];
+      EA.renderKana(document.getElementById('modelKana'), m.en[0]);
+      document.getElementById('modelBox').style.display = 'block';
+      EA.speak(m.en[0], 'en-US', 1.0);
+    }
+
+    let stepResult = null;
+    // 同じターンで再挑戦したときは最高点を残す
+    function setResult(score, usedAnswer) {
+      const cur = stepResult;
+      stepResult = { score: Math.max(cur ? cur.score : 0, score), usedAnswer: (cur && cur.usedAnswer) || usedAnswer };
+    }
+
+    function next() {
+      const step = rp.steps[idx];
+      if (step.m) {
+        const r = stepResult || { score: 0, usedAnswer: false, step };
+        results.push({ score: r.score, usedAnswer: r.usedAnswer, step });
+        document.getElementById('chatLog').appendChild(bubble('', step.m.en[0], step.m.ja, true));
+        stepResult = null;
+      }
+      idx++;
+      if (idx >= rp.steps.length) { finish(); return; }
+      showStep();
+    }
+
+    function finish() {
+      document.getElementById('turnBox').style.display = 'none';
+      dots();
+      const box = document.getElementById('summary'); box.style.display = 'block'; box.innerHTML = '';
+      const avg = results.length ? Math.round(results.reduce((a, r) => a + r.score, 0) / results.length) : 0;
+      saveBest(rp.id, avg);
+      EA.countSpeak(); EA.updateStreakBadge();
+      const h = document.createElement('div'); h.style.cssText = 'text-align:center; margin:0.5rem 0 1rem;';
+      h.innerHTML = '<div style="font-size:2rem;">' + (avg >= 85 ? '🌟' : avg >= 70 ? '🎉' : '💪') + '</div><div style="font-size:1.3rem; font-weight:bold; color:var(--primary);">平均 ' + avg + ' 点</div>';
+      box.appendChild(h);
+      const weak = [];
+      results.forEach(r => {
+        const d = document.createElement('div'); d.className = 'item-row';
+        const e = document.createElement('div'); e.className = 'en-text'; e.textContent = r.step.m.en[0];
+        const j = document.createElement('div'); j.className = 'ja-text'; j.textContent = r.step.m.ja;
+        const s = document.createElement('div'); s.className = 'mini-score';
+        const ok = r.score >= PASS && !r.usedAnswer;
+        s.textContent = (ok ? '✅ ' : '🔁 ') + r.score + '点' + (r.usedAnswer ? '（答えを見ました）' : '');
+        if (!ok) weak.push(r.step.m);
+        const a = document.createElement('div'); a.style.cssText = 'display:flex; gap:2px;';
+        const play = document.createElement('button'); play.className = 'icon-btn'; play.textContent = '🔊'; play.setAttribute('aria-label', '再生'); play.addEventListener('click', () => EA.speak(r.step.m.en[0], 'en-US', 1.0));
+        const pin = document.createElement('button'); pin.className = 'icon-btn'; pin.textContent = EA.isPinned(r.step.m.en[0]) ? '📌' : '📍'; pin.setAttribute('aria-label', 'ピン留め');
+        pin.addEventListener('click', () => { const on = EA.togglePin(r.step.m.en[0], r.step.m.ja); pin.textContent = on ? '📌' : '📍'; EA.toast(on ? 'ピン留めしました' : 'ピン留めを外しました'); });
+        a.appendChild(play); a.appendChild(pin);
+        d.appendChild(e); d.appendChild(j); d.appendChild(s); d.appendChild(a); box.appendChild(d);
+      });
+      const row = document.createElement('div'); row.style.cssText = 'display:flex; flex-direction:column; gap:0.5rem; margin-top:0.75rem;';
+      if (weak.length) {
+        const b = document.createElement('button'); b.className = 'btn weak-cta'; b.style.marginTop = '0'; b.textContent = '🔁 できなかった ' + weak.length + ' 件を復習に追加';
+        b.addEventListener('click', () => { weak.forEach(m => EA.addToReview(m.en[0], m.ja)); EA.toast('復習に追加しました'); b.disabled = true; });
+        row.appendChild(b);
+      }
+      const again = document.createElement('button'); again.className = 'btn'; again.textContent = '🔄 もう一度挑戦する'; again.addEventListener('click', () => start(rp));
+      const back = document.createElement('button'); back.className = 'btn btn-secondary'; back.textContent = '台本の一覧へ'; back.addEventListener('click', toList);
+      row.appendChild(again); row.appendChild(back); box.appendChild(row);
+    }
+
+    function toList() {
+      if (rec && rec.listening) rec.abort();
+      document.getElementById('playView').style.display = 'none';
+      document.getElementById('listView').style.display = 'block';
+      renderList();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      renderList();
+      document.getElementById('backBtn').addEventListener('click', toList);
+      document.getElementById('showAns').addEventListener('click', () => { revealModel(); setResult(0, true); });
+      document.getElementById('replayLine').addEventListener('click', () => EA.speak(rp.steps[idx].p[0], 'en-US', 1.0));
+      document.getElementById('nextStep').addEventListener('click', next);
+      document.getElementById('selfOk').addEventListener('click', () => { setResult(100, false); document.getElementById('scoreText').textContent = '✅ 言えた！'; });
+      document.getElementById('selfNg').addEventListener('click', () => { setResult(40, false); revealModel(); });
+      rec = EA.attachPronunciation(document.getElementById('rpMic'), () => rp.steps[idx].m.en, {
+        onInterim: t => { document.getElementById('liveText').textContent = '🎙️ ' + t; },
+        onResult: r => {
+          document.getElementById('liveText').textContent = '「' + r.text + '」';
+          EA.renderChips(document.getElementById('chipsBox'), r.words);
+          const sc = document.getElementById('scoreText');
+          sc.textContent = r.score + ' 点' + (r.score >= PASS ? '  🎉 ナイス！' : '  もう一度どうぞ');
+          setResult(r.score, false);
+          if (r.score < PASS) document.getElementById('modelBox').style.display = 'none';
+        },
+        onError: m => { const n = document.getElementById('micNotice'); n.className = 'notice error'; n.textContent = m; n.style.display = 'block'; }
+      }, { idle: '🎙️ 英語で答える', on: '⏹ 聞き取り中…' });
+      if (!EA.recognitionSupported) {
+        const n = document.getElementById('micNotice');
+        n.textContent = 'このブラウザは音声認識に対応していません。答えを確認しながら声に出して練習し、「言えた／難しかった」で自己採点してください。';
+        n.style.display = 'block';
+      }
+    });
+
+  </script>
+</body>
+</html>

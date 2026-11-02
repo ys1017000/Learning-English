@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - もらった言葉</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=5">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="translator.html">💬 会話</a>
+    <a href="topics.html">🎲 話題</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="keepsake.html" class="active" aria-current="page">💝 言葉</a>
+  </div>
+  <div class="container">
+    <div class="card next-step" style="text-align:center;" id="dailyCard">
+      <h2>💌 今日の一言</h2>
+      <div id="dailyBox"></div>
+    </div>
+    <div class="card">
+      <h2>＋ もらった言葉を追加</h2>
+      <p class="muted" style="margin-bottom:0.5rem;">会話ふり返りや会話画面の ❤️ でも追加できます。メッセージでもらった言葉もここへ。</p>
+      <input type="text" id="enInput" placeholder="英語（例: I'm so proud of you.）" aria-label="英語" spellcheck="false">
+      <input type="text" id="jaInput" placeholder="日本語訳（空欄なら自動で翻訳）" aria-label="日本語訳">
+      <button class="btn" id="addBtn">💝 保存する</button>
+    </div>
+    <div class="muted" id="countInfo" style="margin-bottom:0.5rem;"></div>
+    <div id="keepList"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html" class="active" aria-current="page">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="quiz.html">✍️ 練習</a>
+    <a href="phrases.html">📚 表現集</a>
+  </nav>
+  <script src="common.js?v=5"></script>
+  <script>
+    let dailyIdx = -1;
+    const fmt = t => { const d = new Date(t); return d.getFullYear() + '/' + (d.getMonth() + 1) + '/' + d.getDate(); };
+
+    function mk(label, aria, fn) { const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); if (fn) b.addEventListener('click', fn); return b; }
+
+    function renderDaily(forceNew) {
+      const list = EA.getKeepsakes(), box = document.getElementById('dailyBox'); box.innerHTML = '';
+      if (!list.length) { box.innerHTML = '<div class="muted">もらった言葉が溜まると、ここに「今日の一言」が出ます。</div>'; return; }
+      if (forceNew || dailyIdx < 0 || dailyIdx >= list.length) {
+        let n = Math.floor(Math.random() * list.length);
+        if (list.length > 1 && forceNew) { let g = 0; while (n === dailyIdx && g++ < 10) n = Math.floor(Math.random() * list.length); }
+        dailyIdx = n;
+      }
+      const it = list[dailyIdx];
+      const e = document.createElement('div'); e.className = 'q-en'; e.style.cssText = 'font-size:1.2rem; font-weight:bold;'; e.textContent = '“' + it.en + '”';
+      const j = document.createElement('div'); j.className = 'muted'; j.style.marginTop = '0.3rem'; j.textContent = it.ja;
+      const row = document.createElement('div'); row.style.cssText = 'display:flex; justify-content:center; gap:6px; margin-top:0.6rem;';
+      row.appendChild(mk('🔊', '再生', () => EA.speak(it.en, 'en-US', 1.0)));
+      row.appendChild(mk('🎲', '別の言葉', () => renderDaily(true)));
+      box.appendChild(e); box.appendChild(j); box.appendChild(row);
+    }
+
+    function render() {
+      const list = EA.getKeepsakes(), box = document.getElementById('keepList'); box.innerHTML = '';
+      document.getElementById('countInfo').textContent = list.length ? list.length + ' 件の言葉' : '';
+      if (!list.length) { box.innerHTML = '<div class="chat-empty">まだありません。会話中に相手の言葉の ❤️ を押すと、ここに集まります。</div>'; return; }
+      list.forEach(it => {
+        const d = document.createElement('div'); d.className = 'phrase-card';
+        const e = document.createElement('div'); e.className = 'en-text'; e.textContent = it.en;
+        const j = document.createElement('div'); j.className = 'ja-text'; j.textContent = it.ja;
+        const t = document.createElement('div'); t.className = 'ex-text'; t.textContent = fmt(it.t);
+        const kana = document.createElement('div'); kana.className = 'kana-line'; EA.renderKana(kana, it.en);
+        const chips = document.createElement('div'); chips.className = 'word-chips'; chips.style.justifyContent = 'flex-start';
+        const score = document.createElement('div'); score.className = 'mini-score';
+        const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem;';
+        const mic = mk('🎙️', '声に出して言ってみる');
+        const save = mk(EA.hasPhrase(it.en) ? '✅' : '💾', 'マイ単語に保存', () => { const r = EA.addCustomPhrase(it.en, it.ja || it.en); if (r.added) { save.textContent = '✅'; EA.toast('マイ単語に保存しました'); } else EA.toast(r.reason === 'empty' ? '日本語訳が必要です' : 'すでに保存されています'); });
+        [mk('🔊', '再生', () => EA.speak(it.en, 'en-US', 1.0)), mk('🐢', 'ゆっくり再生', () => EA.speak(it.en, 'en-US', 0.7)), mic, save,
+          mk('🗑', '削除', () => { if (!confirm('この言葉を削除しますか？')) return; EA.saveKeepsakes(EA.getKeepsakes().filter(x => !(x.t === it.t && x.en === it.en))); render(); renderDaily(true); })
+        ].forEach(b => act.appendChild(b));
+        EA.attachPronunciation(mic, () => it.en, {
+          onInterim: s => { score.textContent = '🎙️ ' + s; },
+          onResult: r => { EA.renderChips(chips, r.words); score.textContent = 'スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉' : ''); EA.countSpeak(); EA.updateStreakBadge(); },
+          onError: m => { score.textContent = m; }
+        });
+        d.appendChild(e); d.appendChild(j); d.appendChild(t); d.appendChild(kana); d.appendChild(chips); d.appendChild(score); d.appendChild(act);
+        box.appendChild(d);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      render(); renderDaily(false);
+      document.getElementById('addBtn').addEventListener('click', async () => {
+        const en = document.getElementById('enInput').value.trim(); let ja = document.getElementById('jaInput').value.trim();
+        if (!en) { EA.toast('英語を入力してください'); return; }
+        const b = document.getElementById('addBtn'); b.disabled = true;
+        if (!ja) { const r = await EA.translate(en, 'en|ja'); if (r.ok) ja = r.text; }
+        b.disabled = false;
+        if (!EA.addKeepsake(en, ja)) { EA.toast('すでに保存されているか、保存できませんでした'); return; }
+        document.getElementById('enInput').value = ''; document.getElementById('jaInput').value = '';
+        render(); renderDaily(true); EA.toast('💝 保存しました');
+      });
+    });
+
+  </script>
+</body>
+</html>

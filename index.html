@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=4">
+  <link rel="stylesheet" href="common.css?v=5">
 </head>
 <body>
   <header>
@@ -15,20 +15,43 @@
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
   <div class="container">
+    <div class="card next-step" id="nextCard">
+      <h2>📅 次に会う日</h2>
+      <div id="nextBody"></div>
+    </div>
+
+    <div class="section-title" style="margin-top:0;">📅 会う前（予習）</div>
+    <div class="nav-buttons-grid two">
+      <a href="plan.html" class="nav-card-btn" style="background:#e0e7ff; border-color:#6366f1; color:#3730a3;"><span class="icon">📅</span><span>予習プラン</span></a>
+      <a href="roleplay.html" class="nav-card-btn"><span class="icon">🎭</span><span>ロールプレイ</span></a>
+      <a href="mylist.html" class="nav-card-btn"><span class="icon">🗒</span><span>言いたいこと</span></a>
+      <a href="scenes.html" class="nav-card-btn" style="background:#fce7f3; border-color:#ec4899; color:#9d174d;"><span class="icon">💞</span><span>気持ちから探す</span></a>
+    </div>
+    <div class="section-title">💬 会っている間</div>
     <div class="nav-buttons-grid">
       <a href="translator.html" class="nav-card-btn" style="background:#ccfbf1; border-color:#14b8a6; color:#115e59;"><span class="icon">💬</span><span>翻訳会話</span></a>
-      <a href="scenes.html" class="nav-card-btn" style="background:#fce7f3; border-color:#ec4899; color:#9d174d;"><span class="icon">💞</span><span>気持ちから探す</span></a>
-      <a href="recap.html" class="nav-card-btn"><span class="icon">📝</span><span>会話ふり返り</span></a>
+      <a href="topics.html" class="nav-card-btn"><span class="icon">🎲</span><span>話題カード</span></a>
+      <a href="phrases.html" class="nav-card-btn"><span class="icon">📚</span><span>表現集一覧</span></a>
+    </div>
+    <div class="section-title">📝 会ったあと（復習）</div>
+    <div class="nav-buttons-grid">
+      <a href="recap.html" class="nav-card-btn"><span class="icon">📝</span><span>ふり返り</span></a>
+      <a href="keepsake.html" class="nav-card-btn"><span class="icon">💝</span><span>もらった言葉</span></a>
+      <a href="quiz.html?mode=due" class="nav-card-btn"><span class="icon">⏰</span><span>今日の復習</span></a>
+    </div>
+    <div class="section-title">✍️ 練習</div>
+    <div class="nav-buttons-grid">
       <a href="quiz.html" class="nav-card-btn"><span class="icon">❓</span><span>クイズ (10問)</span></a>
       <a href="writing.html" class="nav-card-btn"><span class="icon">✍️</span><span>英作文</span></a>
       <a href="speaking.html" class="nav-card-btn"><span class="icon">🎙️</span><span>発音チェック</span></a>
       <a href="addword.html" class="nav-card-btn" style="background:#fef3c7; border-color:#f59e0b; color:#92400e;"><span class="icon">➕</span><span>単語追加</span></a>
-      <a href="phrases.html" class="nav-card-btn"><span class="icon">📚</span><span>表現集一覧</span></a>
       <a href="quiz.html?mode=weak" class="nav-card-btn"><span class="icon">🎯</span><span>弱点復習</span></a>
     </div>
 
     <div class="card">
-      <h2>🎯 弱点克服モード</h2>
+      <h2>🔁 復習</h2>
+      <p class="muted" id="dueSummary" style="margin-bottom:0.75rem;"></p>
+      <a href="quiz.html?mode=due" class="btn" id="dueQuizBtn" style="margin-bottom:0.75rem;">⏰ 今日の復習クイズ</a>
       <p class="muted" id="weakSummary">間違えたフレーズを自動で集めて、そこだけを復習できます。</p>
       <a href="quiz.html?mode=weak" class="btn weak-cta" id="weakQuizBtn">🎯 苦手だけの復習クイズを始める</a>
       <div style="display:flex; gap:8px; margin-top:0.5rem;">
@@ -68,7 +91,7 @@
 
     <div class="card">
       <h2>💾 データのバックアップ</h2>
-      <p class="muted" style="margin-bottom:0.75rem;">マイ単語・お気に入り・学習履歴・会話の記録をファイルに保存できます。機種変更やブラウザのデータ削除の前に書き出しておくと安心です。</p>
+      <p class="muted" style="margin-bottom:0.75rem;">マイ単語・お気に入り・学習履歴・会話の記録・ピン留め・もらった言葉・予習プランをファイルに保存できます。機種変更やブラウザのデータ削除の前に書き出しておくと安心です。</p>
       <div class="backup-row">
         <button class="btn" id="exportBtn">⬇️ 書き出し</button>
         <button class="btn btn-secondary" id="importBtn">⬆️ 読み込み</button>
@@ -85,12 +108,12 @@
 
   <nav>
     <a href="index.html" class="active" aria-current="page">🏠 ホーム</a>
-    <a href="translator.html">💬 翻訳会話</a>
-    <a href="scenes.html">💞 気持ちから</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
     <a href="quiz.html">✍️ 練習</a>
     <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=4"></script>
+  <script src="common.js?v=5"></script>
   <script>
     let viewDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // 月初固定（31日からの月送りで飛ぶのを防ぐ）
 
@@ -106,6 +129,8 @@
       document.getElementById('customCount').textContent = EA.getCustomPhrases().length;
       renderCalendar(store.history);
       renderWeaknesses();
+      renderDue();
+      renderNext();
     }
 
     function renderCalendar(history) {
@@ -172,6 +197,35 @@
           '<a href="quiz.html?genre=' + encodeURIComponent(cat) + '">復習 ▶</a>';
         list.appendChild(li);
       });
+    }
+
+    function renderDue() {
+      const n = EA.getDuePhrases().length;
+      const btn = document.getElementById('dueQuizBtn');
+      btn.style.opacity = n ? '1' : '0.45'; btn.style.pointerEvents = n ? 'auto' : 'none'; btn.setAttribute('aria-disabled', n ? 'false' : 'true');
+      document.getElementById('dueSummary').textContent = n
+        ? '復習の時期が来たフレーズが ' + n + ' 件あります。正解するほど次の出題までの間隔が延びていきます。'
+        : '今日復習するフレーズはありません。練習したフレーズは、忘れかけたころにここへ戻ってきます。';
+    }
+
+    function renderNext() {
+      const box = document.getElementById('nextBody');
+      const plan = EA.getPlan();
+      box.innerHTML = '';
+      if (!plan) {
+        box.innerHTML = '<p class="muted" style="margin-bottom:0.75rem;">会う日を決めると、毎日3フレーズの予習とカウントダウンがはじまります。</p><a href="plan.html" class="btn">📅 予習プランを作る</a>';
+        return;
+      }
+      const d = EA.daysUntil(plan.date);
+      const today = EA.dateKey(), done = (plan.practiced[today] || []).length;
+      const dt = EA.parseKey(plan.date), label = (dt.getMonth() + 1) + '月' + dt.getDate() + '日';
+      if (d >= 0) {
+        box.innerHTML = '<div class="countdown"><div class="lbl">' + EA.esc(label) + (d === 0 ? ' ＝ 今日！' : ' まで あと') + '</div>' + (d === 0 ? '' : '<div class="num">' + d + '日</div>') + '</div>' +
+          '<p class="muted" style="text-align:center; margin-bottom:0.75rem;">今日の予習：' + done + ' フレーズ練習済み</p>' +
+          '<a href="' + (d === 0 ? 'translator.html' : 'plan.html') + '" class="btn">' + (d === 0 ? '💬 会話をはじめる' : '✨ 今日の予習をする') + '</a>';
+      } else {
+        box.innerHTML = '<p class="muted" style="margin-bottom:0.75rem;">' + EA.esc(label) + ' のデートおつかれさま！ピン留めしたフレーズが使えたか、ふり返りましょう。</p><a href="recap.html" class="btn">📝 ふり返りをする</a>';
+      }
     }
 
     function showBackupStatus(type, msg) {

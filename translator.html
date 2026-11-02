@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=4">
+  <link rel="stylesheet" href="common.css?v=5">
 </head>
 <body>
   <header>
@@ -16,7 +16,9 @@
   </header>
   <div class="subnav">
     <a href="translator.html" class="active" aria-current="page">💬 会話</a>
+    <a href="topics.html">🎲 話題</a>
     <a href="recap.html">📝 ふり返り</a>
+    <a href="keepsake.html">💝 言葉</a>
   </div>
   <div class="container">
     <div id="offlineNotice" class="notice error" style="display:none;">📴 オフラインです。翻訳には通信が必要です。<a href="scenes.html">「気持ちから探す」</a>や表現集はオフラインでも使えます。</div>
@@ -39,7 +41,11 @@
         <button class="btn btn-me" id="micMe">🎙️ 自分（日本語で話す）</button>
         <button class="btn btn-partner" id="micPartner">🎙️ 相手（英語を聞く）</button>
       </div>
-      <button class="tiny-btn text-toggle" id="textToggle">⌨️ 文字で入力</button>
+      <div class="bar-row">
+        <button class="tiny-btn" id="openPins">📌 準備フレーズ</button>
+        <button class="tiny-btn" id="openFinder">🔍 言葉が出てこない</button>
+        <button class="tiny-btn" id="textToggle">⌨️ 文字入力</button>
+      </div>
       <div class="text-row" id="textRow">
         <input type="text" id="textInput" placeholder="文章を入力..." aria-label="翻訳したい文章">
         <button class="btn btn-me" id="sendMe">日→英</button>
@@ -48,14 +54,34 @@
     </div>
   </div>
 
+  <div class="sheet-backdrop" id="backdrop"></div>
+  <div class="sheet" id="pinSheet" role="dialog" aria-label="準備したフレーズ" aria-hidden="true">
+    <div class="sheet-inner">
+      <h3>📌 準備したフレーズ <button class="tiny-btn" data-close>閉じる</button></h3>
+      <p class="muted" style="margin-bottom:0.5rem;">言えたら「✅ 使えた！」を押すと記録され、あとで振り返れます。</p>
+      <div id="pinList"></div>
+    </div>
+  </div>
+  <div class="sheet" id="finderSheet" role="dialog" aria-label="言葉が出てこないとき" aria-hidden="true">
+    <div class="sheet-inner">
+      <h3>🔍 言葉が出てこないとき <button class="tiny-btn" data-close>閉じる</button></h3>
+      <div style="display:flex; gap:6px;">
+        <input type="text" id="finderInput" placeholder="日本語で一言（例: 懐かしい、おすすめ）" aria-label="日本語で検索" style="margin-bottom:0;">
+        <button class="btn" id="finderBtn" style="width:auto; padding:0 1rem;">検索</button>
+      </div>
+      <div id="finderResults" style="margin-top:0.75rem;"></div>
+    </div>
+  </div>
+
   <nav>
     <a href="index.html">🏠 ホーム</a>
-    <a href="translator.html" class="active" aria-current="page">💬 翻訳会話</a>
-    <a href="scenes.html">💞 気持ちから</a>
+    <a href="translator.html" class="active" aria-current="page">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
     <a href="quiz.html">✍️ 練習</a>
     <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=4"></script>
+  <script src="common.js?v=5"></script>
+  <script src="content.js?v=5"></script>
   <script>
     // 自分(me): 日本語で話す → 英訳して表示/読み上げ。相手(partner): 英語を聞く → 日本語訳を表示
     const MODE = {
@@ -126,7 +152,15 @@
         if (r.added) { save.textContent = '✅'; save.classList.add('done'); toast('マイ単語に保存しました'); }
         else toast(r.reason === 'exists' ? 'すでに保存されています' : '保存できませんでした');
       });
-      act.appendChild(play); act.appendChild(slow); act.appendChild(save);
+      const pin = document.createElement('button'); pin.className = 'icon-btn'; pin.textContent = EA.isPinned(e.en) ? '📌' : '📍'; pin.setAttribute('aria-label', 'ピン留め');
+      pin.addEventListener('click', () => { const on = EA.togglePin(e.en, e.ja); pin.textContent = on ? '📌' : '📍'; toast(on ? 'ピン留めしました' : 'ピン留めを外しました'); });
+      act.appendChild(play); act.appendChild(slow); act.appendChild(save); act.appendChild(pin);
+      if (e.who === 'partner') {
+        const heart = document.createElement('button'); heart.className = 'icon-btn'; heart.setAttribute('aria-label', 'もらった言葉に保存');
+        heart.textContent = EA.hasKeepsake(e.en) ? '💝' : '🤍';
+        heart.addEventListener('click', () => { if (EA.addKeepsake(e.en, e.ja)) { heart.textContent = '💝'; toast('💝 もらった言葉に保存しました'); } else toast('すでに保存されています'); });
+        act.appendChild(heart);
+      }
       b.appendChild(who); b.appendChild(en); b.appendChild(ja); b.appendChild(kana); b.appendChild(act);
       return b;
     }
@@ -203,6 +237,75 @@
       });
     }
 
+    /* ---- シート（ピン留め／言葉の検索） ---- */
+    function openSheet(id) {
+      document.getElementById('backdrop').classList.add('open');
+      const s = document.getElementById(id); s.classList.add('open'); s.setAttribute('aria-hidden', 'false');
+    }
+    function closeSheets() {
+      document.getElementById('backdrop').classList.remove('open');
+      document.querySelectorAll('.sheet').forEach(s => { s.classList.remove('open'); s.setAttribute('aria-hidden', 'true'); });
+    }
+
+    function iconBtn(label, aria, fn) { const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); b.addEventListener('click', fn); return b; }
+
+    function renderPins() {
+      const box = document.getElementById('pinList'); box.innerHTML = '';
+      const pins = EA.getPins();
+      if (!pins.length) { box.innerHTML = '<div class="chat-empty">まだありません。予習プラン・表現集・気持ちから探す・話題カードの 📍 を押すと、ここに集まります。</div>'; return; }
+      pins.forEach(p => {
+        const d = document.createElement('div'); d.className = 'item-row';
+        const e = document.createElement('div'); e.className = 'en-text'; e.textContent = p.en;
+        if (p.used.length) { const u = document.createElement('span'); u.className = 'used-badge'; u.textContent = '使えた ' + p.used.length + '回'; e.appendChild(u); }
+        const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = p.ja;
+        const kana = document.createElement('div'); kana.className = 'kana-line'; EA.renderKana(kana, p.en);
+        const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem; align-items:center;';
+        act.appendChild(iconBtn('🔊', '再生', () => EA.speak(p.en, 'en-US', 1.0)));
+        act.appendChild(iconBtn('🐢', 'ゆっくり再生', () => EA.speak(p.en, 'en-US', 0.7)));
+        const used = document.createElement('button'); used.className = 'tiny-btn'; used.textContent = '✅ 使えた！';
+        used.addEventListener('click', () => { EA.markPinUsed(p.en); EA.updateStreakBadge(); toast('記録しました 🎉'); renderPins(); });
+        act.appendChild(used);
+        act.appendChild(iconBtn('🗑', 'ピン留めを外す', () => { EA.togglePin(p.en, p.ja); renderPins(); }));
+        d.appendChild(e); d.appendChild(ja); d.appendChild(kana); d.appendChild(act); box.appendChild(d);
+      });
+    }
+
+    function finderCard(en, ja) {
+      const d = document.createElement('div'); d.className = 'item-row';
+      const e = document.createElement('div'); e.className = 'en-text'; e.textContent = en;
+      const j = document.createElement('div'); j.className = 'ja-text'; j.textContent = ja;
+      const kana = document.createElement('div'); kana.className = 'kana-line'; EA.renderKana(kana, en);
+      const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem;';
+      act.appendChild(iconBtn('🔊', '再生', () => EA.speak(en, 'en-US', 1.0)));
+      const pin = iconBtn(EA.isPinned(en) ? '📌' : '📍', 'ピン留め', () => { const on = EA.togglePin(en, ja); pin.textContent = on ? '📌' : '📍'; toast(on ? 'ピン留めしました' : 'ピン留めを外しました'); });
+      act.appendChild(pin);
+      const save = iconBtn(EA.hasPhrase(en) ? '✅' : '💾', 'マイ単語に保存', () => { const r = EA.addCustomPhrase(en, ja); if (r.added) { save.textContent = '✅'; toast('マイ単語に保存しました'); } else toast('すでに保存されています'); });
+      act.appendChild(save);
+      d.appendChild(e); d.appendChild(j); d.appendChild(kana); d.appendChild(act); return d;
+    }
+
+    async function runFinder() {
+      const q = document.getElementById('finderInput').value.trim();
+      const box = document.getElementById('finderResults'); box.innerHTML = '';
+      if (!q) return;
+      const nq = EA.normJa(q), lq = q.toLowerCase(), seen = new Set(), local = [];
+      const push = (en, ja) => { const k = en.toLowerCase(); if (seen.has(k)) return; if (EA.normJa(ja).includes(nq) || k.includes(lq)) { seen.add(k); local.push([en, ja]); } };
+      EA.getAllPhrases().forEach(p => push(p[1], p[2]));
+      CONTENT.SCENES.forEach(s => s.p.forEach(p => push(p[0], p[1])));
+      Object.values(CONTENT.MEET).forEach(m => m.p.forEach(p => push(p[0], p[1])));
+      if (local.length) {
+        const t = document.createElement('div'); t.className = 'section-title'; t.textContent = '📚 フレーズから'; box.appendChild(t);
+        local.slice(0, 8).forEach(x => box.appendChild(finderCard(x[0], x[1])));
+      }
+      const t2 = document.createElement('div'); t2.className = 'section-title'; t2.textContent = '🌐 翻訳の候補'; box.appendChild(t2);
+      const status = document.createElement('div'); status.className = 'muted'; status.textContent = '検索中...'; box.appendChild(status);
+      const r = await EA.translate(q, 'ja|en');
+      status.remove();
+      if (!r.ok) { const m = document.createElement('div'); m.className = 'muted'; m.textContent = r.text; box.appendChild(m); if (!local.length) { /* フレーズの候補なし */ } return; }
+      const cands = [r.text].concat(r.alts).filter((x, i, a) => x && a.findIndex(y => y.toLowerCase() === x.toLowerCase()) === i && x.length <= 80).slice(0, 5);
+      cands.forEach(c => box.appendChild(finderCard(c, q)));
+    }
+
     function syncOnline() { document.getElementById('offlineNotice').style.display = navigator.onLine ? 'none' : 'block'; }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -217,6 +320,13 @@
       renderChat();
       setupMic();
       syncOnline();
+      document.getElementById('openPins').addEventListener('click', () => { renderPins(); openSheet('pinSheet'); });
+      document.getElementById('openFinder').addEventListener('click', () => { openSheet('finderSheet'); setTimeout(() => document.getElementById('finderInput').focus(), 300); });
+      document.getElementById('backdrop').addEventListener('click', closeSheets);
+      document.querySelectorAll('[data-close]').forEach(b => b.addEventListener('click', closeSheets));
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSheets(); });
+      document.getElementById('finderBtn').addEventListener('click', runFinder);
+      document.getElementById('finderInput').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); runFinder(); } });
       window.addEventListener('online', syncOnline);
       window.addEventListener('offline', syncOnline);
 

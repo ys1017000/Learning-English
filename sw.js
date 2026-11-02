@@ -1,7 +1,7 @@
 /* オフライン対応：一度開いたページ・ファイルを端末に保存して、電波がなくても使えるようにする */
-const CACHE = 'english-app-v4';
+const CACHE = 'english-app-v5';
 const ASSETS = ['./', 'index.html', 'quiz.html', 'writing.html', 'speaking.html', 'translator.html', 'recap.html',
-  'scenes.html', 'addword.html', 'phrases.html', 'common.js', 'common.css', 'manifest.webmanifest',
+  'scenes.html', 'plan.html', 'roleplay.html', 'mylist.html', 'topics.html', 'keepsake.html', 'content.js', 'addword.html', 'phrases.html', 'common.js', 'common.css', 'manifest.webmanifest',
   'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
 
 self.addEventListener('install', e => {

@@ -1,4 +1,4 @@
-/* 心をつなぐ英語表現 - 共通スクリプト（データ・学習記録・音声・バックアップ） */
+/* 心をつなぐ英語表現 - 共通スクリプト */
 (function () {
   "use strict";
   const BASE_PHRASES = [
@@ -91,7 +91,7 @@
 
   /* ---------- 学習データ ---------- */
   function defaultStore() {
-    return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, weakPhrases: {}, favorites: [] };
+    return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, weakPhrases: {}, favorites: [], srs: {} };
   }
   function normalizeStore(s) {
     const d = defaultStore();
@@ -104,6 +104,13 @@
     d.history = (s.history && typeof s.history === 'object') ? s.history : {};
     d.weaknesses = (s.weaknesses && typeof s.weaknesses === 'object') ? s.weaknesses : {};
     d.weakPhrases = (s.weakPhrases && typeof s.weakPhrases === 'object') ? s.weakPhrases : {};
+    d.srs = {};
+    if (s.srs && typeof s.srs === 'object') {
+      Object.keys(s.srs).forEach(k => {
+        const e = s.srs[k];
+        if (e && typeof e === 'object' && /^\d{4}-\d{2}-\d{2}$/.test(String(e.due))) d.srs[k] = { box: Math.max(0, Math.min(6, Number(e.box) || 0)), due: String(e.due) };
+      });
+    }
     return d;
   }
   function getStore() {
@@ -159,7 +166,20 @@
       s.weakPhrases[item[1]] = Math.min((s.weakPhrases[item[1]] || 0) + 1, 5);
       s.weaknesses[item[0]] = (Number(s.weaknesses[item[0]]) || 0) + 1;
     }
+    srsUpdate(s, item[1], ok);
     saveStore(s);
+  }
+  // 間隔反復：正解するほど次の出題までの間隔が延び、間違えるとその日にもう一度出題される
+  const SRS_INTERVALS = [0, 1, 2, 4, 7, 15, 30];   // box → 次の復習までの日数
+  function addDays(d, n) { const x = new Date(d); x.setDate(x.getDate() + n); return x; }
+  function srsUpdate(s, en, ok) {
+    const cur = s.srs[en] || { box: 0 };
+    const box = ok ? Math.min(cur.box + 1, SRS_INTERVALS.length - 1) : 0;
+    s.srs[en] = { box, due: dateKey(addDays(new Date(), SRS_INTERVALS[box])) };
+  }
+  function getDuePhrases() {
+    const srs = getStore().srs, today = dateKey();
+    return getAllPhrases().filter(p => srs[p[1]] && srs[p[1]].due <= today);
   }
   function countSpeak() {
     const s = getStore();
@@ -199,6 +219,7 @@
     const all = getAllPhrases();
     if (selected === 'FAV') { const f = getStore().favorites; return all.filter(p => f.includes(p[1])); }
     if (selected === 'WEAK') return getWeakPhrases();
+    if (selected === 'DUE') return getDuePhrases();
     if (selected === 'ALL' || !selected) return all;
     return all.filter(p => p[0] === selected);
   }
@@ -211,10 +232,12 @@
     const add = (v, t) => { const o = document.createElement('option'); o.value = v; o.textContent = t; select.appendChild(o); };
     add('ALL', '✨ 全ジャンル (ランダム出題)');
     add('WEAK', '🎯 苦手フレーズのみ (' + weakCount + '件)');
+    add('DUE', '⏰ 復習の時期が来たフレーズ (' + getDuePhrases().length + '件)');
     add('FAV', '⭐ お気に入りフレーズのみ');
     categories.forEach(c => add(c, (c === CUSTOM_CAT ? '⭐ ' : '📁 ') + c));
     // ?mode=weak / ?genre=カテゴリ名 で開いたときの初期選択
-    const want = params.get('mode') === 'weak' ? 'WEAK' : params.get('genre');
+    const mode = params.get('mode');
+    const want = mode === 'weak' ? 'WEAK' : mode === 'due' ? 'DUE' : params.get('genre');
     if (want && Array.from(select.options).some(o => o.value === want)) select.value = want;
   }
 
@@ -223,6 +246,8 @@
     if (getPhrasesFor(select.value).length > 0) return true;
     const msg = select.value === 'WEAK'
       ? '苦手フレーズはまだありません。クイズや発音チェックで間違えたフレーズがここに溜まります。'
+      : select.value === 'DUE'
+        ? '今日復習するフレーズはありません。練習したフレーズが、時間をおいてここに戻ってきます。'
       : select.value === 'FAV'
         ? 'お気に入りがまだありません。★を押して登録してください。'
         : '該当するフレーズがありません。';
@@ -405,11 +430,15 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 2,
+      version: 3,
       exportedAt: new Date().toISOString(),
       data: getStore(),
       customPhrases: getCustomPhrases(),
-      talkLog: getTalkLog()
+      talkLog: getTalkLog(),
+      pins: getPins(),
+      keepsakes: getKeepsakes(),
+      lists: getLists(),
+      plan: getPlan()
     };
   }
   function downloadBackup() {
@@ -436,6 +465,11 @@
     });
     return out;
   }
+  function mergeSrs(a, b) {
+    const out = Object.assign({}, a);
+    Object.keys(b || {}).forEach(k => { if (!out[k] || b[k].box > out[k].box || (b[k].box === out[k].box && b[k].due > out[k].due)) out[k] = b[k]; });
+    return out;
+  }
   function maxMerge(a, b) {
     const out = Object.assign({}, a);
     Object.keys(b || {}).forEach(k => { out[k] = Math.max(Number(out[k]) || 0, Number(b[k]) || 0); });
@@ -452,9 +486,11 @@
     const inc = normalizeStore(obj.data);
     const incCustom = sanitizeCustom(obj.customPhrases);
     const incTalk = sanitizeTalk(obj.talkLog);
-    let store, custom, talk;
+    const incPins = sanitizePins(obj.pins), incKeeps = sanitizeKeeps(obj.keepsakes), incLists = sanitizeLists(obj.lists), incPlan = sanitizePlan(obj.plan);
+    let store, custom, talk, pins, keeps, lists, plan;
     if (mode === 'replace') {
       store = inc; custom = incCustom; talk = incTalk;
+      pins = incPins; keeps = incKeeps; lists = incLists; plan = incPlan;
     } else {
       const cur = getStore();
       store = {
@@ -467,13 +503,26 @@
         },
         speakCount: Math.max(cur.speakCount, inc.speakCount),
         weaknesses: maxMerge(cur.weaknesses, inc.weaknesses),
-        weakPhrases: maxMerge(cur.weakPhrases, inc.weakPhrases)
+        weakPhrases: maxMerge(cur.weakPhrases, inc.weakPhrases),
+        srs: mergeSrs(cur.srs, inc.srs)
       };
       custom = sanitizeCustom(getCustomPhrases().concat(incCustom));
       talk = sanitizeTalk(getTalkLog().concat(incTalk));
+      // ピンは使えた記録(used)を統合
+      const curPins = getPins();
+      incPins.forEach(ip => {
+        const m = curPins.find(c => c.en.toLowerCase() === ip.en.toLowerCase());
+        if (m) m.used = Array.from(new Set(m.used.concat(ip.used))).sort((a, b) => a - b); else curPins.push(ip);
+      });
+      pins = sanitizePins(curPins);
+      keeps = sanitizeKeeps(getKeepsakes().concat(incKeeps));
+      const curLists = getLists();
+      lists = sanitizeLists({ say: curLists.say.concat(incLists.say), ask: curLists.ask.concat(incLists.ask) });
+      plan = getPlan() || incPlan;
     }
-    if (!saveStore(store) || !saveCustomPhrases(custom) || !saveTalkLog(talk)) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
-    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length };
+    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true));
+    if (!okAll) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
+    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length };
   }
 
 
@@ -507,6 +556,7 @@
     const key = getAllPhrases().find(p => p[1].toLowerCase() === String(en).trim().toLowerCase());
     if (!key) return { added: false, reason: 'notfound' };
     s.weakPhrases[key[1]] = Math.max(s.weakPhrases[key[1]] || 0, 1);
+    s.srs[key[1]] = { box: 0, due: dateKey() };
     saveStore(s);
     return { added: true, newCustom: r.added };
   }
@@ -566,6 +616,12 @@
     misunderstanding: 'ミスアンダスタンディング', apologize: 'アパロジャイズ', forgive: 'フォーギヴ', 
     fiancé: 'フィーアンセイ', cuddling: 'カドゥリング', 
     adore: 'アドー', treasure: 'トレジャー', pressure: 'プレッシャー', patient: 'ペイシェント',
+    dessert: 'ディザート', souvenir: 'スーヴェニア', souvenirs: 'スーヴェニアズ', delicious: 'ディリシャス', stuffed: 'スタッフト', incredible: 'インクレディブル',
+    spicy: 'スパイシー', blanket: 'ブランケット', takeout: 'テイクアウト', dishes: 'ディッシュィズ', view: 'ヴュー', photo: 'フォウトウ', picture: 'ピクチャー',
+    lovely: 'ラヴリー', order: 'オーダー', mood: 'ムード', allergic: 'アラージック', relaxing: 'リラクシング', building: 'ビルディング', station: 'ステイション',
+    always: 'オールウェイズ', dinner: 'ディナー', bill: 'ビル', split: 'スプリット', cheers: 'チアーズ', toast: 'トウスト', recommends: 'レコメンズ',
+    starving: 'スターヴィング', hungry: 'ハングリー', knife: 'ナイフ', knives: 'ナイヴズ', onions: 'アニオンズ', drawer: 'ドローア', careful: 'ケアフル',
+    matching: 'マッチング', lemonade: 'レモネイド', pasta: 'パースタ', mild: 'マイルド', directions: 'ディレクションズ', across: 'アクロス', blocks: 'ブロックス',
     available: 'アヴェイラブル', convenient: 'コンヴィーニエント', exactly: 'イグザクトリ', certainly: 'サートゥンリー', fortunate: 'フォーチュネット', lucky: 'ラッキー'
   };
   // 英文に含まれる難しめの単語 → [単語, カタカナ] の配列
@@ -587,6 +643,178 @@
     container.textContent = '🔤 ' + hints.map(h => h[0] + '＝' + h[1]).join('  ／  ');
   }
 
+  /* ---------- 汎用の保存ヘルパー・日付 ---------- */
+  function loadJSON(key, fallback) { try { const v = JSON.parse(safeGet(key)); return v == null ? fallback : v; } catch (e) { return fallback; } }
+  function parseKey(k) { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(String(k)); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+  // 今日から指定日までの日数（今日=0、過去はマイナス）
+  function daysUntil(k) {
+    const d = parseKey(k); if (!d) return null;
+    const t = new Date(); t.setHours(0, 0, 0, 0);
+    return Math.round((d - t) / 86400000);
+  }
+  function toast(msg) {
+    let el = document.getElementById('toast');
+    if (!el) { el = document.createElement('div'); el.id = 'toast'; el.className = 'toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+    el.textContent = msg; el.classList.add('show');
+    clearTimeout(toast._t); toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+  }
+  // ひらがな/カタカナ・全半角のゆれを吸収して比較用に正規化
+  function normJa(s) {
+    return String(s || '').normalize('NFKC').toLowerCase().replace(/[\u30a1-\u30f6]/g, c => String.fromCharCode(c.charCodeAt(0) - 0x60));
+  }
+  function decodeEntities(s) { return new DOMParser().parseFromString(String(s), 'text/html').documentElement.textContent || ''; }
+
+  // 無料翻訳API。pair: 'ja|en' / 'en|ja'。戻り値 { ok, text, alts[] }
+  async function translate(text, pair) {
+    if (!navigator.onLine) return { ok: false, text: 'オフラインのため翻訳できません。', alts: [] };
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 10000);
+      const res = await fetch('https://api.mymemory.translated.net/get?q=' + encodeURIComponent(text) + '&langpair=' + pair, { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error('http ' + res.status);
+      const data = await res.json();
+      const status = Number(data && data.responseStatus);
+      const out = data && data.responseData && data.responseData.translatedText;
+      if (status === 200 && out) {
+        const alts = [];
+        (data.matches || []).forEach(m => {
+          const t = decodeEntities(m && m.translation || '').trim();
+          if (t && !alts.some(a => a.toLowerCase() === t.toLowerCase())) alts.push(t);
+        });
+        return { ok: true, text: decodeEntities(out), alts };
+      }
+      if (status === 429) return { ok: false, text: '無料翻訳の1日の利用上限に達しました。しばらくしてからお試しください。', alts: [] };
+      if (/QUERY LENGTH LIMIT/i.test(String(out))) return { ok: false, text: '文章が長すぎます（500文字以内にしてください）。', alts: [] };
+    } catch (e) {}
+    return { ok: false, text: '翻訳に失敗しました。通信状況を確認してもう一度お試しください。', alts: [] };
+  }
+
+  /* ---------- ピン留め（会う前に準備したフレーズ）と「使えた」記録 ---------- */
+  const KEY_PINS = 'english_app_pins';
+  function sanitizePins(list) {
+    const seen = new Set(), out = [];
+    (Array.isArray(list) ? list : []).forEach(p => {
+      if (!p || typeof p.en !== 'string' || typeof p.ja !== 'string') return;
+      const en = p.en.trim(), ja = p.ja.trim();
+      if (!en || !ja || seen.has(en.toLowerCase())) return;
+      seen.add(en.toLowerCase());
+      out.push({ en, ja, t: Number(p.t) || Date.now(), used: (Array.isArray(p.used) ? p.used : []).map(Number).filter(isFinite).slice(-50) });
+    });
+    return out.slice(0, 200);
+  }
+  function getPins() { return sanitizePins(loadJSON(KEY_PINS, [])); }
+  function savePins(list) { return safeSet(KEY_PINS, JSON.stringify(sanitizePins(list))); }
+  function isPinned(en) { const k = String(en).trim().toLowerCase(); return getPins().some(p => p.en.toLowerCase() === k); }
+  function togglePin(en, ja) {
+    const list = getPins(), k = String(en).trim().toLowerCase();
+    const i = list.findIndex(p => p.en.toLowerCase() === k);
+    if (i >= 0) { list.splice(i, 1); savePins(list); return false; }
+    list.unshift({ en: String(en).trim(), ja: String(ja).trim(), t: Date.now(), used: [] });
+    savePins(list); return true;
+  }
+  function markPinUsed(en) {
+    const list = getPins(), k = String(en).trim().toLowerCase();
+    const p = list.find(x => x.en.toLowerCase() === k);
+    if (!p) return false;
+    p.used.push(Date.now()); savePins(list);
+    const s = getStore(); touchToday(s); saveStore(s);
+    return true;
+  }
+
+  /* ---------- もらった言葉（コレクション） ---------- */
+  const KEY_KEEP = 'english_app_keepsakes';
+  function sanitizeKeeps(list) {
+    const seen = new Set(), out = [];
+    (Array.isArray(list) ? list : []).forEach(e => {
+      if (!e || typeof e.en !== 'string') return;
+      const en = e.en.trim(), ja = typeof e.ja === 'string' ? e.ja.trim() : '', t = Number(e.t);
+      if (!en || !isFinite(t) || seen.has(t + '|' + en)) return;
+      seen.add(t + '|' + en);
+      out.push({ t, en, ja });
+    });
+    out.sort((a, b) => b.t - a.t);
+    return out.slice(0, 500);
+  }
+  function getKeepsakes() { return sanitizeKeeps(loadJSON(KEY_KEEP, [])); }
+  function saveKeepsakes(list) { return safeSet(KEY_KEEP, JSON.stringify(sanitizeKeeps(list))); }
+  function addKeepsake(en, ja) {
+    const list = getKeepsakes();
+    if (list.some(e => e.en.toLowerCase() === String(en).trim().toLowerCase())) return false;
+    list.unshift({ t: Date.now(), en: String(en).trim(), ja: String(ja || '').trim() });
+    return saveKeepsakes(list);
+  }
+  function hasKeepsake(en) { const k = String(en).trim().toLowerCase(); return getKeepsakes().some(e => e.en.toLowerCase() === k); }
+
+  /* ---------- 言いたいこと／聞きたいことリスト ---------- */
+  const KEY_LISTS = 'english_app_lists';
+  function sanitizeLists(v) {
+    const out = { say: [], ask: [] };
+    ['say', 'ask'].forEach(kind => {
+      const seen = new Set();
+      ((v && Array.isArray(v[kind])) ? v[kind] : []).forEach(e => {
+        if (!e || typeof e.ja !== 'string' || typeof e.en !== 'string') return;
+        const ja = e.ja.trim(), en = e.en.trim();
+        if (!ja || !en || seen.has(en.toLowerCase())) return;
+        seen.add(en.toLowerCase());
+        out[kind].push({ id: String(e.id || ('i' + Date.now() + Math.random().toString(36).slice(2, 6))), ja, en, done: !!e.done, t: Number(e.t) || Date.now() });
+      });
+      out[kind] = out[kind].slice(0, 100);
+    });
+    return out;
+  }
+  function getLists() { return sanitizeLists(loadJSON(KEY_LISTS, {})); }
+  function saveLists(v) { return safeSet(KEY_LISTS, JSON.stringify(sanitizeLists(v))); }
+
+  /* ---------- 次に会う日の予習プラン ---------- */
+  const KEY_PLAN = 'english_app_plan';
+  function sanitizePlan(v) {
+    if (!v || typeof v !== 'object' || !parseKey(v.date)) return null;
+    const scenes = (Array.isArray(v.scenes) ? v.scenes : []).filter(x => typeof x === 'string').slice(0, 6);
+    const practiced = {};
+    if (v.practiced && typeof v.practiced === 'object') {
+      Object.keys(v.practiced).slice(-60).forEach(k => { if (parseKey(k) && Array.isArray(v.practiced[k])) practiced[k] = v.practiced[k].filter(x => typeof x === 'string').slice(0, 60); });
+    }
+    const extra = {};
+    if (v.extra && typeof v.extra === 'object') Object.keys(v.extra).slice(-60).forEach(k => { if (parseKey(k)) extra[k] = Math.max(0, Math.min(20, Number(v.extra[k]) || 0)); });
+    return { date: v.date, scenes, startedAt: Number(v.startedAt) || Date.now(), practiced, extra };
+  }
+  function getPlan() { return sanitizePlan(loadJSON(KEY_PLAN, null)); }
+  function savePlan(v) { const p = sanitizePlan(v); if (!p) return false; return safeSet(KEY_PLAN, JSON.stringify(p)); }
+  function clearPlan() { try { localStorage.removeItem(KEY_PLAN); } catch (e) {} }
+
+  /* ---------- 発音練習ボタン（各ページ共通） ---------- */
+  let activeRec = null;
+  // btn にマイク機能を結びつける。getRef() は照合する英文。handlers: { onResult(result), onInterim(text), onError(msg), onState(on) }
+  function attachPronunciation(btn, getRef, handlers, labels) {
+    labels = labels || { idle: '🎙️', on: '⏹' };
+    if (!recognitionSupported) { btn.disabled = true; btn.title = 'このブラウザは音声認識に対応していません'; return null; }
+    const rec = createRecognizer({
+      lang: 'en-US',
+      onState: on => { btn.classList.toggle('recording', on); btn.textContent = on ? labels.on : labels.idle; handlers.onState && handlers.onState(on); },
+      onInterim: t => handlers.onInterim && handlers.onInterim(t),
+      onFinal: alts => {
+        // getRef() は英文1つ、または別解の配列。いちばん近い正解との照合結果を返す
+        let best = null;
+        [].concat(getRef()).forEach(ref => { const r = bestMatch(ref, alts); if (!best || r.score > best.score) best = Object.assign(r, { ref }); });
+        handlers.onResult && handlers.onResult(best);
+      },
+      onError: m => handlers.onError && handlers.onError(m)
+    });
+    btn.addEventListener('click', () => {
+      if (rec.listening) { rec.stop(); return; }
+      if (activeRec && activeRec !== rec && activeRec.listening) activeRec.abort();
+      activeRec = rec;
+      rec.start();
+    });
+    return rec;
+  }
+  function renderChips(container, words) {
+    container.innerHTML = '';
+    words.forEach(w => { const s = document.createElement('span'); s.className = 'word-chip ' + w.status; s.textContent = w.text; container.appendChild(s); });
+  }
+  const PASS_SCORE = 75;
+
   /* ---------- オフライン対応（Service Worker） ---------- */
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
     window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
@@ -601,7 +829,12 @@
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,
     getPrefs, setPref, hasPhrase, addCustomPhrase, addToReview,
-    getTalkLog, saveTalkLog, addTalkEntry, kanaHints, renderKana
+    getTalkLog, saveTalkLog, addTalkEntry, kanaHints, renderKana,
+    getDuePhrases, daysUntil, parseKey, toast, translate, decodeEntities, normJa,
+    getPins, savePins, isPinned, togglePin, markPinUsed,
+    getKeepsakes, saveKeepsakes, addKeepsake, hasKeepsake,
+    getLists, saveLists, getPlan, savePlan, clearPlan,
+    attachPronunciation, renderChips, PASS_SCORE
   };
 
   document.addEventListener('DOMContentLoaded', updateStreakBadge);

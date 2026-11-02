@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=4">
+  <link rel="stylesheet" href="common.css?v=5">
 </head>
 <body>
   <header>
@@ -16,7 +16,9 @@
   </header>
   <div class="subnav">
     <a href="translator.html">💬 会話</a>
+    <a href="topics.html">🎲 話題</a>
     <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
+    <a href="keepsake.html">💝 言葉</a>
   </div>
   <div class="container">
     <div class="card">
@@ -33,18 +35,24 @@
       </div>
       <p class="muted" style="margin-top:0.5rem;">各フレーズの 🔁 を押すと「復習」に追加され、上のボタンから練習できます。</p>
     </div>
+    <div class="card" id="pinCard">
+      <h2>📌 準備したフレーズの結果</h2>
+      <p class="muted" style="margin-bottom:0.75rem;">会う前にピン留めしたフレーズです。実際に使えたかを記録しましょう。使えなかったものは 🔁 で復習に回せます。</p>
+      <div id="pinResults"></div>
+      <a href="plan.html" class="btn btn-secondary" style="margin-top:0.5rem;">📅 次に会う日の予習プランを作る</a>
+    </div>
     <div id="days"></div>
     <div id="dangerZone" style="text-align:center; margin-top:1rem;"></div>
   </div>
 
   <nav>
     <a href="index.html">🏠 ホーム</a>
-    <a href="translator.html" class="active" aria-current="page">💬 翻訳会話</a>
-    <a href="scenes.html">💞 気持ちから</a>
+    <a href="translator.html" class="active" aria-current="page">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
     <a href="quiz.html">✍️ 練習</a>
     <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=4"></script>
+  <script src="common.js?v=5"></script>
   <script>
     let whoFilter = 'all';
     const WEEK = ['日', '月', '火', '水', '木', '金', '土'];
@@ -61,7 +69,29 @@
       return m + '月' + d + '日(' + WEEK[dt.getDay()] + ')';
     }
 
+    function renderPins() {
+      const box = document.getElementById('pinResults'); box.innerHTML = '';
+      const pins = EA.getPins();
+      if (!pins.length) { box.innerHTML = '<div class="muted">ピン留めしたフレーズはまだありません。予習プラン・表現集などの 📍 から追加できます。</div>'; return; }
+      pins.forEach(p => {
+        const d = document.createElement('div'); d.className = 'item-row';
+        const e = document.createElement('div'); e.className = 'en-text'; e.textContent = p.en;
+        const u = document.createElement('span'); u.className = 'used-badge'; u.textContent = p.used.length ? '使えた ' + p.used.length + '回' : 'まだ使っていない';
+        if (!p.used.length) u.style.cssText = 'background:#f1f5f9; color:#64748b;';
+        e.appendChild(u);
+        const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = p.ja;
+        const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:6px; margin-top:0.4rem; flex-wrap:wrap;';
+        const mk = (label, fn) => { const b = document.createElement('button'); b.className = 'tiny-btn'; b.textContent = label; b.addEventListener('click', fn); return b; };
+        act.appendChild(mk('🔊', () => EA.speak(p.en, 'en-US', 1.0)));
+        act.appendChild(mk('✅ 使えた', () => { EA.markPinUsed(p.en); EA.updateStreakBadge(); toast('記録しました 🎉'); renderPins(); }));
+        act.appendChild(mk('🔁 復習に追加', () => { const r = EA.addToReview(p.en, p.ja); toast(r.added ? '復習に追加しました' : '追加できませんでした'); render(); }));
+        act.appendChild(mk('📌 外す', () => { EA.togglePin(p.en, p.ja); renderPins(); }));
+        d.appendChild(e); d.appendChild(ja); d.appendChild(act); box.appendChild(d);
+      });
+    }
+
     function render() {
+      renderPins();
       const log = EA.getTalkLog();
       const wrap = document.getElementById('days');
       wrap.innerHTML = '';
@@ -136,6 +166,12 @@
         else toast('追加できませんでした');
       });
       act.appendChild(play); act.appendChild(slow); act.appendChild(save); act.appendChild(rev);
+      if (e.who === 'partner') {
+        const heart = document.createElement('button'); heart.className = 'icon-btn'; heart.setAttribute('aria-label', 'もらった言葉に保存');
+        heart.textContent = EA.hasKeepsake(e.en) ? '💝' : '🤍';
+        heart.addEventListener('click', () => { if (EA.addKeepsake(e.en, e.ja)) { heart.textContent = '💝'; toast('💝 もらった言葉に保存しました'); } else toast('すでに保存されています'); });
+        act.appendChild(heart);
+      }
       d.appendChild(head); d.appendChild(en); d.appendChild(ja); d.appendChild(kana); d.appendChild(act);
       return d;
     }

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 予習プラン</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=5">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="plan.html" class="active" aria-current="page">📅 予習</a>
+    <a href="roleplay.html">🎭 ロール</a>
+    <a href="mylist.html">🗒 リスト</a>
+    <a href="scenes.html">💞 気持ち</a>
+  </div>
+  <div class="container">
+    <div class="card" id="planCard">
+      <h2>📅 次に会う日の予習プラン</h2>
+      <div id="countdownBox"></div>
+      <label for="planDate" class="muted" style="font-weight:bold;">会う日</label>
+      <input type="date" id="planDate" style="margin-top:4px;">
+      <div class="muted" style="font-weight:bold;">会う場面（複数OK）</div>
+      <div class="scene-pick" id="scenePick"></div>
+      <button class="btn" id="savePlanBtn">💾 この予定で予習をはじめる</button>
+      <button class="btn btn-secondary" id="clearPlanBtn" style="margin-top:0.5rem; display:none;">予定を削除</button>
+    </div>
+
+    <div class="card" id="todayCard" style="display:none;">
+      <h2>✨ 今日の予習（<span id="todayProgress">0/3</span>）</h2>
+      <p class="muted" style="margin-bottom:0.75rem;">お手本を聞いて、🎙️で声に出してみましょう。75点以上でクリアです。</p>
+      <div id="todayList"></div>
+      <button class="btn btn-secondary" id="moreBtn" style="margin-top:0.5rem;">＋ もう3フレーズ予習する</button>
+    </div>
+
+    <div class="card" id="afterCard" style="display:none;">
+      <h2>🎉 会ったあとは？</h2>
+      <p class="muted" style="margin-bottom:0.75rem;">ピン留めしたフレーズが実際に使えたかを記録して、次に活かしましょう。</p>
+      <a href="recap.html" class="btn">📝 ふり返りを見る</a>
+    </div>
+
+    <div class="card" id="linksCard" style="display:none;">
+      <h2>🚀 本番に向けて</h2>
+      <a href="roleplay.html" class="btn" id="rpLink" style="margin-bottom:0.5rem;">🎭 ロールプレイで練習する</a>
+      <a href="mylist.html" class="btn btn-secondary" style="margin-bottom:0.5rem;">🗒 言いたいこと／聞きたいことを準備する</a>
+      <a href="topics.html" class="btn btn-secondary">🎲 話題カードを見てみる</a>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html" class="active" aria-current="page">📅 予習</a>
+    <a href="quiz.html">✍️ 練習</a>
+    <a href="phrases.html">📚 表現集</a>
+  </nav>
+  <script src="common.js?v=5"></script>
+  <script src="content.js?v=5"></script>
+  <script>
+    const C = CONTENT, ORDER = ['meal', 'sight', 'home', 'meet'];
+    let plan = EA.getPlan();
+
+    function seededShuffle(arr, seedStr) {
+      let h = 2166136261;
+      for (let i = 0; i < seedStr.length; i++) { h ^= seedStr.charCodeAt(i); h = Math.imul(h, 16777619); }
+      const rnd = () => { h += 0x6D2B79F5; let t = Math.imul(h ^ (h >>> 15), 1 | h); t ^= t + Math.imul(t ^ (t >>> 7), 61 | t); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(rnd() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+      return a;
+    }
+    function pool() {
+      const scenes = plan.scenes.filter(s => C.MEET[s]);
+      const items = [];
+      ORDER.filter(s => scenes.includes(s)).forEach(s => C.MEET[s].p.forEach(p => items.push([p[0], p[1], s])));
+      return seededShuffle(items, plan.date);
+    }
+    function todaysItems() {
+      const all = pool(); if (!all.length) return [];
+      const today = EA.dateKey();
+      const started = EA.dateKey(new Date(plan.startedAt));
+      const dayIdx = Math.max(0, -EA.daysUntil(started));
+      const count = Math.min(all.length, 3 + 3 * (plan.extra[today] || 0));
+      const out = [];
+      for (let i = 0; i < count; i++) out.push(all[(dayIdx * 3 + i) % all.length]);
+      return out;
+    }
+
+    function renderScenePick() {
+      const box = document.getElementById('scenePick');
+      box.innerHTML = '';
+      ORDER.forEach(id => {
+        const m = C.MEET[id];
+        const l = document.createElement('label');
+        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.value = id;
+        cb.checked = plan ? plan.scenes.includes(id) : id !== 'meet';
+        l.appendChild(cb); l.appendChild(document.createTextNode(m.emoji + ' ' + m.label));
+        box.appendChild(l);
+      });
+    }
+
+    function renderCountdown() {
+      const box = document.getElementById('countdownBox');
+      box.innerHTML = '';
+      if (!plan) return;
+      const d = EA.daysUntil(plan.date);
+      const cd = document.createElement('div'); cd.className = 'countdown';
+      const dt = EA.parseKey(plan.date);
+      const label = (dt.getMonth() + 1) + '月' + dt.getDate() + '日';
+      if (d > 0) cd.innerHTML = '<div class="lbl">' + EA.esc(label) + ' まで あと</div><div class="num">' + d + '日</div>';
+      else if (d === 0) cd.innerHTML = '<div class="num">今日！</div><div class="lbl">楽しんできてね 💞</div>';
+      else cd.innerHTML = '<div class="lbl">' + EA.esc(label) + ' に会いました</div><div class="num" style="font-size:1.6rem;">おつかれさま 🎉</div>';
+      box.appendChild(cd);
+    }
+
+    function practiceCard(item) {
+      const [en, ja] = item;
+      const c = document.createElement('div'); c.className = 'item-row';
+      const e = document.createElement('div'); e.className = 'en-text'; e.textContent = en;
+      const j = document.createElement('div'); j.className = 'ja-text'; j.textContent = ja;
+      const kana = document.createElement('div'); kana.className = 'kana-line'; EA.renderKana(kana, en);
+      const chips = document.createElement('div'); chips.className = 'word-chips'; chips.style.justifyContent = 'flex-start';
+      const score = document.createElement('div'); score.className = 'mini-score';
+      const today = EA.dateKey();
+      const doneNow = () => (plan.practiced[today] || []).includes(en);
+      if (doneNow()) score.textContent = '✅ 練習済み';
+      const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem; align-items:center;';
+      const play = btn('🔊', '再生', () => EA.speak(en, 'en-US', 1.0));
+      const slow = btn('🐢', 'ゆっくり再生', () => EA.speak(en, 'en-US', 0.7));
+      const mic = btn('🎙️', '発音チェック', null);
+      const pin = btn(EA.isPinned(en) ? '📌' : '📍', 'ピン留め', () => {
+        const on = EA.togglePin(en, ja); pin.textContent = on ? '📌' : '📍'; EA.toast(on ? 'ピン留めしました（会話画面から開けます）' : 'ピン留めを外しました');
+      });
+      const save = btn(EA.hasPhrase(en) ? '✅' : '💾', 'マイ単語に保存', () => {
+        const r = EA.addCustomPhrase(en, ja); if (r.added) { save.textContent = '✅'; EA.toast('マイ単語に保存しました'); } else EA.toast('すでに保存されています');
+      });
+      [play, slow, mic, pin, save].forEach(b => act.appendChild(b));
+      EA.attachPronunciation(mic, () => en, {
+        onInterim: t => { score.textContent = '🎙️ ' + t; },
+        onResult: r => {
+          EA.renderChips(chips, r.words);
+          score.textContent = 'スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉 クリア！' : '  もう一度！');
+          const list = plan.practiced[today] = plan.practiced[today] || [];
+          if (!list.includes(en)) list.push(en);
+          EA.savePlan(plan);
+          EA.countSpeak();
+          if (r.score < EA.PASS_SCORE) EA.addToReview(en, ja);
+          else { const it = EA.getAllPhrases().find(p => p[1] === en); if (it) EA.recordResult(it, true); }
+          EA.updateStreakBadge(); updateProgress();
+        },
+        onError: m => { score.textContent = m; }
+      });
+      c.appendChild(e); c.appendChild(j); c.appendChild(kana); c.appendChild(chips); c.appendChild(score); c.appendChild(act);
+      return c;
+    }
+    function btn(label, aria, fn) {
+      const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria);
+      if (fn) b.addEventListener('click', fn); return b;
+    }
+
+    function updateProgress() {
+      const items = todaysItems(), today = EA.dateKey();
+      const done = items.filter(i => (plan.practiced[today] || []).includes(i[0])).length;
+      document.getElementById('todayProgress').textContent = done + '/' + items.length;
+    }
+
+    function render() {
+      const has = !!plan;
+      const d = has ? EA.daysUntil(plan.date) : null;
+      renderCountdown();
+      document.getElementById('planDate').value = has ? plan.date : '';
+      renderScenePick();
+      document.getElementById('clearPlanBtn').style.display = has ? 'block' : 'none';
+      document.getElementById('savePlanBtn').textContent = has ? '💾 予定を更新する' : '💾 この予定で予習をはじめる';
+      const upcoming = has && d >= 0;
+      document.getElementById('todayCard').style.display = upcoming ? 'block' : 'none';
+      document.getElementById('linksCard').style.display = has ? 'block' : 'none';
+      document.getElementById('afterCard').style.display = has && d < 0 ? 'block' : 'none';
+      if (has) {
+        const first = plan.scenes.find(s => C.MEET[s]);
+        document.getElementById('rpLink').href = 'roleplay.html' + (first ? '?scene=' + first : '');
+      }
+      if (upcoming) {
+        const list = document.getElementById('todayList'); list.innerHTML = '';
+        const items = todaysItems();
+        if (!items.length) list.innerHTML = '<div class="muted">場面を1つ以上選んでください。</div>';
+        items.forEach(i => list.appendChild(practiceCard(i)));
+        updateProgress();
+        const pl = pool().length, shown = items.length;
+        document.getElementById('moreBtn').style.display = shown < pl ? 'block' : 'none';
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateEl = document.getElementById('planDate');
+      dateEl.min = EA.dateKey();
+      render();
+      document.getElementById('savePlanBtn').addEventListener('click', () => {
+        const date = dateEl.value;
+        const scenes = Array.from(document.querySelectorAll('#scenePick input:checked')).map(x => x.value);
+        if (!date || !EA.parseKey(date)) { EA.toast('会う日を選んでください'); return; }
+        if (EA.daysUntil(date) < 0) { EA.toast('今日以降の日付を選んでください'); return; }
+        if (!scenes.length) { EA.toast('場面を1つ以上選んでください'); return; }
+        const keepStart = plan && plan.date === date && plan.scenes.join() === scenes.join();
+        plan = { date, scenes, startedAt: keepStart ? plan.startedAt : Date.now(), practiced: plan ? plan.practiced : {}, extra: plan ? plan.extra : {} };
+        EA.savePlan(plan); EA.toast('予習プランを保存しました'); render();
+      });
+      document.getElementById('clearPlanBtn').addEventListener('click', () => {
+        if (!confirm('この予定を削除しますか？（練習の記録は残ります）')) return;
+        EA.clearPlan(); plan = null; render();
+      });
+      document.getElementById('moreBtn').addEventListener('click', () => {
+        const today = EA.dateKey();
+        plan.extra[today] = (plan.extra[today] || 0) + 1;
+        EA.savePlan(plan); render();
+      });
+    });
+
+  </script>
+</body>
+</html>

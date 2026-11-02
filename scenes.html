@@ -7,13 +7,19 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=4">
+  <link rel="stylesheet" href="common.css?v=5">
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">心をつなぐ英語表現</a>
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
+  <div class="subnav">
+    <a href="plan.html">📅 予習</a>
+    <a href="roleplay.html">🎭 ロール</a>
+    <a href="mylist.html">🗒 リスト</a>
+    <a href="scenes.html" class="active" aria-current="page">💞 気持ち</a>
+  </div>
   <div class="container">
     <input type="text" id="searchInput" class="search-box" placeholder="気持ちや場面を日本語で（例: 寂しい、謝りたい）" aria-label="気持ちや場面を検索" autocomplete="off">
     <div class="chip-row" id="sceneChips"></div>
@@ -28,96 +34,16 @@
 
   <nav>
     <a href="index.html">🏠 ホーム</a>
-    <a href="translator.html">💬 翻訳会話</a>
-    <a href="scenes.html" class="active" aria-current="page">💞 気持ちから</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html" class="active" aria-current="page">📅 予習</a>
     <a href="quiz.html">✍️ 練習</a>
     <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=4"></script>
+  <script src="common.js?v=5"></script>
+  <script src="content.js?v=5"></script>
   <script>
     // tone: c=カジュアル / g=やさしく / s=真剣に
-    const SCENES = [
-      { id: 'cheer', emoji: '💪', label: '励ましたい', kw: ['励ま', '元気づけ', '落ち込', 'がんば', '頑張', '応援', 'つらい', '辛い', 'へこ', '疲れ'], p: [
-        ["You've got this!", 'あなたならできるよ！', 'c'],
-        ["Don't worry, it'll work out.", '大丈夫、きっとうまくいくよ。', 'c'],
-        ["Want to talk it out? I'm all ears.", '話してみる？ちゃんと聞くよ。', 'g'],
-        ["It's okay to take a break. You've been working so hard.", '休んでもいいんだよ。ずっと頑張ってきたんだから。', 'g'],
-        ['I believe in you, no matter what.', '何があっても、あなたを信じてるよ。', 's'],
-        ["Whatever happens, I'll be right here with you.", '何が起きても、私はずっとそばにいるよ。', 's'] ] },
-      { id: 'thanks', emoji: '🙏', label: '感謝を伝えたい', kw: ['ありがとう', '感謝', '助か', 'うれしい', '嬉しい', 'お礼'], p: [
-        ["Thanks, you're the best!", 'ありがとう、最高だよ！', 'c'],
-        ['That really helped me out. Thank you!', 'すごく助かった。ありがとう！', 'c'],
-        ['Thank you for always thinking of me.', 'いつも私のことを考えてくれてありがとう。', 'g'],
-        ['I appreciate everything you do for me.', 'いつもしてくれること、全部に感謝してるよ。', 'g'],
-        ["I don't say it enough, but I'm really thankful for you.", 'あまり言えてないけど、あなたがいてくれて本当に感謝してる。', 's'] ] },
-      { id: 'love', emoji: '❤️', label: '好きを伝えたい', kw: ['好き', '愛してる', '大好き', '愛情', '告白', 'ときめ', '惚れ'], p: [
-        ["I can't stop thinking about you.", 'あなたのことが頭から離れないよ。', 'c'],
-        ["I'm really into you.", 'あなたのこと、本気で好きなんだ。', 'c'],
-        ['I love spending time with you.', 'あなたと過ごす時間が大好き。', 'g'],
-        ['You make me so happy.', 'あなたといると本当に幸せ。', 'g'],
-        ['I love you more than I can say.', '言葉にできないくらい愛してる。', 's'],
-        ['I want to be with you for a long time.', 'これからもずっとあなたと一緒にいたい。', 's'] ] },
-      { id: 'sorry', emoji: '🙇', label: '謝りたい', kw: ['ごめん', '謝', 'すまない', '悪かった', '反省'], p: [
-        ['My bad, I\'m sorry!', 'ごめん、私が悪かった！', 'c'],
-        ["Sorry I'm late!", '遅れてごめんね！', 'c'],
-        ["I'm sorry I hurt your feelings.", '傷つけてしまってごめんね。', 'g'],
-        ["I shouldn't have said that. I'm really sorry.", 'あんなこと言うべきじゃなかった。本当にごめん。', 'g'],
-        ['I know I let you down, and I want to make it right.', 'がっかりさせたのは分かってる。ちゃんと埋め合わせたいと思ってる。', 's'] ] },
-      { id: 'invite', emoji: '🍽️', label: '誘いたい（デート）', kw: ['誘', 'デート', '会おう', '遊', '行こう', 'ご飯', 'ごはん', '週末', '会える'], p: [
-        ['Wanna grab dinner this weekend?', '今週末、ご飯行かない？', 'c'],
-        ["Let's do something fun on Saturday!", '土曜日、何か楽しいことしようよ！', 'c'],
-        ['Would you like to go for a walk together?', '一緒に散歩しない？', 'g'],
-        ['I found a cozy café. Want to check it out with me?', '居心地のいいカフェを見つけたんだ。一緒に行ってみない？', 'g'],
-        ["I'd love to take you somewhere special. Are you free this Friday?", '特別な場所に連れて行きたいな。今週の金曜は空いてる？', 's'] ] },
-      { id: 'worry', emoji: '😟', label: '心配している', kw: ['心配', '大丈夫', '体調', '具合', '無理', '元気ない', '病気'], p: [
-        ["You okay? You seem kind of down.", '大丈夫？ちょっと元気ないね。', 'c'],
-        ['Did you eat anything today?', '今日、何か食べた？', 'c'],
-        ["Are you feeling okay? Please don't push yourself.", '具合は大丈夫？無理しないでね。', 'g'],
-        ["Let me know if there's anything I can do.", '私にできることがあったら教えてね。', 'g'],
-        ["I'm worried about you. Is something on your mind?", 'あなたのことが心配なの。何か気になってることがある？', 's'] ] },
-      { id: 'miss', emoji: '🌙', label: '会いたい・寂しい', kw: ['会いたい', '寂しい', 'さみしい', '恋しい', '離れ', '遠距離', 'そばにいたい'], p: [
-        ['I miss you already!', 'もう会いたいよ！', 'c'],
-        ["Can't wait to see you!", '会えるのが待ち遠しい！', 'c'],
-        ['I wish you were here with me.', 'あなたがここにいてくれたらいいのに。', 'g'],
-        ['I keep thinking about you today.', '今日はずっとあなたのことを考えてる。', 'g'],
-        ["It's hard being apart from you. I miss you so much.", '離れているのは辛いよ。本当に会いたい。', 's'] ] },
-      { id: 'praise', emoji: '✨', label: '褒めたい', kw: ['褒め', 'かっこいい', 'かわいい', '素敵', 'すてき', 'すごい', 'きれい', '尊敬', '誇り'], p: [
-        ['You look amazing today!', '今日すごく素敵だね！', 'c'],
-        ["I'm so proud of you!", 'あなたのこと、誇りに思うよ！', 'c'],
-        ['I love your smile. It makes my day.', 'あなたの笑顔が大好き。それだけで一日が幸せになるよ。', 'g'],
-        ["You're so thoughtful. I really admire that about you.", 'あなたはすごく思いやりがあるね。そういうところ尊敬してる。', 'g'],
-        ["You're the most amazing person I know.", 'あなたは私が知る中で一番素晴らしい人だよ。', 's'] ] },
-      { id: 'talk', emoji: '🤝', label: '話し合い・仲直り', kw: ['話し合', '仲直り', 'ケンカ', 'けんか', '喧嘩', '本音', '誤解', '気持ちを聞'], p: [
-        ['Can we talk about it?', 'それについて話せる？', 'c'],
-        ["Let's not fight. I hate when we're like this.", 'ケンカはやめよう。こうなるのは嫌だな。', 'c'],
-        ['I want to hear your side of things.', 'あなたの考えも聞かせてほしい。', 'g'],
-        ["I don't want to argue. I just want us to understand each other.", '言い争いたくないんだ。ただお互いを理解したいだけ。', 'g'],
-        ["This relationship matters to me, so I want to work through this together.", '私たちの関係は大切だから、一緒に乗り越えたい。', 's'],
-        ["I'm sorry for my part in this.", 'この件での私の悪かったところは謝るね。', 's'] ] },
-      { id: 'daily', emoji: '🌅', label: 'おはよう・おやすみ', kw: ['おはよう', 'おやすみ', '朝', '夜', '寝', '眠', '挨拶'], p: [
-        ['Good morning! Hope you slept well.', 'おはよう！ぐっすり眠れた？', 'c'],
-        ['Sleep tight! Talk tomorrow.', 'ぐっすり寝てね！また明日話そう。', 'c'],
-        ["Sweet dreams. I'm thinking of you.", 'いい夢を見てね。あなたのことを想ってるよ。', 'g'],
-        ["Have a great day today. You'll do great!", '今日もいい一日を。きっとうまくいくよ！', 'g'],
-        ["Goodnight. I'm so glad I get to share my days with you.", 'おやすみ。毎日をあなたと分かち合えて本当に嬉しいよ。', 's'] ] },
-      { id: 'contact', emoji: '📱', label: '連絡・返信', kw: ['連絡', '返信', '遅れ', '電話', 'LINE', 'メッセージ', '既読'], p: [
-        ["Sorry for the slow reply, I was swamped!", '返信遅くなってごめん、バタバタしてた！', 'c'],
-        ['Call me when you get a chance.', '時間あるとき電話してね。', 'c'],
-        ["I'll text you as soon as I get home.", '家に着いたらすぐ連絡するね。', 'g'],
-        ["Can I call you tonight? I'd love to hear your voice.", '今夜電話してもいい？声が聞きたいな。', 'g'],
-        ["I'd like to hear from you more often, if that's okay.", 'もう少し連絡をもらえたら嬉しいな、もしよければ。', 's'] ] },
-      { id: 'honest', emoji: '💭', label: '不安・本音', kw: ['不安', '本音', '正直', '悩み', '打ち明け', '相談', '愚痴'], p: [
-        ["Honestly, I've been feeling a bit anxious lately.", '正直、最近ちょっと不安なんだ。', 'c'],
-        ['Can I vent for a sec?', 'ちょっと愚痴ってもいい？', 'c'],
-        ["There's something I've been wanting to tell you.", 'ずっと伝えたかったことがあるんだ。', 'g'],
-        ["I'm not great at putting my feelings into words, but I'll try.", '気持ちを言葉にするのは苦手だけど、頑張って伝えるね。', 'g'],
-        ['I need your support right now. Can you just listen?', '今はあなたの支えが必要なんだ。ただ聞いてくれる？', 's'] ] },
-      { id: 'celebrate', emoji: '🎂', label: 'お祝い・記念日', kw: ['誕生日', '記念日', 'おめでとう', 'お祝い', '祝', 'プレゼント'], p: [
-        ["Happy birthday! Let's celebrate tonight!", '誕生日おめでとう！今夜お祝いしよう！', 'c'],
-        ['Congrats! I knew you could do it!', 'おめでとう！あなたならできると思ってたよ！', 'c'],
-        ['Happy anniversary. Every moment with you is a gift.', '記念日おめでとう。あなたと過ごす一瞬一瞬が贈り物だよ。', 'g'],
-        ["I'm so lucky to have spent another year with you.", 'また一年あなたと過ごせて、本当に幸せ者だよ。', 's'] ] }
-    ];
+    const SCENES = CONTENT.SCENES;
     const TONE_LABEL = { c: 'カジュアル', g: 'やさしく', s: '真剣に' };
     let activeScene = null, tone = 'all', query = '';
 
@@ -160,7 +86,9 @@
         if (r.added) { save.textContent = '✅'; save.classList.add('done'); toast('マイ単語に保存しました（クイズ・発音でも出題されます）'); }
         else toast(r.reason === 'exists' ? 'すでに保存されています' : '保存できませんでした');
       });
-      act.appendChild(play); act.appendChild(slow); act.appendChild(save);
+      const pin = document.createElement('button'); pin.className = 'icon-btn'; pin.textContent = EA.isPinned(en) ? '📌' : '📍'; pin.setAttribute('aria-label', 'ピン留め');
+      pin.addEventListener('click', () => { const on = EA.togglePin(en, ja); pin.textContent = on ? '📌' : '📍'; toast(on ? 'ピン留めしました（会話画面から開けます）' : 'ピン留めを外しました'); });
+      act.appendChild(play); act.appendChild(slow); act.appendChild(pin); act.appendChild(save);
       row.appendChild(left); row.appendChild(act);
       c.appendChild(row);
       const kana = document.createElement('div'); kana.className = 'kana-line'; EA.renderKana(kana, en); c.appendChild(kana);
@@ -193,6 +121,10 @@
         SCENES.forEach(sc => sc.p.forEach(p => {
           if (have.has(p[0].toLowerCase())) return;
           if ((tone === 'all' || p[2] === tone) && (norm(p[1]).includes(q) || p[0].toLowerCase().includes(q))) extra.push([p[0], p[1], p[2]]);
+        }));
+        Object.values(CONTENT.MEET).forEach(m => m.p.forEach(p => {
+          if (have.has(p[0].toLowerCase()) || extra.some(x => x[0].toLowerCase() === p[0].toLowerCase())) return;
+          if (tone === 'all' && (norm(p[1]).includes(q) || p[0].toLowerCase().includes(q))) extra.push([p[0], p[1], null]);
         }));
         EA.getAllPhrases().forEach(p => {
           if (have.has(p[1].toLowerCase()) || extra.some(x => x[0].toLowerCase() === p[1].toLowerCase())) return;

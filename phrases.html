@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=4">
+  <link rel="stylesheet" href="common.css?v=5">
 </head>
 <body>
   <header>
@@ -22,12 +22,12 @@
 
   <nav>
     <a href="index.html">🏠 ホーム</a>
-    <a href="translator.html">💬 翻訳会話</a>
-    <a href="scenes.html">💞 気持ちから</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
     <a href="quiz.html">✍️ 練習</a>
     <a href="phrases.html" class="active" aria-current="page">📚 表現集</a>
   </nav>
-  <script src="common.js?v=4"></script>
+  <script src="common.js?v=5"></script>
   <script>
     function renderPhrases(query) {
       const q = (query || '').trim().toLowerCase();
@@ -62,7 +62,12 @@
         play.setAttribute('aria-label', '音声を再生');
         play.style.cssText = 'background:none; border:none; cursor:pointer; font-size:1.2rem;';
         play.addEventListener('click', () => EA.speak(p[1], 'en-US', 1.0));
-        actions.appendChild(fav); actions.appendChild(play);
+        const pin = document.createElement('button');
+        pin.textContent = EA.isPinned(p[1]) ? '📌' : '📍';
+        pin.setAttribute('aria-label', 'ピン留め');
+        pin.style.cssText = 'background:none; border:none; cursor:pointer; font-size:1.2rem;';
+        pin.addEventListener('click', () => { const on = EA.togglePin(p[1], p[2]); pin.textContent = on ? '📌' : '📍'; EA.toast(on ? 'ピン留めしました（会話画面から開けます）' : 'ピン留めを外しました'); });
+        actions.appendChild(fav); actions.appendChild(pin); actions.appendChild(play);
         row.appendChild(en); row.appendChild(actions);
         const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = p[2];
         card.appendChild(badge); card.appendChild(row); card.appendChild(ja);
