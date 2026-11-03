@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=5">
+  <link rel="stylesheet" href="common.css?v=6">
 </head>
 <body>
   <header>
@@ -17,6 +17,7 @@
   <div class="subnav">
     <a href="plan.html" class="active" aria-current="page">📅 予習</a>
     <a href="roleplay.html">🎭 ロール</a>
+    <a href="letter.html">💌 手紙</a>
     <a href="mylist.html">🗒 リスト</a>
     <a href="scenes.html">💞 気持ち</a>
   </div>
@@ -42,7 +43,15 @@
     <div class="card" id="afterCard" style="display:none;">
       <h2>🎉 会ったあとは？</h2>
       <p class="muted" style="margin-bottom:0.75rem;">ピン留めしたフレーズが実際に使えたかを記録して、次に活かしましょう。</p>
-      <a href="recap.html" class="btn">📝 ふり返りを見る</a>
+      <a href="recap.html" class="btn" style="margin-bottom:0.5rem;">📝 ふり返りを見る</a>
+      <a href="diary.html" class="btn btn-secondary" style="margin-bottom:0.5rem;">📔 英語日記に思い出を残す</a>
+      <a href="report.html" class="btn btn-secondary">🏆 成果レポートを見る</a>
+    </div>
+
+    <div class="card" id="memoryCard" style="display:none;">
+      <h2>💭 前回の思い出</h2>
+      <p class="muted" style="margin-bottom:0.5rem;">会ったら話題にしてみよう。"Do you remember…?" で切り出せます。</p>
+      <div id="memoryBox"></div>
     </div>
 
     <div class="card" id="linksCard" style="display:none;">
@@ -57,11 +66,11 @@
     <a href="index.html">🏠 ホーム</a>
     <a href="translator.html">💬 会話</a>
     <a href="plan.html" class="active" aria-current="page">📅 予習</a>
+    <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
-    <a href="phrases.html">📚 表現集</a>
   </nav>
-  <script src="common.js?v=5"></script>
-  <script src="content.js?v=5"></script>
+  <script src="common.js?v=6"></script>
+  <script src="content.js?v=6"></script>
   <script>
     const C = CONTENT, ORDER = ['meal', 'sight', 'home', 'meet'];
     let plan = EA.getPlan();
@@ -169,10 +178,27 @@
       document.getElementById('todayProgress').textContent = done + '/' + items.length;
     }
 
+    function renderMemory() {
+      const mem = EA.getDiary().filter(e => e.memory);
+      const card = document.getElementById('memoryCard'), box = document.getElementById('memoryBox');
+      card.style.display = mem.length && plan ? 'block' : 'none';
+      if (!mem.length) return;
+      const e = mem[Math.floor(Math.random() * mem.length)];
+      box.innerHTML = '';
+      const en = document.createElement('div'); en.className = 'en-text'; en.style.cssText = 'font-weight:600; white-space:pre-wrap;'; en.textContent = e.en;
+      const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = e.ja;
+      const row = document.createElement('div'); row.style.cssText = 'display:flex; gap:6px; margin-top:0.4rem;';
+      const play = btn('🔊', '再生', () => EA.speak(e.en, 'en-US', 1.0));
+      const again = btn('🎲', '別の思い出', renderMemory);
+      row.appendChild(play); row.appendChild(again);
+      box.appendChild(en); if (e.ja) box.appendChild(ja); box.appendChild(row);
+    }
+
     function render() {
       const has = !!plan;
       const d = has ? EA.daysUntil(plan.date) : null;
       renderCountdown();
+      renderMemory();
       document.getElementById('planDate').value = has ? plan.date : '';
       renderScenePick();
       document.getElementById('clearPlanBtn').style.display = has ? 'block' : 'none';
@@ -206,12 +232,14 @@
         if (!date || !EA.parseKey(date)) { EA.toast('会う日を選んでください'); return; }
         if (EA.daysUntil(date) < 0) { EA.toast('今日以降の日付を選んでください'); return; }
         if (!scenes.length) { EA.toast('場面を1つ以上選んでください'); return; }
+        if (plan && plan.date !== date && EA.daysUntil(plan.date) < 0) EA.archivePlan(plan);   // 過ぎた予定は成果として記録
         const keepStart = plan && plan.date === date && plan.scenes.join() === scenes.join();
         plan = { date, scenes, startedAt: keepStart ? plan.startedAt : Date.now(), practiced: plan ? plan.practiced : {}, extra: plan ? plan.extra : {} };
         EA.savePlan(plan); EA.toast('予習プランを保存しました'); render();
       });
       document.getElementById('clearPlanBtn').addEventListener('click', () => {
         if (!confirm('この予定を削除しますか？（練習の記録は残ります）')) return;
+        if (plan && EA.daysUntil(plan.date) < 0) EA.archivePlan(plan);
         EA.clearPlan(); plan = null; render();
       });
       document.getElementById('moreBtn').addEventListener('click', () => {

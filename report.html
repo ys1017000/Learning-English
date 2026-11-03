@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 成果レポート</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=6">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="recap.html">📝 会話</a>
+    <a href="diary.html">📔 日記</a>
+    <a href="report.html" class="active" aria-current="page">🏆 成果</a>
+    <a href="keepsake.html">💝 言葉</a>
+  </div>
+  <div class="container">
+    <div class="card next-step" id="heroCard"><h2>🏆 成果レポート</h2><div id="heroMsg"></div></div>
+
+    <div class="card">
+      <h2>💞 会った日の成果</h2>
+      <div id="meetBox"></div>
+    </div>
+
+    <div class="card">
+      <h2>🗺 場面ごとの得意・不得意</h2>
+      <p class="muted" style="margin-bottom:0.5rem;">予習・ロールプレイ・復習・「使えた」の記録から判定しています。</p>
+      <div id="sceneBox"></div>
+    </div>
+
+    <div class="card">
+      <h2>📈 学習のようす</h2>
+      <div class="stats-grid" id="statGrid" style="margin-bottom:1rem;"></div>
+      <div class="muted" style="margin-bottom:4px;">直近8週間の学習日数</div>
+      <div id="weekBars" style="display:flex; align-items:flex-end; gap:6px; height:90px;"></div>
+      <div id="weekLabels" style="display:flex; gap:6px; margin-top:2px;"></div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
+    <a href="quiz.html">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=6"></script>
+  <script src="content.js?v=6"></script>
+  <script>
+    const C = CONTENT;
+    function rpBest() { try { return JSON.parse(localStorage.getItem('english_app_rp')) || {}; } catch (e) { return {}; } }
+    const delta = (a, b) => b == null ? '' : (a > b ? '  ↑ +' + (a - b) : a < b ? '  ↓ ' + (a - b) : '  → 同じ');
+
+    function sceneStats() {
+      const store = EA.getStore(), pins = EA.getPins(), plan = EA.getPlan(), best = rpBest();
+      const practiced = new Set(); if (plan) Object.values(plan.practiced).forEach(l => l.forEach(x => practiced.add(x)));
+      return Object.keys(C.MEET).map(id => {
+        const ens = new Set(C.MEET[id].p.map(p => p[0]));
+        const done = [...practiced].filter(x => ens.has(x)).length;
+        const weak = Object.keys(store.weakPhrases).filter(x => ens.has(x)).length;
+        const used = pins.filter(p => ens.has(p.en)).reduce((n, p) => n + p.used.length, 0);
+        const rps = C.ROLEPLAYS.filter(r => r.scene === id), scores = rps.map(r => best[r.id]).filter(x => x != null);
+        const rpAvg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : null;
+        let tag = '🌱 これから', cls = '#64748b';
+        const active = done + used + scores.length + weak > 0;
+        if (active) {
+          if (weak >= 2 || (rpAvg != null && rpAvg < 70)) { tag = '🔥 要強化'; cls = '#b91c1c'; }
+          else if ((rpAvg != null && rpAvg >= 80) || used >= 3 || (done >= 5 && weak === 0)) { tag = '🌟 得意'; cls = '#15803d'; }
+          else { tag = '💪 練習中'; cls = '#b45309'; }
+        }
+        return { id, m: C.MEET[id], done, weak, used, rpAvg, tag, cls, total: ens.size, active };
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const store = EA.getStore(), talk = EA.getTalkLog(), pins = EA.getPins();
+      // ---- 会った日の成果
+      let meets = EA.getMeetings().slice();
+      const plan = EA.getPlan();
+      if (plan && EA.daysUntil(plan.date) < 0 && !meets.some(m => m.date === plan.date)) meets.push(EA.summarizePlan(plan));
+      meets.sort((a, b) => a.date < b.date ? -1 : 1);
+      const box = document.getElementById('meetBox');
+      if (!meets.length) {
+        box.innerHTML = '<div class="muted">会う日が過ぎると、予習したフレーズ数・実際に使えた数・会話の数がここに記録されます。<br><a href="plan.html">予習プランを作る</a></div>';
+      } else {
+        const cur = meets[meets.length - 1], prev = meets.length > 1 ? meets[meets.length - 2] : null;
+        const dt = EA.parseKey(cur.date);
+        const rows = [['📚 予習したフレーズ', cur.practiced, prev && prev.practiced], ['✅ 実際に使えたフレーズ', cur.used, prev && prev.used], ['💬 会話した数', cur.talk, prev && prev.talk]];
+        box.innerHTML = '<div class="muted" style="margin-bottom:0.5rem;">' + (dt.getMonth() + 1) + '月' + dt.getDate() + '日' + (prev ? '（前回との比較）' : '') + '</div>';
+        rows.forEach(r => { const d = document.createElement('div'); d.className = 'weakness-item'; d.innerHTML = '<span>' + r[0] + '</span><span style="font-weight:bold; color:var(--primary);">' + r[1] + '個' + EA.esc(delta(r[1], r[2])) + '</span>'; box.appendChild(d); });
+        if (meets.length > 1) { const h = document.createElement('div'); h.className = 'muted'; h.style.marginTop = '0.5rem'; h.textContent = '記録: ' + meets.length + ' 回分'; box.appendChild(h); }
+      }
+
+      // ---- 場面ごと
+      const ss = sceneStats(), sb = document.getElementById('sceneBox');
+      ss.forEach(s => {
+        const d = document.createElement('div'); d.className = 'item-row';
+        const top = document.createElement('div'); top.style.cssText = 'display:flex; justify-content:space-between; align-items:center;';
+        top.innerHTML = '<b>' + s.m.emoji + ' ' + EA.esc(s.m.label) + '</b><span style="font-weight:bold; color:' + s.cls + ';">' + s.tag + '</span>';
+        const det = document.createElement('div'); det.className = 'muted'; det.style.marginTop = '0.25rem';
+        det.textContent = '予習 ' + s.done + '/' + s.total + '・要復習 ' + s.weak + '・使えた ' + s.used + '回' + (s.rpAvg != null ? '・ロールプレイ平均 ' + s.rpAvg + '点' : '');
+        const bar = document.createElement('div'); bar.className = 'progress-bar-container'; bar.style.margin = '0.4rem 0';
+        const fill = document.createElement('div'); fill.className = 'progress-bar-fill'; fill.style.width = Math.min(100, Math.round(s.done / s.total * 100)) + '%'; bar.appendChild(fill);
+        d.appendChild(top); d.appendChild(det); d.appendChild(bar);
+        if (!s.active || s.tag.includes('要強化')) { const a = document.createElement('a'); a.href = 'roleplay.html?scene=' + s.id; a.className = 'tiny-btn'; a.style.textDecoration = 'none'; a.textContent = '🎭 ロールプレイで練習'; d.appendChild(a); }
+        sb.appendChild(d);
+      });
+
+      // ---- 全体
+      const days = Object.keys(store.history).length, acc = store.quizStats.total ? Math.round(store.quizStats.correct / store.quizStats.total * 100) : 0;
+      const usedTotal = pins.reduce((n, p) => n + p.used.length, 0);
+      const stat = [[days, '学習した日'], [EA.calcStreak(store.history), '連続日数'], [acc + '%', 'クイズ正答率'], [store.speakCount, '話した回数'],
+        [talk.length, '会話の数'], [usedTotal, '使えた回数'], [EA.getDiary().length, '英語日記'], [EA.getKeepsakes().length, 'もらった言葉'], [EA.getNihongo().learned.length, '教えた日本語']];
+      const g = document.getElementById('statGrid'); g.style.gridTemplateColumns = 'repeat(3, 1fr)'; g.style.rowGap = '0.9rem';
+      stat.forEach(s => { const d = document.createElement('div'); d.innerHTML = '<div class="stat-number">' + EA.esc(s[0]) + '</div><div class="stat-label">' + s[1] + '</div>'; g.appendChild(d); });
+
+      // ---- 週ごとのバー（直近8週間・今日までの7日区切り）
+      const bars = document.getElementById('weekBars'), labels = document.getElementById('weekLabels');
+      const counts = [];
+      for (let w = 7; w >= 0; w--) {
+        let n = 0; for (let i = 0; i < 7; i++) { const d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - (w * 7 + i)); if (store.history[EA.dateKey(d)]) n++; }
+        counts.push(n);
+      }
+      counts.forEach((n, i) => {
+        const b = document.createElement('div'); b.style.cssText = 'flex:1; background:' + (i === 7 ? 'var(--primary)' : '#c7d2fe') + '; border-radius:4px 4px 0 0; min-height:3px; height:' + Math.max(3, Math.round(n / 7 * 90)) + 'px;';
+        b.title = n + '日'; b.setAttribute('aria-label', (8 - i) + '週前 ' + n + '日'); bars.appendChild(b);
+        const l = document.createElement('div'); l.style.cssText = 'flex:1; text-align:center; font-size:0.7rem; color:var(--text-muted);'; l.textContent = n; labels.appendChild(l);
+      });
+
+      // ---- ひとこと
+      const hero = document.getElementById('heroMsg');
+      const weakScene = ss.filter(s => s.tag.includes('要強化'))[0], goodScene = ss.filter(s => s.tag.includes('得意'))[0];
+      let msg = 'まだ記録が少ないので、予習プランとロールプレイから始めてみましょう。';
+      if (days > 0) {
+        msg = '学習 ' + days + ' 日目。' + (goodScene ? goodScene.m.label + 'の場面は得意になってきました！' : '') + (weakScene ? weakScene.m.label + 'の場面を強化すると、次はもっと自信をもって話せます。' : (!goodScene ? '少しずつ積み重ねていきましょう。' : ''));
+      }
+      hero.textContent = msg;
+    });
+
+  </script>
+</body>
+</html>

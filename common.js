@@ -430,7 +430,7 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 3,
+      version: 4,
       exportedAt: new Date().toISOString(),
       data: getStore(),
       customPhrases: getCustomPhrases(),
@@ -438,7 +438,12 @@
       pins: getPins(),
       keepsakes: getKeepsakes(),
       lists: getLists(),
-      plan: getPlan()
+      plan: getPlan(),
+      profile: getProfile(),
+      letters: getLetters(),
+      diary: getDiary(),
+      meetings: getMeetings(),
+      nihongo: getNihongo()
     };
   }
   function downloadBackup() {
@@ -487,10 +492,12 @@
     const incCustom = sanitizeCustom(obj.customPhrases);
     const incTalk = sanitizeTalk(obj.talkLog);
     const incPins = sanitizePins(obj.pins), incKeeps = sanitizeKeeps(obj.keepsakes), incLists = sanitizeLists(obj.lists), incPlan = sanitizePlan(obj.plan);
-    let store, custom, talk, pins, keeps, lists, plan;
+    const incProfile = sanitizeProfile(obj.profile), incLetters = sanitizeLetters(obj.letters), incDiary = sanitizeDiary(obj.diary), incMeet = sanitizeMeetings(obj.meetings), incNi = sanitizeNihongo(obj.nihongo);
+    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo;
     if (mode === 'replace') {
       store = inc; custom = incCustom; talk = incTalk;
       pins = incPins; keeps = incKeeps; lists = incLists; plan = incPlan;
+      profile = incProfile; letters = incLetters; diary = incDiary; meetings = incMeet; nihongo = incNi;
     } else {
       const cur = getStore();
       store = {
@@ -519,10 +526,16 @@
       const curLists = getLists();
       lists = sanitizeLists({ say: curLists.say.concat(incLists.say), ask: curLists.ask.concat(incLists.ask) });
       plan = getPlan() || incPlan;
+      const curP = getProfile();
+      profile = { partnerName: curP.partnerName || incProfile.partnerName, myName: curP.myName || incProfile.myName };
+      letters = sanitizeLetters(getLetters().concat(incLetters));
+      diary = sanitizeDiary(getDiary().concat(incDiary));
+      meetings = sanitizeMeetings(getMeetings().concat(incMeet));
+      nihongo = sanitizeNihongo({ learned: getNihongo().learned.concat(incNi.learned) });
     }
-    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true));
+    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo);
     if (!okAll) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
-    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length };
+    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length, diary: diary.length, letters: letters.length };
   }
 
 
@@ -783,6 +796,102 @@
   function savePlan(v) { const p = sanitizePlan(v); if (!p) return false; return safeSet(KEY_PLAN, JSON.stringify(p)); }
   function clearPlan() { try { localStorage.removeItem(KEY_PLAN); } catch (e) {} }
 
+  /* ---------- 宛名・署名（プロフィール） ---------- */
+  const KEY_PROFILE = 'english_app_profile';
+  function sanitizeProfile(v) {
+    const clean = x => (typeof x === 'string' ? x.trim().slice(0, 40) : '');
+    return { partnerName: clean(v && v.partnerName), myName: clean(v && v.myName) };
+  }
+  function getProfile() { return sanitizeProfile(loadJSON(KEY_PROFILE, {})); }
+  function saveProfile(v) { return safeSet(KEY_PROFILE, JSON.stringify(sanitizeProfile(v))); }
+
+  /* ---------- 手紙・メッセージの下書き ---------- */
+  const KEY_LETTERS = 'english_app_letters';
+  function newId(prefix) { return prefix + Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+  function sanitizeLetters(list) {
+    const seen = new Set(), out = [];
+    (Array.isArray(list) ? list : []).forEach(l => {
+      if (!l || typeof l !== 'object') return;
+      const id = String(l.id || ''); if (!id || seen.has(id)) return;
+      const pairs = (Array.isArray(l.pairs) ? l.pairs : []).filter(p => p && typeof p.en === 'string')
+        .map(p => ({ ja: typeof p.ja === 'string' ? p.ja.slice(0, 600) : '', en: p.en.slice(0, 600) })).slice(0, 40);
+      if (!pairs.length) return;
+      seen.add(id);
+      out.push({ id, t: Number(l.t) || Date.now(), mode: l.mode === 'msg' ? 'msg' : 'letter', occ: typeof l.occ === 'string' ? l.occ.slice(0, 20) : '', pairs });
+    });
+    out.sort((a, b) => b.t - a.t);
+    return out.slice(0, 100);
+  }
+  function getLetters() { return sanitizeLetters(loadJSON(KEY_LETTERS, [])); }
+  function saveLetters(list) { return safeSet(KEY_LETTERS, JSON.stringify(sanitizeLetters(list))); }
+
+  /* ---------- 英語日記 ---------- */
+  const KEY_DIARY = 'english_app_diary';
+  const MOODS = ['😊', '🥰', '😆', '😌', '😢', '😴'];
+  function sanitizeDiary(list) {
+    const seen = new Set(), out = [];
+    (Array.isArray(list) ? list : []).forEach(e => {
+      if (!e || typeof e !== 'object' || typeof e.en !== 'string') return;
+      const id = String(e.id || ''), en = e.en.trim().slice(0, 1000);
+      if (!id || !en || seen.has(id)) return;
+      seen.add(id);
+      out.push({ id, t: Number(e.t) || Date.now(), ja: typeof e.ja === 'string' ? e.ja.trim().slice(0, 1000) : '', en,
+        mood: MOODS.includes(e.mood) ? e.mood : '', memory: !!e.memory });
+    });
+    out.sort((a, b) => b.t - a.t);
+    return out.slice(0, 500);
+  }
+  function getDiary() { return sanitizeDiary(loadJSON(KEY_DIARY, [])); }
+  function saveDiary(list) { return safeSet(KEY_DIARY, JSON.stringify(sanitizeDiary(list))); }
+  function addDiaryEntry(en, ja, mood, memory) {
+    const list = getDiary();
+    list.unshift({ id: newId('d'), t: Date.now(), ja: ja || '', en, mood: mood || '', memory: !!memory });
+    const ok = saveDiary(list);
+    const s = getStore(); touchToday(s); saveStore(s);
+    return ok;
+  }
+
+  /* ---------- 日本語カードの習得記録 ---------- */
+  const KEY_NIHONGO = 'english_app_nihongo';
+  function sanitizeNihongo(v) {
+    return { learned: Array.from(new Set((v && Array.isArray(v.learned) ? v.learned : []).filter(x => typeof x === 'string' && x.length < 60))).slice(0, 500) };
+  }
+  function getNihongo() { return sanitizeNihongo(loadJSON(KEY_NIHONGO, {})); }
+  function saveNihongo(v) { return safeSet(KEY_NIHONGO, JSON.stringify(sanitizeNihongo(v))); }
+
+  /* ---------- 会った日ごとの成果（予習プランの記録） ---------- */
+  const KEY_MEET = 'english_app_meetings';
+  function sanitizeMeetings(list) {
+    const seen = new Set(), out = [];
+    (Array.isArray(list) ? list : []).forEach(m => {
+      if (!m || !parseKey(m.date) || seen.has(m.date)) return;
+      seen.add(m.date);
+      out.push({ date: m.date, scenes: (Array.isArray(m.scenes) ? m.scenes : []).filter(x => typeof x === 'string').slice(0, 6),
+        practiced: Math.max(0, Number(m.practiced) || 0), used: Math.max(0, Number(m.used) || 0), talk: Math.max(0, Number(m.talk) || 0) });
+    });
+    out.sort((a, b) => a.date < b.date ? -1 : 1);
+    return out.slice(-50);
+  }
+  function getMeetings() { return sanitizeMeetings(loadJSON(KEY_MEET, [])); }
+  function saveMeetings(list) { return safeSet(KEY_MEET, JSON.stringify(sanitizeMeetings(list))); }
+  // 予習プランから成果サマリーを作る（予習した数・実際に使えた数・会話の数）
+  function summarizePlan(plan) {
+    const d = parseKey(plan.date);
+    const from = plan.startedAt, to = d.getTime() + 2 * 86400000;
+    const practiced = Object.keys(plan.practiced).reduce((n, k) => n + plan.practiced[k].length, 0);
+    const used = getPins().reduce((n, p) => n + p.used.filter(t => t >= from && t < to).length, 0);
+    const day0 = d.getTime(), talk = getTalkLog().filter(e => e.t >= day0 && e.t < to).length;
+    return { date: plan.date, scenes: plan.scenes, practiced, used, talk };
+  }
+  function archivePlan(plan) {
+    if (!plan) return false;
+    const list = getMeetings();
+    const sum = summarizePlan(plan);
+    const i = list.findIndex(m => m.date === sum.date);
+    if (i >= 0) list[i] = sum; else list.push(sum);
+    return saveMeetings(list);
+  }
+
   /* ---------- 発音練習ボタン（各ページ共通） ---------- */
   let activeRec = null;
   // btn にマイク機能を結びつける。getRef() は照合する英文。handlers: { onResult(result), onInterim(text), onError(msg), onState(on) }
@@ -834,7 +943,9 @@
     getPins, savePins, isPinned, togglePin, markPinUsed,
     getKeepsakes, saveKeepsakes, addKeepsake, hasKeepsake,
     getLists, saveLists, getPlan, savePlan, clearPlan,
-    attachPronunciation, renderChips, PASS_SCORE
+    attachPronunciation, renderChips, PASS_SCORE,
+    getProfile, saveProfile, getLetters, saveLetters, getDiary, saveDiary, addDiaryEntry, MOODS,
+    getNihongo, saveNihongo, getMeetings, saveMeetings, summarizePlan, archivePlan, newId
   };
 
   document.addEventListener('DOMContentLoaded', updateStreakBadge);

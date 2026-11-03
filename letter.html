@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 手紙・メッセージ</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=6">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="plan.html">📅 予習</a>
+    <a href="roleplay.html">🎭 ロール</a>
+    <a href="letter.html" class="active" aria-current="page">💌 手紙</a>
+    <a href="mylist.html">🗒 リスト</a>
+    <a href="scenes.html">💞 気持ち</a>
+  </div>
+  <div class="container">
+    <div class="chip-row" id="modeChips" role="group" aria-label="種類">
+      <button class="chip active" data-mode="letter">💌 手紙（特別な日）</button>
+      <button class="chip" data-mode="msg">📱 メッセージ（ふだん）</button>
+    </div>
+
+    <div class="card">
+      <h2 id="occTitle">どんな場面？</h2>
+      <div class="chip-row" id="occChips"></div>
+      <div class="chip-row" id="toneChips" role="group" aria-label="言い方のトーン">
+        <button class="chip active" data-tone="all">すべて</button>
+        <button class="chip" data-tone="c">😄 カジュアル</button>
+        <button class="chip" data-tone="g">🤍 やさしく</button>
+        <button class="chip" data-tone="s">💞 真剣に</button>
+      </div>
+      <div id="tplList"></div>
+    </div>
+
+    <div class="card">
+      <h2>✍️ 自分の言葉で書く</h2>
+      <p class="muted" style="margin-bottom:0.5rem;">日本語で書くと、1文ずつ英語にして下の「仕上げ」に追加します。</p>
+      <textarea id="jaInput" style="height:90px;" placeholder="例: 先週はありがとう。あなたと過ごした時間は、私にとって宝物です。"></textarea>
+      <button class="btn" id="translateBtn">🌐 英語にして追加</button>
+    </div>
+
+    <div class="card">
+      <h2>📝 仕上げ <span class="muted" id="countInfo"></span></h2>
+      <div style="display:flex; gap:8px; margin-bottom:0.5rem;">
+        <input type="text" id="partnerName" placeholder="相手の名前（英語表記）" aria-label="相手の名前" style="margin-bottom:0;">
+        <input type="text" id="myName" placeholder="自分の名前" aria-label="自分の名前" style="margin-bottom:0;">
+      </div>
+      <select id="closing" class="genre-select-box" aria-label="結びの言葉" style="margin-bottom:0.75rem; font-weight:normal;">
+        <option value="">結びの言葉なし</option>
+        <option value="With love,">With love,（愛をこめて）</option>
+        <option value="Love,">Love,（愛してる）</option>
+        <option value="Always yours,">Always yours,（いつもあなたの）</option>
+        <option value="Yours,">Yours,（あなたの）</option>
+        <option value="Take care,">Take care,（体に気をつけて）</option>
+      </select>
+      <div id="pairList"></div>
+      <div class="muted" style="margin-top:0.75rem; font-weight:bold;">全文プレビュー</div>
+      <div class="answer-box" id="fullText" style="display:block; white-space:pre-wrap; margin-top:0.25rem;"></div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:0.75rem;">
+        <button class="btn" id="copyBtn" style="font-size:0.85rem;">📋 コピー</button>
+        <button class="btn" id="shareBtn" style="font-size:0.85rem; background:#0f766e; display:none;">📤 送る（LINEなど）</button>
+        <button class="btn btn-secondary" id="speakAllBtn" style="font-size:0.85rem;">🔊 全文を読み上げ</button>
+        <button class="btn btn-secondary" id="saveDraftBtn" style="font-size:0.85rem;">💾 下書き保存</button>
+      </div>
+      <button class="tiny-btn" id="clearBtn" style="margin-top:0.75rem;">🗑 仕上げを空にする</button>
+    </div>
+
+    <div class="card">
+      <h2>💾 下書き</h2>
+      <div id="drafts"></div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html" class="active" aria-current="page">📅 予習</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="quiz.html">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=6"></script>
+  <script>
+    // 手紙・メッセージの文例。tone: c=カジュアル g=やさしく s=真剣に。各文は [日本語, 英語]
+    const OCC = {
+      letter: [
+        { id: 'birthday', label: '🎂 誕生日', t: [
+          ['g', [['お誕生日おめでとう。', 'Happy birthday.'], ['あなたが生まれてきてくれたことに、心から感謝しています。', "I'm so grateful that you were born."], ['あなたと過ごす毎日が、私の宝物です。', 'Every day with you is a treasure to me.'], ['今年も一緒にたくさん笑いましょう。', "Let's laugh a lot together this year, too."]]],
+          ['s', [['お誕生日おめでとう。', 'Happy birthday.'], ['あなたに出会えたことが、私の人生で一番うれしいことです。', 'Meeting you is the best thing that has ever happened to me.'], ['これからも、あなたの一番近くで支えさせてください。', 'Please let me keep supporting you, always by your side.'], ['心から愛しています。', 'I love you with all my heart.']]]] },
+        { id: 'anniv', label: '💍 記念日', t: [
+          ['g', [['今日は私たちの記念日ですね。', 'Today is our anniversary.'], ['あなたと出会ってから、毎日がとても楽しいです。', 'Every day since I met you has been so much fun.'], ['これからもずっと、一緒に思い出を作っていきたいです。', 'I want to keep making memories with you, always.']]],
+          ['s', [['記念日おめでとう。', 'Happy anniversary.'], ['あなたの優しさに、何度も救われてきました。', 'Your kindness has saved me more times than I can count.'], ['この先の未来も、あなたと歩んでいきたいです。', 'I want to walk into the future with you.']]]] },
+        { id: 'thanks', label: '🙏 感謝', t: [
+          ['g', [['いつも本当にありがとう。', 'Thank you so much for everything.'], ['あなたの優しさに、毎日励まされています。', 'Your kindness encourages me every day.'], ['うまく言えないけれど、感謝の気持ちでいっぱいです。', "I can't put it into words, but my heart is full of gratitude."]]],
+          ['s', [['あなたがそばにいてくれることに、心から感謝しています。', "I'm truly grateful to have you by my side."], ['つらいときも、あなたの言葉に支えられました。', 'Even in hard times, your words kept me going.'], ['本当にありがとう。大好きです。', 'Thank you so much. I love you.']]]] },
+        { id: 'cheer', label: '💪 励まし', t: [
+          ['g', [['最近、忙しそうですね。', 'You seem so busy lately.'], ['無理しすぎていないか、少し心配しています。', "I'm a little worried you might be pushing yourself too hard."], ['あなたならきっと大丈夫。いつでも応援しています。', "I know you'll be fine. I'm always cheering for you."]]],
+          ['s', [['あなたが頑張っているのを、ちゃんと知っています。', 'I know how hard you are working.'], ['うまくいかない日があっても、あなたの価値は変わりません。', "Even on days when things don't go well, your worth doesn't change."], ['私はずっとあなたの味方です。', "I'll always be on your side."]]]] },
+        { id: 'miss', label: '🌙 会いたい', t: [
+          ['g', [['元気にしていますか？', 'How are you doing?'], ['今日はふとした瞬間に、あなたのことを思い出しました。', 'Today, I suddenly thought of you.'], ['会える日を楽しみに、毎日頑張っています。', "I'm doing my best every day, looking forward to seeing you."]]],
+          ['s', [['離れていると、あなたの大切さがよく分かります。', 'Being apart makes me realize how much you mean to me.'], ['声が聞きたくなる夜がたくさんあります。', 'There are so many nights when I just want to hear your voice.'], ['次に会えたら、強く抱きしめさせてください。', 'When we meet again, please let me hold you tight.']]]] },
+        { id: 'sorry', label: '🙇 ごめんね', t: [
+          ['g', [['このあいだは、ごめんなさい。', "I'm sorry about the other day."], ['あなたを傷つけるつもりはありませんでした。', 'I never meant to hurt you.'], ['もう一度、ゆっくり話せたらうれしいです。', "I'd be happy if we could talk again, slowly."]]],
+          ['s', [['自分の言葉があなたを傷つけたこと、反省しています。', 'I regret that my words hurt you.'], ['あなたの気持ちを、もっと大切にします。', 'I will cherish your feelings more.'], ['許してもらえるなら、もう一度やり直したいです。', "If you can forgive me, I'd like to start again."]]]] },
+        { id: 'hello', label: '👋 久しぶり', t: [
+          ['c', [['久しぶり！元気？', "Hey, long time no see! How've you been?"], ['最近どう？ふと連絡したくなっちゃった。', "How's everything? I suddenly felt like reaching out."], ['またすぐ話そうね。', "Let's talk again soon."]]],
+          ['g', [['お久しぶりです。元気にしていましたか？', 'Long time no see. How have you been?'], ['最近、あなたのことをよく考えています。', "I've been thinking about you a lot lately."], ['今度、ゆっくり話せる日を楽しみにしています。', "I'm looking forward to a day when we can talk slowly."]]]] }
+      ],
+      msg: [
+        { id: 'morning', label: '🌅 おはよう', t: [
+          ['c', [['おはよう！今日もいい一日にしようね。', "Good morning! Let's make today a great one."], ['今日の予定は？', "What's on your schedule today?"]]],
+          ['g', [['おはよう。よく眠れた？', 'Good morning. Did you sleep well?'], ['今日も無理しないでね。', "Don't push yourself today."]]]] },
+        { id: 'night', label: '🌙 おやすみ', t: [
+          ['c', [['おやすみ！また明日ね。', 'Goodnight! Talk tomorrow.'], ['いい夢を！', 'Sweet dreams!']]],
+          ['g', [['今日もおつかれさま。', 'You worked hard today.'], ['ゆっくり休んでね。おやすみ。', 'Get some good rest. Goodnight.']]]] },
+        { id: 'today', label: '📖 今日の出来事', t: [
+          ['c', [['今日ね、ちょっとおもしろいことがあったよ。', 'Something funny happened today.'], ['あとで話すね！', "I'll tell you about it later!"]]],
+          ['g', [['今日は一日中あなたのことを考えていたよ。', "I've been thinking about you all day."], ['あなたの今日はどうだった？', 'How was your day?']]]] },
+        { id: 'miss2', label: '💭 会いたい', t: [
+          ['c', [['会いたいなあ。', 'I miss you so much.'], ['次はいつ会えるかな？', 'When can we meet next?']]],
+          ['g', [['今ふと、あなたの顔が見たくなった。', 'I suddenly wanted to see your face.'], ['声だけでも聞けたらうれしいな。', "It'd be nice just to hear your voice."]]]] },
+        { id: 'support', label: '📣 応援', t: [
+          ['c', [['今日の本番、頑張って！', 'Good luck today! You can do it!'], ['終わったら教えてね。', 'Let me know how it went.']]],
+          ['g', [['あなたなら大丈夫。ずっと応援してるよ。', "You'll be fine. I'm cheering for you all the way."], ['無理せず、いつもの力を出してね。', "Don't push yourself. Just show your usual strength."]]]] },
+        { id: 'late', label: '⏳ 返信が遅れた', t: [
+          ['c', [['返信が遅くなってごめんね！', 'Sorry for the late reply!'], ['バタバタしてたんだ。', 'I was so swamped.']]],
+          ['g', [['返事が遅くなってごめんなさい。', "I'm sorry for taking so long to reply."], ['待っていてくれてありがとう。', 'Thank you for waiting for me.']]]] },
+        { id: 'plan', label: '🗓 会う約束', t: [
+          ['c', [['今度の週末、空いてる？', 'Are you free this weekend?'], ['一緒にご飯に行こうよ！', "Let's go get something to eat together!"]]],
+          ['g', [['次に会える日が待ち遠しいな。', "I can't wait for the next time we meet."], ['都合のいい日を教えてもらえる？', 'Could you tell me which days work for you?']]]] }
+      ]
+    };
+    const TONE_LABEL = { c: 'カジュアル', g: 'やさしく', s: '真剣に' };
+
+    let mode = 'letter', occ = null, tone = 'all', pairs = [];   // pairs: [{ja, en}]
+    let renderLock = false;
+
+    /* ---- 文の分割・全文の組み立て ---- */
+    function splitSentences(text) {
+      const out = []; let buf = '';
+      String(text).replace(/\r/g, '').split('').forEach(ch => {
+        if (ch === '\n') { if (buf.trim()) out.push(buf.trim()); buf = ''; return; }
+        buf += ch;
+        if ('。！？!?'.includes(ch)) { if (buf.trim()) out.push(buf.trim()); buf = ''; }
+      });
+      if (buf.trim()) out.push(buf.trim());
+      return out;
+    }
+    function fullText() {
+      const prof = EA.getProfile();
+      const closing = document.getElementById('closing').value;
+      const body = pairs.map(p => p.en.trim()).filter(Boolean);
+      if (!body.length) return '';
+      const parts = [];
+      if (mode === 'letter' && prof.partnerName) parts.push('Dear ' + prof.partnerName + ',');
+      parts.push(mode === 'letter' ? body.join(' ') : body.join('\n'));
+      if (closing) parts.push(closing + (prof.myName ? '\n' + prof.myName : ''));
+      return parts.join('\n\n');
+    }
+
+    /* ---- 文例 ---- */
+    function renderOcc() {
+      const box = document.getElementById('occChips'); box.innerHTML = '';
+      OCC[mode].forEach(o => {
+        const b = document.createElement('button'); b.className = 'chip' + (occ === o.id ? ' active' : ''); b.textContent = o.label;
+        b.addEventListener('click', () => { occ = occ === o.id ? null : o.id; renderOcc(); renderTpl(); }); box.appendChild(b);
+      });
+      document.getElementById('occTitle').textContent = mode === 'letter' ? '💌 どんな手紙にする？' : '📱 どんなメッセージにする？';
+    }
+    function renderTpl() {
+      const box = document.getElementById('tplList'); box.innerHTML = '';
+      const o = OCC[mode].find(x => x.id === occ);
+      if (!o) { box.innerHTML = '<div class="muted">場面を選ぶと文例が出ます。そのまま使っても、直して使ってもOK。</div>'; return; }
+      const list = o.t.filter(x => tone === 'all' || x[0] === tone);
+      if (!list.length) { box.innerHTML = '<div class="muted">この場面にはこのトーンの文例がありません。別のトーンを選んでください。</div>'; return; }
+      list.forEach(([tn, prs]) => {
+        const c = document.createElement('div'); c.className = 'item-row';
+        const badge = document.createElement('span'); badge.className = 'tone-badge tone-' + tn; badge.textContent = TONE_LABEL[tn]; badge.style.marginLeft = '0';
+        const en = document.createElement('div'); en.className = 'en-text'; en.style.cssText = 'font-size:0.95rem; margin-top:0.4rem; font-weight:normal;'; en.textContent = prs.map(p => p[1]).join(mode === 'letter' ? ' ' : '\n'); en.style.whiteSpace = 'pre-wrap';
+        const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = prs.map(p => p[0]).join(mode === 'letter' ? '' : ' / ');
+        const use = document.createElement('button'); use.className = 'tiny-btn'; use.style.marginTop = '0.5rem'; use.textContent = '＋ この文例を仕上げに入れる';
+        use.addEventListener('click', () => { prs.forEach(p => pairs.push({ ja: p[0], en: p[1] })); renderPairs(); EA.toast('仕上げに追加しました。自由に書き換えられます'); });
+        c.appendChild(badge); c.appendChild(en); c.appendChild(ja); c.appendChild(use); box.appendChild(c);
+      });
+    }
+
+    /* ---- 仕上げ ---- */
+    function renderPairs() {
+      const box = document.getElementById('pairList'); box.innerHTML = '';
+      document.getElementById('countInfo').textContent = pairs.length ? '（' + pairs.length + '文）' : '';
+      if (!pairs.length) box.innerHTML = '<div class="chat-empty" style="padding:1rem;">文例を入れるか、日本語を書いて「英語にして追加」を押してください。</div>';
+      pairs.forEach((p, i) => {
+        const d = document.createElement('div'); d.className = 'item-row';
+        const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = p.ja || '（日本語なし）';
+        const en = document.createElement('textarea'); en.value = p.en; en.setAttribute('aria-label', '英文'); en.style.cssText = 'height:62px; margin:0.3rem 0; font-weight:bold;';
+        en.addEventListener('input', () => { p.en = en.value; updateFull(); kana(); });
+        const kn = document.createElement('div'); kn.className = 'kana-line';
+        const kana = () => EA.renderKana(kn, p.en); kana();
+        const chips = document.createElement('div'); chips.className = 'word-chips'; chips.style.justifyContent = 'flex-start';
+        const score = document.createElement('div'); score.className = 'mini-score';
+        const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; align-items:center;';
+        const mk = (label, aria, fn) => { const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); if (fn) b.addEventListener('click', fn); return b; };
+        const mic = mk('🎙️', '音読チェック');
+        [mk('🔊', '再生', () => EA.speak(p.en, 'en-US', 1.0)), mk('🐢', 'ゆっくり再生', () => EA.speak(p.en, 'en-US', 0.7)), mic,
+          mk('⬆️', '上へ', () => { if (i > 0) { [pairs[i - 1], pairs[i]] = [pairs[i], pairs[i - 1]]; renderPairs(); } }),
+          mk('⬇️', '下へ', () => { if (i < pairs.length - 1) { [pairs[i + 1], pairs[i]] = [pairs[i], pairs[i + 1]]; renderPairs(); } }),
+          mk('🗑', '削除', () => { pairs.splice(i, 1); renderPairs(); })].forEach(b => act.appendChild(b));
+        EA.attachPronunciation(mic, () => p.en, {
+          onInterim: t => { score.textContent = '🎙️ ' + t; },
+          onResult: r => { EA.renderChips(chips, r.words); score.textContent = 'スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉 いい発音です' : '  もう一度どうぞ'); EA.countSpeak(); EA.updateStreakBadge(); },
+          onError: m => { score.textContent = m; }
+        });
+        d.appendChild(ja); d.appendChild(en); d.appendChild(kn); d.appendChild(chips); d.appendChild(score); d.appendChild(act); box.appendChild(d);
+      });
+      updateFull();
+    }
+    function updateFull() { document.getElementById('fullText').textContent = fullText() || '（まだ何も入っていません）'; }
+
+    /* ---- コピー・共有・下書き ---- */
+    async function copyText(text) {
+      try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+      try { const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed; opacity:0;'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return ok; } catch (e) { return false; }
+    }
+    function renderDrafts() {
+      const box = document.getElementById('drafts'); box.innerHTML = '';
+      const list = EA.getLetters();
+      if (!list.length) { box.innerHTML = '<div class="muted">保存した下書きはまだありません。</div>'; return; }
+      list.slice(0, 30).forEach(l => {
+        const d = document.createElement('div'); d.className = 'item-row';
+        const dt = new Date(l.t);
+        const head = document.createElement('div'); head.className = 'muted';
+        head.textContent = (l.mode === 'letter' ? '💌 手紙' : '📱 メッセージ') + '  ' + (dt.getMonth() + 1) + '/' + dt.getDate();
+        const en = document.createElement('div'); en.className = 'en-text'; en.style.cssText = 'font-size:0.9rem; font-weight:normal;'; en.textContent = l.pairs.map(p => p.en).join(' ').slice(0, 120) + (l.pairs.map(p => p.en).join(' ').length > 120 ? '…' : '');
+        const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:6px; margin-top:0.4rem;';
+        const load = document.createElement('button'); load.className = 'tiny-btn'; load.textContent = '開いて続きを書く';
+        load.addEventListener('click', () => { mode = l.mode; occ = null; pairs = l.pairs.map(p => ({ ja: p.ja, en: p.en })); syncMode(); renderPairs(); window.scrollTo({ top: document.body.scrollHeight / 3, behavior: 'smooth' }); });
+        const del = document.createElement('button'); del.className = 'tiny-btn'; del.textContent = '削除';
+        del.addEventListener('click', () => { if (!confirm('この下書きを削除しますか？')) return; EA.saveLetters(EA.getLetters().filter(x => x.id !== l.id)); renderDrafts(); });
+        act.appendChild(load); act.appendChild(del); d.appendChild(head); d.appendChild(en); d.appendChild(act); box.appendChild(d);
+      });
+    }
+    function syncMode() {
+      document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === mode));
+      renderOcc(); renderTpl();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const prof = EA.getProfile();
+      document.getElementById('partnerName').value = prof.partnerName; document.getElementById('myName').value = prof.myName;
+      const saveProf = () => { EA.saveProfile({ partnerName: document.getElementById('partnerName').value, myName: document.getElementById('myName').value }); updateFull(); };
+      document.getElementById('partnerName').addEventListener('input', saveProf); document.getElementById('myName').addEventListener('input', saveProf);
+      document.getElementById('closing').addEventListener('change', updateFull);
+      syncMode(); renderPairs(); renderDrafts();
+      if (navigator.share) document.getElementById('shareBtn').style.display = 'block';
+
+      document.querySelectorAll('#modeChips .chip').forEach(c => c.addEventListener('click', () => {
+        mode = c.dataset.mode; occ = null; tone = 'all';   // 種類を変えたらトーンの絞り込みは解除
+        document.querySelectorAll('#toneChips .chip').forEach(x => x.classList.toggle('active', x.dataset.tone === 'all'));
+        syncMode(); updateFull();
+      }));
+      document.querySelectorAll('#toneChips .chip').forEach(c => c.addEventListener('click', () => {
+        document.querySelectorAll('#toneChips .chip').forEach(x => x.classList.remove('active')); c.classList.add('active'); tone = c.dataset.tone; renderTpl();
+      }));
+
+      document.getElementById('translateBtn').addEventListener('click', async () => {
+        const text = document.getElementById('jaInput').value.trim();
+        if (!text) { EA.toast('日本語を入力してください'); return; }
+        const sentences = splitSentences(text).slice(0, 15);
+        const btn = document.getElementById('translateBtn'); btn.disabled = true;
+        let failed = false;
+        for (let i = 0; i < sentences.length; i++) {
+          btn.textContent = '🔄 翻訳中... (' + (i + 1) + '/' + sentences.length + ')';
+          if (failed) { pairs.push({ ja: sentences[i], en: '' }); continue; }
+          const r = await EA.translate(sentences[i], 'ja|en');
+          if (r.ok) pairs.push({ ja: sentences[i], en: r.text });
+          else { failed = true; pairs.push({ ja: sentences[i], en: '' }); EA.toast(r.text + ' 英文は手入力できます。'); }
+        }
+        btn.disabled = false; btn.textContent = '🌐 英語にして追加';
+        document.getElementById('jaInput').value = ''; renderPairs();
+        if (!failed) EA.toast('追加しました。英文は自由に直せます');
+      });
+
+      document.getElementById('copyBtn').addEventListener('click', async () => { const t = fullText(); if (!t) { EA.toast('コピーする文章がありません'); return; } EA.toast((await copyText(t)) ? '📋 コピーしました' : 'コピーできませんでした'); });
+      document.getElementById('shareBtn').addEventListener('click', () => { const t = fullText(); if (!t) { EA.toast('送る文章がありません'); return; } navigator.share({ text: t }).catch(() => {}); });
+      document.getElementById('speakAllBtn').addEventListener('click', () => { const t = fullText(); if (t) EA.speak(t.replace(/\n+/g, '. '), 'en-US', 0.95); });
+      document.getElementById('saveDraftBtn').addEventListener('click', () => {
+        if (!pairs.length) { EA.toast('保存する文章がありません'); return; }
+        const list = EA.getLetters(); list.unshift({ id: EA.newId('l'), t: Date.now(), mode, occ: occ || '', pairs: pairs.map(p => ({ ja: p.ja, en: p.en })) });
+        EA.saveLetters(list); renderDrafts(); EA.toast('下書きを保存しました');
+      });
+      document.getElementById('clearBtn').addEventListener('click', () => { if (pairs.length && confirm('仕上げの内容を空にしますか？')) { pairs = []; renderPairs(); } });
+    });
+
+  </script>
+</body>
+</html>

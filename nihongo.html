@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 日本語を教える</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=6">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="translator.html">💬 会話</a>
+    <a href="topics.html">🎲 話題</a>
+    <a href="nihongo.html" class="active" aria-current="page">🇯🇵 日本語</a>
+  </div>
+  <div class="container">
+    <div class="chip-row" id="modeChips" role="group" aria-label="モード">
+      <button class="chip active" data-mode="learn">📖 教える</button>
+      <button class="chip" data-mode="quiz">🎯 出題する</button>
+    </div>
+    <div class="chip-row" id="catChips"></div>
+
+    <div class="card topic-card" id="cardBox" aria-live="polite">
+      <div class="muted" id="cardCat"></div>
+      <div id="faceJa" style="font-size:2.2rem; font-weight:800; margin:0.4rem 0; color:#0f172a;"></div>
+      <div id="faceRomaji" style="font-size:1.3rem; color:var(--primary); font-weight:bold;"></div>
+      <div id="faceEn" class="q-ja" style="font-size:1.05rem; color:#334155;"></div>
+      <div id="faceNote" class="kana-line" style="background:#ecfeff; color:#155e75; margin-top:0.8rem; text-align:left;"></div>
+      <div id="quizHint" class="muted" style="display:none; margin-top:0.6rem;">この英語を日本語で言ってみて！答えが分かったら下のボタンで確認。</div>
+      <div style="display:flex; justify-content:center; gap:6px; margin-top:1rem; flex-wrap:wrap;">
+        <button class="icon-btn" id="playJa" aria-label="日本語を再生">🔊</button>
+        <button class="icon-btn" id="slowJa" aria-label="ゆっくり再生">🐢</button>
+        <button class="tiny-btn" id="revealBtn" style="display:none;">答えを見る</button>
+        <button class="tiny-btn" id="learnedBtn">☑️ 覚えた</button>
+      </div>
+      <div id="quizRow" style="display:none; gap:8px; margin-top:0.75rem;">
+        <button class="btn" id="okBtn" style="background:#16a34a; flex:1;">⭕ 言えた！</button>
+        <button class="btn" id="ngBtn" style="background:#be123c; flex:1;">❌ もう一度</button>
+      </div>
+    </div>
+    <div style="display:flex; gap:8px;">
+      <button class="btn btn-secondary" id="prevBtn" style="flex:1;">◀ 前へ</button>
+      <button class="btn" id="nextBtn" style="flex:2;">次のカード ▶</button>
+    </div>
+    <p class="muted" id="progressInfo" style="text-align:center; margin-top:0.75rem;"></p>
+
+    <div class="card" style="margin-top:1rem;">
+      <h2>🗣 英語で教えるときの言い方</h2>
+      <div id="teachList"></div>
+    </div>
+    <div class="card">
+      <h2>📋 カテゴリの一覧</h2>
+      <div id="listBox"></div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html" class="active" aria-current="page">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="quiz.html">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=6"></script>
+  <script>
+    // [カテゴリ, 日本語, ローマ字, 英語の意味, 英語での使い方メモ(任意)]
+    const CARDS = [
+      ['あいさつ', 'こんにちは', 'konnichiwa', 'Hello / Good afternoon'],
+      ['あいさつ', 'おはよう', 'ohayou', 'Good morning', 'Casual. To be polite, add "gozaimasu": ohayou gozaimasu.'],
+      ['あいさつ', 'こんばんは', 'konbanwa', 'Good evening'],
+      ['あいさつ', 'おやすみ', 'oyasumi', 'Good night', 'Said before going to bed.'],
+      ['あいさつ', 'ありがとう', 'arigatou', 'Thank you', 'Casual. More polite: arigatou gozaimasu.'],
+      ['あいさつ', 'どういたしまして', 'dou itashimashite', "You're welcome"],
+      ['あいさつ', 'ごめんね', 'gomen ne', "I'm sorry (casual)", 'Used between close friends and couples.'],
+      ['あいさつ', 'すみません', 'sumimasen', 'Excuse me / Sorry / Thank you', 'Very useful! Use it to get attention or to apologize politely.'],
+      ['あいさつ', 'はじめまして', 'hajimemashite', 'Nice to meet you', 'Said the first time you meet someone.'],
+      ['あいさつ', '久しぶり', 'hisashiburi', 'Long time no see'],
+      ['あいさつ', '元気？', 'genki?', 'How are you? (casual)'],
+      ['あいさつ', 'また会おうね', 'mata aou ne', "Let's meet again"],
+      ['食事', 'いただきます', 'itadakimasu', "Let's eat (before a meal)", 'We say this before eating to show gratitude for the food.'],
+      ['食事', 'ごちそうさま', 'gochisousama', 'Thank you for the meal (after eating)', 'We say this after eating.'],
+      ['食事', 'おいしい！', 'oishii!', 'Delicious!'],
+      ['食事', '乾杯', 'kanpai', 'Cheers!'],
+      ['食事', 'おなかがすいた', 'onaka ga suita', "I'm hungry"],
+      ['食事', 'おなかいっぱい', 'onaka ippai', "I'm full"],
+      ['食事', 'お水ください', 'omizu kudasai', 'Water, please'],
+      ['食事', 'おかわり', 'okawari', 'Another serving, please'],
+      ['食事', 'お会計お願いします', 'okaikei onegaishimasu', 'The check, please'],
+      ['食事', 'これは何ですか？', 'kore wa nan desu ka?', 'What is this?'],
+      ['気持ち', '好き', 'suki', 'I like you / I like it'],
+      ['気持ち', '大好き', 'daisuki', 'I love it / I really like you', 'Strong "like". Very common between couples.'],
+      ['気持ち', '愛してる', 'aishiteru', 'I love you', 'Very deep and serious. Japanese people say it rarely.'],
+      ['気持ち', '会いたい', 'aitai', 'I want to see you / I miss you'],
+      ['気持ち', 'うれしい', 'ureshii', "I'm happy"],
+      ['気持ち', '楽しい', 'tanoshii', 'Fun / Enjoyable'],
+      ['気持ち', '寂しい', 'sabishii', "I'm lonely / I miss you"],
+      ['気持ち', 'かわいい', 'kawaii', 'Cute'],
+      ['気持ち', 'かっこいい', 'kakkoii', 'Cool / Handsome'],
+      ['気持ち', 'きれい', 'kirei', 'Beautiful / Pretty / Clean'],
+      ['気持ち', '幸せ', 'shiawase', 'Happy (deeply)'],
+      ['気持ち', 'ずっと一緒にいたい', 'zutto issho ni itai', 'I want to be together forever'],
+      ['気持ち', '大丈夫？', 'daijoubu?', 'Are you okay?'],
+      ['気持ち', '手をつなごう', 'te o tsunagou', "Let's hold hands"],
+      ['移動・観光', '駅はどこですか？', 'eki wa doko desu ka?', 'Where is the station?'],
+      ['移動・観光', 'いくらですか？', 'ikura desu ka?', 'How much is it?'],
+      ['移動・観光', '写真を撮ってください', 'shashin o totte kudasai', 'Please take a photo'],
+      ['移動・観光', 'トイレはどこですか？', 'toire wa doko desu ka?', 'Where is the restroom?'],
+      ['移動・観光', '右', 'migi', 'Right'],
+      ['移動・観光', '左', 'hidari', 'Left'],
+      ['移動・観光', 'まっすぐ', 'massugu', 'Straight ahead'],
+      ['移動・観光', 'きれいな景色', 'kirei na keshiki', 'Beautiful view'],
+      ['移動・観光', '疲れた', 'tsukareta', "I'm tired"],
+      ['おうち', 'ただいま', 'tadaima', "I'm home", 'Said when you come home.'],
+      ['おうち', 'おかえり', 'okaeri', 'Welcome home', 'The reply to "tadaima".'],
+      ['おうち', 'ゆっくりしてね', 'yukkuri shite ne', 'Take your time / Relax'],
+      ['おうち', '一緒に見よう', 'issho ni miyou', "Let's watch it together"],
+      ['おうち', 'お風呂', 'ofuro', 'Bath'],
+      ['おうち', 'おやすみなさい', 'oyasumi nasai', 'Good night (polite)'],
+      ['数字', '一', 'ichi', 'One (1)'], ['数字', '二', 'ni', 'Two (2)'], ['数字', '三', 'san', 'Three (3)'], ['数字', '四', 'yon / shi', 'Four (4)'],
+      ['数字', '五', 'go', 'Five (5)'], ['数字', '六', 'roku', 'Six (6)'], ['数字', '七', 'nana / shichi', 'Seven (7)'], ['数字', '八', 'hachi', 'Eight (8)'],
+      ['数字', '九', 'kyuu / ku', 'Nine (9)'], ['数字', '十', 'juu', 'Ten (10)']
+    ];
+    const TEACH = [
+      ['This means "…" in English.', '「…」という意味だよ。'],
+      ["You say this when you want to…", '…したいときに言うんだよ。'],
+      ['Try saying it after me.', '私のあとに言ってみて。'],
+      ['Great job! Your pronunciation is getting better!', 'すごい！発音どんどん上手になってるよ！'],
+      ["It's a little hard, but you can do it.", '少し難しいけど、きっとできるよ。'],
+      ["Let me say it slowly.", 'ゆっくり言うね。'],
+      ['Do you want to learn how to say it in Japanese?', '日本語での言い方、知りたい？']
+    ];
+    const cats = ['all'].concat(Array.from(new Set(CARDS.map(c => c[0]))));
+    let mode = 'learn', cat = 'all', idx = 0, revealed = false;
+    const learnedSet = () => new Set(EA.getNihongo().learned);
+    const deck = () => CARDS.filter(c => cat === 'all' || c[0] === cat);
+
+    function setLearned(ja, on) {
+      const s = learnedSet(); if (on) s.add(ja); else s.delete(ja);
+      EA.saveNihongo({ learned: Array.from(s) });
+      const st = EA.getStore(); st.history[EA.dateKey()] = true; EA.saveStore(st); EA.updateStreakBadge();
+    }
+
+    function renderCard() {
+      const d = deck(); if (!d.length) return;
+      idx = ((idx % d.length) + d.length) % d.length;
+      const c = d[idx], quiz = mode === 'quiz', shown = !quiz || revealed;
+      document.getElementById('cardCat').textContent = c[0] + '  ' + (idx + 1) + '/' + d.length;
+      document.getElementById('faceJa').textContent = shown ? c[1] : '？';
+      document.getElementById('faceRomaji').textContent = shown ? c[2] : '';
+      document.getElementById('faceEn').textContent = c[3];
+      const note = document.getElementById('faceNote');
+      if (shown && c[4]) { note.style.display = 'block'; note.textContent = '💡 ' + c[4]; } else note.style.display = 'none';
+      document.getElementById('quizHint').style.display = quiz && !revealed ? 'block' : 'none';
+      document.getElementById('revealBtn').style.display = quiz && !revealed ? 'inline-block' : 'none';
+      document.getElementById('quizRow').style.display = quiz && revealed ? 'flex' : 'none';
+      document.getElementById('learnedBtn').style.display = quiz ? 'none' : 'inline-block';
+      const learned = learnedSet().has(c[1]);
+      document.getElementById('learnedBtn').textContent = learned ? '✅ 覚えた（取り消す）' : '☑️ 覚えた';
+      document.getElementById('playJa').style.visibility = shown ? 'visible' : 'hidden';
+      document.getElementById('slowJa').style.visibility = shown ? 'visible' : 'hidden';
+      const L = learnedSet(), all = deck();
+      document.getElementById('progressInfo').textContent = '覚えた ' + all.filter(x => L.has(x[1])).length + ' / ' + all.length;
+    }
+
+    function renderList() {
+      const box = document.getElementById('listBox'); box.innerHTML = '';
+      const L = learnedSet();
+      deck().forEach((c, i) => {
+        const r = document.createElement('div'); r.className = 'phrase-card'; r.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:8px; cursor:pointer;';
+        const left = document.createElement('div');
+        const ja = document.createElement('div'); ja.className = 'en-text'; ja.textContent = (L.has(c[1]) ? '✅ ' : '') + c[1];
+        const ro = document.createElement('div'); ro.className = 'ja-text'; ro.style.color = 'var(--primary)'; ro.textContent = c[2];
+        const en = document.createElement('div'); en.className = 'ex-text'; en.textContent = c[3];
+        left.appendChild(ja); left.appendChild(ro); left.appendChild(en);
+        const play = document.createElement('button'); play.className = 'icon-btn'; play.textContent = '🔊'; play.setAttribute('aria-label', '日本語を再生');
+        play.addEventListener('click', e => { e.stopPropagation(); EA.speak(c[1].replace(/[？?]/g, ''), 'ja-JP', 0.9); });
+        r.addEventListener('click', () => { idx = i; revealed = false; renderCard(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+        r.appendChild(left); r.appendChild(play); box.appendChild(r);
+      });
+    }
+
+    function go(delta) { idx += delta; revealed = false; renderCard(); }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const chips = document.getElementById('catChips');
+      cats.forEach(c => {
+        const b = document.createElement('button'); b.className = 'chip' + (c === cat ? ' active' : ''); b.textContent = c === 'all' ? 'ぜんぶ' : c;
+        b.addEventListener('click', () => { cat = c; idx = 0; revealed = false; chips.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x === b)); renderCard(); renderList(); });
+        chips.appendChild(b);
+      });
+      document.querySelectorAll('#modeChips .chip').forEach(c => c.addEventListener('click', () => {
+        document.querySelectorAll('#modeChips .chip').forEach(x => x.classList.remove('active')); c.classList.add('active'); mode = c.dataset.mode; revealed = false; renderCard();
+      }));
+      const say = rate => { const d = deck(); if (d.length) EA.speak(d[idx][1].replace(/[？?]/g, ''), 'ja-JP', rate); };
+      document.getElementById('playJa').addEventListener('click', () => say(0.9));
+      document.getElementById('slowJa').addEventListener('click', () => say(0.6));
+      document.getElementById('revealBtn').addEventListener('click', () => { revealed = true; renderCard(); say(0.9); });
+      document.getElementById('learnedBtn').addEventListener('click', () => { const c = deck()[idx]; setLearned(c[1], !learnedSet().has(c[1])); renderCard(); renderList(); });
+      document.getElementById('okBtn').addEventListener('click', () => { setLearned(deck()[idx][1], true); go(1); renderList(); });
+      document.getElementById('ngBtn').addEventListener('click', () => { setLearned(deck()[idx][1], false); revealed = false; renderCard(); renderList(); EA.toast('もう一度ゆっくり練習しよう'); });
+      document.getElementById('nextBtn').addEventListener('click', () => { go(1); if (mode === 'learn') say(0.9); });
+      document.getElementById('prevBtn').addEventListener('click', () => { go(-1); if (mode === 'learn') say(0.9); });
+
+      const teach = document.getElementById('teachList');
+      TEACH.forEach(t => {
+        const r = document.createElement('div'); r.className = 'phrase-card'; r.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:8px;';
+        const l = document.createElement('div'); const e = document.createElement('div'); e.className = 'en-text'; e.textContent = t[0];
+        const j = document.createElement('div'); j.className = 'ja-text'; j.textContent = t[1]; l.appendChild(e); l.appendChild(j);
+        const a = document.createElement('div'); a.style.cssText = 'display:flex; flex-shrink:0;';
+        const play = document.createElement('button'); play.className = 'icon-btn'; play.textContent = '🔊'; play.setAttribute('aria-label', '再生'); play.addEventListener('click', () => EA.speak(t[0], 'en-US', 1.0));
+        const pin = document.createElement('button'); pin.className = 'icon-btn'; pin.textContent = EA.isPinned(t[0]) ? '📌' : '📍'; pin.setAttribute('aria-label', 'ピン留め');
+        pin.addEventListener('click', () => { const on = EA.togglePin(t[0], t[1]); pin.textContent = on ? '📌' : '📍'; EA.toast(on ? 'ピン留めしました' : 'ピン留めを外しました'); });
+        a.appendChild(play); a.appendChild(pin); r.appendChild(l); r.appendChild(a); teach.appendChild(r);
+      });
+      renderCard(); renderList();
+    });
+
+  </script>
+</body>
+</html>

@@ -7,13 +7,20 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=5">
+  <link rel="stylesheet" href="common.css?v=6">
 </head>
 <body>
   <header>
     <a href="index.html" class="logo">心をつなぐ英語表現</a>
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
+  <div class="subnav">
+    <a href="quiz.html">❓ クイズ</a>
+    <a href="writing.html">✍️ 英作文</a>
+    <a href="speaking.html">🎙️ 発音</a>
+    <a href="addword.html">➕ 単語</a>
+    <a href="phrases.html" class="active" aria-current="page">📚 表現集</a>
+  </div>
   <div class="container">
     <input type="text" id="searchInput" class="search-box" placeholder="キーワード検索（英語・日本語・ジャンル）..." aria-label="キーワード検索">
     <div id="resultCount" class="muted" style="margin-bottom:0.75rem;"></div>
@@ -24,10 +31,10 @@
     <a href="index.html">🏠 ホーム</a>
     <a href="translator.html">💬 会話</a>
     <a href="plan.html">📅 予習</a>
-    <a href="quiz.html">✍️ 練習</a>
-    <a href="phrases.html" class="active" aria-current="page">📚 表現集</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=5"></script>
+  <script src="common.js?v=6"></script>
   <script>
     function renderPhrases(query) {
       const q = (query || '').trim().toLowerCase();

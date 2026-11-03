@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 英語日記</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=6">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="recap.html">📝 会話</a>
+    <a href="diary.html" class="active" aria-current="page">📔 日記</a>
+    <a href="report.html">🏆 成果</a>
+    <a href="keepsake.html">💝 言葉</a>
+  </div>
+  <div class="container">
+    <div class="card next-step">
+      <h2>🌟 今日のお題</h2>
+      <div id="promptBox" style="font-size:1.05rem; font-weight:bold; margin-bottom:0.5rem;"></div>
+      <div id="promptEn" class="muted" style="margin-bottom:0.5rem;"></div>
+      <button class="tiny-btn" id="shufflePrompt">🎲 別のお題</button>
+    </div>
+    <div class="card">
+      <h2>📔 今日の一文</h2>
+      <textarea id="jaInput" style="height:80px;" placeholder="日本語で気持ちを書いてみよう（英語で直接書いてもOK）" aria-label="日本語"></textarea>
+      <button class="btn btn-secondary" id="translateBtn" style="margin-bottom:0.75rem;">🌐 英語にする</button>
+      <textarea id="enInput" style="height:80px;" placeholder="英語（自動で入ります。直して使えます）" aria-label="英語" spellcheck="false"></textarea>
+      <div class="muted" style="font-weight:bold;">今日の気分</div>
+      <div class="chip-row" id="moodChips" style="margin-top:4px;"></div>
+      <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; margin:0.5rem 0 0.75rem;"><input type="checkbox" id="memoryCb"> 💞 会った日の思い出として残す（次の予習で思い出せます）</label>
+      <button class="btn" id="saveBtn">📔 日記に保存する</button>
+    </div>
+    <div class="muted" id="countInfo" style="margin-bottom:0.5rem;"></div>
+    <div id="entries"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
+    <a href="quiz.html">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=6"></script>
+  <script>
+    // お題: [日本語, 英語の書き出し, 思い出用か]
+    const PROMPTS = [
+      ['今日一番うれしかったこと', 'The happiest moment of my day was…', false],
+      ['今日あった小さな出来事', 'Something small happened today…', false],
+      ['今日、誰かに感謝したこと', 'Today, I was thankful for…', false],
+      ['今日がんばったこと', 'Something I worked hard on today…', false],
+      ['最近、相手と話して楽しかったこと', 'I really enjoyed talking with you about…', false],
+      ['次に会ったら一緒にしたいこと', 'When we meet next, I want to…', false],
+      ['今日の気持ちを一言で', 'Today I feel…', false],
+      ['会った日の一番の思い出', 'My favorite moment from our day was…', true],
+      ['会った日に見つけた、相手の素敵なところ', 'Something I loved about you today was…', true],
+      ['会った日においしかったもの', 'The best thing we ate was…', true]
+    ];
+    let promptIdx = 0, mood = '', pickedMemoryPrompt = false;
+
+    function recentMeeting() { const p = EA.getPlan(); if (!p) return false; const d = EA.daysUntil(p.date); return d <= 0 && d >= -3; }
+    function pickPrompt(random) {
+      const pool = PROMPTS.map((p, i) => i).filter(i => !recentMeeting() || PROMPTS[i][2]);
+      if (random) { let n = pool[Math.floor(Math.random() * pool.length)], g = 0; while (n === promptIdx && pool.length > 1 && g++ < 10) n = pool[Math.floor(Math.random() * pool.length)]; promptIdx = n; }
+      else { const day = Math.floor(new Date().setHours(0, 0, 0, 0) / 86400000); promptIdx = pool[day % pool.length]; }
+      const p = PROMPTS[promptIdx];
+      document.getElementById('promptBox').textContent = p[0];
+      document.getElementById('promptEn').textContent = '書き出し: ' + p[1];
+      document.getElementById('memoryCb').checked = p[2] || recentMeeting();
+    }
+
+    function render() {
+      const list = EA.getDiary(), box = document.getElementById('entries'); box.innerHTML = '';
+      document.getElementById('countInfo').textContent = list.length ? list.length + ' 件の日記' : '';
+      if (!list.length) { box.innerHTML = '<div class="chat-empty">まだ日記がありません。短い一文からはじめましょう。</div>'; return; }
+      list.forEach(e => {
+        const d = document.createElement('div'); d.className = 'phrase-card';
+        const dt = new Date(e.t);
+        const head = document.createElement('div'); head.className = 'muted';
+        head.textContent = dt.getFullYear() + '/' + (dt.getMonth() + 1) + '/' + dt.getDate() + '  ' + (e.mood || '') + (e.memory ? '  💞 思い出' : '');
+        const en = document.createElement('div'); en.className = 'en-text'; en.style.cssText = 'font-weight:600; font-size:1rem; white-space:pre-wrap;'; en.textContent = e.en;
+        const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = e.ja;
+        const chips = document.createElement('div'); chips.className = 'word-chips'; chips.style.justifyContent = 'flex-start';
+        const score = document.createElement('div'); score.className = 'mini-score';
+        const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem;';
+        const mk = (label, aria, fn) => { const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); if (fn) b.addEventListener('click', fn); return b; };
+        const mic = mk('🎙️', '音読してみる');
+        [mk('🔊', '再生', () => EA.speak(e.en, 'en-US', 1.0)), mk('🐢', 'ゆっくり再生', () => EA.speak(e.en, 'en-US', 0.7)), mic,
+          mk(e.memory ? '💞' : '🤍', '思い出に切り替え', () => { const l = EA.getDiary(); const x = l.find(y => y.id === e.id); if (x) { x.memory = !x.memory; EA.saveDiary(l); render(); } }),
+          mk('🗑', '削除', () => { if (!confirm('この日記を削除しますか？')) return; EA.saveDiary(EA.getDiary().filter(y => y.id !== e.id)); render(); })
+        ].forEach(b => act.appendChild(b));
+        EA.attachPronunciation(mic, () => e.en, {
+          onInterim: t => { score.textContent = '🎙️ ' + t; },
+          onResult: r => { EA.renderChips(chips, r.words); score.textContent = 'スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉' : ''); EA.countSpeak(); EA.updateStreakBadge(); },
+          onError: m => { score.textContent = m; }
+        });
+        d.appendChild(head); d.appendChild(en); if (e.ja) d.appendChild(ja); d.appendChild(chips); d.appendChild(score); d.appendChild(act); box.appendChild(d);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      pickPrompt(false); render();
+      const moods = document.getElementById('moodChips');
+      EA.MOODS.forEach(m => {
+        const b = document.createElement('button'); b.className = 'chip'; b.textContent = m; b.setAttribute('aria-label', '気分 ' + m);
+        b.addEventListener('click', () => { mood = mood === m ? '' : m; moods.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x.textContent === mood)); });
+        moods.appendChild(b);
+      });
+      document.getElementById('shufflePrompt').addEventListener('click', () => pickPrompt(true));
+      document.getElementById('translateBtn').addEventListener('click', async () => {
+        const ja = document.getElementById('jaInput').value.trim();
+        if (!ja) { EA.toast('日本語を入力してください'); return; }
+        const b = document.getElementById('translateBtn'); b.disabled = true; b.textContent = '🔄 翻訳中...';
+        const r = await EA.translate(ja, 'ja|en');
+        b.disabled = false; b.textContent = '🌐 英語にする';
+        if (r.ok) { document.getElementById('enInput').value = r.text; EA.toast('英語を確認して、直したいところは直そう'); }
+        else EA.toast(r.text + ' 英語を直接入力してもOKです。');
+      });
+      document.getElementById('saveBtn').addEventListener('click', () => {
+        const en = document.getElementById('enInput').value.trim(), ja = document.getElementById('jaInput').value.trim();
+        if (!en) { EA.toast('英語を入力してください（「英語にする」で自動入力）'); return; }
+        if (!EA.addDiaryEntry(en, ja, mood, document.getElementById('memoryCb').checked)) { EA.toast('保存できませんでした'); return; }
+        document.getElementById('enInput').value = ''; document.getElementById('jaInput').value = '';
+        document.getElementById('memoryCb').checked = PROMPTS[promptIdx][2] || recentMeeting();   // 次の一文はお題の初期値に戻す
+        EA.updateStreakBadge(); render(); EA.toast('📔 日記に保存しました');
+      });
+    });
+
+  </script>
+</body>
+</html>
