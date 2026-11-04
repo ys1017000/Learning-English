@@ -446,7 +446,7 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 4,
+      version: 5,
       exportedAt: new Date().toISOString(),
       data: getStore(),
       customPhrases: getCustomPhrases(),
@@ -459,7 +459,8 @@
       letters: getLetters(),
       diary: getDiary(),
       meetings: getMeetings(),
-      nihongo: getNihongo()
+      nihongo: getNihongo(),
+      roadmap: getRoadmap()
     };
   }
   function downloadBackup() {
@@ -509,11 +510,14 @@
     const incTalk = sanitizeTalk(obj.talkLog);
     const incPins = sanitizePins(obj.pins), incKeeps = sanitizeKeeps(obj.keepsakes), incLists = sanitizeLists(obj.lists), incPlan = sanitizePlan(obj.plan);
     const incProfile = sanitizeProfile(obj.profile), incLetters = sanitizeLetters(obj.letters), incDiary = sanitizeDiary(obj.diary), incMeet = sanitizeMeetings(obj.meetings), incNi = sanitizeNihongo(obj.nihongo);
-    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo;
+    const hasRoad = obj.roadmap && typeof obj.roadmap === 'object';   // v4以前のバックアップには無いので、今の進捗をそのまま残す
+    const incRoad = sanitizeRoadmap(obj.roadmap);
+    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo, road;
     if (mode === 'replace') {
       store = inc; custom = incCustom; talk = incTalk;
       pins = incPins; keeps = incKeeps; lists = incLists; plan = incPlan;
       profile = incProfile; letters = incLetters; diary = incDiary; meetings = incMeet; nihongo = incNi;
+      road = hasRoad ? incRoad : getRoadmap();
     } else {
       const cur = getStore();
       store = {
@@ -548,8 +552,9 @@
       diary = sanitizeDiary(getDiary().concat(incDiary));
       meetings = sanitizeMeetings(getMeetings().concat(incMeet));
       nihongo = sanitizeNihongo({ learned: getNihongo().learned.concat(incNi.learned) });
+      road = mergeRoadmap(getRoadmap(), incRoad);
     }
-    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo);
+    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo) && saveRoadmap(road);
     if (!okAll) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
     return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length, diary: diary.length, letters: letters.length };
   }
@@ -876,6 +881,48 @@
   function getNihongo() { return sanitizeNihongo(loadJSON(KEY_NIHONGO, {})); }
   function saveNihongo(v) { return safeSet(KEY_NIHONGO, JSON.stringify(sanitizeNihongo(v))); }
 
+
+  /* ---------- 3か月ロードマップの進捗 ---------- */
+  const KEY_ROAD = 'english_app_roadmap';
+  function emptyRoadmap() { return { start: null, done: {}, skipped: {}, cardLog: {}, checks: {} }; }
+  function sanitizeRoadmap(v) {
+    const out = emptyRoadmap();
+    if (!v || typeof v !== 'object') return out;
+    if (parseKey(v.start)) out.start = v.start;
+    const dates = o => Object.keys(o && typeof o === 'object' ? o : {}).filter(k => parseKey(k)).sort().slice(-400);
+    dates(v.done).forEach(k => {
+      const ids = (Array.isArray(v.done[k]) ? v.done[k] : []).filter(x => typeof x === 'string' && x.length < 8);
+      if (ids.length) out.done[k] = Array.from(new Set(ids));
+    });
+    dates(v.skipped).forEach(k => { if (v.skipped[k]) out.skipped[k] = true; });
+    const log = v.cardLog && typeof v.cardLog === 'object' ? v.cardLog : {};
+    Object.keys(log).slice(-1500).forEach(en => {
+      const e = log[en];
+      if (!e || typeof e !== 'object' || en.length > 200 || !parseKey(e.d)) return;
+      out.cardLog[en] = { ok: !!e.ok, d: e.d, w: Math.max(0, Math.min(12, Number(e.w) || 0)) };
+    });
+    const ch = v.checks && typeof v.checks === 'object' ? v.checks : {};
+    ['1', '2', '3'].forEach(m => {
+      const c = ch[m];
+      if (c && typeof c === 'object' && parseKey(c.d)) {
+        const total = Math.max(0, Math.min(50, Number(c.total) || 0));
+        out.checks[m] = { said: Math.max(0, Math.min(total, Number(c.said) || 0)), total, d: c.d };
+      }
+    });
+    return out;
+  }
+  function getRoadmap() { return sanitizeRoadmap(loadJSON(KEY_ROAD, null)); }
+  function saveRoadmap(v) { return safeSet(KEY_ROAD, JSON.stringify(sanitizeRoadmap(v))); }
+  function mergeRoadmap(a, b) {
+    const out = sanitizeRoadmap(a);
+    if (!out.start) out.start = b.start;
+    Object.keys(b.done).forEach(k => { out.done[k] = Array.from(new Set((out.done[k] || []).concat(b.done[k]))); });
+    Object.keys(b.skipped).forEach(k => { out.skipped[k] = true; });
+    Object.keys(b.cardLog).forEach(en => { const c = out.cardLog[en]; if (!c || b.cardLog[en].d > c.d) out.cardLog[en] = b.cardLog[en]; });
+    Object.keys(b.checks).forEach(m => { const c = out.checks[m]; if (!c || b.checks[m].d > c.d) out.checks[m] = b.checks[m]; });
+    return sanitizeRoadmap(out);
+  }
+
   /* ---------- 会った日ごとの成果（予習プランの記録） ---------- */
   const KEY_MEET = 'english_app_meetings';
   function sanitizeMeetings(list) {
@@ -962,7 +1009,7 @@
     getLists, saveLists, getPlan, savePlan, clearPlan,
     attachPronunciation, renderChips, PASS_SCORE,
     getProfile, saveProfile, getLetters, saveLetters, getDiary, saveDiary, addDiaryEntry, MOODS,
-    getNihongo, saveNihongo, getMeetings, saveMeetings, summarizePlan, archivePlan, newId
+    getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId
   };
 
   document.addEventListener('DOMContentLoaded', updateStreakBadge);

@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - ロードマップ</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=7">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="roadmap.html" class="active" aria-current="page">🗺 計画</a>
+    <a href="quiz.html">❓ クイズ</a>
+    <a href="writing.html">✍️ 英作文</a>
+    <a href="speaking.html">🎙️ 発音</a>
+    <a href="addword.html">➕ 単語</a>
+    <a href="phrases.html">📚 表現集</a>
+  </div>
+  <div class="container">
+    <div class="chip-row" id="tabChips" role="group" aria-label="表示の切り替え">
+      <button class="chip active" data-tab="today">📍 今日のメニュー</button>
+      <button class="chip" data-tab="weeks">🗓 週間一覧</button>
+    </div>
+
+    <div class="card rm-run" id="runBox" style="display:none;" aria-live="polite"></div>
+
+    <div id="viewToday"></div>
+    <div id="viewWeeks" style="display:none;"></div>
+  </div>
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=7"></script>
+  <script src="roadmap-data.js?v=7"></script>
+  <script>
+    const RM = window.RM;
+    const $ = id => document.getElementById(id);
+    const esc = EA.esc;
+    const today = EA.dateKey();
+    const ICON = { am: '🌅', noon: '☀️', night: '🌙' };
+    const SYM = { full: '◎', min: '〇', skip: '✕', none: '・', future: '', before: '' };
+    let rd = EA.getRoadmap();
+    let tab = 'today', minimal = false, editStart = false, run = null;
+
+    const cardsMap = () => RM.cardsByWeek(EA.getCustomPhrases());
+    function update(fn) { rd = EA.getRoadmap(); fn(rd); if (!EA.saveRoadmap(rd)) EA.toast('保存に失敗しました。ブラウザの保存領域を確認してください。'); rd = EA.getRoadmap(); }
+    function touchToday() { const s = EA.getStore(); s.history[today] = true; EA.saveStore(s); EA.updateStreakBadge(); }
+    function fmt(k) { const d = RM.parseKey(k); return (d.getMonth() + 1) + '/' + d.getDate() + '（' + RM.DOW_JA[RM.dowOf(d) - 1] + '）'; }
+    function pos() { return RM.position(rd.start, today); }
+
+    /* ---------- 開始日 ---------- */
+    function startForm(lead) {
+      const def = rd.start || RM.nextMondayKey(today);
+      return '<div class="card"><h2>🗺 3か月ロードマップをはじめる</h2>' +
+        '<p class="muted" style="margin-bottom:0.75rem;">' + lead + '</p>' +
+        '<label class="muted" for="startDate">開始日</label>' +
+        '<input type="date" id="startDate" class="rm-date" value="' + def + '">' +
+        '<p class="muted" id="startHint" style="margin-bottom:0.75rem;"></p>' +
+        '<button class="btn" data-act="start">この日から始める</button>' +
+        '<button class="btn btn-secondary" data-act="startToday" style="margin-top:0.5rem;">今日（' + esc(fmt(today)) + '）から始める</button>' +
+        (rd.start ? '<button class="btn btn-secondary" data-act="cancelStart" style="margin-top:0.5rem;">変更しない</button>' : '') +
+        '</div>';
+    }
+    function updateStartHint() {
+      const el = $('startDate'), hint = $('startHint');
+      if (!el || !hint) return;
+      const d = RM.parseKey(el.value);
+      if (!d) { hint.textContent = '日付を選んでください。'; return; }
+      const dow = RM.dowOf(d);
+      hint.textContent = dow === 1 ? '月曜はじまりなので、第1週のカードを1日10枚ずつ進められます。' :
+        (dow >= 6 ? RM.DOW_JA[dow - 1] + '曜はじまりです。第1週は月曜から数えるので、実際の学習は次の月曜から始まります。' :
+          RM.DOW_JA[dow - 1] + '曜はじまりです。第1週のカード50枚を、残りの平日で均等に分けます。月曜はじまり（推奨）なら1日10枚です。');
+    }
+
+    /* ---------- 今日の画面 ---------- */
+    function dayChips(p) {
+      const dates = RM.weekDates(rd.start, p.week);
+      return '<div class="rm-days">' + dates.map((k, i) => {
+        let st = 'future';
+        if (k < rd.start) st = 'before';
+        else if (k <= today) st = RM.dayStatus({ dow: i + 1 }, rd.done[k], rd.skipped[k]);
+        const sym = k === today && st === 'none' ? '…' : SYM[st];
+        return '<div class="rm-day' + (k === today ? ' today' : '') + ' st-' + st + '"><span>' + RM.DOW_JA[i] + '</span><b>' + sym + '</b></div>';
+      }).join('') + '</div><div class="muted" style="font-size:0.72rem; margin-top:0.35rem;">◎ 全部できた　〇 最低ライン（朝＋昼）　✕ 捨てた　・ できなかった</div>';
+    }
+    function deckFor(kind, p) {
+      const b = cardsMap();
+      if (kind === 'lunch') {
+        const d = RM.lunchDeck(p, b, rd.start, rd.cardLog);
+        return d.new.map(c => ({ c, t: '新しい' })).concat(d.review.map(c => ({ c, t: p.buffer ? '復習' : '前日の復習' })), d.carry.map(c => ({ c, t: '再登場' })));
+      }
+      if (kind === 'week') return RM.weekDeck(b, p.week).map(c => ({ c, t: '通し' }));
+      if (kind === 'weak') return RM.weakDeck(b, rd.cardLog, p.week).map(c => ({ c, t: '印つき' }));
+      if (kind === 'check') return RM.checkDeck(b, p.month, today).map(c => ({ c, t: 'チェック' }));
+      return [];
+    }
+    const DECK_LABEL = { lunch: 'カード暗唱を始める', week: '今週のカードを通しで言う', weak: '言えなかったカードだけ言う', check: '月末チェックを始める' };
+    function slotHtml(s, done, p) {
+      const links = (s.links || []).map(k => {
+        const l = RM.LINKS[k];
+        return '<a class="tiny-btn rm-link" href="' + esc(l.href) + '"' + (l.ext ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + esc(l.label) + (l.ext ? ' ↗' : '') + '</a>';
+      }).join('');
+      let deckBtn = '';
+      if (s.deck) {
+        const n = deckFor(s.deck, p).length;
+        deckBtn = n ? '<button class="btn rm-deck" data-act="deck" data-deck="' + s.deck + '" data-slot="' + s.id + '">▶ ' + DECK_LABEL[s.deck] + '（' + n + '枚）</button>'
+          : '<p class="muted rm-nodeck">' + (s.deck === 'weak' ? '言えなかったカードはまだありません。' : 'この枠で使うカードがまだありません。') + '</p>';
+      }
+      return '<div class="rm-slot' + (done ? ' done' : '') + '">' +
+        '<button class="rm-check" data-act="toggle" data-id="' + s.id + '" aria-pressed="' + (done ? 'true' : 'false') + '" aria-label="' + esc(s.title) + 'を' + (done ? '未完了に戻す' : '完了にする') + '">' + (done ? '✔' : '') + '</button>' +
+        '<div class="rm-slot-body"><div class="muted">' + (ICON[s.id] || '') + ' ' + esc(s.when) + '</div><div class="rm-title">' + esc(s.title) + '</div>' +
+        (s.detail ? '<div class="muted">' + esc(s.detail) + '</div>' : '') +
+        (links ? '<div class="rm-links">' + links + '</div>' : '') + deckBtn + '</div></div>';
+    }
+    function renderToday() {
+      const box = $('viewToday');
+      if (editStart || !rd.start) {
+        box.innerHTML = startForm(rd.start ? '開始日を変えます。これまでの記録は消えません。' : '3か月（12週）の学習メニューを、毎日の「朝・昼・夜」に分けて出します。開始日を決めてください。');
+        updateStartHint();
+        return;
+      }
+      const p = pos();
+      if (p.state === 'before') {
+        box.innerHTML = '<div class="card next-step"><div class="countdown"><div class="lbl">' + esc(fmt(rd.start)) + ' に はじまります。あと</div><div class="num">' + p.daysUntil + '日</div></div>' +
+          '<p class="muted" style="text-align:center;">それまでに、第1週のカードを眺めておくのもおすすめです。</p></div>' +
+          '<button class="btn btn-secondary" data-act="editStart">開始日を変更する</button>';
+        return;
+      }
+      if (p.state === 'done') {
+        box.innerHTML = '<div class="card next-step"><h2>🎉 12週間、おつかれさまでした！</h2><p class="muted">週間一覧で、週ごとの記録と月末チェックを見返せます。</p></div>' +
+          '<button class="btn" data-act="tabWeeks">🗓 週間一覧を見る</button><button class="btn btn-secondary" data-act="editStart" style="margin-top:0.5rem;">開始日を変更する</button>';
+        return;
+      }
+      const W = RM.WEEKS[p.week - 1], M = RM.MONTHS[p.month - 1];
+      const b = cardsMap(), doneIds = rd.done[today] || [];
+      let slots = RM.planFor(p, b, rd.start);
+      if (minimal) slots = slots.filter(s => s.min);
+      const cards = b[p.week] || [];
+      const sc = RM.weekScore(b, p.week, rd.cardLog);
+      let html = '<div class="card next-step"><div class="muted">第' + p.week + '週 / 12　' + p.month + 'か月目「' + esc(M.name) + '」</div>' +
+        '<h2 style="margin:0.2rem 0 0.5rem;">' + esc(W.theme) + (W.buffer ? ' <span class="rm-badge">バッファー</span>' : '') + '</h2>' +
+        '<div class="progress-bar-container" style="margin-bottom:0.5rem;"><div class="progress-bar-fill" style="width:' + Math.round((p.week - 1) / 12 * 100 + (p.dow / 7) / 12 * 100) + '%"></div></div>' +
+        '<div class="muted">' + esc(W.focus) + '</div>' + dayChips(p) + '</div>';
+      if (W.buffer) html += '<div class="notice" style="background:#ecfeff; color:#155e75;">今週は調整週です。新しい内容は入れず、復習・録音の聞き返し・書き直しだけにします。</div>';
+      html += '<div class="section-title" style="margin-top:0;">' + esc(RM.DOW_JA[p.dow - 1]) + '曜日（' + esc(fmt(today).split('（')[0]) + '）のメニュー' + (minimal ? ' ― 最低ライン' : '') + '</div>';
+      html += slots.map(s => slotHtml(s, doneIds.includes(s.id), p)).join('');
+      if (!W.buffer && !cards.length) html += '<div class="notice">第' + p.week + '週のカードがまだありません。別のチャットで作ったカードのJSONを、<a href="index.html">ホーム</a>の「バックアップ読み込み」から<b>統合</b>で取り込むと、ここに自動で並びます。</div>';
+      html += '<div class="bar-row" style="display:flex; gap:6px; margin:0.75rem 0;">' +
+        '<button class="tiny-btn" data-act="minimal" aria-pressed="' + minimal + '">' + (minimal ? '全部のメニューを見る' : '⏱ 時間がない日（最低ラインだけ）') + '</button>' +
+        '<button class="tiny-btn" data-act="skip">' + (rd.skipped[today] ? '↩︎ 「捨てた」を取り消す' : '🗑 今日の残りは捨てる') + '</button></div>';
+      html += '<p class="muted" style="margin-bottom:1rem;">最低ラインは「朝の単語＋昼のカード」です。できなかった分は翌週に詰め込まず、捨てて大丈夫です。</p>';
+      if (cards.length) {
+        html += '<div class="card"><h2>📈 今週のカード</h2><div class="muted">' + cards.length + '枚 ・ 3秒以内に言えた：<b>' + sc.said + '/' + sc.tried + '</b>' + (sc.tried ? '（' + sc.pct + '%）' : '') +
+          '　目標 ' + RM.PASS_RATE + '%</div>';
+        const missing = cards.filter(c => !EA.hasPhrase(c.en)).length;
+        if (missing) html += '<button class="btn btn-secondary" data-act="addCards" style="margin-top:0.75rem; font-size:0.9rem;">➕ 第' + p.week + '週のカード' + missing + '枚を「単語」に追加（クイズ・復習で使える）</button>';
+        html += '</div>';
+      }
+      box.innerHTML = html;
+    }
+
+    /* ---------- 週間一覧 ---------- */
+    function renderWeeks() {
+      const box = $('viewWeeks'), p = rd.start ? pos() : { state: 'unset' };
+      const b = cardsMap();
+      let html = '';
+      if (rd.start) html += '<div class="card"><div class="muted">開始日：<b>' + esc(fmt(rd.start)) + '</b></div><button class="tiny-btn" data-act="editStart" style="margin-top:0.5rem;">開始日を変更</button></div>';
+      else html += '<div class="notice">開始日がまだ決まっていません。「今日のメニュー」から設定してください。</div>';
+      [1, 2, 3].forEach(m => {
+        const M = RM.MONTHS[m - 1], ch = rd.checks[String(m)];
+        html += '<div class="section-title">' + m + 'か月目：' + esc(M.name) + '</div><p class="muted" style="margin-bottom:0.5rem;">' + esc(M.goal) + '</p>';
+        if (ch) html += '<p class="muted" style="margin-bottom:0.5rem;">✅ 月末チェック：<b>' + ch.said + '/' + ch.total + '</b>（' + Math.round(ch.said * 100 / Math.max(1, ch.total)) + '%）　' + esc(fmt(ch.d)) + '</p>';
+        for (let w = 4 * (m - 1) + 1; w <= 4 * m; w++) {
+          const W = RM.WEEKS[w - 1], cur = p.state === 'active' && p.week === w;
+          const sc = RM.weekScore(b, w, rd.cardLog), n = (b[w] || []).length;
+          let days = '';
+          if (rd.start) {
+            const dates = RM.weekDates(rd.start, w);
+            days = '<div class="rm-days" style="margin-top:0.5rem;">' + dates.map((k, i) => {
+              let st = 'future';
+              if (k < rd.start) st = 'before'; else if (k <= today) st = RM.dayStatus({ dow: i + 1 }, rd.done[k], rd.skipped[k]);
+              return '<div class="rm-day st-' + st + (k === today ? ' today' : '') + '"><span>' + RM.DOW_JA[i] + '</span><b>' + SYM[st] + '</b></div>';
+            }).join('') + '</div>';
+          }
+          html += '<details class="day rm-week' + (W.buffer ? ' buffer' : '') + '"' + (cur ? ' open' : '') + '><summary style="padding:0.75rem 1rem; cursor:pointer;">' +
+            '<b>第' + w + '週</b>　' + esc(W.theme) + (cur ? ' <span class="rm-badge now">今週</span>' : '') + (W.buffer ? ' <span class="rm-badge">バッファー</span>' : '') + '</summary>' +
+            '<div style="padding:0 1rem 1rem;"><div class="muted">' + esc(W.focus) + '</div>' +
+            '<div class="muted" style="margin-top:0.4rem;">' + (W.buffer ? '新しいカードは入れません（月のカードを復習）' : (n ? 'カード ' + n + '枚' : 'カードはまだありません（JSONの取り込み待ち）')) +
+            (sc.tried ? ' ・ 言えた <b>' + sc.said + '/' + sc.tried + '</b>（' + sc.pct + '%）' : '') + '</div>' + days + '</div></details>';
+        }
+      });
+      html += '<div class="card" style="margin-top:1rem;"><h2>🕒 1日の型</h2><div class="muted" style="line-height:1.8;">' +
+        '<b>朝</b>　単語35個の復習＋単語アプリ5分<br><b>昼</b>　その日の型カード（8〜10枚）を3秒以内に言う → 音読×3<br>' +
+        '<b>夜（月）</b>読解　<b>（火）</b>構文暗唱　<b>（水）</b>リスニング　<b>（木）</b>ライティング　<b>（金）</b>復習<br>' +
+        '<b>土</b>　読解＋表現抽出／気持ちを3行 → 英語に／印つきカードの暗唱<br><b>日</b>　30秒の独り言を録音／彼女宛てメッセージ</div></div>';
+      html += '<div class="card"><h2>💬 深い話題の学び方（週1テーマ）</h2><ol class="muted" style="padding-left:1.2rem; margin-bottom:0.75rem;">' +
+        RM.DEEP.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol>' +
+        RM.DEEP.patterns.map(x => '<div class="item-row"><div class="muted">' + esc(x[0]) + '</div><div class="en-text">' + esc(x[1]) + '</div></div>').join('') + '</div>';
+      box.innerHTML = html;
+    }
+
+    /* ---------- カード暗唱（3秒チャレンジ） ---------- */
+    function startRun(kind, slotId, cards) {
+      const p = pos();
+      if (p.state !== 'active') return;
+      cards = cards || deckFor(kind, p);
+      if (!cards.length) { EA.toast('対象のカードがありません'); return; }
+      run = { kind, slot: slotId, cards, i: 0, results: [], revealed: false };
+      renderRun();
+      $('runBox').scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+    function itemFor(c) {
+      const k = c.en.toLowerCase();
+      return EA.getAllPhrases().find(x => x[1].toLowerCase() === k) || [EA.CUSTOM_CAT, c.en, c.ja, ''];
+    }
+    function renderRun() {
+      const box = $('runBox');
+      if (!run) { box.style.display = 'none'; box.innerHTML = ''; return; }
+      box.style.display = '';
+      const title = { lunch: '昼のカード暗唱', week: '今週のカードを通しで', weak: '言えなかったカードだけ', check: '月末チェック' }[run.kind];
+      if (run.i >= run.cards.length) {
+        const said = run.results.filter(r => r.ok).length, ng = run.results.filter(r => !r.ok);
+        box.innerHTML = '<h2>🎉 ' + esc(title) + ' おわり</h2><div class="stats-grid" style="margin-bottom:1rem;"><div><div class="stat-number">' + said + '/' + run.results.length +
+          '</div><div class="stat-label">3秒以内に言えた</div></div><div><div class="stat-number">' + Math.round(said * 100 / run.results.length) + '%</div><div class="stat-label">目標 ' + RM.PASS_RATE + '%</div></div></div>' +
+          (ng.length ? '<div class="muted" style="margin-bottom:0.5rem;">言えなかったカード（翌週の昼にもう一度出ます）</div>' + ng.map(r => '<div class="item-row"><div class="en-text">' + esc(r.c.en) + '</div><div class="ja-text muted">' + esc(r.c.ja) + '</div></div>').join('') : '<p class="muted">全部言えました！</p>') +
+          '<div style="display:flex; gap:8px; margin-top:0.75rem;">' + (ng.length ? '<button class="btn btn-secondary" data-act="retry" style="flex:1;">言えなかった分だけ もう一度</button>' : '') +
+          '<button class="btn" data-act="closeRun" style="flex:1;">閉じる</button></div>';
+        return;
+      }
+      const cur = run.cards[run.i], c = cur.c;
+      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;"><span class="muted">' + esc(title) + ' ・ ' + (run.i + 1) + '/' + run.cards.length +
+        ' <span class="rm-badge">' + esc(cur.t) + '</span></span><button class="tiny-btn" data-act="closeRun">✕ やめる</button></div>' +
+        '<div class="rm-ja">' + esc(c.ja) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill" id="timerFill"></div></div>' +
+        '<p class="muted" style="text-align:center;">日本語を見て、3秒以内に声に出して言ってみよう</p>' +
+        '<div id="revealArea" style="display:none;"><div class="rm-en" id="enText">' + esc(c.en) + '</div>' + (c.tag ? '<div class="muted" style="text-align:center;">' + esc(c.tag) + '</div>' : '') +
+        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button></div>' +
+        '<div class="word-chips" id="chips"></div><div class="mini-score" id="micScore" style="text-align:center;"></div>' +
+        '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-act="ok" style="background:#16a34a; flex:1;">⭕ 3秒以内に言えた</button><button class="btn" data-act="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
+        '<button class="btn" data-act="reveal" id="revealBtn">答えを見る</button>';
+      const f = $('timerFill');
+      f.style.transition = 'none'; f.style.width = '100%'; void f.offsetWidth;
+      f.style.transition = 'width 3s linear'; f.style.width = '0%';
+    }
+    function revealCard() {
+      if (!run || run.i >= run.cards.length) return;
+      const c = run.cards[run.i].c;
+      $('revealArea').style.display = ''; $('revealBtn').style.display = 'none';
+      $('playEn').onclick = () => EA.speak(c.en, 'en-US', 1);
+      $('slowEn').onclick = () => EA.speak(c.en, 'en-US', 0.7);
+      EA.attachPronunciation($('micBtn'), () => c.en, {
+        onResult: r => { EA.renderChips($('chips'), r.words); $('micScore').textContent = r.score + '点（' + (r.score >= EA.PASS_SCORE ? '合格！' : 'もう一度') + '）'; EA.countSpeak(); },
+        onError: m => { $('micScore').textContent = m; }
+      });
+    }
+    function answer(ok) {
+      if (!run || run.i >= run.cards.length) return;
+      const c = run.cards[run.i].c;
+      run.results.push({ c, ok });
+      update(r => { r.cardLog[c.en] = { ok, d: today, w: c.w }; });
+      EA.recordResult(itemFor(c), ok, 'recall');
+      run.i += 1;
+      if (run.i >= run.cards.length) finishRun();
+      renderRun();
+    }
+    function finishRun() {
+      const said = run.results.filter(r => r.ok).length, total = run.results.length;
+      update(r => {
+        if (run.slot) { r.done[today] = Array.from(new Set((r.done[today] || []).concat(run.slot))); }
+        if (run.kind === 'check') { const p = pos(); r.checks[String(p.month)] = { said, total, d: today }; }
+      });
+      touchToday();
+      renderToday();
+    }
+
+    /* ---------- クリック処理 ---------- */
+    document.addEventListener('click', e => {
+      const t = e.target.closest('[data-act], [data-tab]');
+      if (!t) return;
+      if (t.dataset.tab) { setTab(t.dataset.tab); return; }
+      const a = t.dataset.act;
+      if (a === 'start' || a === 'startToday') {
+        const v = a === 'startToday' ? today : ($('startDate').value || '');
+        if (!RM.parseKey(v)) { EA.toast('日付を選んでください'); return; }
+        update(r => { r.start = v; }); editStart = false; render(); return;
+      }
+      if (a === 'cancelStart') { editStart = false; render(); return; }
+      if (a === 'editStart') { editStart = true; setTab('today'); return; }
+      if (a === 'tabWeeks') { setTab('weeks'); return; }
+      if (a === 'toggle') {
+        const id = t.dataset.id;
+        update(r => {
+          const cur = r.done[today] || [], i = cur.indexOf(id);
+          if (i >= 0) cur.splice(i, 1); else cur.push(id);
+          if (cur.length) r.done[today] = cur; else delete r.done[today];
+        });
+        if ((rd.done[today] || []).includes(id)) touchToday();
+        render(); return;
+      }
+      if (a === 'minimal') { minimal = !minimal; renderToday(); return; }
+      if (a === 'skip') { update(r => { if (r.skipped[today]) delete r.skipped[today]; else r.skipped[today] = true; }); renderToday(); EA.toast(rd.skipped[today] ? '今日の残りは捨てました。明日また！' : '取り消しました'); return; }
+      if (a === 'deck') { startRun(t.dataset.deck, t.dataset.slot); return; }
+      if (a === 'reveal') { revealCard(); return; }
+      if (a === 'ok') { answer(true); return; }
+      if (a === 'ng') { answer(false); return; }
+      if (a === 'closeRun') { run = null; renderRun(); return; }
+      if (a === 'retry') {
+        const miss = run.results.filter(r => !r.ok).map(r => ({ c: r.c, t: '再挑戦' }));
+        const kind = run.kind, slot = run.slot;
+        run = null; startRun(kind === 'check' ? 'weak' : kind, slot, miss); return;
+      }
+      if (a === 'addCards') {
+        const p = pos(); let n = 0;
+        (cardsMap()[p.week] || []).forEach(c => { const r = EA.addCustomPhrase(c.en, c.ja, '第' + p.week + '週カード' + c.num + (c.tag ? '（' + c.tag + '）' : '')); if (r.added) n++; });
+        EA.toast(n + '枚を追加しました'); renderToday(); return;
+      }
+    });
+    document.addEventListener('input', e => { if (e.target && e.target.id === 'startDate') updateStartHint(); });
+
+    function setTab(name) {
+      tab = name;
+      document.querySelectorAll('#tabChips .chip').forEach(c => c.classList.toggle('active', c.dataset.tab === name));
+      render();
+    }
+    function render() {
+      $('viewToday').style.display = tab === 'today' ? '' : 'none';
+      $('viewWeeks').style.display = tab === 'weeks' ? '' : 'none';
+      if (tab === 'today') renderToday(); else renderWeeks();
+    }
+    render();
+    EA.updateStreakBadge();
+
+  </script>
+</body>
+</html>

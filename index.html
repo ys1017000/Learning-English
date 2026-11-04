@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=6">
+  <link rel="stylesheet" href="common.css?v=7">
 </head>
 <body>
   <header>
@@ -15,6 +15,10 @@
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
   <div class="container">
+    <div class="card" id="roadCard" style="border-color:#a5b4fc;">
+      <h2>🗺 今日の学習メニュー</h2>
+      <div id="roadBody"></div>
+    </div>
     <div class="card next-step" id="nextCard">
       <h2>📅 次に会う日</h2>
       <div id="nextBody"></div>
@@ -44,6 +48,7 @@
     </div>
     <div class="section-title">✍️ 練習</div>
     <div class="nav-buttons-grid">
+      <a href="roadmap.html" class="nav-card-btn" style="background:#e0e7ff; border-color:#6366f1; color:#3730a3;"><span class="icon">🗺</span><span>ロードマップ</span></a>
       <a href="quiz.html" class="nav-card-btn"><span class="icon">❓</span><span>クイズ (10問)</span></a>
       <a href="writing.html" class="nav-card-btn"><span class="icon">✍️</span><span>英作文</span></a>
       <a href="speaking.html" class="nav-card-btn"><span class="icon">🎙️</span><span>発音チェック</span></a>
@@ -117,7 +122,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=6"></script>
+  <script src="common.js?v=7"></script>
+  <script src="roadmap-data.js?v=7"></script>
   <script>
     let viewDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // 月初固定（31日からの月送りで飛ぶのを防ぐ）
 
@@ -135,6 +141,7 @@
       renderWeaknesses();
       renderDue();
       renderNext();
+      renderRoad();
     }
 
     function renderCalendar(history) {
@@ -210,6 +217,23 @@
       document.getElementById('dueSummary').textContent = n
         ? '復習の時期が来たフレーズが ' + n + ' 件あります。正解するほど次の出題までの間隔が延びていきます。'
         : '今日復習するフレーズはありません。練習したフレーズは、忘れかけたころにここへ戻ってきます。';
+    }
+
+    function renderRoad() {
+      const box = document.getElementById('roadBody');
+      const rd = EA.getRoadmap(), today = EA.dateKey(), p = RM.position(rd.start, today);
+      if (!rd.start) {
+        box.innerHTML = '<p class="muted" style="margin-bottom:0.75rem;">12週間の学習メニューを、毎日の「朝・昼・夜」に分けて出します。</p><a href="roadmap.html" class="btn">🗺 ロードマップをはじめる</a>';
+      } else if (p.state === 'before') {
+        box.innerHTML = '<p class="muted" style="margin-bottom:0.75rem;">開始まであと ' + p.daysUntil + ' 日です。</p><a href="roadmap.html" class="btn">🗺 ロードマップを開く</a>';
+      } else if (p.state === 'done') {
+        box.innerHTML = '<p class="muted" style="margin-bottom:0.75rem;">12週間おつかれさまでした！</p><a href="roadmap.html" class="btn">🗓 記録を見る</a>';
+      } else {
+        const W = RM.WEEKS[p.week - 1], slots = RM.planFor(p, RM.cardsByWeek(EA.getCustomPhrases()), rd.start), done = rd.done[today] || [];
+        box.innerHTML = '<div class="muted">第' + p.week + '週 / 12 ・ ' + EA.esc(W.theme) + '</div>' +
+          '<div class="rm-home-slots">' + slots.map(s => '<span class="' + (done.includes(s.id) ? 'done' : '') + '">' + (done.includes(s.id) ? '✔ ' : '') + EA.esc(s.when) + '</span>').join('') + '</div>' +
+          '<a href="roadmap.html" class="btn">▶ 今日のメニューを開く</a>';
+      }
     }
 
     function renderNext() {
