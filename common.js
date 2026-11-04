@@ -65,7 +65,23 @@
       ["会話フレーズ", "I'm going out for drinks with my coworkers on Friday.", "金曜日に同僚と飲みに行くんだ。（go out for drinks with someone）"],
       ["会話フレーズ", "No, sorry, I didn't mean that. That was a poor choice of words.", "いや、ごめん、そういう意味じゃなくて。言い方が悪かったね。"],
       ["語彙・コロケーション", "I've been doing a lot of overtime this week.", "今週は残業がかなり多いんだ。（overtime: 残業）"],
-      ["語彙・コロケーション", "renew my driver's license", "運転免許を更新する"]
+      ["語彙・コロケーション", "renew my driver's license", "運転免許を更新する"],
+      ["語彙・コロケーション", "work on my presentation", "プレゼンの準備に取り組む（work on ～：～に取り組む）", "I'm working on my presentation tonight."],
+      ["語彙・コロケーション", "take a break", "休憩する（take a break：休憩を取る）", "Let's take a break for a minute."],
+      ["語彙・コロケーション", "take breaks regularly", "こまめに休憩を取る（take breaks：何度も休憩する）", "Try to take breaks regularly while you work."],
+      ["語彙・コロケーション", "cheer someone on", "（人を）応援する（cheer someone on）", "I'll be cheering you on all the way."],
+      ["語彙・コロケーション", "look for some cafes", "カフェを探す（look for ～：～を探す）", "We're looking for some cafes nearby."],
+      ["語彙・コロケーション", "Let me know.", "教えてね。（let me know：私に知らせてね）", "Just let me know when you're ready."],
+      ["語彙・コロケーション", "anything you'd like to eat", "食べたいものなんでも（anything you'd like：あなたが～したいもの）", "Is there anything you'd like to eat tonight?"],
+      ["文法・表現パターン", "Let's meet in Naka-Meguro.", "中目黒で会おう。（Let's meet in ～：～で会おう）"],
+      ["文法・表現パターン", "I'll look for some cafes.", "これからカフェを探すね。（I'll + 動詞：これから～するね）"],
+      ["文法・表現パターン", "Let me know if you'd like anything.", "何かほしいものがあったら教えてね。（Let me know if ～：もし～なら教えてね）"],
+      ["文法・表現パターン", "I hope you're getting some breaks.", "ちゃんと休憩できてるといいな。（I hope you're ～ing：今～しているといいな）"],
+      ["文法・表現パターン", "while working on your presentation", "プレゼンの準備をしている間に（while + ～ing：～している間に）"],
+      ["実践フレーズ", "I hope you're getting some breaks while working on your presentation.", "プレゼンの準備中も、ちゃんと休憩できてるといいな。"],
+      ["実践フレーズ", "I'll look for some restaurants and cafes.", "レストランやカフェを探してみるね。"],
+      ["実践フレーズ", "Let me know if there's anything you'd like to eat!", "何か食べたいものがあったら教えてね！"],
+      ["実践フレーズ", "Good luck with your presentation!", "プレゼン頑張ってね！（Good luck with ～：～がうまくいくといいね）"]
   ];
 
   const KEY_DATA = 'english_app_data';
@@ -635,6 +651,7 @@
     always: 'オールウェイズ', dinner: 'ディナー', bill: 'ビル', split: 'スプリット', cheers: 'チアーズ', toast: 'トウスト', recommends: 'レコメンズ',
     starving: 'スターヴィング', hungry: 'ハングリー', knife: 'ナイフ', knives: 'ナイヴズ', onions: 'アニオンズ', drawer: 'ドローア', careful: 'ケアフル',
     matching: 'マッチング', lemonade: 'レモネイド', pasta: 'パースタ', mild: 'マイルド', directions: 'ディレクションズ', across: 'アクロス', blocks: 'ブロックス',
+    presentation: 'プレゼンテイション', restaurants: 'レストランツ', restaurant: 'レストラント', cafes: 'キャフェイズ', breaks: 'ブレイクス', luck: 'ラック', cheering: 'チアリング',
     available: 'アヴェイラブル', convenient: 'コンヴィーニエント', exactly: 'イグザクトリ', certainly: 'サートゥンリー', fortunate: 'フォーチュネット', lucky: 'ラッキー'
   };
   // 英文に含まれる難しめの単語 → [単語, カタカナ] の配列
