@@ -460,7 +460,7 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 6,   // v6: 英語日記に翻訳の参考(ref)を追加
+      version: 7,   // v6: 英語日記に翻訳の参考(ref)を追加 / v7: DMノート(dmNotes)を追加
       exportedAt: new Date().toISOString(),
       data: getStore(),
       customPhrases: getCustomPhrases(),
@@ -474,7 +474,8 @@
       diary: getDiary(),
       meetings: getMeetings(),
       nihongo: getNihongo(),
-      roadmap: getRoadmap()
+      roadmap: getRoadmap(),
+      dmNotes: getDmNotes()
     };
   }
   function downloadBackup() {
@@ -519,6 +520,10 @@
     if (!obj || obj.app !== BACKUP_APP_ID || typeof obj.data !== 'object') {
       throw new Error('このアプリのバックアップファイルではありません。');
     }
+    // 追加用ファイル（Claudeが作った表現・DMの取り込みなど）は、置き換えると今のデータが消えるので統合だけにする
+    if (obj.partial && mode === 'replace') {
+      throw new Error('このファイルは「追加用」です。「統合」で読み込んでください（置き換えると今のデータが消えます）。');
+    }
     const inc = normalizeStore(obj.data);
     const incCustom = sanitizeCustom(obj.customPhrases);
     const incTalk = sanitizeTalk(obj.talkLog);
@@ -526,12 +531,15 @@
     const incProfile = sanitizeProfile(obj.profile), incLetters = sanitizeLetters(obj.letters), incDiary = sanitizeDiary(obj.diary), incMeet = sanitizeMeetings(obj.meetings), incNi = sanitizeNihongo(obj.nihongo);
     const hasRoad = obj.roadmap && typeof obj.roadmap === 'object';   // v4以前のバックアップには無いので、今の進捗をそのまま残す
     const incRoad = sanitizeRoadmap(obj.roadmap);
-    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo, road;
+    const hasDm = Array.isArray(obj.dmNotes);   // v6以前のバックアップには無いので、今のDMノートをそのまま残す
+    const incDm = sanitizeDmNotes(obj.dmNotes);
+    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo, road, dm;
     if (mode === 'replace') {
       store = inc; custom = incCustom; talk = incTalk;
       pins = incPins; keeps = incKeeps; lists = incLists; plan = incPlan;
       profile = incProfile; letters = incLetters; diary = incDiary; meetings = incMeet; nihongo = incNi;
       road = hasRoad ? incRoad : getRoadmap();
+      dm = hasDm ? incDm : getDmNotes();
     } else {
       const cur = getStore();
       store = {
@@ -567,10 +575,11 @@
       meetings = sanitizeMeetings(getMeetings().concat(incMeet));
       nihongo = sanitizeNihongo({ learned: getNihongo().learned.concat(incNi.learned) });
       road = mergeRoadmap(getRoadmap(), incRoad);
+      dm = sanitizeDmNotes(getDmNotes().concat(incDm));
     }
-    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo) && saveRoadmap(road);
+    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo) && saveRoadmap(road) && saveDmNotes(dm);
     if (!okAll) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
-    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length, diary: diary.length, letters: letters.length };
+    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length, diary: diary.length, letters: letters.length, dm: dm.length };
   }
 
 
@@ -997,6 +1006,41 @@
     return saveMeetings(list);
   }
 
+  /* ---------- DMノート（相手からのDMと、そこから学んだ表現・返信の下書き） ---------- */
+  // { id, t: 保存時刻, u: 更新時刻, d: 受け取った日(YYYY-MM-DD), text: DM原文, memo, tr: [文ごとの日本語訳], items: [{en, ja}] 保存した表現, reply: 返信の下書き, c: Claude用にコピー済み }
+  const KEY_DM = 'english_app_dmnotes';
+  function sanitizeDmNotes(list) {
+    const map = new Map();
+    (Array.isArray(list) ? list : []).forEach(n => {
+      if (!n || typeof n !== 'object' || typeof n.text !== 'string') return;
+      const id = String(n.id || ''), text = n.text.trim().slice(0, 4000);
+      if (!id || !text) return;
+      const e = { id, t: Number(n.t) || Date.now(), u: Number(n.u) || Number(n.t) || 0,
+        d: parseKey(n.d) ? n.d : dateKey(new Date(Number(n.t) || Date.now())), text,
+        memo: typeof n.memo === 'string' ? n.memo.trim().slice(0, 500) : '',
+        tr: (Array.isArray(n.tr) ? n.tr : []).slice(0, 80).map(x => typeof x === 'string' ? x.slice(0, 600) : ''),
+        items: (Array.isArray(n.items) ? n.items : []).filter(x => x && typeof x.en === 'string' && x.en.trim())
+          .map(x => ({ en: x.en.trim().slice(0, 300), ja: typeof x.ja === 'string' ? x.ja.trim().slice(0, 300) : '' })).slice(0, 60),
+        reply: typeof n.reply === 'string' ? n.reply.slice(0, 2000) : '', c: !!n.c };
+      const x = map.get(id);
+      if (!x) { map.set(id, e); return; }
+      // 同じDMが重なったら（統合読み込み）、新しく更新された方を基本にして、訳・保存した表現は足し合わせる
+      const base = e.u > x.u ? e : x, other = base === e ? x : e;
+      other.tr.forEach((v, i) => { if (v && !base.tr[i]) base.tr[i] = v; });
+      for (let i = 0; i < base.tr.length; i++) if (typeof base.tr[i] !== 'string') base.tr[i] = '';
+      other.items.forEach(it => { if (!base.items.some(b => b.en.toLowerCase() === it.en.toLowerCase())) base.items.push(it); });
+      if (!base.reply) base.reply = other.reply;
+      if (!base.memo) base.memo = other.memo;
+      base.c = base.c || other.c;
+      map.set(id, base);
+    });
+    const out = Array.from(map.values());
+    out.sort((a, b) => (b.d < a.d ? -1 : b.d > a.d ? 1 : b.t - a.t));
+    return out.slice(0, 300);
+  }
+  function getDmNotes() { return sanitizeDmNotes(loadJSON(KEY_DM, [])); }
+  function saveDmNotes(list) { return safeSet(KEY_DM, JSON.stringify(sanitizeDmNotes(list))); }
+
   /* ---------- 発音練習ボタン（各ページ共通） ---------- */
   let activeRec = null;
   // btn にマイク機能を結びつける。getRef() は照合する英文。handlers: { onResult(result), onInterim(text), onError(msg), onState(on) }
@@ -1050,7 +1094,8 @@
     getLists, saveLists, getPlan, savePlan, clearPlan,
     attachPronunciation, renderChips, PASS_SCORE,
     getProfile, saveProfile, getLetters, saveLetters, getDiary, saveDiary, addDiaryEntry, MOODS,
-    getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId
+    getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId,
+    getDmNotes, saveDmNotes
   };
 
   document.addEventListener('DOMContentLoaded', updateStreakBadge);

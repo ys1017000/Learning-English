@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - DMノート</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=9">
+  <style>
+    /* DMノート */
+    .dm-sec { font-size: 0.8rem; font-weight: bold; color: #4338ca; margin: 0.9rem 0 0.35rem; }
+    .dm-sec .muted { font-weight: normal; }
+    .dm-orig { background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 12px 12px 12px 4px; padding: 0.7rem 0.8rem; white-space: pre-wrap; word-break: break-word; font-size: 0.95rem; line-height: 1.55; }
+    .dm-item { border: 1px solid var(--border); border-radius: var(--radius); background: var(--card-bg); margin-bottom: 0.75rem; }
+    .dm-item > summary { padding: 0.8rem 1rem; cursor: pointer; list-style: none; }
+    .dm-item > summary::-webkit-details-marker { display: none; }
+    .dm-item > summary .d { font-size: 0.75rem; color: var(--text-muted); }
+    .dm-item > summary .p { font-size: 0.92rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .dm-body { padding: 0 1rem 1rem; }
+    .dm-sent { border-top: 1px dashed var(--border); padding: 0.5rem 0; }
+    .dm-sent:first-child { border-top: none; }
+    .dm-sent .en { font-size: 0.95rem; word-break: break-word; }
+    .dm-sent .ja { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .dm-row { display: flex; flex-wrap: wrap; gap: 2px; align-items: center; margin-top: 0.15rem; }
+    .dm-pat { border: 1px solid #c7d2fe; background: #eef2ff; border-radius: 10px; padding: 0.55rem 0.7rem; margin-bottom: 0.45rem; }
+    .dm-pat.de { border-color: #fde68a; background: #fffbeb; }
+    .dm-pat.word { border-color: #bbf7d0; background: #f0fdf4; }
+    .dm-pat .en { font-weight: 700; word-break: break-word; }
+    .dm-pat .ja { font-size: 0.85rem; }
+    .dm-pat .nt { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .dm-pat .src { font-size: 0.78rem; color: #475569; margin-top: 0.2rem; font-style: italic; word-break: break-word; }
+    .dm-kind { display: inline-block; font-size: 0.68rem; font-weight: bold; border-radius: 999px; padding: 1px 7px; margin-right: 4px; vertical-align: 1px; background: #4f46e5; color: #fff; }
+    .dm-kind.de { background: #b45309; }
+    .dm-kind.word { background: #15803d; }
+    .dm-reply { display: flex; gap: 6px; align-items: flex-start; border-top: 1px dashed var(--border); padding: 0.45rem 0; }
+    .dm-reply:first-of-type { border-top: none; }
+    .dm-reply .txt { flex: 1; min-width: 0; }
+    .dm-reply .en { font-weight: 600; word-break: break-word; }
+    .dm-reply .ja { font-size: 0.8rem; color: var(--text-muted); }
+    .dm-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 0.3rem; }
+    .dm-tag { font-size: 0.7rem; background: #f1f5f9; border-radius: 999px; padding: 1px 8px; color: #475569; }
+    .dm-stat { display: flex; justify-content: space-between; gap: 8px; align-items: center; padding: 0.4rem 0; border-top: 1px dashed var(--border); cursor: pointer; }
+    .dm-stat:first-child { border-top: none; }
+    .dm-stat .en { font-weight: 600; font-size: 0.9rem; word-break: break-word; min-width: 0; }
+    .dm-stat .n { font-size: 0.78rem; color: var(--text-muted); white-space: nowrap; }
+    .dm-emo { display: flex; flex-wrap: wrap; gap: 6px; }
+    .dm-emo span { background: #fff; border: 1px solid var(--border); border-radius: 999px; padding: 2px 9px; font-size: 0.95rem; }
+    .dm-emo small { font-size: 0.72rem; color: var(--text-muted); margin-left: 2px; }
+    .dm-note { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.6rem 0.8rem; margin-bottom: 0.5rem; }
+    .dm-note b { font-size: 0.85rem; }
+    .dm-note ul { margin: 0.3rem 0 0 1.1rem; padding: 0; font-size: 0.82rem; }
+    .dm-note li { margin-bottom: 0.2rem; }
+    .dm-check { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 10px; padding: 0.6rem 0.8rem; margin: 0.3rem 0 0.5rem; font-size: 0.9rem; white-space: pre-wrap; word-break: break-word; }
+    .dm-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .dm-btns .tiny-btn { font-size: 0.8rem; padding: 5px 12px; }
+    .dm-fold > summary { cursor: pointer; list-style: none; }
+    .dm-fold > summary::-webkit-details-marker { display: none; }
+    .dm-fold > summary::before { content: '▶ '; font-size: 0.7rem; }
+    .dm-fold[open] > summary::before { content: '▼ '; }
+    .dm-detail { display: none; }
+    .dm-detail.on { display: block; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="recap.html">📝 会話</a>
+    <a href="diary.html">📔 日記</a>
+    <a href="dmnote.html" class="active" aria-current="page">📩 DM</a>
+    <a href="report.html">🏆 成果</a>
+    <a href="keepsake.html">💝 言葉</a>
+  </div>
+  <div class="container">
+    <div class="card">
+      <h2>📩 もらったDMを貼る</h2>
+      <p class="muted" style="margin-bottom:0.5rem;">インスタなどでもらったメッセージをそのまま貼ると、よく使う型・ドイツ語っぽい言い方・返信のヒントを出します。</p>
+      <label class="muted" for="dateInput">受け取った日</label>
+      <input type="date" id="dateInput" aria-label="受け取った日" style="width:100%; padding:0.6rem; border:1px solid var(--border); border-radius:8px; font-size:1rem; margin:0.2rem 0 0.75rem; font-family:inherit; background:#fff;">
+      <textarea id="textInput" placeholder="ここにDMを貼り付け" aria-label="DMの本文" spellcheck="false" style="height:140px;"></textarea>
+      <input type="text" id="memoInput" placeholder="メモ（任意）例: 今夜の予定をキャンセル" aria-label="メモ">
+      <button class="btn" id="addBtn">🔎 保存して分析する</button>
+    </div>
+
+    <div class="card" id="trendCard">
+      <h2 id="trendTitle">📊 相手の英語の傾向</h2>
+      <div id="trendBox"></div>
+    </div>
+
+    <div class="muted" id="countInfo" style="margin:0 0 0.5rem;"></div>
+    <div id="dmList"></div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
+    <a href="quiz.html">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=9"></script>
+  <script src="dm-data.js?v=1"></script>
+  <script>
+    const KIND = { form: ['型', ''], de: ['ドイツ語っぽい', 'de'], word: ['単語', 'word'] };
+    const EMOJI_RE = /\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic}️?)*/gu;
+    let openId = null;   // 開いているDM（再描画しても開いたままにする）
+
+    /* ---- 文字の下ごしらえ ---- */
+    const norm = s => String(s || '').replace(/[’‘`´]/g, "'").replace(/[“”]/g, '"');
+    const stripEmoji = s => norm(s).replace(EMOJI_RE, '').replace(/[️‍]/g, '').replace(/\s+/g, ' ').trim();
+    const mdLabel = d => { const k = EA.parseKey(d); return k ? (k.getMonth() + 1) + '/' + k.getDate() : d; };
+    const fmtDate = d => { const k = EA.parseKey(d); return k ? k.getFullYear() + '/' + (k.getMonth() + 1) + '/' + k.getDate() + '（' + '日月火水木金土'[k.getDay()] + '）' : d; };
+
+    // 文に分ける。文末の絵文字は前の文に付ける
+    function splitSentences(text) {
+      const out = [];
+      String(text).split(/\n+/).forEach(line => {
+        line = line.trim(); if (!line) return;
+        const parts = line.split(/([.!?…]+)\s+/);
+        const sents = [];
+        for (let i = 0; i < parts.length; i += 2) { const s = (parts[i] || '') + (parts[i + 1] || ''); if (s.trim()) sents.push(s.trim()); }
+        for (let i = 1; i < sents.length; i++) {
+          const m = /^[^A-Za-z0-9"'‘’“(]+/.exec(sents[i]);
+          if (m) { sents[i - 1] += ' ' + m[0].trim(); sents[i] = sents[i].slice(m[0].length).trim(); }
+        }
+        sents.filter(s => s).forEach(s => out.push(s));
+      });
+      return out;
+    }
+
+    /* ---- 型を見つける ---- */
+    const COMPILED = (window.DM ? DM.PATTERNS : []).map(p => { try { return Object.assign({ rx: new RegExp(p.re, 'i') }, p); } catch (e) { return null; } }).filter(Boolean);
+    function findPatterns(text) {
+      const sents = splitSentences(text), hits = [];
+      COMPILED.forEach(p => {
+        const src = sents.find(s => p.rx.test(norm(s)));
+        if (src) hits.push({ p, src });
+      });
+      // 「型」→「単語」→「ドイツ語っぽい」の順に並べる
+      const order = { form: 0, word: 1, de: 2 };
+      return hits.sort((a, b) => order[a.p.k] - order[b.p.k]);
+    }
+    function findScenes(hits) {
+      const ids = []; hits.forEach(h => { if (h.p.scene && !ids.includes(h.p.scene)) ids.push(h.p.scene); });
+      return ids.map(id => (DM.SCENES || []).find(s => s.id === id)).filter(Boolean);
+    }
+    const emojisOf = text => String(text).match(EMOJI_RE) || [];
+
+    /* ---- 小物 ---- */
+    function mk(label, aria, fn) { const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); b.title = aria; if (fn) b.addEventListener('click', fn); return b; }
+    function tiny(label, fn) { const b = document.createElement('button'); b.className = 'tiny-btn'; b.textContent = label; if (fn) b.addEventListener('click', fn); return b; }
+    function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+    async function copyText(text) {
+      try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+      try { const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed; opacity:0;'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return ok; } catch (e) { return false; }
+    }
+    function updateNote(id, fn) {
+      const list = EA.getDmNotes(), n = list.find(x => x.id === id); if (!n) return null;
+      fn(n); n.u = Date.now(); EA.saveDmNotes(list); return n;
+    }
+    // マイ単語に保存し、このDMの「保存した表現」にも記録
+    function saveExpr(note, en, ja, example, btn) {
+      en = stripEmoji(en); ja = String(ja || '').trim();
+      if (!en) return;
+      if (!ja) { EA.toast('先に 🌐 で日本語訳を出してください'); return; }
+      const r = EA.addCustomPhrase(en, ja, example);
+      if (r.added || r.reason === 'exists') {
+        updateNote(note.id, n => { if (!n.items.some(x => x.en.toLowerCase() === en.toLowerCase())) n.items.push({ en, ja }); });
+        if (btn) btn.textContent = '✅';
+        EA.toast(r.added ? '💾 マイ単語に保存しました（クイズ・復習に出ます）' : 'すでにフレーズ集にあります（このDMの表現として記録しました）');
+        render();
+      } else EA.toast('保存できませんでした');
+    }
+
+    /* ---- 傾向 ---- */
+    function renderTrend() {
+      const list = EA.getDmNotes(), box = document.getElementById('trendBox'); box.innerHTML = '';
+      const name = EA.getProfile().partnerName;
+      document.getElementById('trendTitle').textContent = '📊 ' + (name ? name + 'の' : '相手の') + '英語の傾向';
+      if (!list.length) { box.innerHTML = '<div class="muted">DMを保存すると、よく使う型・絵文字・ドイツ語っぽい言い方がここに集まります。</div>'; }
+      else {
+        const cnt = {}, ex = {}, emo = {};
+        list.forEach(n => {
+          findPatterns(n.text).forEach(h => { cnt[h.p.id] = (cnt[h.p.id] || 0) + 1; if (!ex[h.p.id]) ex[h.p.id] = h; });
+          emojisOf(n.text).forEach(e => { emo[e] = (emo[e] || 0) + 1; });
+        });
+        box.appendChild(el('div', 'muted', 'これまで ' + list.length + ' 通のDMから'));
+        const ids = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a]);
+        const groups = [['form', '🔁 よく使う型'], ['word', '📚 よく出る単語'], ['de', '🇩🇪 ドイツ語っぽい言い方（読めればOK）']];
+        groups.forEach(([k, label]) => {
+          const g = ids.filter(id => ex[id].p.k === k); if (!g.length) return;
+          box.appendChild(el('div', 'dm-sec', label));
+          const wrap = el('div');
+          g.slice(0, k === 'form' ? 8 : 6).forEach(id => {
+            const h = ex[id];
+            const row = el('div', 'dm-stat'); row.setAttribute('role', 'button'); row.tabIndex = 0;
+            const left = el('div'); left.style.minWidth = '0';
+            left.appendChild(el('div', 'en', h.p.en));
+            const det = el('div', 'dm-detail');
+            det.appendChild(el('div', 'muted', h.p.ja + (h.p.note ? '。' + h.p.note : '')));
+            left.appendChild(det);
+            row.appendChild(left); row.appendChild(el('div', 'n', cnt[id] + '通'));
+            const toggle = () => det.classList.toggle('on');
+            row.addEventListener('click', toggle); row.addEventListener('keydown', e => { if (e.key === 'Enter') toggle(); });
+            wrap.appendChild(row);
+          });
+          box.appendChild(wrap);
+        });
+        const emos = Object.keys(emo).sort((a, b) => emo[b] - emo[a]).slice(0, 10);
+        if (emos.length) {
+          box.appendChild(el('div', 'dm-sec', '😊 よく使う絵文字'));
+          const w = el('div', 'dm-emo');
+          emos.forEach(e => { const s = el('span', null, e); const sm = el('small', null, '×' + emo[e]); s.appendChild(sm); w.appendChild(s); });
+          box.appendChild(w);
+        }
+        // Claudeに分析してもらう用のコピー
+        const fresh = list.filter(n => !n.c);
+        box.appendChild(el('div', 'dm-sec', '🤖 Claudeに分析してもらう'));
+        box.appendChild(el('div', 'muted', 'コピーしてチャットに貼ると、新しい型や返信例をアプリに足してもらえます。'));
+        const btns = el('div', 'dm-btns'); btns.style.marginTop = '0.4rem';
+        const copyList = async (arr, label) => {
+          if (!arr.length) { EA.toast('コピーするDMがありません'); return; }
+          const text = '相手からのDMです。英語の傾向を分析してアプリ（DMノート）へ反映してください。\n\n' +
+            arr.slice().reverse().map(n => '【DM ' + n.d + '】' + (n.memo ? '（メモ: ' + n.memo + '）' : '') + '\n' + n.text + (n.reply ? '\n— 自分の返信（下書き）: ' + n.reply : '')).join('\n\n');
+          if (await copyText(text)) {
+            const set = new Set(arr.map(n => n.id));
+            const l = EA.getDmNotes(); l.forEach(n => { if (set.has(n.id)) n.c = true; }); EA.saveDmNotes(l);
+            EA.toast('📋 ' + label + 'をコピーしました'); render();
+          } else EA.toast('コピーできませんでした');
+        };
+        btns.appendChild(tiny('📋 まだ送っていないDM（' + fresh.length + '通）', () => copyList(fresh, 'まだ送っていないDM')));
+        btns.appendChild(tiny('📋 全部（' + list.length + '通）', () => copyList(list, '全部のDM')));
+        box.appendChild(btns);
+      }
+      // 分析メモ（dm-data.js の NOTES）
+      const notes = (window.DM && DM.NOTES) || [];
+      if (notes.length) {
+        const det = document.createElement('details'); det.style.marginTop = '0.9rem';
+        const sum = el('summary', 'dm-sec', '🧠 これまでの分析メモ（' + notes.length + '件）'); sum.style.cursor = 'pointer'; sum.style.margin = '0';
+        det.appendChild(sum);
+        notes.forEach(nt => {
+          const d = el('div', 'dm-note'); d.style.marginTop = '0.4rem';
+          d.appendChild(el('b', null, mdLabel(nt.d) + ' ' + nt.title));
+          const ul = el('ul'); nt.points.forEach(p => ul.appendChild(el('li', null, p))); d.appendChild(ul);
+          det.appendChild(d);
+        });
+        box.appendChild(det);
+      }
+    }
+
+    /* ---- DM 1通分 ---- */
+    function renderNote(n) {
+      const det = document.createElement('details'); det.className = 'dm-item'; det.dataset.id = n.id;
+      if (openId === n.id) det.open = true;
+      det.addEventListener('toggle', () => { if (det.open) openId = n.id; else if (openId === n.id) openId = null; });
+      const hits = findPatterns(n.text), scenes = findScenes(hits);
+      const sum = el('summary');
+      sum.appendChild(el('div', 'd', fmtDate(n.d) + (n.memo ? '・' + n.memo : '') + (n.c ? '・🤖送信済み' : '')));
+      sum.appendChild(el('div', 'p', n.text.replace(/\s+/g, ' ')));
+      const tags = el('div', 'dm-tags');
+      tags.appendChild(el('span', 'dm-tag', '🔁 型 ' + hits.filter(h => h.p.k !== 'de').length));
+      if (hits.some(h => h.p.k === 'de')) tags.appendChild(el('span', 'dm-tag', '🇩🇪 ' + hits.filter(h => h.p.k === 'de').length));
+      if (n.items.length) tags.appendChild(el('span', 'dm-tag', '💾 ' + n.items.length));
+      if (n.reply.trim()) tags.appendChild(el('span', 'dm-tag', '✍️ 返信あり'));
+      sum.appendChild(tags);
+      det.appendChild(sum);
+
+      const body = el('div', 'dm-body');
+      // 原文
+      body.appendChild(el('div', 'dm-orig', n.text));
+      const r0 = el('div', 'dm-row');
+      r0.appendChild(mk('🔊', '全文を再生', () => EA.speak(stripEmoji(n.text), 'en-US', 0.95)));
+      r0.appendChild(mk('🐢', 'ゆっくり再生', () => EA.speak(stripEmoji(n.text), 'en-US', 0.7)));
+      body.appendChild(r0);
+
+      // 文ごと
+      const sents = splitSentences(n.text);
+      const secS = el('div', 'dm-sec'); secS.appendChild(document.createTextNode('📖 文ごとに読む ')); secS.appendChild(el('span', 'muted', '（🌐訳す・💾マイ単語・💝もらった言葉）'));
+      body.appendChild(secS);
+      const allBtn = tiny('🌐 全部訳す', async () => {
+        allBtn.disabled = true;
+        for (let i = 0; i < sents.length; i++) {
+          if ((EA.getDmNotes().find(x => x.id === n.id) || n).tr[i]) continue;
+          allBtn.textContent = '🌐 訳しています… ' + (i + 1) + '/' + sents.length;
+          const r = await EA.translate(stripEmoji(sents[i]), 'en|ja');
+          if (!r.ok) { EA.toast(r.text); break; }
+          updateNote(n.id, x => { x.tr[i] = r.text; });
+        }
+        render();
+      });
+      if (sents.some((s, i) => !n.tr[i])) { const w = el('div'); w.style.marginBottom = '0.3rem'; w.appendChild(allBtn); body.appendChild(w); }
+      const sWrap = el('div');
+      sents.forEach((s, i) => {
+        const row = el('div', 'dm-sent');
+        row.appendChild(el('div', 'en', s));
+        const ja = el('div', 'ja', n.tr[i] || ''); row.appendChild(ja);
+        const act = el('div', 'dm-row');
+        const clean = stripEmoji(s);
+        act.appendChild(mk('🔊', '再生', () => EA.speak(clean, 'en-US', 0.95)));
+        const tb = mk('🌐', '日本語に訳す', async () => {
+          tb.disabled = true; ja.textContent = '翻訳中…';
+          const r = await EA.translate(clean, 'en|ja'); tb.disabled = false;
+          if (!r.ok) { ja.textContent = r.text; return; }
+          ja.textContent = r.text; updateNote(n.id, x => { x.tr[i] = r.text; });
+        });
+        act.appendChild(tb);
+        const saved = n.items.some(x => x.en.toLowerCase() === clean.toLowerCase()) || EA.hasPhrase(clean);
+        const sb = mk(saved ? '✅' : '💾', 'この文をマイ単語に保存', () => saveExpr(n, clean, (EA.getDmNotes().find(x => x.id === n.id) || n).tr[i] || ja.textContent.replace(/^翻訳中…$/, ''), 'DM ' + mdLabel(n.d), sb));
+        act.appendChild(sb);
+        const kb = mk(EA.hasKeepsake(clean) ? '💖' : '💝', 'もらった言葉に追加', () => {
+          const jt = (EA.getDmNotes().find(x => x.id === n.id) || n).tr[i] || '';
+          if (EA.addKeepsake(clean, jt)) { kb.textContent = '💖'; EA.toast('💝 もらった言葉に追加しました'); } else EA.toast('すでに追加されています');
+        });
+        act.appendChild(kb);
+        row.appendChild(act);
+        sWrap.appendChild(row);
+      });
+      body.appendChild(sWrap);
+
+      // 見つかった型
+      if (hits.length) {
+        const pd = document.createElement('details'); pd.className = 'dm-fold';
+        const sec = el('summary', 'dm-sec'); sec.appendChild(document.createTextNode('🔎 見つかった型 ')); sec.appendChild(el('span', 'muted', '（' + hits.length + '個・タップで開く）'));
+        pd.appendChild(sec); body.appendChild(pd);
+        hits.forEach(h => {
+          const p = h.p, box = el('div', 'dm-pat' + (KIND[p.k][1] ? ' ' + KIND[p.k][1] : ''));
+          const t = el('div', 'en'); t.appendChild(el('span', 'dm-kind' + (KIND[p.k][1] ? ' ' + KIND[p.k][1] : ''), KIND[p.k][0])); t.appendChild(document.createTextNode(p.en));
+          box.appendChild(t);
+          box.appendChild(el('div', 'ja', p.ja));
+          if (p.note) box.appendChild(el('div', 'nt', p.note));
+          box.appendChild(el('div', 'src', '“' + h.src + '”'));
+          if (p.say) {
+            const act = el('div', 'dm-row');
+            act.appendChild(el('span', 'muted', '使える形: ' + p.say[0]));
+            act.appendChild(mk('🔊', '再生', () => EA.speak(p.say[0], 'en-US', 0.95)));
+            const done = EA.hasPhrase(p.say[0]);
+            const b = mk(done ? '✅' : '💾', 'マイ単語に保存', () => saveExpr(n, p.say[0], p.say[1], 'DM ' + mdLabel(n.d) + ': ' + stripEmoji(h.src), b));
+            act.appendChild(b);
+            box.appendChild(act);
+          }
+          pd.appendChild(box);
+        });
+      }
+
+      // 返信
+      const secR = el('div', 'dm-sec'); secR.appendChild(document.createTextNode('💬 返信のヒント ')); secR.appendChild(el('span', 'muted', '（➕で下書きに入る）'));
+      body.appendChild(secR);
+      const draft = document.createElement('textarea');
+      if (!scenes.length) body.appendChild(el('div', 'muted', 'この内容に合う返信例はまだありません。下に自分で書いてみよう。'));
+      scenes.forEach(sc => {
+        const box = el('div', 'dm-note');
+        box.appendChild(el('b', null, sc.emoji + ' ' + sc.label));
+        sc.replies.forEach(rp => {
+          const row = el('div', 'dm-reply');
+          const txt = el('div', 'txt'); txt.appendChild(el('div', 'en', rp[0])); txt.appendChild(el('div', 'ja', rp[1]));
+          row.appendChild(txt);
+          row.appendChild(mk('🔊', '再生', () => EA.speak(rp[0], 'en-US', 0.95)));
+          row.appendChild(mk('➕', '下書きに入れる', () => {
+            draft.value = (draft.value.trim() ? draft.value.trim() + ' ' : '') + rp[0];
+            updateNote(n.id, x => { x.reply = draft.value; });
+            draft.focus();
+          }));
+          box.appendChild(row);
+        });
+        body.appendChild(box);
+      });
+
+      const secD = el('div', 'dm-sec', '✍️ 返信の下書き');
+      body.appendChild(secD);
+      draft.placeholder = '英語で返信を書いてみよう'; draft.setAttribute('aria-label', '返信の下書き'); draft.spellcheck = false;
+      draft.value = n.reply; draft.style.marginBottom = '0.4rem';
+      let tmr = null;
+      draft.addEventListener('input', () => { clearTimeout(tmr); tmr = setTimeout(() => updateNote(n.id, x => { x.reply = draft.value; }), 400); });
+      draft.addEventListener('blur', () => { clearTimeout(tmr); updateNote(n.id, x => { x.reply = draft.value; }); });
+      body.appendChild(draft);
+      const check = el('div', 'dm-check'); check.style.display = 'none';
+      const btns = el('div', 'dm-btns');
+      btns.appendChild(tiny('🌐 意味チェック（日本語に戻す）', async () => {
+        const t = draft.value.trim(); if (!t) { EA.toast('先に英語を書いてください'); return; }
+        check.style.display = 'block'; check.textContent = '翻訳中…';
+        const r = await EA.translate(t.slice(0, 480), 'en|ja');
+        check.textContent = r.ok ? '相手にはこう伝わりそう：\n' + r.text : r.text;
+      }));
+      btns.appendChild(tiny('🔊 読む', () => { const t = draft.value.trim(); if (t) EA.speak(t, 'en-US', 0.95); }));
+      btns.appendChild(tiny('📋 コピー', async () => { const t = draft.value.trim(); if (!t) { EA.toast('下書きが空です'); return; } EA.toast(await copyText(t) ? '📋 コピーしました' : 'コピーできませんでした'); }));
+      body.appendChild(btns);
+      body.appendChild(check);
+
+      // 保存した表現
+      if (n.items.length) {
+        body.appendChild(el('div', 'dm-sec', '💾 このDMから保存した表現'));
+        n.items.forEach(it => {
+          const row = el('div', 'dm-reply');
+          const txt = el('div', 'txt'); txt.appendChild(el('div', 'en', it.en)); txt.appendChild(el('div', 'ja', it.ja));
+          row.appendChild(txt);
+          row.appendChild(mk('🔊', '再生', () => EA.speak(it.en, 'en-US', 0.95)));
+          body.appendChild(row);
+        });
+      }
+
+      // メモ・削除
+      body.appendChild(el('div', 'dm-sec', '🗒 受け取った日・メモ'));
+      const dIn = document.createElement('input'); dIn.type = 'date'; dIn.value = n.d; dIn.setAttribute('aria-label', '受け取った日');
+      dIn.style.cssText = 'width:100%; padding:0.6rem; border:1px solid var(--border); border-radius:8px; font-size:1rem; margin-bottom:0.5rem; font-family:inherit; background:#fff;';
+      dIn.addEventListener('change', () => { if (!EA.parseKey(dIn.value)) return; updateNote(n.id, x => { x.d = dIn.value; }); render(); });
+      body.appendChild(dIn);
+      const memo = document.createElement('input'); memo.type = 'text'; memo.value = n.memo; memo.placeholder = 'どんな流れのDM？（任意）'; memo.setAttribute('aria-label', 'メモ'); memo.style.marginBottom = '0.5rem';
+      memo.addEventListener('change', () => { updateNote(n.id, x => { x.memo = memo.value.trim(); }); render(); });
+      body.appendChild(memo);
+      const foot = el('div', 'dm-btns');
+      foot.appendChild(tiny('📋 原文をコピー', async () => EA.toast(await copyText(n.text) ? '📋 コピーしました' : 'コピーできませんでした')));
+      foot.appendChild(tiny('🗑 このDMを削除', () => {
+        if (!confirm('このDMを削除しますか？（マイ単語に保存した表現は残ります）')) return;
+        EA.saveDmNotes(EA.getDmNotes().filter(x => x.id !== n.id)); render();
+      }));
+      body.appendChild(foot);
+      det.appendChild(body);
+      return det;
+    }
+
+    function render() {
+      renderTrend();
+      const list = EA.getDmNotes(), box = document.getElementById('dmList'); box.innerHTML = '';
+      document.getElementById('countInfo').textContent = list.length ? '📚 保存したDM ' + list.length + ' 通（タップで開く）' : '';
+      if (!list.length) { box.innerHTML = '<div class="chat-empty">まだありません。上の欄にDMを貼って保存してください。</div>'; return; }
+      list.forEach(n => box.appendChild(renderNote(n)));
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const dateIn = document.getElementById('dateInput'); dateIn.value = EA.dateKey();
+      if (!window.DM) EA.toast('dm-data.js が読み込めませんでした');
+      render();
+      document.getElementById('addBtn').addEventListener('click', () => {
+        const text = document.getElementById('textInput').value.trim();
+        if (!text) { EA.toast('DMを貼り付けてください'); return; }
+        const list = EA.getDmNotes();
+        if (list.some(x => x.text.replace(/\s+/g, ' ') === text.replace(/\s+/g, ' '))) { EA.toast('同じDMがすでに保存されています'); return; }
+        const id = EA.newId('dm');
+        list.unshift({ id, t: Date.now(), u: Date.now(), d: EA.parseKey(dateIn.value) ? dateIn.value : EA.dateKey(), text, memo: document.getElementById('memoInput').value.trim(), tr: [], items: [], reply: '' });
+        if (!EA.saveDmNotes(list)) { EA.toast('保存できませんでした'); return; }
+        const s = EA.getStore(); s.history[EA.dateKey()] = true; EA.saveStore(s); EA.updateStreakBadge();
+        document.getElementById('textInput').value = ''; document.getElementById('memoInput').value = '';
+        openId = id; render();
+        const hits = findPatterns(text);
+        EA.toast('🔎 保存しました（型 ' + hits.length + '個）');
+        const node = document.querySelector('.dm-item[data-id="' + id + '"]'); if (node) node.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+</body>
+</html>
