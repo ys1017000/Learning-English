@@ -130,9 +130,11 @@
     return splitEven(cards, 5 - f + 1)[dow - f] || [];
   }
   function lastOk(log, en) { var e = log && log[en]; return e ? e : null; }
+  // 最後に言えなかった／初回で言えなかったカードは「あやしい」とみなす
+  function shaky(e) { return !!e && (e.ok === false || e.f === false); }
 
   // 昼のカード暗唱で出す組み合わせ
-  function lunchDeck(pos, by, startKey, log) {
+  function lunchDeck(pos, by, startKey, log, todayKey) {
     var week = pos.week, dow = pos.dow, out = { new: [], review: [], carry: [], title: '' };
     log = log || {};
     if (WEEKS[week - 1].buffer) {
@@ -141,7 +143,7 @@
       all = all.map(function (c, i) { return { c: c, i: i }; });
       all.sort(function (a, b) {
         var la = lastOk(log, a.c.en), lb = lastOk(log, b.c.en);
-        var ra = !la ? 1 : (la.ok ? 2 : 0), rb = !lb ? 1 : (lb.ok ? 2 : 0);
+        var ra = !la ? 1 : (shaky(la) ? 0 : 2), rb = !lb ? 1 : (shaky(lb) ? 0 : 2);
         if (ra !== rb) return ra - rb;
         var da = la ? la.d : '', db = lb ? lb.d : '';
         if (da !== db) return da < db ? -1 : 1;
@@ -153,16 +155,23 @@
     }
     out.new = dayCards(by, startKey, week, dow);
     var f = firstDow(startKey, week);
-    if (dow > f && dow <= 5) out.review = dayCards(by, startKey, week, dow - 1);
+    // 前日の分は「軽く復習」：前回、初回でスッと言えたカードは外す
+    if (dow > f && dow <= 5) out.review = dayCards(by, startKey, week, dow - 1).filter(function (c) { var e = log[c.en]; return !(e && e.f === true); });
     var seen = {};
     out.new.concat(out.review).forEach(function (c) { seen[c.en] = 1; });
+    // 言えなかった／初回で言えなかったカードは、翌日の昼にもう一度出る（初回で言えるまで）
+    var cand = [];
     Object.keys(log).forEach(function (en) {
       var e = log[en];
-      if (e && e.ok === false && e.w && e.w < week && !seen[en] && out.carry.length < 6) {
-        var card = null;
-        Object.keys(by).forEach(function (w) { by[w].forEach(function (c) { if (c.en === en) card = c; }); });
-        if (card) { out.carry.push(card); seen[en] = 1; }
-      }
+      if (!e || seen[en] || !shaky(e) || (todayKey && e.d >= todayKey)) return;
+      cand.push({ en: en, pri: e.ok === false ? 0 : 1, d: e.d });
+    });
+    cand.sort(function (a, b) { return a.pri - b.pri || (a.d < b.d ? -1 : a.d > b.d ? 1 : 0); });
+    cand.forEach(function (x) {
+      if (out.carry.length >= 8) return;
+      var card = null;
+      Object.keys(by).forEach(function (w) { by[w].forEach(function (c) { if (c.en === x.en) card = c; }); });
+      if (card) out.carry.push(card);
     });
     out.title = out.new.length ? '今日の新しいカード' : '';
     return out;
@@ -172,7 +181,7 @@
     var out = [];
     Object.keys(by).forEach(function (w) {
       if (+w > week) return;
-      by[w].forEach(function (c) { var e = log && log[c.en]; if (e && e.ok === false) out.push(c); });
+      by[w].forEach(function (c) { var e = log && log[c.en]; if (shaky(e)) out.push(c); });
     });
     return out;
   }
@@ -188,7 +197,7 @@
   // 今週の「3秒以内に言えた枚数」（各カードの直近の結果で数える）
   function weekScore(by, week, log) {
     var cards = by[week] || [], said = 0, tried = 0;
-    cards.forEach(function (c) { var e = log && log[c.en]; if (e) { tried++; if (e.ok) said++; } });
+    cards.forEach(function (c) { var e = log && log[c.en]; if (e) { tried++; if (e.f !== undefined ? e.f : e.ok) said++; } });
     return { said: said, tried: tried, total: cards.length, pct: tried ? Math.round(said * 100 / tried) : 0 };
   }
 
@@ -213,12 +222,11 @@
     var am = { id: 'am', when: '朝', min: true, title: '単語35個の復習＋単語アプリ5分', detail: '今まで通り。', links: [] };
     slots.push(am);
     if (dow <= 5) {
-      var lunch = lunchDeck(pos, by, startKey, null);
       var cnt = buffer ? 12 : dayCards(by, startKey, week, dow).length;
       slots.push({
         id: 'noon', when: '昼', min: true,
         title: buffer ? '今月のカード復習（12枚）' : (cnt ? '型カード' + cnt + '枚' : '型カード'),
-        detail: buffer ? '言えなかったものから優先して、日本語を見て3秒以内に英語で言う → 音読×3。' : '日本語を見て3秒以内に英語で言う → 音読×3。' + (dow > firstDow(startKey, week) ? '前日の分も軽く復習。' : ''),
+        detail: buffer ? '言えなかったものから優先して、日本語を見て3秒以内に英語で言う → 音読×3。' : '日本語を見て3秒以内に英語で言う → 音読×3。言えなかった分だけ、最大3回まで繰り返す。' + (dow > firstDow(startKey, week) ? '前日の分も軽く復習。' : ''),
         links: [], deck: 'lunch'
       });
       var ev = (buffer ? BUFFER_EVENING : EVENING)[dow];

@@ -96,8 +96,8 @@
     function deckFor(kind, p) {
       const b = cardsMap();
       if (kind === 'lunch') {
-        const d = RM.lunchDeck(p, b, rd.start, rd.cardLog);
-        return d.new.map(c => ({ c, t: '新しい' })).concat(d.review.map(c => ({ c, t: p.buffer ? '復習' : '前日の復習' })), d.carry.map(c => ({ c, t: '再登場' })));
+        const d = RM.lunchDeck(p, b, rd.start, rd.cardLog, today);
+        return d.new.map(c => ({ c, t: '新しい' })).concat(d.review.map(c => ({ c, t: p.buffer ? '復習' : '前日の復習' })), d.carry.map(c => ({ c, t: '言えるまで再登場' })));
       }
       if (kind === 'week') return RM.weekDeck(b, p.week).map(c => ({ c, t: '通し' }));
       if (kind === 'weak') return RM.weakDeck(b, rd.cardLog, p.week).map(c => ({ c, t: '印つき' }));
@@ -160,13 +160,21 @@
         '<button class="tiny-btn" data-act="skip">' + (rd.skipped[today] ? '↩︎ 「捨てた」を取り消す' : '🗑 今日の残りは捨てる') + '</button></div>';
       html += '<p class="muted" style="margin-bottom:1rem;">最低ラインは「朝の単語＋昼のカード」です。できなかった分は翌週に詰め込まず、捨てて大丈夫です。</p>';
       if (cards.length) {
-        html += '<div class="card"><h2>📈 今週のカード</h2><div class="muted">' + cards.length + '枚 ・ 3秒以内に言えた：<b>' + sc.said + '/' + sc.tried + '</b>' + (sc.tried ? '（' + sc.pct + '%）' : '') +
+        html += '<div class="card"><h2>📈 今週のカード</h2><div class="muted">' + cards.length + '枚 ・ 1回目で言えた：<b>' + sc.said + '/' + sc.tried + '</b>' + (sc.tried ? '（' + sc.pct + '%）' : '') +
           '　目標 ' + RM.PASS_RATE + '%</div>';
         const missing = cards.filter(c => !EA.hasPhrase(c.en)).length;
         if (missing) html += '<button class="btn btn-secondary" data-act="addCards" style="margin-top:0.75rem; font-size:0.9rem;">➕ 第' + p.week + '週のカード' + missing + '枚を「単語」に追加（クイズ・復習で使える）</button>';
         html += '</div>';
       }
+      const ts = rd.sessions.filter(x => x.d === today);
+      if (ts.length) html += '<div class="card"><h2>📋 今日のふり返り</h2>' + ts.map(sessionLine).join('') + '</div>';
       box.innerHTML = html;
+    }
+    function sessionLine(x) {
+      const first = x.rounds[0], name = { lunch: '昼の暗唱', week: '通し', weak: '言えなかった分', check: '月末チェック' }[x.kind];
+      return '<div class="item-row"><div><b>' + esc(name) + '</b>　<span class="muted">' + esc(fmt(x.d)) + (x.w ? ' ・ 第' + x.w + '週' : '') + '</span></div>' +
+        '<div class="muted">' + x.rounds.map((r, i) => CIRCLE[i + 1] + ' ' + r[0] + '/' + r[1]).join(' → ') + '　1回目 ' + Math.round(first[0] * 100 / first[1]) + '%' +
+        (x.still.length ? '　<span style="color:var(--bad);">まだ ' + x.still.length + '枚</span>' : '　<span style="color:var(--ok);">全部言えた</span>') + '</div></div>';
     }
 
     /* ---------- 週間一覧 ---------- */
@@ -199,6 +207,7 @@
             (sc.tried ? ' ・ 言えた <b>' + sc.said + '/' + sc.tried + '</b>（' + sc.pct + '%）' : '') + '</div>' + days + '</div></details>';
         }
       });
+      if (rd.sessions.length) html += '<div class="card" style="margin-top:1rem;"><h2>📋 カード暗唱のふり返り（最近）</h2>' + rd.sessions.slice(-8).reverse().map(sessionLine).join('') + '</div>';
       html += '<div class="card" style="margin-top:1rem;"><h2>🕒 1日の型</h2><div class="muted" style="line-height:1.8;">' +
         '<b>朝</b>　単語35個の復習＋単語アプリ5分<br><b>昼</b>　その日の型カード（8〜10枚）を3秒以内に言う → 音読×3<br>' +
         '<b>夜（月）</b>読解　<b>（火）</b>構文暗唱　<b>（水）</b>リスニング　<b>（木）</b>ライティング　<b>（金）</b>復習<br>' +
@@ -209,13 +218,16 @@
       box.innerHTML = html;
     }
 
-    /* ---------- カード暗唱（3秒チャレンジ） ---------- */
-    function startRun(kind, slotId, cards) {
+    /* ---------- カード暗唱（3秒チャレンジ・最大3ラウンド） ---------- */
+    const MAX_ROUND = 3;
+    const CIRCLE = ['', '①', '②', '③'];
+    const RUN_TITLE = { lunch: '昼のカード暗唱', week: '今週のカードを通しで', weak: '言えなかったカードだけ', check: '月末チェック' };
+        function startRun(kind, slotId, cards) {
       const p = pos();
       if (p.state !== 'active') return;
       cards = cards || deckFor(kind, p);
       if (!cards.length) { EA.toast('対象のカードがありません'); return; }
-      run = { kind, slot: slotId, cards, i: 0, results: [], revealed: false };
+      run = { kind, slot: slotId, all: cards.map(x => x.c), queue: cards, round: 1, i: 0, res: [], hist: [], said: {}, phase: 'card' };
       renderRun();
       $('runBox').scrollIntoView({ block: 'start', behavior: 'smooth' });
     }
@@ -223,22 +235,43 @@
       const k = c.en.toLowerCase();
       return EA.getAllPhrases().find(x => x[1].toLowerCase() === k) || [EA.CUSTOM_CAT, c.en, c.ja, ''];
     }
+    function roundLine(hist) {
+      return hist.map(h => CIRCLE[h.round] + ' ' + h.said + '/' + h.total).join(' → ');
+    }
+    function reviewHtml() {
+      const first = run.hist[0], stillN = run.all.filter(c => !run.said[c.en]).length;
+      let html = '<h2>📋 ふり返り：' + esc(RUN_TITLE[run.kind]) + '</h2>' +
+        '<div class="stats-grid" style="margin-bottom:0.75rem;"><div><div class="stat-number">' + first.said + '/' + first.total + '</div><div class="stat-label">1回目で言えた</div></div>' +
+        '<div><div class="stat-number">' + Math.round(first.said * 100 / first.total) + '%</div><div class="stat-label">目標 ' + RM.PASS_RATE + '%</div></div>' +
+        '<div><div class="stat-number" style="color:' + (stillN ? 'var(--bad)' : 'var(--ok)') + ';">' + stillN + '</div><div class="stat-label">まだ言えない</div></div></div>' +
+        '<div class="muted" style="margin-bottom:0.6rem;">' + esc(roundLine(run.hist)) + '</div>';
+      html += run.all.map(c => {
+        const r = run.said[c.en];
+        return '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:8px; align-items:flex-start;"><div><div class="en-text">' + esc(c.en) + '</div><div class="ja-text muted">' + esc(c.ja) + '</div></div>' +
+          '<span class="rm-badge' + (r ? ' ok' : ' ng') + '">' + (r ? CIRCLE[r] + (r === 1 ? ' 1回目で言えた' : ' ' + r + '回目で言えた') : '✕ まだ') + '</span></div></div>';
+      }).join('');
+      html += '<p class="muted" style="margin:0.6rem 0;">' + (stillN ? '「まだ」のカードは、明日の昼にもう一度出ます。1回目で言えるようになるまで、毎日1回ずつ出ます。' : '全部言えました！ 1回目で言えなかったカードも、明日の昼にもう一度出て、定着を確かめます。') + '</p>' +
+        '<button class="btn" data-act="closeRun">閉じる</button>';
+      return html;
+    }
     function renderRun() {
       const box = $('runBox');
       if (!run) { box.style.display = 'none'; box.innerHTML = ''; return; }
       box.style.display = '';
-      const title = { lunch: '昼のカード暗唱', week: '今週のカードを通しで', weak: '言えなかったカードだけ', check: '月末チェック' }[run.kind];
-      if (run.i >= run.cards.length) {
-        const said = run.results.filter(r => r.ok).length, ng = run.results.filter(r => !r.ok);
-        box.innerHTML = '<h2>🎉 ' + esc(title) + ' おわり</h2><div class="stats-grid" style="margin-bottom:1rem;"><div><div class="stat-number">' + said + '/' + run.results.length +
-          '</div><div class="stat-label">3秒以内に言えた</div></div><div><div class="stat-number">' + Math.round(said * 100 / run.results.length) + '%</div><div class="stat-label">目標 ' + RM.PASS_RATE + '%</div></div></div>' +
-          (ng.length ? '<div class="muted" style="margin-bottom:0.5rem;">言えなかったカード（翌週の昼にもう一度出ます）</div>' + ng.map(r => '<div class="item-row"><div class="en-text">' + esc(r.c.en) + '</div><div class="ja-text muted">' + esc(r.c.ja) + '</div></div>').join('') : '<p class="muted">全部言えました！</p>') +
-          '<div style="display:flex; gap:8px; margin-top:0.75rem;">' + (ng.length ? '<button class="btn btn-secondary" data-act="retry" style="flex:1;">言えなかった分だけ もう一度</button>' : '') +
-          '<button class="btn" data-act="closeRun" style="flex:1;">閉じる</button></div>';
+      const title = RUN_TITLE[run.kind];
+      if (run.phase === 'review') { box.innerHTML = reviewHtml(); return; }
+      if (run.phase === 'roundEnd') {
+        const h = run.hist[run.hist.length - 1], miss = run.res.filter(r => !r.ok);
+        box.innerHTML = '<h2>' + CIRCLE[h.round] + ' ' + h.round + '回目 おわり</h2>' +
+          '<div class="stats-grid" style="grid-template-columns:repeat(2,1fr); margin-bottom:0.75rem;"><div><div class="stat-number">' + h.said + '/' + h.total + '</div><div class="stat-label">3秒以内に言えた</div></div>' +
+          '<div><div class="stat-number" style="color:var(--bad);">' + miss.length + '</div><div class="stat-label">言えなかった</div></div></div>' +
+          '<div class="muted" style="margin-bottom:0.5rem;">言えなかったカード</div>' + miss.map(r => '<div class="item-row"><div class="en-text">' + esc(r.c.en) + '</div><div class="ja-text muted">' + esc(r.c.ja) + '</div></div>').join('') +
+          '<button class="btn" data-act="nextRound" style="margin-top:0.75rem;">▶ ' + (run.round + 1) + '回目：言えなかった' + miss.length + '枚だけ</button>' +
+          '<button class="btn btn-secondary" data-act="endSession" style="margin-top:0.5rem;">ここでおわる（ふり返りを見る）</button>';
         return;
       }
-      const cur = run.cards[run.i], c = cur.c;
-      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;"><span class="muted">' + esc(title) + ' ・ ' + (run.i + 1) + '/' + run.cards.length +
+      const cur = run.queue[run.i], c = cur.c;
+      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;"><span class="muted">' + esc(title) + (run.kind === 'check' ? '' : ' ・ ' + run.round + '回目') + ' ・ ' + (run.i + 1) + '/' + run.queue.length +
         ' <span class="rm-badge">' + esc(cur.t) + '</span></span><button class="tiny-btn" data-act="closeRun">✕ やめる</button></div>' +
         '<div class="rm-ja">' + esc(c.ja) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill" id="timerFill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、3秒以内に声に出して言ってみよう</p>' +
@@ -252,8 +285,8 @@
       f.style.transition = 'width 3s linear'; f.style.width = '0%';
     }
     function revealCard() {
-      if (!run || run.i >= run.cards.length) return;
-      const c = run.cards[run.i].c;
+      if (!run || run.phase !== 'card' || run.i >= run.queue.length) return;
+      const c = run.queue[run.i].c;
       $('revealArea').style.display = ''; $('revealBtn').style.display = 'none';
       $('playEn').onclick = () => EA.speak(c.en, 'en-US', 1);
       $('slowEn').onclick = () => EA.speak(c.en, 'en-US', 0.7);
@@ -263,20 +296,34 @@
       });
     }
     function answer(ok) {
-      if (!run || run.i >= run.cards.length) return;
-      const c = run.cards[run.i].c;
-      run.results.push({ c, ok });
-      update(r => { r.cardLog[c.en] = { ok, d: today, w: c.w }; });
-      EA.recordResult(itemFor(c), ok, 'recall');
+      if (!run || run.phase !== 'card' || run.i >= run.queue.length) return;
+      const c = run.queue[run.i].c, round = run.round;
+      run.res.push({ c, ok });
+      if (ok && !run.said[c.en]) run.said[c.en] = round;
+      update(r => {
+        const prev = r.cardLog[c.en];
+        // f = 1回目（初回）に言えたか。ラウンド2以降は「最終的に言えたか」だけ更新する
+        r.cardLog[c.en] = round === 1 ? { ok, f: ok, d: today, w: c.w } : { ok, f: prev && typeof prev.f === 'boolean' ? prev.f : false, d: today, w: c.w };
+      });
+      if (round === 1) EA.recordResult(itemFor(c), ok, 'recall');
       run.i += 1;
-      if (run.i >= run.cards.length) finishRun();
+      if (run.i >= run.queue.length) endRound();
       renderRun();
     }
-    function finishRun() {
-      const said = run.results.filter(r => r.ok).length, total = run.results.length;
+    function endRound() {
+      const said = run.res.filter(r => r.ok).length, total = run.res.length;
+      run.hist.push({ round: run.round, said, total });
+      const miss = run.res.filter(r => !r.ok).length;
+      if (run.kind === 'check' || miss === 0 || run.round >= MAX_ROUND) finishSession(); else run.phase = 'roundEnd';
+    }
+    function finishSession() {
+      run.phase = 'review';
+      const first = run.hist[0], still = run.all.filter(c => !run.said[c.en]).map(c => c.en);
+      const p = pos();
       update(r => {
-        if (run.slot) { r.done[today] = Array.from(new Set((r.done[today] || []).concat(run.slot))); }
-        if (run.kind === 'check') { const p = pos(); r.checks[String(p.month)] = { said, total, d: today }; }
+        if (run.slot) r.done[today] = Array.from(new Set((r.done[today] || []).concat(run.slot)));
+        if (run.kind === 'check') r.checks[String(p.month)] = { said: first.said, total: first.total, d: today };
+        r.sessions.push({ d: today, kind: run.kind, w: p.week, t: Date.now(), rounds: run.hist.map(h => [h.said, h.total]), still });
       });
       touchToday();
       renderToday();
@@ -313,11 +360,11 @@
       if (a === 'ok') { answer(true); return; }
       if (a === 'ng') { answer(false); return; }
       if (a === 'closeRun') { run = null; renderRun(); return; }
-      if (a === 'retry') {
-        const miss = run.results.filter(r => !r.ok).map(r => ({ c: r.c, t: '再挑戦' }));
-        const kind = run.kind, slot = run.slot;
-        run = null; startRun(kind === 'check' ? 'weak' : kind, slot, miss); return;
+      if (a === 'nextRound') {
+        const miss = run.res.filter(r => !r.ok).map(r => ({ c: r.c, t: (run.round + 1) + '回目' }));
+        run.round += 1; run.queue = miss; run.i = 0; run.res = []; run.phase = 'card'; renderRun(); return;
       }
+      if (a === 'endSession') { finishSession(); renderRun(); return; }
       if (a === 'addCards') {
         const p = pos(); let n = 0;
         (cardsMap()[p.week] || []).forEach(c => { const r = EA.addCustomPhrase(c.en, c.ja, '第' + p.week + '週カード' + c.num + (c.tag ? '（' + c.tag + '）' : '')); if (r.added) n++; });

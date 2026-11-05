@@ -884,7 +884,7 @@
 
   /* ---------- 3か月ロードマップの進捗 ---------- */
   const KEY_ROAD = 'english_app_roadmap';
-  function emptyRoadmap() { return { start: null, done: {}, skipped: {}, cardLog: {}, checks: {} }; }
+  function emptyRoadmap() { return { start: null, done: {}, skipped: {}, cardLog: {}, checks: {}, sessions: [] }; }
   function sanitizeRoadmap(v) {
     const out = emptyRoadmap();
     if (!v || typeof v !== 'object') return out;
@@ -900,6 +900,7 @@
       const e = log[en];
       if (!e || typeof e !== 'object' || en.length > 200 || !parseKey(e.d)) return;
       out.cardLog[en] = { ok: !!e.ok, d: e.d, w: Math.max(0, Math.min(12, Number(e.w) || 0)) };
+      if (typeof e.f === 'boolean') out.cardLog[en].f = e.f;   // 初回（1回目）で言えたか
     });
     const ch = v.checks && typeof v.checks === 'object' ? v.checks : {};
     ['1', '2', '3'].forEach(m => {
@@ -909,6 +910,23 @@
         out.checks[m] = { said: Math.max(0, Math.min(total, Number(c.said) || 0)), total, d: c.d };
       }
     });
+    // カード暗唱1回ごとのふり返り（ラウンドごとの言えた数、最後まで言えなかったカード）
+    const seenS = new Set();
+    (Array.isArray(v.sessions) ? v.sessions : []).forEach(x => {
+      if (!x || typeof x !== 'object' || !parseKey(x.d) || !['lunch', 'week', 'weak', 'check'].includes(x.kind)) return;
+      const rounds = (Array.isArray(x.rounds) ? x.rounds : []).slice(0, 3).map(r => {
+        const total = Math.max(0, Math.min(80, Number(Array.isArray(r) ? r[1] : 0) || 0));
+        return [Math.max(0, Math.min(total, Number(Array.isArray(r) ? r[0] : 0) || 0)), total];
+      }).filter(r => r[1] > 0);
+      if (!rounds.length) return;
+      const still = (Array.isArray(x.still) ? x.still : []).filter(en => typeof en === 'string' && en.length < 200).slice(0, 80);
+      const key = x.d + '|' + x.kind + '|' + rounds.map(r => r.join('/')).join(',') + '|' + still.join(',');
+      if (seenS.has(key)) return;
+      seenS.add(key);
+      out.sessions.push({ d: x.d, kind: x.kind, w: Math.max(0, Math.min(12, Number(x.w) || 0)), t: Number(x.t) || 0, rounds, still });
+    });
+    out.sessions.sort((a, b) => (a.d === b.d ? a.t - b.t : (a.d < b.d ? -1 : 1)));
+    out.sessions = out.sessions.slice(-150);
     return out;
   }
   function getRoadmap() { return sanitizeRoadmap(loadJSON(KEY_ROAD, null)); }
@@ -920,6 +938,7 @@
     Object.keys(b.skipped).forEach(k => { out.skipped[k] = true; });
     Object.keys(b.cardLog).forEach(en => { const c = out.cardLog[en]; if (!c || b.cardLog[en].d > c.d) out.cardLog[en] = b.cardLog[en]; });
     Object.keys(b.checks).forEach(m => { const c = out.checks[m]; if (!c || b.checks[m].d > c.d) out.checks[m] = b.checks[m]; });
+    out.sessions = out.sessions.concat(b.sessions);
     return sanitizeRoadmap(out);
   }
 
