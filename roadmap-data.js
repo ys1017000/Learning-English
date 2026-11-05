@@ -32,7 +32,7 @@
     addword: { label: '➕ 表現を追加', href: 'addword.html' },
     writing: { label: '✍️ 英作文で練習', href: 'writing.html' },
     speaking: { label: '🎙️ 発音・シャドーイング', href: 'speaking.html' },
-    diary: { label: '📔 英語日記に書く', href: 'diary.html' },
+    diary: { label: '📔 英語日記に書く', href: 'diary.html?mode=write' },
     letter: { label: '💌 メッセージを書く', href: 'letter.html' },
     quiz: { label: '❓ クイズで確認', href: 'quiz.html' },
     weak: { label: '🎯 弱点を復習', href: 'quiz.html?mode=weak' }

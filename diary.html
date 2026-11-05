@@ -8,6 +8,23 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="stylesheet" href="common.css?v=8">
+  <style>
+    /* 英語日記：自分で書く → 答え合わせ */
+    .dy-step { font-size: 0.8rem; font-weight: bold; color: #4338ca; margin: 0.2rem 0 0.35rem; }
+    .dy-step .muted { font-weight: normal; }
+    .dy-meta { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin: -0.6rem 0 0.75rem; }
+    .dy-count { font-size: 0.8rem; color: var(--text-muted); }
+    .dy-count.goal { color: var(--ok); font-weight: bold; }
+    .dy-pats { display: flex; flex-wrap: wrap; gap: 6px; margin: 0.4rem 0 0.5rem; }
+    .dy-pat { text-align: left; background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 10px; padding: 0.35rem 0.6rem; font-size: 0.85rem; cursor: pointer; color: #1e1b4b; max-width: 100%; }
+    .dy-pat small { display: block; font-size: 0.7rem; color: var(--text-muted); }
+    .dy-pat:active { background: #e0e7ff; }
+    .dy-res { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.7rem 0.8rem; margin-bottom: 0.5rem; }
+    .dy-res .t { font-size: 0.72rem; font-weight: bold; color: var(--text-muted); margin-bottom: 0.15rem; }
+    .dy-res .v { font-size: 1rem; font-weight: 600; white-space: pre-wrap; word-break: break-word; }
+    .dy-res.mine { border-color: #c7d2fe; background: #eef2ff; }
+    .dy-res .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-top: 0.35rem; }
+  </style>
 </head>
 <body>
   <header>
@@ -22,20 +39,49 @@
   </div>
   <div class="container">
     <div class="card next-step">
-      <h2>🌟 今日のお題</h2>
+      <h2 id="promptTitle">🌟 今日のお題</h2>
       <div id="promptBox" style="font-size:1.05rem; font-weight:bold; margin-bottom:0.5rem;"></div>
       <div id="promptEn" class="muted" style="margin-bottom:0.5rem;"></div>
-      <button class="tiny-btn" id="shufflePrompt">🎲 別のお題</button>
+      <div style="display:flex; flex-wrap:wrap; gap:6px;">
+        <button class="tiny-btn" id="shufflePrompt">🎲 別のお題</button>
+        <button class="tiny-btn" id="themePrompt" style="display:none;">🗺 今週のテーマで書く</button>
+      </div>
     </div>
     <div class="card">
-      <h2>📔 今日の一文</h2>
-      <textarea id="jaInput" style="height:80px;" placeholder="日本語で気持ちを書いてみよう（英語で直接書いてもOK）" aria-label="日本語"></textarea>
-      <button class="btn btn-secondary" id="translateBtn" style="margin-bottom:0.75rem;">🌐 英語にする</button>
-      <textarea id="enInput" style="height:80px;" placeholder="英語（自動で入ります。直して使えます）" aria-label="英語" spellcheck="false"></textarea>
+      <h2>📔 今日の日記</h2>
+
+      <div class="dy-step">① 日本語でメモ <span class="muted">（任意・考えの整理用）</span></div>
+      <textarea id="jaInput" style="height:72px;" placeholder="言いたいことを日本語で2〜3行。そのまま訳さず、知っている型で言える形を考えよう" aria-label="日本語のメモ"></textarea>
+
+      <div class="dy-step">② 自分で英語を書く</div>
+      <textarea id="enInput" style="height:110px;" placeholder="簡単な英語でOK。下の型をタップすると入ります" aria-label="自分の英語" autocapitalize="sentences" spellcheck="false"></textarea>
+      <div class="dy-meta">
+        <span class="dy-count" id="sentCount"></span>
+        <span style="display:flex; gap:2px;">
+          <button class="icon-btn" id="playMine" aria-label="自分の英語を再生">🔊</button>
+          <button class="icon-btn btn-record" id="micMine" aria-label="自分の英語を音読してチェック">🎙️</button>
+        </span>
+      </div>
+      <div class="word-chips" id="mineChips" style="justify-content:flex-start;"></div>
+      <div class="mini-score" id="mineScore"></div>
+
+      <div id="patBox" style="display:none;">
+        <div class="muted" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <span id="patTitle">💡 使える型（タップで入る）</span>
+          <button class="tiny-btn" id="patShuffle">🔄 別の型</button>
+        </div>
+        <div class="dy-pats" id="patList"></div>
+      </div>
+
+      <div class="dy-step" style="margin-top:0.6rem;">③ 答え合わせ</div>
+      <button class="btn btn-secondary" id="checkBtn" style="margin-bottom:0.75rem;">🔍 翻訳と比べる</button>
+      <div id="checkArea" style="display:none; margin-bottom:0.75rem;" aria-live="polite"></div>
+
       <div class="muted" style="font-weight:bold;">今日の気分</div>
       <div class="chip-row" id="moodChips" style="margin-top:4px;"></div>
-      <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; margin:0.5rem 0 0.75rem;"><input type="checkbox" id="memoryCb"> 💞 会った日の思い出として残す（次の予習で思い出せます）</label>
-      <button class="btn" id="saveBtn">📔 日記に保存する</button>
+      <label style="display:flex; align-items:center; gap:8px; font-size:0.9rem; margin:0.5rem 0 0.4rem;"><input type="checkbox" id="memoryCb"> 💞 会った日の思い出として残す（次の予習で思い出せます）</label>
+      <label id="roadRow" style="display:none; align-items:center; gap:8px; font-size:0.9rem; margin:0 0 0.75rem;"><input type="checkbox" id="roadCb"> <span id="roadLabel">🗺 ロードマップのメニューを完了にする</span></label>
+      <button class="btn" id="saveBtn" style="margin-top:0.35rem;">📔 日記に保存する</button>
     </div>
     <div class="muted" id="countInfo" style="margin-bottom:0.5rem;"></div>
     <div id="entries"></div>
@@ -49,6 +95,7 @@
     <a href="quiz.html">✍️ 練習</a>
   </nav>
   <script src="common.js?v=8"></script>
+  <script src="roadmap-data.js?v=8"></script>
   <script>
     // お題: [日本語, 英語の書き出し, 思い出用か]
     const PROMPTS = [
@@ -63,22 +110,154 @@
       ['会った日に見つけた、相手の素敵なところ', 'Something I loved about you today was…', true],
       ['会った日においしかったもの', 'The best thing we ate was…', true]
     ];
-    let promptIdx = 0, mood = '', pickedMemoryPrompt = false;
+    const $ = id => document.getElementById(id);
+    const params = new URLSearchParams(location.search);
+    const today = EA.dateKey();
+    let promptIdx = 0, mood = '', themeMode = false, checked = null;
 
     function recentMeeting() { const p = EA.getPlan(); if (!p) return false; const d = EA.daysUntil(p.date); return d <= 0 && d >= -3; }
+
+    /* ---------- ロードマップとの連動（今週のテーマ・型カード・完了チェック） ---------- */
+    function roadCtx() {
+      if (!window.RM) return null;
+      const rd = EA.getRoadmap();
+      if (!rd.start) return null;
+      const p = RM.position(rd.start, today);
+      if (p.state !== 'active') return null;
+      const by = RM.cardsByWeek(EA.getCustomPhrases());
+      let cards = [];
+      if (p.buffer) RM.monthWeeks(p.month).forEach(w => { cards = cards.concat(by[w] || []); });
+      else cards = (by[p.week] || []).slice();
+      // 今週のカードがまだ無い（取り込み前）ときは、これまでの週のカードを使う
+      if (!cards.length) Object.keys(by).forEach(w => { if (+w <= p.week) cards = cards.concat(by[w]); });
+      const slot = RM.planFor(p, by, rd.start).find(s => (s.links || []).includes('diary')) || null;
+      return { rd, p, W: RM.WEEKS[p.week - 1], cards, slot, slotDone: !!slot && (rd.done[today] || []).includes(slot.id) };
+    }
+    const ctx = roadCtx();
+
     function pickPrompt(random) {
+      themeMode = false;
       const pool = PROMPTS.map((p, i) => i).filter(i => !recentMeeting() || PROMPTS[i][2]);
       if (random) { let n = pool[Math.floor(Math.random() * pool.length)], g = 0; while (n === promptIdx && pool.length > 1 && g++ < 10) n = pool[Math.floor(Math.random() * pool.length)]; promptIdx = n; }
       else { const day = Math.floor(new Date().setHours(0, 0, 0, 0) / 86400000); promptIdx = pool[day % pool.length]; }
       const p = PROMPTS[promptIdx];
-      document.getElementById('promptBox').textContent = p[0];
-      document.getElementById('promptEn').textContent = '書き出し: ' + p[1];
-      document.getElementById('memoryCb').checked = p[2] || recentMeeting();
+      $('promptTitle').textContent = '🌟 今日のお題';
+      $('promptBox').textContent = p[0];
+      $('promptEn').textContent = '書き出し: ' + p[1];
+      $('memoryCb').checked = p[2] || recentMeeting();
+      $('themePrompt').style.display = ctx ? '' : 'none';
+      updateCount();
+    }
+    function showTheme() {
+      themeMode = true;
+      $('promptTitle').textContent = '🗺 第' + ctx.p.week + '週のテーマ';
+      $('promptBox').textContent = ctx.W.theme;
+      $('promptEn').textContent = ctx.p.buffer ? '今月書いたものを1本選んで、型を使って書き直そう。' : '今週の気持ちや出来事を3〜5文で。下の「使える型」を入れてみよう。　書き出し例: This week, I…';
+      $('memoryCb').checked = recentMeeting();
+      $('themePrompt').style.display = 'none';
+      if ($('roadRow').style.display !== 'none') setupRoadRow();
+      updateCount();
     }
 
+    /* ---------- 使える型（タップで英語欄に入る） ---------- */
+    function renderPatterns() {
+      if (!ctx || !ctx.cards.length) { $('patBox').style.display = 'none'; return; }
+      $('patBox').style.display = '';
+      $('patTitle').textContent = '💡 第' + ctx.p.week + '週の型（タップで入る）';
+      const pool = ctx.cards.slice();
+      for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+      const list = $('patList'); list.innerHTML = '';
+      pool.slice(0, 6).forEach(c => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'dy-pat';
+        b.innerHTML = EA.esc(c.en) + '<small>' + EA.esc(c.ja) + '</small>';
+        b.setAttribute('aria-label', c.en + '（' + c.ja + '）を英語欄に入れる');
+        b.addEventListener('click', () => insertText(c.en));
+        list.appendChild(b);
+      });
+    }
+    function insertText(text) {
+      const ta = $('enInput'), v = ta.value;
+      const s = typeof ta.selectionStart === 'number' ? ta.selectionStart : v.length;
+      const e = typeof ta.selectionEnd === 'number' ? ta.selectionEnd : v.length;
+      const before = v.slice(0, s), after = v.slice(e);
+      const pre = before && !/\s$/.test(before) ? ' ' : '';
+      const post = after && !/^\s/.test(after) ? ' ' : '';
+      ta.value = before + pre + text + post + after;
+      const pos = (before + pre + text).length;
+      try { ta.focus(); ta.setSelectionRange(pos, pos); } catch (err) {}
+      updateCount();
+    }
+
+    /* ---------- 文の数 ---------- */
+    function countSentences(t) {
+      return (String(t).replace(/\.{3}|…/g, '').match(/[^.!?。！？\n]*[A-Za-z][^.!?。！？\n]*([.!?。！？]+|$)/gm) || []).filter(s => s.trim().length > 1).length;
+    }
+    function updateCount() {
+      const n = countSentences($('enInput').value), el = $('sentCount');
+      if (!n) { el.textContent = themeMode ? '目安：3〜5文' : ''; el.classList.remove('goal'); return; }
+      el.textContent = n + '文' + (themeMode ? (n >= 3 ? '　✓ 目安（3〜5文）に届いた' : '　目安：3〜5文') : '');
+      el.classList.toggle('goal', themeMode && n >= 3);
+    }
+
+    /* ---------- 答え合わせ ---------- */
+    async function check() {
+      const en = $('enInput').value.trim(), ja = $('jaInput').value.trim();
+      if (!en && !ja) { EA.toast('まず日本語のメモか、自分の英語を書いてみよう'); return; }
+      if (!en && !confirm('まだ自分の英語を書いていません。先に翻訳を見ますか？\n（1語でも自分で書いてから比べるほうが、話す力につながります）')) { $('enInput').focus(); return; }
+      const btn = $('checkBtn'); btn.disabled = true; btn.textContent = '🔄 確認中...';
+      const [model, back] = await Promise.all([
+        ja ? EA.translate(ja, 'ja|en') : Promise.resolve(null),
+        en ? EA.translate(en, 'en|ja') : Promise.resolve(null)
+      ]);
+      btn.disabled = false; btn.textContent = '🔍 もう一度比べる';
+      checked = { en, ja, model: model && model.ok ? model.text : '' };
+      const area = $('checkArea'); area.innerHTML = ''; area.style.display = '';
+      const box = (cls, title, value, extra) => {
+        const d = document.createElement('div'); d.className = 'dy-res' + (cls ? ' ' + cls : '');
+        const t = document.createElement('div'); t.className = 't'; t.textContent = title;
+        const v = document.createElement('div'); v.className = 'v'; v.textContent = value;
+        d.appendChild(t); d.appendChild(v);
+        if (extra) d.appendChild(extra);
+        area.appendChild(d);
+        return d;
+      };
+      const row = btns => { const r = document.createElement('div'); r.className = 'row'; btns.forEach(b => r.appendChild(b)); return r; };
+      const mk = (label, aria, fn, cls) => { const b = document.createElement('button'); b.type = 'button'; b.className = cls || 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); b.addEventListener('click', fn); return b; };
+
+      if (en) {
+        box('mine', '✍️ あなたの英語', en);
+        if (back) box('', '🔁 あなたの英語を日本語に戻すと（意味が伝わるかの目安）', back.text);
+      }
+      if (ja) {
+        if (model && model.ok) {
+          box('', '🌐 翻訳の英語（参考）', model.text, row([
+            mk('🔊', '翻訳の英語を再生', () => EA.speak(model.text, 'en-US', 1.0)),
+            mk('🐢', 'ゆっくり再生', () => EA.speak(model.text, 'en-US', 0.7)),
+            mk('➕ いい言い方を単語に追加', '翻訳の英語を単語に追加', ev => {
+              const r = EA.addCustomPhrase(model.text, ja, '');
+              EA.toast(r.added ? '「単語」に追加しました。クイズや復習で出ます' : r.reason === 'exists' ? 'もう追加されています' : '追加できませんでした');
+              if (r.added || r.reason === 'exists') ev.currentTarget.disabled = true;
+            }, 'tiny-btn')
+          ]));
+        } else if (model) box('', '🌐 翻訳の英語（参考）', model.text);
+      } else {
+        const n = document.createElement('p'); n.className = 'muted'; n.style.marginBottom = '0.5rem';
+        n.textContent = '日本語メモを書くと、翻訳の英語とも比べられます。';
+        area.appendChild(n);
+      }
+      const tip = document.createElement('p'); tip.className = 'muted';
+      tip.textContent = en ? '日本語に戻した文で意味が通じていれば合格です。翻訳と同じにする必要はありません。いいなと思った言い方を1〜2個だけ取り入れて、自分の英語を直そう。'
+        : '翻訳を見たら、今度は見ないで自分の英語を書いてみよう。';
+      area.appendChild(tip);
+      touch();
+    }
+    function touch() { const s = EA.getStore(); s.history[today] = true; EA.saveStore(s); EA.updateStreakBadge(); }
+
+    /* ---------- 日記の一覧 ---------- */
     function render() {
-      const list = EA.getDiary(), box = document.getElementById('entries'); box.innerHTML = '';
-      document.getElementById('countInfo').textContent = list.length ? list.length + ' 件の日記' : '';
+      const list = EA.getDiary(), box = $('entries'); box.innerHTML = '';
+      $('countInfo').textContent = list.length ? list.length + ' 件の日記' : '';
       if (!list.length) { box.innerHTML = '<div class="chat-empty">まだ日記がありません。短い一文からはじめましょう。</div>'; return; }
       list.forEach(e => {
         const d = document.createElement('div'); d.className = 'phrase-card';
@@ -105,31 +284,53 @@
       });
     }
 
+    function setupRoadRow() {
+      if (!ctx || !ctx.slot) return;
+      $('roadRow').style.display = 'flex';
+      $('roadLabel').textContent = ctx.slotDone ? '🗺 今日の「' + ctx.slot.title + '」は完了済み' : '🗺 今日の「' + ctx.slot.title + '」を完了にする';
+      $('roadCb').checked = !ctx.slotDone && (themeMode || params.get('mode') === 'write');
+      $('roadCb').disabled = ctx.slotDone;
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      pickPrompt(false); render();
-      const moods = document.getElementById('moodChips');
+      if (ctx && params.get('mode') === 'write') showTheme(); else pickPrompt(false);
+      renderPatterns(); setupRoadRow(); render(); updateCount();
+      const moods = $('moodChips');
       EA.MOODS.forEach(m => {
         const b = document.createElement('button'); b.className = 'chip'; b.textContent = m; b.setAttribute('aria-label', '気分 ' + m);
         b.addEventListener('click', () => { mood = mood === m ? '' : m; moods.querySelectorAll('.chip').forEach(x => x.classList.toggle('active', x.textContent === mood)); });
         moods.appendChild(b);
       });
-      document.getElementById('shufflePrompt').addEventListener('click', () => pickPrompt(true));
-      document.getElementById('translateBtn').addEventListener('click', async () => {
-        const ja = document.getElementById('jaInput').value.trim();
-        if (!ja) { EA.toast('日本語を入力してください'); return; }
-        const b = document.getElementById('translateBtn'); b.disabled = true; b.textContent = '🔄 翻訳中...';
-        const r = await EA.translate(ja, 'ja|en');
-        b.disabled = false; b.textContent = '🌐 英語にする';
-        if (r.ok) { document.getElementById('enInput').value = r.text; EA.toast('英語を確認して、直したいところは直そう'); }
-        else EA.toast(r.text + ' 英語を直接入力してもOKです。');
+      $('shufflePrompt').addEventListener('click', () => pickPrompt(true));
+      $('themePrompt').addEventListener('click', showTheme);
+      $('patShuffle').addEventListener('click', renderPatterns);
+      $('enInput').addEventListener('input', updateCount);
+      $('checkBtn').addEventListener('click', check);
+      $('playMine').addEventListener('click', () => { const t = $('enInput').value.trim(); if (t) EA.speak(t, 'en-US', 1.0); else EA.toast('先に英語を書いてみよう'); });
+      // 英語が空のときは音読チェックを始めない（attachPronunciation より先に登録して止める）
+      $('micMine').addEventListener('click', ev => { if (!$('enInput').value.trim()) { ev.stopImmediatePropagation(); EA.toast('先に英語を書いてみよう'); } });
+      EA.attachPronunciation($('micMine'), () => $('enInput').value.trim(), {
+        onInterim: t => { $('mineScore').textContent = '🎙️ ' + t; },
+        onResult: r => { EA.renderChips($('mineChips'), r.words); $('mineScore').textContent = '音読スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉' : '（赤い単語をもう一度）'); EA.countSpeak(); EA.updateStreakBadge(); },
+        onError: m => { $('mineScore').textContent = m; }
       });
-      document.getElementById('saveBtn').addEventListener('click', () => {
-        const en = document.getElementById('enInput').value.trim(), ja = document.getElementById('jaInput').value.trim();
-        if (!en) { EA.toast('英語を入力してください（「英語にする」で自動入力）'); return; }
-        if (!EA.addDiaryEntry(en, ja, mood, document.getElementById('memoryCb').checked)) { EA.toast('保存できませんでした'); return; }
-        document.getElementById('enInput').value = ''; document.getElementById('jaInput').value = '';
-        document.getElementById('memoryCb').checked = PROMPTS[promptIdx][2] || recentMeeting();   // 次の一文はお題の初期値に戻す
-        EA.updateStreakBadge(); render(); EA.toast('📔 日記に保存しました');
+      $('saveBtn').addEventListener('click', () => {
+        const en = $('enInput').value.trim(), ja = $('jaInput').value.trim();
+        if (!en) { EA.toast('自分の英語を書いてから保存しよう'); $('enInput').focus(); return; }
+        if (!EA.addDiaryEntry(en, ja, mood, $('memoryCb').checked)) { EA.toast('保存できませんでした'); return; }
+        let roadDone = false;
+        if (ctx && ctx.slot && $('roadCb').checked && !$('roadCb').disabled) {
+          const rd = EA.getRoadmap();
+          rd.done[today] = Array.from(new Set((rd.done[today] || []).concat(ctx.slot.id)));
+          roadDone = EA.saveRoadmap(rd);
+          if (roadDone) { ctx.slotDone = true; setupRoadRow(); }
+        }
+        $('enInput').value = ''; $('jaInput').value = '';
+        $('checkArea').style.display = 'none'; $('checkArea').innerHTML = ''; $('checkBtn').textContent = '🔍 翻訳と比べる';
+        $('mineChips').innerHTML = ''; $('mineScore').textContent = '';
+        $('memoryCb').checked = themeMode ? recentMeeting() : (PROMPTS[promptIdx][2] || recentMeeting());   // 次の日記はお題の初期値に戻す
+        EA.updateStreakBadge(); render(); updateCount();
+        EA.toast(roadDone ? '📔 保存して、ロードマップも完了にしました' : '📔 日記に保存しました');
       });
     });
 
