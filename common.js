@@ -460,7 +460,7 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 5,
+      version: 6,   // v6: 英語日記に翻訳の参考(ref)を追加
       exportedAt: new Date().toISOString(),
       data: getStore(),
       customPhrases: getCustomPhrases(),
@@ -871,19 +871,25 @@
     (Array.isArray(list) ? list : []).forEach(e => {
       if (!e || typeof e !== 'object' || typeof e.en !== 'string') return;
       const id = String(e.id || ''), en = e.en.trim().slice(0, 1000);
-      if (!id || !en || seen.has(id)) return;
+      const ref = typeof e.ref === 'string' ? e.ref.trim().slice(0, 1000) : '';   // 翻訳の英語（参考）。v6で追加
+      if (!id || !en) return;
+      if (seen.has(id)) {   // 同じ日記が重なったら、翻訳の参考がある方を残す（統合読み込み用）
+        const x = out.find(y => y.id === id);
+        if (x && !x.ref && ref) x.ref = ref;
+        return;
+      }
       seen.add(id);
       out.push({ id, t: Number(e.t) || Date.now(), ja: typeof e.ja === 'string' ? e.ja.trim().slice(0, 1000) : '', en,
-        mood: MOODS.includes(e.mood) ? e.mood : '', memory: !!e.memory });
+        mood: MOODS.includes(e.mood) ? e.mood : '', memory: !!e.memory, ref });
     });
     out.sort((a, b) => b.t - a.t);
     return out.slice(0, 500);
   }
   function getDiary() { return sanitizeDiary(loadJSON(KEY_DIARY, [])); }
   function saveDiary(list) { return safeSet(KEY_DIARY, JSON.stringify(sanitizeDiary(list))); }
-  function addDiaryEntry(en, ja, mood, memory) {
+  function addDiaryEntry(en, ja, mood, memory, ref) {
     const list = getDiary();
-    list.unshift({ id: newId('d'), t: Date.now(), ja: ja || '', en, mood: mood || '', memory: !!memory });
+    list.unshift({ id: newId('d'), t: Date.now(), ja: ja || '', en, mood: mood || '', memory: !!memory, ref: ref || '' });
     const ok = saveDiary(list);
     const s = getStore(); touchToday(s); saveStore(s);
     return ok;

@@ -280,7 +280,27 @@
           onResult: r => { EA.renderChips(chips, r.words); score.textContent = 'スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉' : ''); EA.countSpeak(); EA.updateStreakBadge(); },
           onError: m => { score.textContent = m; }
         });
-        d.appendChild(head); d.appendChild(en); if (e.ja) d.appendChild(ja); d.appendChild(chips); d.appendChild(score); d.appendChild(act); box.appendChild(d);
+        // 翻訳の英語（参考）。無い日記は、日本語メモがあれば🌐であとから付けられる
+        let refBox = null;
+        if (e.ref) {
+          refBox = document.createElement('div'); refBox.className = 'dy-res'; refBox.style.margin = '0.5rem 0 0';
+          const t = document.createElement('div'); t.className = 't'; t.textContent = '🌐 翻訳の英語（参考）';
+          const v = document.createElement('div'); v.className = 'v'; v.style.cssText = 'font-size:0.92rem; font-weight:500;'; v.textContent = e.ref;
+          const r = document.createElement('div'); r.className = 'row';
+          r.appendChild(mk('🔊', '翻訳の英語を再生', () => EA.speak(e.ref, 'en-US', 1.0)));
+          r.appendChild(mk('🐢', '翻訳の英語をゆっくり再生', () => EA.speak(e.ref, 'en-US', 0.7)));
+          refBox.appendChild(t); refBox.appendChild(v); refBox.appendChild(r);
+        } else if (e.ja) {
+          act.insertBefore(mk('🌐', '翻訳の参考を付ける', async ev => {
+            const b = ev.currentTarget; b.disabled = true; b.textContent = '🔄';
+            const tr = await EA.translate(e.ja, 'ja|en');
+            if (!tr.ok) { b.disabled = false; b.textContent = '🌐'; EA.toast(tr.text); return; }
+            const l = EA.getDiary(), x = l.find(y => y.id === e.id);
+            if (x) { x.ref = tr.text; EA.saveDiary(l); }
+            render(); EA.toast('翻訳の参考を付けました');
+          }), act.children[3]);
+        }
+        d.appendChild(head); d.appendChild(en); if (e.ja) d.appendChild(ja); if (refBox) d.appendChild(refBox); d.appendChild(chips); d.appendChild(score); d.appendChild(act); box.appendChild(d);
       });
     }
 
@@ -317,7 +337,9 @@
       $('saveBtn').addEventListener('click', () => {
         const en = $('enInput').value.trim(), ja = $('jaInput').value.trim();
         if (!en) { EA.toast('自分の英語を書いてから保存しよう'); $('enInput').focus(); return; }
-        if (!EA.addDiaryEntry(en, ja, mood, $('memoryCb').checked)) { EA.toast('保存できませんでした'); return; }
+        // 答え合わせをした日本語メモのままなら、翻訳の英語も参考として一緒に残す
+        const ref = checked && checked.model && checked.ja === ja ? checked.model : '';
+        if (!EA.addDiaryEntry(en, ja, mood, $('memoryCb').checked, ref)) { EA.toast('保存できませんでした'); return; }
         let roadDone = false;
         if (ctx && ctx.slot && $('roadCb').checked && !$('roadCb').disabled) {
           const rd = EA.getRoadmap();
@@ -326,7 +348,7 @@
           if (roadDone) { ctx.slotDone = true; setupRoadRow(); }
         }
         $('enInput').value = ''; $('jaInput').value = '';
-        $('checkArea').style.display = 'none'; $('checkArea').innerHTML = ''; $('checkBtn').textContent = '🔍 翻訳と比べる';
+        $('checkArea').style.display = 'none'; $('checkArea').innerHTML = ''; $('checkBtn').textContent = '🔍 翻訳と比べる'; checked = null;
         $('mineChips').innerHTML = ''; $('mineScore').textContent = '';
         $('memoryCb').checked = themeMode ? recentMeeting() : (PROMPTS[promptIdx][2] || recentMeeting());   // 次の日記はお題の初期値に戻す
         EA.updateStreakBadge(); render(); updateCount();
