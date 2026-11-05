@@ -89,7 +89,13 @@
       ["文法・表現パターン", "I would've loved to come.", "行きたかったな。（would've loved to ～：〜したかったのに／残念）", "I would've loved to come, but I had to work."],
       ["文法・表現パターン", "I must've left it at home.", "家に忘れてきたに違いない。（must've + 過去分詞：〜したに違いない／確信）", "She must've loved the gift."],
       ["文法・表現パターン", "He could've been stuck in traffic.", "渋滞にはまっていたのかも。（could've + 過去分詞：〜だった可能性もある／推測）", "He must've had too much to drink last night."],
-      ["文法・表現パターン", "I wish I had known.", "知っていたらよかったのに。（I wish I had + 過去分詞：〜だったらよかった）", "I wish I had told you earlier."]
+      ["文法・表現パターン", "I wish I had known.", "知っていたらよかったのに。（I wish I had + 過去分詞：〜だったらよかった）", "I wish I had told you earlier."],
+      ["会話フレーズ", "I can't make it.", "行けそうにない。（参加できない／都合がつかないときに）", "Sorry, I can't make it tonight."],
+      ["語彙・コロケーション", "two more assignments", "さらに2つの課題（two more ～：あと2つの～）", "I still have two more assignments."],
+      ["会話フレーズ", "It's getting a little bit much.", "ちょっと手いっぱいになってきた。（やることや気持ちが多すぎるときに）", "Work is getting a little bit much."],
+      ["文法・表現パターン", "I'll keep working on it.", "引き続き取り組むね。（keep working on ～：～に引き続き取り組む）", "I'll keep working on my English."],
+      ["単語 (単体)", "otherwise", "そうしないと、さもないと", "Let's go now. Otherwise, we'll be late."],
+      ["文法・表現パターン", "I would have liked to come.", "行きたかったんだけどね。（I would have liked to ～：～したかったんだけどね）", "I would have liked to see you this weekend."]
   ];
 
   const KEY_DATA = 'english_app_data';
@@ -384,7 +390,7 @@
   };
   function tokenize(s) {
     s = String(s || '').toLowerCase().replace(/[’‘`]/g, "'");
-    s = s.replace(/[a-z]+'[a-z]+/g, w => CONTRACTIONS[w] || w);
+    s = s.replace(/[a-z]+'[a-z]+/g, w => CONTRACTIONS[w] || w).replace(/\bcannot\b/g, 'can not');
     s = s.replace(/'/g, '').replace(/[^a-z0-9\s]/g, ' ');
     return s.split(/\s+/).filter(Boolean);
   }
@@ -666,7 +672,8 @@
     starving: 'スターヴィング', hungry: 'ハングリー', knife: 'ナイフ', knives: 'ナイヴズ', onions: 'アニオンズ', drawer: 'ドローア', careful: 'ケアフル',
     matching: 'マッチング', lemonade: 'レモネイド', pasta: 'パースタ', mild: 'マイルド', directions: 'ディレクションズ', across: 'アクロス', blocks: 'ブロックス',
     presentation: 'プレゼンテイション', restaurants: 'レストランツ', restaurant: 'レストラント', cafes: 'キャフェイズ', breaks: 'ブレイクス', luck: 'ラック', cheering: 'チアリング',
-    available: 'アヴェイラブル', convenient: 'コンヴィーニエント', exactly: 'イグザクトリ', certainly: 'サートゥンリー', fortunate: 'フォーチュネット', lucky: 'ラッキー'
+    available: 'アヴェイラブル', convenient: 'コンヴィーニエント', exactly: 'イグザクトリ', certainly: 'サートゥンリー', fortunate: 'フォーチュネット', lucky: 'ラッキー',
+    assignments: 'アサインメンツ', assignment: 'アサインメント', otherwise: 'アザーワイズ'
   };
   // 英文に含まれる難しめの単語 → [単語, カタカナ] の配列
   function kanaHints(text) {
