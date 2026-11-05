@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 文法ノート</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=8">
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="roadmap.html">🗺 計画</a>
+    <a href="grammar.html" class="active" aria-current="page">📖 文法</a>
+    <a href="quiz.html">❓ クイズ</a>
+    <a href="writing.html">✍️ 英作文</a>
+    <a href="speaking.html">🎙️ 発音</a>
+    <a href="addword.html">➕ 単語</a>
+    <a href="phrases.html">📚 表現集</a>
+  </div>
+  <div class="container">
+    <div class="chip-row" id="topicChips" role="group" aria-label="文法の項目" style="display:none;"></div>
+    <div class="chip-row" id="tabChips" role="group" aria-label="表示の切り替え">
+      <button class="chip active" data-tab="note">📖 ノート</button>
+      <button class="chip" data-tab="quiz">🎯 判定クイズ</button>
+    </div>
+    <div id="viewNote"></div>
+    <div id="viewQuiz" style="display:none;"></div>
+  </div>
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=8"></script>
+  <script src="grammar-data.js?v=8"></script>
+  <script>
+    const GR = window.GR;
+    const $ = id => document.getElementById(id);
+    const esc = EA.esc;
+    let topicIdx = 0, tab = 'note', quiz = null;
+    const topic = () => GR.TOPICS[topicIdx];
+
+    function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function itemFor(full) {
+      const k = full.toLowerCase();
+      return EA.getAllPhrases().find(x => x[1].toLowerCase() === k) || [EA.CUSTOM_CAT, full, '', ''];
+    }
+    function speakBtns(en) {
+      return '<button class="icon-btn" data-speak="' + esc(en) + '" aria-label="英語を再生">🔊</button><button class="icon-btn" data-speak="' + esc(en) + '" data-slow="1" aria-label="ゆっくり再生">🐢</button>';
+    }
+
+    /* ---------- ノート ---------- */
+    function renderNote() {
+      const T = topic();
+      let html = '<div class="card next-step"><h2 style="margin-bottom:0.4rem;">' + esc(T.title) + '</h2><div class="muted">' + esc(T.intro) + '</div></div>';
+      T.groups.forEach(g => {
+        html += '<div class="section-title">' + esc(g.name) + '</div><p class="muted" style="margin-bottom:0.6rem;">' + esc(g.note) + '</p>';
+        g.forms.forEach(f => {
+          html += '<div class="card gr-form"><div class="gr-key">' + esc(f.key) + '</div>' +
+            '<div class="muted">読み方：<b>' + esc(f.kana) + '</b>（弱く言う）</div>' +
+            '<div class="muted" style="margin-top:0.3rem;">' + esc(f.label) + '</div>' +
+            '<div class="gr-ja">' + esc(f.ja) + '</div><div class="muted">' + esc(f.nuance) + '</div>' +
+            '<div class="item-row" style="margin-top:0.7rem;"><div style="display:flex; justify-content:space-between; gap:6px; align-items:center;"><div><div class="en-text">' + esc(f.ex[0]) + '</div><div class="ja-text muted">' + esc(f.ex[1]) + '</div></div><div style="display:flex; gap:4px;">' + speakBtns(f.ex[0]) + '</div></div></div>' +
+            '<div class="muted gr-tone">💡 ' + esc(f.tone) + '</div></div>';
+        });
+      });
+      html += '<div class="card"><h2>🔍 ニュアンスの比べ方</h2><div class="muted" style="margin-bottom:0.5rem;">' + esc(T.compare.lead) + '</div>' +
+        T.compare.rows.map(r => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:center;"><div><div class="en-text">' + esc(r[0]) + '</div><div class="ja-text muted">' + esc(r[1]) + '</div></div><div>' + speakBtns(r[0]).split('</button>')[0] + '</button></div></div></div>').join('') + '</div>';
+      html += '<div class="card"><h2>⚠️ 注意しておきたいこと</h2><ul style="padding-left:1.1rem;" class="muted">' + T.cautions.map(c => '<li style="margin-bottom:0.5rem;">' + esc(c) + '</li>').join('') + '</ul></div>';
+      html += '<button class="btn" data-act="toQuiz">🎯 判定クイズに挑戦する</button>' +
+        '<div style="display:flex; gap:8px; margin-top:0.5rem;"><a href="phrases.html" class="btn btn-secondary" style="flex:1; font-size:0.85rem;">📚 表現集で例文を見る</a><a href="writing.html" class="btn btn-secondary" style="flex:1; font-size:0.85rem;">✍️ 英作文で練習</a></div>';
+      $('viewNote').innerHTML = html;
+    }
+
+    /* ---------- 判定クイズ ---------- */
+    function startQuiz(questions) {
+      quiz = { qs: shuffle(questions || topic().quiz), i: 0, ok: 0, missed: [], answered: false };
+      renderQuiz();
+    }
+    function blankSentence(s) { return esc(s).replace('___', '<span class="gr-blank">＿＿＿＿</span>'); }
+    function renderQuiz() {
+      const box = $('viewQuiz');
+      if (!quiz) { startQuiz(); return; }
+      if (quiz.i >= quiz.qs.length) {
+        const n = quiz.qs.length, pct = Math.round(quiz.ok * 100 / n);
+        box.innerHTML = '<div class="card" style="text-align:center;"><div style="font-size:2.5rem;">' + (pct >= 80 ? '🏆' : '💪') + '</div><h2>クイズ完了！</h2>' +
+          '<div style="font-size:1.4rem; font-weight:bold; color:var(--primary); margin:0.5rem 0;">' + quiz.ok + ' / ' + n + '（' + pct + '%）</div>' +
+          '<p class="muted">' + (quiz.missed.length ? '間違えた問題は弱点として記録され、復習クイズに出ます。' : '全問正解です！') + '</p>' +
+          (quiz.missed.length ? '<div style="text-align:left; margin-top:0.75rem;">' + quiz.missed.map(q => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:center;"><div><div class="en-text">' + esc(q.full) + '</div><div class="ja-text muted">' + esc(q.situation) + '</div><div class="muted" style="margin-top:0.2rem;">' + esc(q.why) + '</div></div><div>' + speakBtns(q.full).split('</button>')[0] + '</button></div></div></div>').join('') + '</div>' : '') +
+          '<button class="btn" data-act="restart" style="margin-top:0.75rem;">🔄 もう一度（全問）</button>' +
+          (quiz.missed.length ? '<button class="btn btn-secondary" data-act="retryMissed" style="margin-top:0.5rem;">間違えた' + quiz.missed.length + '問だけ もう一度</button>' : '') +
+          '</div>';
+        return;
+      }
+      const q = quiz.qs[quiz.i];
+      quiz.opts = quiz.opts && quiz.optsFor === q ? quiz.opts : shuffle(q.options);
+      quiz.optsFor = q;
+      box.innerHTML = '<div class="card"><div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><span class="muted">文法クイズ</span><span style="font-weight:bold; color:var(--primary);">' + (quiz.i + 1) + ' / ' + quiz.qs.length + '</span></div>' +
+        '<div class="progress-bar-container"><div class="progress-bar-fill" style="width:' + Math.round(quiz.i / quiz.qs.length * 100) + '%"></div></div>' +
+        '<div class="muted" style="margin-top:0.9rem;">こんな場面：</div><div class="question" style="margin-bottom:0.6rem;">' + esc(q.situation) + '</div>' +
+        '<div class="gr-sentence">' + blankSentence(q.sentence) + '</div>' +
+        '<div class="options" id="grOptions">' + quiz.opts.map(o => '<button class="option-btn" data-opt="' + esc(o) + '">' + esc(o) + '</button>').join('') + '</div>' +
+        '<div class="feedback" id="grFeedback" role="status"></div><button class="btn" id="grNext" data-act="next" style="display:none; margin-top:1rem;">次の問題へ</button></div>';
+    }
+    function answerQuiz(btn) {
+      if (!quiz || quiz.answered) return;
+      const q = quiz.qs[quiz.i], pick = btn.dataset.opt, ok = pick === q.answer;
+      quiz.answered = true;
+      document.querySelectorAll('#grOptions .option-btn').forEach(b => {
+        b.disabled = true;
+        if (b.dataset.opt === q.answer) b.classList.add('correct');
+        else if (b === btn) b.classList.add('wrong');
+      });
+      if (ok) quiz.ok += 1; else quiz.missed.push(q);
+      EA.recordResult(itemFor(q.full), ok, 'grammar');
+      const fb = $('grFeedback');
+      fb.className = 'feedback ' + (ok ? 'correct' : 'wrong'); fb.style.display = 'block';
+      fb.innerHTML = (ok ? '⭕ 正解！' : '❌ 正解は ' + esc(q.answer)) + '<span class="sub">' + esc(q.why) + '</span><span class="sub"><b>' + esc(q.full) + '</b></span>' +
+        '<div style="margin-top:0.4rem;">' + speakBtns(q.full) + '</div>';
+      $('grNext').style.display = 'block';
+      $('grNext').textContent = quiz.i + 1 >= quiz.qs.length ? '結果を見る' : '次の問題へ';
+    }
+
+    /* ---------- 切り替え ---------- */
+    function setTab(name) {
+      tab = name;
+      document.querySelectorAll('#tabChips .chip').forEach(c => c.classList.toggle('active', c.dataset.tab === name));
+      $('viewNote').style.display = name === 'note' ? '' : 'none';
+      $('viewQuiz').style.display = name === 'quiz' ? '' : 'none';
+      if (name === 'quiz') renderQuiz(); else renderNote();
+    }
+    function renderTopics() {
+      const box = $('topicChips');
+      if (GR.TOPICS.length < 2) return;
+      box.style.display = '';
+      box.innerHTML = GR.TOPICS.map((t, i) => '<button class="chip' + (i === topicIdx ? ' active' : '') + '" data-topic="' + i + '">' + esc(t.short) + '</button>').join('');
+    }
+    document.addEventListener('click', e => {
+      const sp = e.target.closest('[data-speak]');
+      if (sp) { EA.speak(sp.dataset.speak, 'en-US', sp.dataset.slow ? 0.7 : 1); return; }
+      const tp = e.target.closest('[data-topic]');
+      if (tp) { topicIdx = +tp.dataset.topic; quiz = null; renderTopics(); setTab(tab); return; }
+      const tb = e.target.closest('[data-tab]');
+      if (tb) { setTab(tb.dataset.tab); return; }
+      const op = e.target.closest('[data-opt]');
+      if (op) { answerQuiz(op); return; }
+      const a = e.target.closest('[data-act]');
+      if (!a) return;
+      if (a.dataset.act === 'toQuiz') { setTab('quiz'); window.scrollTo(0, 0); }
+      else if (a.dataset.act === 'next') { quiz.i += 1; quiz.answered = false; quiz.opts = null; renderQuiz(); }
+      else if (a.dataset.act === 'restart') { startQuiz(); }
+      else if (a.dataset.act === 'retryMissed') { startQuiz(quiz.missed); }
+    });
+    renderTopics();
+    renderNote();
+    EA.updateStreakBadge();
+
+  </script>
+</body>
+</html>

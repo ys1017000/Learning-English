@@ -233,3 +233,10 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--primary); }
 .rm-home-slots span.done { background: #dcfce7; border-color: #86efac; color: #166534; font-weight: 600; }
 .rm-badge.ok { background: #dcfce7; color: #166534; white-space: nowrap; }
 .rm-badge.ng { background: #fee2e2; color: #b91c1c; white-space: nowrap; }
+
+/* ---- 文法ノート ---- */
+.gr-key { font-size: 1.7rem; font-weight: 800; color: var(--primary); line-height: 1.2; margin-bottom: 0.25rem; }
+.gr-ja { font-size: 1.05rem; font-weight: 700; margin: 0.4rem 0 0.2rem; }
+.gr-tone { margin-top: 0.6rem; padding: 0.5rem 0.65rem; background: #fffbeb; border-radius: 8px; color: #92400e; }
+.gr-sentence { font-size: 1.25rem; font-weight: 700; line-height: 1.5; margin: 0.4rem 0 1rem; color: #0f172a; }
+.gr-blank { display: inline-block; min-width: 3.2em; text-align: center; border-bottom: 3px solid var(--primary); color: var(--primary); }

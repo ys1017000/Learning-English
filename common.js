@@ -81,7 +81,15 @@
       ["実践フレーズ", "I hope you're getting some breaks while working on your presentation.", "プレゼンの準備中も、ちゃんと休憩できてるといいな。"],
       ["実践フレーズ", "I'll look for some restaurants and cafes.", "レストランやカフェを探してみるね。"],
       ["実践フレーズ", "Let me know if there's anything you'd like to eat!", "何か食べたいものがあったら教えてね！"],
-      ["実践フレーズ", "Good luck with your presentation!", "プレゼン頑張ってね！（Good luck with ～：～がうまくいくといいね）"]
+      ["実践フレーズ", "Good luck with your presentation!", "プレゼン頑張ってね！（Good luck with ～：～がうまくいくといいね）"],
+      ["文法・表現パターン", "I should've called you last night.", "昨日の夜、電話すればよかった。（should've + 過去分詞：〜すべきだったのに／後悔）", "I should've called you. I'm sorry."],
+      ["文法・表現パターン", "I shouldn't have said that.", "あんなこと、言わなければよかった。（shouldn't have + 過去分詞：〜しなければよかった）", "I shouldn't have said that. I'm sorry."],
+      ["文法・表現パターン", "I could've helped you. I had time.", "手伝えたのに。時間はあったんだ。（could've + 過去分詞：〜できたのに）", "I could've picked you up if you had told me."],
+      ["文法・表現パターン", "I would've gone if I had known.", "知っていたら行ったのに。（would've + 過去分詞：〜しただろう／もしもの想像）", "If it hadn't rained, the game would've started."],
+      ["文法・表現パターン", "I would've loved to come.", "行きたかったな。（would've loved to ～：〜したかったのに／残念）", "I would've loved to come, but I had to work."],
+      ["文法・表現パターン", "I must've left it at home.", "家に忘れてきたに違いない。（must've + 過去分詞：〜したに違いない／確信）", "She must've loved the gift."],
+      ["文法・表現パターン", "He could've been stuck in traffic.", "渋滞にはまっていたのかも。（could've + 過去分詞：〜だった可能性もある／推測）", "He must've had too much to drink last night."],
+      ["文法・表現パターン", "I wish I had known.", "知っていたらよかったのに。（I wish I had + 過去分詞：〜だったらよかった）", "I wish I had told you earlier."]
   ];
 
   const KEY_DATA = 'english_app_data';
@@ -648,7 +656,8 @@
     answer: 'アンサー', listen: 'リスン', whole: 'ホウル', enough: 'イナフ', laugh: 'ラフ', daughter: 'ドーター', nervous: 'ナーヴァス',
     stress: 'ストレス', stressed: 'ストレスト', exhausted: 'イグゾースティド', overwhelmed: 'オウヴァウェルムド', upset: 'アプセット', disappointed: 'ディサポインティド',
     misunderstanding: 'ミスアンダスタンディング', apologize: 'アパロジャイズ', forgive: 'フォーギヴ', 
-    fiancé: 'フィーアンセイ', cuddling: 'カドゥリング', 
+    fiancé: 'フィーアンセイ', cuddling: 'カドゥリング',
+    "should've": 'シュダヴ', "shouldn't": 'シュドゥント', "could've": 'クダヴ', "would've": 'ウダヴ', "must've": 'マスタヴ', 
     adore: 'アドー', treasure: 'トレジャー', pressure: 'プレッシャー', patient: 'ペイシェント',
     dessert: 'ディザート', souvenir: 'スーヴェニア', souvenirs: 'スーヴェニアズ', delicious: 'ディリシャス', stuffed: 'スタッフト', incredible: 'インクレディブル',
     spicy: 'スパイシー', blanket: 'ブランケット', takeout: 'テイクアウト', dishes: 'ディッシュィズ', view: 'ヴュー', photo: 'フォウトウ', picture: 'ピクチャー',
