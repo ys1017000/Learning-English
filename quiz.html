@@ -57,6 +57,7 @@
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
   <script src="common.js?v=10"></script>
+  <script src="usage-data.js?v=1"></script>
   <script>
     const QUIZ_SIZE = 10;
     let quizSet = [], currentIndex = 0, score = 0, answered = false, missed = [];
@@ -141,6 +142,7 @@
       fb.className = 'feedback ' + (ok ? 'correct' : 'wrong');
       fb.textContent = ok ? '⭕ 正解です！' : '❌ 残念！ 正解: ' + item[1];
       extra.forEach(t => { const s = document.createElement('span'); s.className = 'sub'; s.textContent = t; fb.appendChild(s); });
+      { const u = EA.usageFor(item[1]); if (u) { const s = document.createElement('span'); s.className = 'sub usage-line'; s.textContent = '🎬 場面：' + u; fb.appendChild(s); } }
       fb.style.display = 'block';
 
       const next = document.getElementById('nextBtn');

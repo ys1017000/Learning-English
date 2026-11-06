@@ -57,6 +57,7 @@
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
   <script src="common.js?v=10"></script>
+  <script src="usage-data.js?v=1"></script>
   <script>
     let currentItem = null, selfChecked = false;
 
@@ -91,6 +92,7 @@
       document.getElementById('modelAnswer').textContent = currentItem[1];
       const { note } = EA.splitJa(currentItem[2]);
       document.getElementById('modelNote').textContent = [note ? '💡 ' + note : '', currentItem[3] ? '例文: ' + currentItem[3] : ''].filter(Boolean).join('  /  ');
+      EA.renderUsage(document.getElementById('modelNote'), currentItem[1]);
 
       // 入力があれば単語単位で照合（別解もあり得るので参考表示。判定は自己採点）
       const typed = document.getElementById('userInput').value.trim();

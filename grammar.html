@@ -40,6 +40,7 @@
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
   <script src="common.js?v=10"></script>
+  <script src="usage-data.js?v=1"></script>
   <script src="grammar-data.js?v=8"></script>
   <script>
     const GR = window.GR;
@@ -123,7 +124,7 @@
       EA.recordResult(itemFor(q.full), ok, 'grammar');
       const fb = $('grFeedback');
       fb.className = 'feedback ' + (ok ? 'correct' : 'wrong'); fb.style.display = 'block';
-      fb.innerHTML = (ok ? '⭕ 正解！' : '❌ 正解は ' + esc(q.answer)) + '<span class="sub">' + esc(q.why) + '</span><span class="sub"><b>' + esc(q.full) + '</b></span>' +
+      fb.innerHTML = (ok ? '⭕ 正解！' : '❌ 正解は ' + esc(q.answer)) + '<span class="sub">' + esc(q.why) + '</span><span class="sub"><b>' + esc(q.full) + '</b></span>' + (EA.usageFor(q.full) ? '<span class="sub usage-line">🎬 場面：' + esc(EA.usageFor(q.full)) + '</span>' : '') +
         '<div style="margin-top:0.4rem;">' + speakBtns(q.full) + '</div>';
       $('grNext').style.display = 'block';
       $('grNext').textContent = quiz.i + 1 >= quiz.qs.length ? '結果を見る' : '次の問題へ';

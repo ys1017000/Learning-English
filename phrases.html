@@ -37,6 +37,7 @@
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
   <script src="common.js?v=10"></script>
+  <script src="usage-data.js?v=1"></script>
   <script>
     function renderPhrases(query) {
       const q = (query || '').trim().toLowerCase();
@@ -81,6 +82,7 @@
         const ja = document.createElement('div'); ja.className = 'ja-text'; ja.textContent = p[2];
         card.appendChild(badge); card.appendChild(row); card.appendChild(ja);
         if (p[3]) { const ex = document.createElement('div'); ex.className = 'ex-text'; ex.textContent = '例文: ' + p[3]; card.appendChild(ex); }
+        { const u = EA.usageFor(p[1]); if (u) { const us = document.createElement('div'); us.className = 'usage-line'; us.textContent = '🎬 場面：' + u; card.appendChild(us); } }
         container.appendChild(card);
       });
     }

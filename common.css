@@ -240,3 +240,7 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--primary); }
 .gr-tone { margin-top: 0.6rem; padding: 0.5rem 0.65rem; background: #fffbeb; border-radius: 8px; color: #92400e; }
 .gr-sentence { font-size: 1.25rem; font-weight: 700; line-height: 1.5; margin: 0.4rem 0 1rem; color: #0f172a; }
 .gr-blank { display: inline-block; min-width: 3.2em; text-align: center; border-bottom: 3px solid var(--primary); color: var(--primary); }
+
+/* 場面の補足（どんなシチュエーションで使うか） */
+.usage-line { font-size: 0.85rem; line-height: 1.5; text-align: left; color: #7c2d12; background: #fff7ed; border-left: 3px solid #fb923c; border-radius: 6px; padding: 0.4rem 0.65rem; margin-top: 0.45rem; word-break: break-word; font-weight: normal; }
+.feedback .usage-line { display: block; }

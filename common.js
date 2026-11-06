@@ -368,6 +368,33 @@
 
   /* ---------- ジャンル選択・出題 ---------- */
   // 日本語訳の末尾の（補足）を分離。出題文に答えのヒントが混ざるのを防ぐ
+  /* ---------- 場面の補足（usage-data.js の window.USAGE） ---------- */
+  // 英文ごとに「どんな場面で使うか」を一文で持つ。大文字小文字・文末の記号・’ の違いは無視して照合
+  function usageKey(en) { return String(en || '').toLowerCase().replace(/[’‘]/g, "'").replace(/\s+/g, ' ').trim().replace(/[\s.!?。！？]+$/, ''); }
+  let usageMap = null;
+  function usageFor(en) {
+    if (!usageMap) {
+      usageMap = {};
+      const src = (typeof window !== 'undefined' && window.USAGE) || {};
+      Object.keys(src).forEach(k => { usageMap[usageKey(k)] = String(src[k]); });
+    }
+    return usageMap[usageKey(en)] || '';
+  }
+  // el に「🎬 場面：…」を出す（無ければ隠す）。el が無ければ、anchor の直後に作る
+  function renderUsage(target, en) {
+    let el = target;
+    if (el && !el.classList.contains('usage-line')) {
+      const next = el.nextElementSibling;
+      if (next && next.classList.contains('usage-line')) el = next;
+      else { const d = document.createElement('div'); d.className = 'usage-line'; el.insertAdjacentElement('afterend', d); el = d; }
+    }
+    if (!el) return '';
+    const u = usageFor(en);
+    el.textContent = u ? '🎬 場面：' + u : '';
+    el.style.display = u ? '' : 'none';
+    return u;
+  }
+
   function splitJa(ja) {
     const m = String(ja || '').match(/^(.*?)\s*（([^）]*)）\s*$/);
     if (m && m[1].trim()) return { main: m[1].trim(), note: m[2].trim() };
@@ -1212,7 +1239,7 @@
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
     esc, dateKey, getStore, saveStore, getCustomPhrases, saveCustomPhrases, getAllPhrases,
     isFavorite, toggleFavorite, markStudied, recordResult, countSpeak, getWeakPhrases, calcStreak, updateStreakBadge,
-    splitJa, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
+    splitJa, usageFor, renderUsage, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,
     getPrefs, setPref, hasPhrase, addCustomPhrase, addToReview,
