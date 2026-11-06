@@ -321,6 +321,32 @@
     "I didn't think you would remember my birthday.": "相手が覚えていてくれた・してくれたことに驚いて喜ぶとき。",
     "It was easier than I thought.": "やってみたら予想より簡単だったとき。逆なら It was harder than I thought.",
 
+    // ===== 文法ノート：比較級・頻度 =====
+    "This place is cheaper than the one near the station.": "ほかの店と比べて値段の話をするとき。the one＝（同じ種類の）もの・店。",
+    "This restaurant is more expensive than I expected.": "メニューやお会計を見て、予想より高かったとき。小声で言うのが無難。",
+    "I feel much better today.": "体調を心配されたときの返事。少しだけなら I feel a little better.",
+    "I like summer better than winter.": "好みを比べて話すとき。相手には Which do you like better? と聞ける。",
+    "Your English is much better than my German.": "相手の語学力をほめつつ、自分の苦手を軽く笑いにするとき。",
+    "It's getting colder and colder.": "季節の変わり目の雑談。暑くなるなら warmer and warmer.",
+    "The view here is more beautiful than the one at the temple.": "観光中に2つの場所を比べて感想を言うとき。",
+    "This cafe isn't as crowded as that one.": "お店を選ぶとき。not as ～ as はやわらかく比べられる。",
+    "I usually cook at home on weekdays.": "ふだんの生活・習慣を話すとき。",
+    "I rarely eat breakfast.": "食習慣を聞かれたとき。rarely だけで否定になる。",
+    "I'm usually busy on weekdays.": "会える日を決めるときに、平日の都合を伝える。",
+    "I go to the gym twice a week.": "習慣を回数で具体的に話すとき。",
+    "How often do you talk to your family?": "相手の家族や生活のことを聞くとき。離れて暮らす相手に。",
+    "I sometimes watch German movies.": "相手の国や文化に興味があると伝えるきっかけに。",
+    "I never eat spicy food.": "食べられない・食べないものを伝えるとき。苦手なら I can't eat spicy food.",
+    "Let's go out together every weekend.": "これからの過ごし方を提案するとき。毎週が重いなら more often（もっと頻繁に）。",
+
+    // ===== 文法ノート：頻度（その他・barely） =====
+    "I hardly ever eat out.": "食習慣を話すとき。rarely より会話的。",
+    "I barely slept last night.": "寝不足を伝えるとき。回数ではなく「寝た量」が少ない。",
+    "I barely made the train.": "待ち合わせに滑り込んだときなど。I barely made it. だけでも言える。",
+    "We text each other all the time.": "二人のやりとりの多さを話すとき。text＝メッセージを送る。",
+    "I go to the movies alone once in a while.": "一人の時間の過ごし方を話すとき。",
+    "I could barely hear you.": "電話や騒がしい店で聞き取れなかったとき。",
+
     // ===== マイ単語 =====
     "Has something fun happened lately?": "近況を聞くときの話題の振り方。How are you? より話が広がりやすい。",
     "improvisation": "前もって準備せず、その場で即興でやること（演劇・音楽・スピーチなど）。",
