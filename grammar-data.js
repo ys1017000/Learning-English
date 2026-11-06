@@ -254,6 +254,185 @@
       { situation: 'しょっちゅうメッセージを送り合ってるね。', sentence: 'We text each other ___.', options: ['all the time', 'always time', 'every times', 'all times'], answer: 'all the time', full: 'We text each other all the time.', why: 'all the time を文の最後に置いて「しょっちゅう」。' },
       { situation: 'たまに、一人で映画を見に行く。', sentence: 'I go to the movies alone ___.', options: ['once in a while', 'once a while', 'one time while', 'in once a while'], answer: 'once in a while', full: 'I go to the movies alone once in a while.', why: 'once in a while＝たまに（sometimes より少なめ）。' }
     ]
+  }, {
+    id: 'present-perfect',
+    title: '現在完了：have / has ＋ 過去分詞',
+    short: '今につながる過去（現在完了）',
+    intro: 'have / has ＋ 過去分詞で、「過去のことが今につながっている」ことを表します。使い方は大きく3つ：経験（〜したことがある）、完了（もう〜した）、継続（ずっと〜している）。話すときは I\'ve / she\'s と縮めます。',
+    groups: [
+      {
+        name: '3つの使い方',
+        note: '同じ形でも、一緒に使う言葉（ever / never、already / just / yet、for / since）で意味が分かります。',
+        forms: [
+          { key: '経験：〜したことがある', kana: 'アイヴ ビーン', kanaNote: '（I have は I\'ve と縮める）', label: 'have ＋ 過去分詞（＋ never / ever / before / 回数）', ja: '〜したことがある', nuance: '今までの人生での経験。Have you ever ～? で経験を聞きます。',
+            ex: ["I've never been to Germany.", 'ドイツには行ったことがない。'], tone: '「行ったことがある」は have been to。have gone to は「行ってしまって今ここにいない」の意味。' },
+          { key: '完了：もう〜した', kana: 'オールレディ / ジャスト / イェット', kanaNote: '', label: 'have ＋ already / just ＋ 過去分詞、haven\'t ＋ 過去分詞 ＋ yet', ja: 'もう〜した／ちょうど〜した／まだ〜していない', nuance: '「やり終えて、今その状態にある」こと。',
+            ex: ["I've just finished work.", 'ちょうど仕事が終わったところ。'], tone: 'yet は否定文・疑問文の最後に：Have you eaten yet?（もう食べた？）／ I haven\'t eaten yet.（まだ食べてない）' },
+          { key: '継続：ずっと〜している', kana: 'フォー / シンス', kanaNote: '', label: 'have ＋ 過去分詞 ＋ for 期間 / since 起点', ja: 'ずっと〜している', nuance: '過去から今まで続いている状態。',
+            ex: ["I've lived in Tokyo for five years.", '東京に5年住んでいる。'], tone: 'for＝期間（for two years）、since＝始まった時点（since 2020 / since I was a child）。' }
+        ]
+      },
+      {
+        name: '会話でよく使う形',
+        note: '相手のことを聞く質問や、最近の様子を話すときに毎日のように使います。',
+        forms: [
+          { key: 'Have you ever ～?', kana: 'ハヴュー エヴァー', kanaNote: '', label: 'Have you ever ＋ 過去分詞?', ja: '〜したことある？', nuance: '話題を広げる定番の質問。',
+            ex: ['Have you ever tried natto?', '納豆、食べたことある？'], tone: "答えは Yes, I have. / No, I haven't. / No, never." },
+          { key: 'How long have you ～?', kana: '', kanaNote: '', label: 'How long have you ＋ 過去分詞?', ja: 'どのくらい〜している？', nuance: '続いている期間を聞きます。',
+            ex: ['How long have you lived in Japan?', '日本に住んでどのくらい？'], tone: '答えは For two years.（2年）/ Since last April.（去年の4月から）' },
+          { key: 'have been ～ing', kana: '', kanaNote: '', label: 'have been ＋ ～ing（現在完了進行形）', ja: 'ずっと〜している（動作）', nuance: '動作がずっと続いていること。最近の忙しさや気持ちを話すときに。',
+            ex: ["I've been studying English for five years.", '英語を5年間勉強している。'], tone: "I've been busy.（最近忙しい）、I've been thinking about you.（ずっとあなたのことを考えてた）も定番。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「ドイツに行く」',
+      rows: [
+        ['I went to Germany last year.', '去年ドイツに行った。（過去：いつのことかを言う）'],
+        ["I've been to Germany.", 'ドイツに行ったことがある。（経験）'],
+        ["I've been to Germany twice.", 'ドイツに2回行ったことがある。（経験の回数）'],
+        ['She has gone to Germany.', '彼女はドイツに行ってしまった。（今ここにいない）'],
+        ["I've lived in Germany for a year.", 'ドイツに1年住んでいる。（今も住んでいる）']
+      ]
+    },
+    cautions: [
+      '過去の時点を表す言葉（yesterday / last week / in 2020 / ～ ago）と現在完了は一緒に使わない：I have seen it yesterday.（×）→ I saw it yesterday.（○）',
+      'When ～? の質問にも使わない：When have you come to Japan?（×）→ When did you come to Japan?（○）',
+      '「行ったことがある」は have been to。have gone to は「行ってしまった（今いない）」。',
+      'アメリカ英語では Did you eat yet? のように過去形で言うことも多いので、相手が過去形で言っても迷わなくて大丈夫です。'
+    ],
+    quiz: [
+      { situation: 'ドイツには行ったことがない。', sentence: "I've never ___ to Germany.", options: ['been', 'gone', 'went', 'go'], answer: 'been', full: "I've never been to Germany.", why: '「行ったことがある／ない」は have been to。gone だと「行ってしまった」。' },
+      { situation: 'ちょうど仕事が終わったところ。', sentence: "I've just ___ work.", options: ['finished', 'finish', 'finishing', 'been finish'], answer: 'finished', full: "I've just finished work.", why: 'have ＋ just ＋ 過去分詞で「ちょうど〜したところ」。' },
+      { situation: '納豆、食べたことある？', sentence: 'Have you ever ___ natto?', options: ['tried', 'try', 'trying', 'tries'], answer: 'tried', full: 'Have you ever tried natto?', why: '経験を聞くのは Have you ever ＋ 過去分詞?' },
+      { situation: '東京に5年住んでいる。', sentence: "I've lived in Tokyo ___ five years.", options: ['for', 'since', 'from', 'during'], answer: 'for', full: "I've lived in Tokyo for five years.", why: '期間（five years）の前は for。' },
+      { situation: '彼女は去年の4月から日本に住んでいる。', sentence: 'She has lived in Japan ___ last April.', options: ['since', 'for', 'from', 'ago'], answer: 'since', full: 'She has lived in Japan since last April.', why: '始まった時点（last April）の前は since。' },
+      { situation: 'その映画、昨日見たよ。', sentence: 'I ___ the movie yesterday.', options: ['saw', 'have seen', 'had seen', 'have saw'], answer: 'saw', full: 'I saw the movie yesterday.', why: 'yesterday のように過去の時点がはっきりしているときは、現在完了ではなく過去形。' },
+      { situation: 'まだ夕ごはん食べてない。', sentence: "I haven't had dinner ___.", options: ['yet', 'already', 'just', 'since'], answer: 'yet', full: "I haven't had dinner yet.", why: '否定文の「まだ」は文の最後に yet。' },
+      { situation: '最近ずっとあなたのことを考えてた。', sentence: "I've been ___ about you a lot lately.", options: ['thinking', 'think', 'thought', 'thinks'], answer: 'thinking', full: "I've been thinking about you a lot lately.", why: 'have been ＋ ～ing で「ずっと〜している（動作）」。' }
+    ]
+  }, {
+    id: 'past-perfect',
+    title: '過去完了：had ＋ 過去分詞',
+    short: '過去よりさらに前（過去完了）',
+    intro: 'had ＋ 過去分詞で、「過去のある時点より、さらに前に起きていたこと」を表します。2つの過去の出来事の順番をはっきりさせたいときに使います。話すときは I\'d / she\'d と縮めます。',
+    groups: [
+      {
+        name: '基本の使い方',
+        note: 'まず「基準になる過去」（駅に着いた、日本に来た、など）があって、それより前のことを had ＋ 過去分詞で言います。',
+        forms: [
+          { key: 'もう〜していた', kana: 'ハッド', kanaNote: '（I had は I\'d と縮める）', label: '基準の過去（過去形）＋ had ＋ 過去分詞', ja: '（そのときには）もう〜していた', nuance: '基準の過去より前に終わっていたこと。',
+            ex: ['When I got to the station, the train had already left.', '駅に着いたとき、電車はもう出てしまっていた。'], tone: '基準（got to the station）は過去形、それより前（left）は had left。' },
+          { key: '〜したことがなかった', kana: '', kanaNote: '', label: 'had never ＋ 過去分詞 ＋ before ～', ja: '（そのときまで）一度も〜したことがなかった', nuance: '過去のある時点までの経験。現在完了の「経験」を過去にずらした形です。',
+            ex: ['I had never eaten sushi before I came to Japan.', '日本に来るまで、お寿司を食べたことがなかった。'], tone: '日本に来る前・出会う前の話をするときによく出ます。' },
+          { key: 'ずっと〜だった', kana: '', kanaNote: '', label: 'had ＋ 過去分詞 ＋ for 期間（＋ before ～）', ja: '（そのときまで）ずっと〜だった', nuance: '過去のある時点まで続いていたこと。',
+            ex: ['We had known each other for a year before we started dating.', '付き合う前に、1年知り合いだった。'], tone: 'for / since は現在完了と同じように使えます。' }
+        ]
+      },
+      {
+        name: '会話でよく使う形',
+        note: '過去完了は、会話ではこの3つが特によく出ます。',
+        forms: [
+          { key: "I'd forgotten", kana: 'アイド フォガトゥン', kanaNote: '', label: "I'd forgotten ～ / I hadn't realized ～", ja: '（言われるまで）忘れていた／気づいていなかった', nuance: '言われて初めて気づいたときの定番。',
+            ex: ["Sorry, I'd forgotten about it.", 'ごめん、すっかり忘れてた。'], tone: "I hadn't realized it was so late.（こんなに遅いって気づかなかった）" },
+          { key: 'If I had known', kana: '', kanaNote: '', label: "If I had ＋ 過去分詞, I would've ～", ja: 'もし〜していたら、…したのに', nuance: '過去の事実と違う「もしも」。文法ノートの would\'ve とつながります。',
+            ex: ["If I had known, I would've come earlier.", '知っていたら、もっと早く来たのに。'], tone: 'I wish I had ～.（〜していればよかった）も同じ had ＋ 過去分詞。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「駅に着いたとき」と「電車」',
+      rows: [
+        ['When I got to the station, the train left.', '駅に着いたら、（そのあと）電車が出た。（順番どおり）'],
+        ['When I got to the station, the train had left.', '駅に着いたとき、電車はもう出ていた。（電車が先）'],
+        ['The train has left.', '電車はもう出てしまった。（今の話：現在完了）'],
+        ['The train left at 9.', '電車は9時に出た。（ただの過去）']
+      ]
+    },
+    cautions: [
+      '過去完了は「基準になる過去」があるときだけ使います。基準がないなら、ふつうの過去形でOK。',
+      'before / after で順番がはっきりしているときは、過去形だけでも通じます：I ate before I left.（会話ではこちらが多い）',
+      "I'd は I had と I would の両方の短縮形。後ろが過去分詞なら had（I'd forgotten）、動詞の原形なら would（I'd like）。",
+      '使いすぎなくて大丈夫。「忘れてた」「〜したことがなかった」「もし知っていたら」の3つを押さえれば、会話ではほぼ足ります。'
+    ],
+    quiz: [
+      { situation: '駅に着いたとき、電車はもう出てしまっていた。', sentence: 'When I got to the station, the train ___ already left.', options: ['had', 'has', 'have', 'was'], answer: 'had', full: 'When I got to the station, the train had already left.', why: '駅に着いた（過去）より前に出ていたので had ＋ 過去分詞。' },
+      { situation: '日本に来るまで、お寿司を食べたことがなかった。', sentence: 'I had never ___ sushi before I came to Japan.', options: ['eaten', 'ate', 'eat', 'eating'], answer: 'eaten', full: 'I had never eaten sushi before I came to Japan.', why: 'had のあとは過去分詞。eat の過去分詞は eaten。' },
+      { situation: 'ごめん、すっかり忘れてた。', sentence: "Sorry, I'd ___ about it.", options: ['forgotten', 'forget', 'forgot', 'forgetting'], answer: 'forgotten', full: "Sorry, I'd forgotten about it.", why: "I'd ＋ 過去分詞なので I had forgotten。forget の過去分詞は forgotten。" },
+      { situation: '知っていたら、もっと早く来たのに。', sentence: "If I ___ known, I would've come earlier.", options: ['had', 'have', 'would', 'did'], answer: 'had', full: "If I had known, I would've come earlier.", why: '過去の事実と違う「もしも」は If I had ＋ 過去分詞。' },
+      { situation: 'こんなに遅いって気づかなかった。', sentence: '___ realized it was so late.', options: ["I hadn't", "I haven't", "I didn't have", "I wasn't"], answer: "I hadn't", full: "I hadn't realized it was so late.", why: '気づいた時点より前の「気づいていなかった」なので hadn\'t ＋ 過去分詞。' },
+      { situation: '付き合う前に、1年知り合いだった。', sentence: 'We had known each other ___ a year before we started dating.', options: ['for', 'since', 'during', 'from'], answer: 'for', full: 'We had known each other for a year before we started dating.', why: '期間（a year）の前は for。' },
+      { situation: '家に帰ったとき、彼女はもう寝ていた。', sentence: 'When I got home, she ___ already gone to bed.', options: ['had', 'has', 'was', 'have'], answer: 'had', full: 'When I got home, she had already gone to bed.', why: '帰った（過去）より前に寝ていたので had gone。' },
+      { situation: '（今の話）電車、もう出ちゃった！次のを待とう。', sentence: "The train ___ left! Let's wait for the next one.", options: ['has', 'had', 'have', 'is'], answer: 'has', full: "The train has left! Let's wait for the next one.", why: '今の状況なので現在完了の has。基準になる過去がないので had は使わない。' }
+    ]
+  }, {
+    id: 'hope-wish',
+    title: '願う・期待する：I hope ～ / I wish ～',
+    short: '「そうだといいね」（hope / wish）',
+    intro: '「そうだといいね」「私もそう願ってる」のように、これからのことへの期待や願いを伝える言い方です。恋人同士のメッセージでもよく使います。ポイントは、実現しそうなことには hope、現実とは違う（無理だと分かっている）ことには wish を使うことです。',
+    groups: [
+      {
+        name: '短い返事で使う',
+        note: '相手の言葉に「そうだといいね」と返す短い言い方。会話でもメッセージでも一番よく使います。',
+        forms: [
+          { key: 'I hope so.', kana: 'アイ ホウプ ソウ', kanaNote: '', label: 'I hope so. / I hope so too.', ja: 'そうだといいね／私もそう願ってる', nuance: 'so は相手が言った内容を指します。相手の期待に同意するときの返事。',
+            ex: ['I hope so too.', '私もそう願ってる。'], tone: '「土曜は晴れるって」→ I hope so!（そうだといいね）。気持ちを込めるなら I really hope so.' },
+          { key: 'I hope not.', kana: 'アイ ホウプ ノット', kanaNote: '', label: 'I hope not.', ja: 'そうならないといいな', nuance: '悪いことが起きないでほしいときの返事。',
+            ex: ['I hope not.', 'そうならないといいな。'], tone: "「明日雨かな？」→ I hope not.（降らないといいな）。I don't hope so. とは言いません。" },
+          { key: 'Fingers crossed!', kana: 'フィンガーズ クロスト', kanaNote: '', label: "Fingers crossed! / Let's hope so.", ja: 'うまくいくといいね！（祈ってる）', nuance: '試験・面接・天気など、結果を待つときの軽い言い方。人差し指と中指を交差させるジェスチャーから。',
+            ex: ['Fingers crossed for your presentation!', 'プレゼン、うまくいくように祈ってる！'], tone: "Let's hope so.（そうだといいね）は、二人で一緒に願う感じ。" }
+        ]
+      },
+      {
+        name: '気持ちを込めて願う',
+        note: '相手のこと・二人のこれからを願う言い方です。',
+        forms: [
+          { key: 'I hope ＋ 文', kana: '', kanaNote: '', label: 'I hope ＋ 主語 ＋ 動詞', ja: '〜だといいな', nuance: '相手のこれからを願う形。未来のことでも現在形で言うことが多いです。',
+            ex: ['I hope you feel better soon.', '早く良くなるといいな。'], tone: 'I hope you have a great day!（素敵な一日になりますように）は朝のメッセージの定番。' },
+          { key: "I'm hoping ～", kana: '', kanaNote: '', label: "I'm hoping ＋ 文", ja: '〜だといいなと思ってる', nuance: '進行形にすると、今まさに期待している気持ちが、少し控えめに伝わります。',
+            ex: ["I'm hoping we can meet next week.", '来週会えたらいいなと思ってる。'], tone: '会う予定を押しつけずに提案するときにも使えます。' },
+          { key: 'I hope we can ～', kana: '', kanaNote: '', label: 'I hope we can ＋ 動詞', ja: '（二人で）〜できたらいいな', nuance: '二人のこれからを願う、恋人同士でよく使う形です。',
+            ex: ['I hope we can go to Germany together someday.', 'いつか一緒にドイツに行けたらいいな。'], tone: 'someday（いつか）、more often（もっと頻繁に）と一緒に使うことが多いです。' }
+        ]
+      },
+      {
+        name: 'hope と wish の違い',
+        note: 'どちらも「願う」ですが、実現しそうかどうかで使い分けます。',
+        forms: [
+          { key: 'I wish ＋ 過去形', kana: 'アイ ウィッシュ', kanaNote: '', label: 'I wish ＋ 主語 ＋ 過去形（could / were など）', ja: '（無理だけど）〜だったらいいのに', nuance: '現実とは違うことを願う形。会えない寂しさを伝えるときによく使います。',
+            ex: ['I wish you were here.', 'あなたがここにいたらいいのに。'], tone: 'I wish I could see you today.（今日会えたらいいのに＝会えない）。I hope I can see you today. は「会えるといいな（会えるかも）」。' },
+          { key: 'I wish you ＋ 名詞', kana: '', kanaNote: '', label: 'I wish you ＋ 名詞（good luck / the best）', ja: '〜を祈ってる', nuance: '「相手に〜がありますように」の決まり文句。この形だけは過去形にしません。',
+            ex: ['I wish you the best of luck.', '幸運を祈ってるよ。'], tone: 'We wish you a merry Christmas. と同じ形です。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「会えたらいいな」',
+      rows: [
+        ['I hope I can see you this weekend.', '今週末会えるといいな。（会えるかもしれない）'],
+        ["I'm hoping to see you this weekend.", '今週末会えたらいいなと思ってる。（控えめな期待）'],
+        ['I wish I could see you this weekend.', '今週末会えたらいいのに。（会えないと分かっている）'],
+        ['I hope so too.', '私もそう願ってる。（相手の言葉への返事）'],
+        ['I hope not.', 'そうならないといいな。']
+      ]
+    },
+    cautions: [
+      "「そうならないといいな」は I hope not.。I don't hope so. とは言いません。",
+      'I wish のあとは過去形（I wish I could / I wish you were）。実現しそうなことに wish を使うと「無理だと思ってる」と伝わるので注意。',
+      'I hope のあとは、未来のことでも現在形でOK：I hope you have fun.（I hope you will have fun. も可）',
+      "相手の言葉に I hope so. だけ返すと、少し自信がなさそうに聞こえることも。強く同意したいなら I'm sure it will.（きっとそうなるよ）。"
+    ],
+    quiz: [
+      { situation: '「土曜は晴れるって！」と言われて「そうだといいね！」', sentence: 'I hope ___!', options: ['so', 'it', 'that', 'yes'], answer: 'so', full: 'I hope so!', why: '相手が言ったこと全体を so で受けて I hope so。' },
+      { situation: '「明日、雨かな？」と聞かれて「降らないといいな」', sentence: 'I hope ___.', options: ['not', "don't", 'no', 'never'], answer: 'not', full: 'I hope not.', why: "否定の願いは I hope not。I don't hope so. とは言わない。" },
+      { situation: '「来週会えたらいいね」と言われて「僕もそう願ってる」', sentence: 'I hope so ___.', options: ['too', 'also', 'either', 'again'], answer: 'too', full: 'I hope so too.', why: '「私も」は文の最後に too。either は否定文の「〜もない」。' },
+      { situation: '体調の悪い相手に「早く良くなるといいな」', sentence: 'I hope you ___ better soon.', options: ['feel', 'felt', 'feeling', 'to feel'], answer: 'feel', full: 'I hope you feel better soon.', why: 'I hope のあとは、未来のことでも現在形でよい。' },
+      { situation: '会えなくて寂しい。「あなたがここにいたらいいのに」', sentence: 'I wish you ___ here.', options: ['were', 'are', 'will be', 'be'], answer: 'were', full: 'I wish you were here.', why: '現実と違う願いは I wish ＋ 過去形。be動詞は were を使う。' },
+      { situation: '「いつか一緒にドイツに行けたらいいな」（実現できそう）', sentence: 'I ___ we can go to Germany together someday.', options: ['hope', 'wish', 'want', 'hoped'], answer: 'hope', full: 'I hope we can go to Germany together someday.', why: '実現しそうな願いは hope。wish だと「無理だけど」に聞こえる。' },
+      { situation: '「今日会えたらいいのに」（会えないと分かっている）', sentence: 'I wish I ___ see you today.', options: ['could', 'can', 'will', 'am'], answer: 'could', full: 'I wish I could see you today.', why: 'I wish のあとは過去形。can → could。' },
+      { situation: '「来週会えたらいいなと思ってる」（控えめに）', sentence: "I'm ___ we can meet next week.", options: ['hoping', 'hope', 'hoped', 'wishing'], answer: 'hoping', full: "I'm hoping we can meet next week.", why: "I'm hoping で「〜だといいなと思ってる」。I'm wishing とはあまり言わない。" },
+      { situation: '「プレゼン、うまくいくように祈ってる！」', sentence: '___ crossed for your presentation!', options: ['Fingers', 'Finger', 'Hands', 'Fingered'], answer: 'Fingers', full: 'Fingers crossed for your presentation!', why: '決まり文句の Fingers crossed!（指を交差させて幸運を祈る）。' }
+    ]
   }];
 
 
