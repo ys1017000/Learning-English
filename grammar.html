@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=11">
+  <link rel="stylesheet" href="common.css?v=12">
 </head>
 <body>
   <header>
@@ -39,9 +39,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=11"></script>
-  <script src="usage-data.js?v=1"></script>
-  <script src="grammar-data.js?v=8"></script>
+  <script src="common.js?v=12"></script>
+  <script src="usage-data.js?v=2"></script>
+  <script src="grammar-data.js?v=9"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -66,7 +66,7 @@
         html += '<div class="section-title">' + esc(g.name) + '</div><p class="muted" style="margin-bottom:0.6rem;">' + esc(g.note) + '</p>';
         g.forms.forEach(f => {
           html += '<div class="card gr-form"><div class="gr-key">' + esc(f.key) + '</div>' +
-            '<div class="muted">読み方：<b>' + esc(f.kana) + '</b>（弱く言う）</div>' +
+            (f.kana ? '<div class="muted">読み方：<b>' + esc(f.kana) + '</b>' + esc(f.kanaNote != null ? f.kanaNote : '（弱く言う）') + '</div>' : '') +
             '<div class="muted" style="margin-top:0.3rem;">' + esc(f.label) + '</div>' +
             '<div class="gr-ja">' + esc(f.ja) + '</div><div class="muted">' + esc(f.nuance) + '</div>' +
             '<div class="item-row" style="margin-top:0.7rem;"><div style="display:flex; justify-content:space-between; gap:6px; align-items:center;"><div><div class="en-text">' + esc(f.ex[0]) + '</div><div class="ja-text muted">' + esc(f.ex[1]) + '</div></div><div style="display:flex; gap:4px;">' + speakBtns(f.ex[0]) + '</div></div></div>' +

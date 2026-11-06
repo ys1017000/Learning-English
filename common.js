@@ -96,6 +96,15 @@
       ["文法・表現パターン", "I'll keep working on it.", "引き続き取り組むね。（keep working on ～：～に引き続き取り組む）", "I'll keep working on my English."],
       ["単語 (単体)", "otherwise", "そうしないと、さもないと", "Let's go now. Otherwise, we'll be late."],
       ["文法・表現パターン", "I would have liked to come.", "行きたかったんだけどね。（I would have liked to ～：～したかったんだけどね）", "I would have liked to see you this weekend."],
+      // ---- 文法ノート「I thought ... would be ... to ～」（2026-11-06） ----
+      ["文法・表現パターン", "I thought it would be hard to get used to life in Japan.", "日本の生活に慣れるのは大変だと思っていた。（I thought it would be ＋ 形容詞 ＋ to ～：～するのは…だろうと思っていた）"],
+      ["文法・表現パターン", "I thought German would be hard to learn.", "ドイツ語は覚えるのが難しいと思ってた。（hard to learn のあとに it を付けない）"],
+      ["文法・表現パターン", "I thought it would be scary, but it was really fun.", "怖いと思ってたけど、すごく楽しかった。（予想とのギャップ）"],
+      ["文法・表現パターン", "I thought it would be stressful to talk in English, but I'm fine with you.", "英語で話すのは緊張すると思ってたけど、あなたとだと平気。"],
+      ["文法・表現パターン", "I thought it would be hard to talk about, but I'm glad we did.", "話しにくいと思ってたけど、話せてよかった。（talk about のあとに it を付けない）"],
+      ["文法・表現パターン", "I didn't think it would be this fun.", "こんなに楽しいとは思わなかった。（I didn't think ～ would：～とは思わなかった）"],
+      ["文法・表現パターン", "I didn't think you would remember my birthday.", "誕生日を覚えててくれるなんて思わなかった。"],
+      ["文法・表現パターン", "It was easier than I thought.", "思ったより簡単だった。（比較級 ＋ than I thought：思ったより～）"],
       // ---- 旧アプリ「気持ちを伝える英語」（review.html）から移行（2026-11-06） ----
       ["気持ち・関係を伝える", "I care about you, and I want to be honest with you.", "君のことを大切に思っているし、正直に話したい。"],
       ["気持ち・関係を伝える", "Sometimes I struggle to explain my feelings in English.", "英語で気持ちを説明するのが難しいときがある。"],

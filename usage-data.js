@@ -311,6 +311,16 @@
     "She must've loved the gift.": "相手の反応から「きっと気に入ったはず」と推測するとき。",
     "If it hadn't rained, the game would've started.": "実際には起きなかったことを「もし〜だったら」と想像するとき。",
 
+    // ===== 文法ノート：I thought ... would be ... to ～ =====
+    "I thought it would be hard to get used to life in Japan.": "前に予想していたことと、実際のギャップを話すとき。but I got used to it quickly. などを続ける。",
+    "I thought German would be hard to learn.": "始める前の思い込みを話すとき。実際はどうだったかを続けると会話が広がる。",
+    "I thought it would be scary, but it was really fun.": "アトラクションや初めての体験が、予想よりよかったとき。",
+    "I thought it would be stressful to talk in English, but I'm fine with you.": "相手と話すと安心できると、予想とのギャップで伝えるとき。",
+    "I thought it would be hard to talk about, but I'm glad we did.": "言いにくい話をしたあとに、話せてよかったと伝えるとき。",
+    "I didn't think it would be this fun.": "デートや体験が予想以上に楽しかったときのうれしい驚き。",
+    "I didn't think you would remember my birthday.": "相手が覚えていてくれた・してくれたことに驚いて喜ぶとき。",
+    "It was easier than I thought.": "やってみたら予想より簡単だったとき。逆なら It was harder than I thought.",
+
     // ===== マイ単語 =====
     "Has something fun happened lately?": "近況を聞くときの話題の振り方。How are you? より話が広がりやすい。",
     "improvisation": "前もって準備せず、その場で即興でやること（演劇・音楽・スピーチなど）。",
