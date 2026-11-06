@@ -741,11 +741,13 @@
 
   /* ---------- 設定（端末ごと・バックアップ対象外） ---------- */
   const KEY_PREFS = 'english_app_prefs';
-  const DEFAULT_PREFS = { speakMine: true, speakPartner: false, kana: true };
+  const DEFAULT_PREFS = { speakMine: true, speakPartner: false, kana: true, autoSpeak: true };
   function getPrefs() {
     try { return Object.assign({}, DEFAULT_PREFS, JSON.parse(safeGet(KEY_PREFS)) || {}); } catch (e) { return Object.assign({}, DEFAULT_PREFS); }
   }
   function setPref(key, val) { const p = getPrefs(); p[key] = val; safeSet(KEY_PREFS, JSON.stringify(p)); }
+  // 答えを出したときなどの「自動の読み上げ」。設定（ホーム ⚙️）でオフにできる。🔊ボタンでの再生は対象外
+  function autoSpeak(text, lang, rate) { if (getPrefs().autoSpeak !== false) speak(text, lang, rate); }
 
   /* ---------- マイ単語・復習への追加 ---------- */
   function hasPhrase(en) {
@@ -1239,7 +1241,7 @@
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
     esc, dateKey, getStore, saveStore, getCustomPhrases, saveCustomPhrases, getAllPhrases,
     isFavorite, toggleFavorite, markStudied, recordResult, countSpeak, getWeakPhrases, calcStreak, updateStreakBadge,
-    splitJa, usageFor, renderUsage, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
+    splitJa, usageFor, renderUsage, autoSpeak, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,
     getPrefs, setPref, hasPhrase, addCustomPhrase, addToReview,

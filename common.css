@@ -244,3 +244,8 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--primary); }
 /* 場面の補足（どんなシチュエーションで使うか） */
 .usage-line { font-size: 0.85rem; line-height: 1.5; text-align: left; color: #7c2d12; background: #fff7ed; border-left: 3px solid #fb923c; border-radius: 6px; padding: 0.4rem 0.65rem; margin-top: 0.45rem; word-break: break-word; font-weight: normal; }
 .feedback .usage-line { display: block; }
+
+/* ロードマップ：いつでも練習 */
+.rm-free { margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
+.rm-free-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+.rm-free-btns .tiny-btn { font-size: 0.8rem; padding: 5px 10px; }

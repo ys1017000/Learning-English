@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=10">
+  <link rel="stylesheet" href="common.css?v=11">
 </head>
 <body>
   <header>
@@ -41,7 +41,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=10"></script>
+  <script src="common.js?v=11"></script>
   <script src="usage-data.js?v=1"></script>
   <script src="roadmap-data.js?v=8"></script>
   <script>
@@ -166,6 +166,7 @@
           '　目標 ' + RM.PASS_RATE + '%</div>';
         const missing = cards.filter(c => !EA.hasPhrase(c.en)).length;
         if (missing) html += '<button class="btn btn-secondary" data-act="addCards" style="margin-top:0.75rem; font-size:0.9rem;">➕ 第' + p.week + '週のカード' + missing + '枚を「単語」に追加（クイズ・復習で使える）</button>';
+        html += freeHtml(p.week, cards) + '<div class="muted" style="margin-top:0.4rem; font-size:0.8rem;">前の週のカードは <a href="#" data-act="tabWeeks">🗓 週間一覧</a> から練習できます。</div>';
         html += '</div>';
       }
       const ts = rd.sessions.filter(x => x.d === today);
@@ -206,7 +207,7 @@
             '<b>第' + w + '週</b>　' + esc(W.theme) + (cur ? ' <span class="rm-badge now">今週</span>' : '') + (W.buffer ? ' <span class="rm-badge">バッファー</span>' : '') + '</summary>' +
             '<div style="padding:0 1rem 1rem;"><div class="muted">' + esc(W.focus) + '</div>' +
             '<div class="muted" style="margin-top:0.4rem;">' + (W.buffer ? '新しいカードは入れません（月のカードを復習）' : (n ? 'カード ' + n + '枚' : 'カードはまだありません（JSONの取り込み待ち）')) +
-            (sc.tried ? ' ・ 言えた <b>' + sc.said + '/' + sc.tried + '</b>（' + sc.pct + '%）' : '') + '</div>' + days + '</div></details>';
+            (sc.tried ? ' ・ 言えた <b>' + sc.said + '/' + sc.tried + '</b>（' + sc.pct + '%）' : '') + '</div>' + days + freeHtml(w, b[w] || []) + '</div></details>';
         }
       });
       if (rd.sessions.length) html += '<div class="card" style="margin-top:1rem;"><h2>📋 カード暗唱のふり返り（最近）</h2>' + rd.sessions.slice(-8).reverse().map(sessionLine).join('') + '</div>';
@@ -218,6 +219,29 @@
         RM.DEEP.steps.map(s => '<li>' + esc(s) + '</li>').join('') + '</ol>' +
         RM.DEEP.patterns.map(x => '<div class="item-row"><div class="muted">' + esc(x[0]) + '</div><div class="en-text">' + esc(x[1]) + '</div></div>').join('') + '</div>';
       box.innerHTML = html;
+    }
+
+    /* ---------- いつでも練習（週・分類を選んで暗唱。ロードマップの記録には入れない） ---------- */
+    function freeHtml(w, cards) {
+      if (!cards.length) return '';
+      const cats = [];
+      cards.forEach(c => { if (c.tag && !cats.includes(c.tag)) cats.push(c.tag); });
+      const missN = cards.filter(c => { const l = rd.cardLog[c.en]; return l && (!l.ok || l.f === false); }).length;
+      const btn = (label, cat, mode) => '<button class="tiny-btn" data-act="free" data-w="' + w + '"' + (cat ? ' data-cat="' + esc(cat) + '"' : '') + (mode ? ' data-mode="' + mode + '"' : '') + '>' + label + '</button>';
+      return '<div class="rm-free"><div class="muted" style="margin-bottom:0.35rem;">🔁 いつでも練習（シャッフル・記録なし）</div><div class="rm-free-btns">' +
+        btn('▶ 全部（' + cards.length + '枚）') + (missN ? btn('🎯 言えなかったもの（' + missN + '枚）', '', 'miss') : '') +
+        cats.map(t => btn(esc(t) + '（' + cards.filter(c => c.tag === t).length + '）', t)).join('') + '</div></div>';
+    }
+    function shuffled(a) { const x = a.slice(); for (let i = x.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [x[i], x[j]] = [x[j], x[i]]; } return x; }
+    function startFree(w, cat, mode) {
+      let cards = (cardsMap()[w] || []);
+      if (cat) cards = cards.filter(c => c.tag === cat);
+      if (mode === 'miss') cards = cards.filter(c => { const l = rd.cardLog[c.en]; return l && (!l.ok || l.f === false); });
+      if (!cards.length) { EA.toast('対象のカードがありません'); return; }
+      const label = '第' + w + '週' + (cat ? '「' + cat + '」' : '') + (mode === 'miss' ? 'の言えなかったもの' : '') + 'を練習';
+      run = { kind: 'free', free: { w, cat: cat || '', mode: mode || '' }, label, slot: null, all: cards, queue: shuffled(cards).map(c => ({ c, t: '練習' })), round: 1, i: 0, res: [], hist: [], said: {}, phase: 'card' };
+      renderRun();
+      $('runBox').scrollIntoView({ block: 'start', behavior: 'smooth' });
     }
 
     /* ---------- カード暗唱（3秒チャレンジ・最大3ラウンド） ---------- */
@@ -242,7 +266,7 @@
     }
     function reviewHtml() {
       const first = run.hist[0], stillN = run.all.filter(c => !run.said[c.en]).length;
-      let html = '<h2>📋 ふり返り：' + esc(RUN_TITLE[run.kind]) + '</h2>' +
+      let html = '<h2>📋 ふり返り：' + esc(run.label || RUN_TITLE[run.kind]) + '</h2>' +
         '<div class="stats-grid" style="margin-bottom:0.75rem;"><div><div class="stat-number">' + first.said + '/' + first.total + '</div><div class="stat-label">1回目で言えた</div></div>' +
         '<div><div class="stat-number">' + Math.round(first.said * 100 / first.total) + '%</div><div class="stat-label">目標 ' + RM.PASS_RATE + '%</div></div>' +
         '<div><div class="stat-number" style="color:' + (stillN ? 'var(--bad)' : 'var(--ok)') + ';">' + stillN + '</div><div class="stat-label">まだ言えない</div></div></div>' +
@@ -252,6 +276,11 @@
         return '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:8px; align-items:flex-start;"><div><div class="en-text">' + esc(c.en) + '</div><div class="ja-text muted">' + esc(c.ja) + '</div>' + usageHtml(c.en) + '</div>' +
           '<span class="rm-badge' + (r ? ' ok' : ' ng') + '">' + (r ? CIRCLE[r] + (r === 1 ? ' 1回目で言えた' : ' ' + r + '回目で言えた') : '✕ まだ') + '</span></div></div>';
       }).join('');
+      if (run.free) {
+        html += '<p class="muted" style="margin:0.6rem 0;">いつでも練習の結果は、ロードマップの記録（言えた率・翌日の再登場）には入りません。</p>' +
+          '<button class="btn" data-act="freeAgain">🔀 もう一度（シャッフル）</button><button class="btn btn-secondary" data-act="closeRun" style="margin-top:0.5rem;">閉じる</button>';
+        return html;
+      }
       html += '<p class="muted" style="margin:0.6rem 0;">' + (stillN ? '「まだ」のカードは、明日の昼にもう一度出ます。1回目で言えるようになるまで、毎日1回ずつ出ます。' : '全部言えました！ 1回目で言えなかったカードも、明日の昼にもう一度出て、定着を確かめます。') + '</p>' +
         '<button class="btn" data-act="closeRun">閉じる</button>';
       return html;
@@ -260,7 +289,7 @@
       const box = $('runBox');
       if (!run) { box.style.display = 'none'; box.innerHTML = ''; return; }
       box.style.display = '';
-      const title = RUN_TITLE[run.kind];
+      const title = run.label || RUN_TITLE[run.kind];
       if (run.phase === 'review') { box.innerHTML = reviewHtml(); return; }
       if (run.phase === 'roundEnd') {
         const h = run.hist[run.hist.length - 1], miss = run.res.filter(r => !r.ok);
@@ -303,12 +332,12 @@
       const c = run.queue[run.i].c, round = run.round;
       run.res.push({ c, ok });
       if (ok && !run.said[c.en]) run.said[c.en] = round;
-      update(r => {
+      if (!run.free) update(r => {
         const prev = r.cardLog[c.en];
         // f = 1回目（初回）に言えたか。ラウンド2以降は「最終的に言えたか」だけ更新する
         r.cardLog[c.en] = round === 1 ? { ok, f: ok, d: today, w: c.w } : { ok, f: prev && typeof prev.f === 'boolean' ? prev.f : false, d: today, w: c.w };
       });
-      if (round === 1) EA.recordResult(itemFor(c), ok, 'recall');
+      if (round === 1 && !run.free) EA.recordResult(itemFor(c), ok, 'recall');
       run.i += 1;
       if (run.i >= run.queue.length) endRound();
       renderRun();
@@ -322,6 +351,7 @@
     function finishSession() {
       run.phase = 'review';
       const first = run.hist[0], still = run.all.filter(c => !run.said[c.en]).map(c => c.en);
+      if (run.free) { touchToday(); return; }
       const p = pos();
       update(r => {
         if (run.slot) r.done[today] = Array.from(new Set((r.done[today] || []).concat(run.slot)));
@@ -336,6 +366,7 @@
     document.addEventListener('click', e => {
       const t = e.target.closest('[data-act], [data-tab]');
       if (!t) return;
+      if (t.tagName === 'A') e.preventDefault();
       if (t.dataset.tab) { setTab(t.dataset.tab); return; }
       const a = t.dataset.act;
       if (a === 'start' || a === 'startToday') {
@@ -360,6 +391,8 @@
       if (a === 'skip') { update(r => { if (r.skipped[today]) delete r.skipped[today]; else r.skipped[today] = true; }); renderToday(); EA.toast(rd.skipped[today] ? '今日の残りは捨てました。明日また！' : '取り消しました'); return; }
       if (a === 'deck') { startRun(t.dataset.deck, t.dataset.slot); return; }
       if (a === 'reveal') { revealCard(); return; }
+      if (a === 'free') { startFree(+t.dataset.w, t.dataset.cat || '', t.dataset.mode || ''); return; }
+      if (a === 'freeAgain') { const f = run && run.free; if (f) startFree(f.w, f.cat, f.mode); return; }
       if (a === 'ok') { answer(true); return; }
       if (a === 'ng') { answer(false); return; }
       if (a === 'closeRun') { run = null; renderRun(); return; }

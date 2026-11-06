@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=10">
+  <link rel="stylesheet" href="common.css?v=11">
 </head>
 <body>
   <header>
@@ -99,6 +99,15 @@
       <ul class="weakness-list" id="weaknessList"></ul>
     </div>
 
+    <div class="card" id="settingsCard">
+      <h2>⚙️ 設定（この端末だけ）</h2>
+      <div class="radio-row" style="flex-direction:column; align-items:flex-start; gap:0.5rem;">
+        <label><input type="checkbox" id="optAutoSpeak"> 🔊 答えを自動で読み上げる（クイズ・英作文・発音・ロールプレイ）</label>
+        <label><input type="checkbox" id="optKanaHome"> カタカナ発音ヒントを表示する</label>
+      </div>
+      <p class="muted" style="margin-top:0.4rem; font-size:0.8rem;">オフにしても、🔊ボタンを押せばいつでも聞けます。会話ページの読み上げは、会話ページの ⚙️ で切り替えます。</p>
+    </div>
+
     <div class="card">
       <h2>💾 データのバックアップ</h2>
       <p class="muted" style="margin-bottom:0.75rem;">マイ単語・お気に入り・学習履歴・会話の記録・ピン留め・もらった言葉・予習プラン・手紙の下書き・英語日記・DMノートをファイルに保存できます。機種変更やブラウザのデータ削除の前に書き出しておくと安心です。</p>
@@ -123,7 +132,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=10"></script>
+  <script src="common.js?v=11"></script>
   <script src="roadmap-data.js?v=8"></script>
   <script>
     let viewDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // 月初固定（31日からの月送りで飛ぶのを防ぐ）
@@ -264,6 +273,11 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      { const pr = EA.getPrefs();
+        const as = document.getElementById('optAutoSpeak'), kn = document.getElementById('optKanaHome');
+        as.checked = pr.autoSpeak !== false; kn.checked = pr.kana !== false;
+        as.addEventListener('change', () => { EA.setPref('autoSpeak', as.checked); EA.toast(as.checked ? '🔊 自動の読み上げをオンにしました' : '🔇 自動の読み上げをオフにしました'); });
+        kn.addEventListener('change', () => { EA.setPref('kana', kn.checked); }); }
       renderDashboard();
       document.getElementById('prevMonthBtn').addEventListener('click', () => { viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1); renderCalendar(EA.getStore().history); });
       document.getElementById('nextMonthBtn').addEventListener('click', () => { viewDate = new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1); renderCalendar(EA.getStore().history); });

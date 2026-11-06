@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=10">
+  <link rel="stylesheet" href="common.css?v=11">
 </head>
 <body>
   <header>
@@ -41,6 +41,7 @@
             <div class="muted">模範解答</div>
             <div id="modelEn" style="font-weight:bold; color:var(--primary);"></div>
             <div id="modelKana" class="kana-line"></div>
+            <div style="display:flex; gap:6px; margin-top:0.3rem;"><button class="icon-btn" id="playModelRp" aria-label="模範解答を再生">🔊</button><button class="icon-btn" id="slowModelRp" aria-label="ゆっくり再生">🐢</button></div>
           </div>
           <div id="liveText" class="muted" style="min-height:1.4em; text-align:center;"></div>
           <div id="chipsBox" class="word-chips"></div>
@@ -69,7 +70,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=10"></script>
+  <script src="common.js?v=11"></script>
   <script src="content.js?v=8"></script>
   <script>
     const C = CONTENT, PASS = 70;
@@ -132,7 +133,7 @@
       const step = rp.steps[idx];
       const log = document.getElementById('chatLog');
       log.appendChild(bubble(step.who, step.p[0], step.p[1], false));
-      EA.speak(step.p[0], 'en-US', 1.0);
+      EA.autoSpeak(step.p[0], 'en-US', 1.0);
       dots();
       if (!step.m) { finish(); return; }
       document.getElementById('turnBox').style.display = 'block';
@@ -152,7 +153,9 @@
       document.getElementById('modelEn').textContent = m.en[0];
       EA.renderKana(document.getElementById('modelKana'), m.en[0]);
       document.getElementById('modelBox').style.display = 'block';
-      EA.speak(m.en[0], 'en-US', 1.0);
+      document.getElementById('playModelRp').onclick = () => EA.speak(m.en[0], 'en-US', 1.0);
+      document.getElementById('slowModelRp').onclick = () => EA.speak(m.en[0], 'en-US', 0.7);
+      EA.autoSpeak(m.en[0], 'en-US', 1.0);
     }
 
     let stepResult = null;

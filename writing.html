@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=10">
+  <link rel="stylesheet" href="common.css?v=11">
 </head>
 <body>
   <header>
@@ -34,6 +34,7 @@
       <div class="answer-box" id="answerArea">
         <div style="font-size:0.85rem; color:#64748b;">模範解答:</div>
         <div id="modelAnswer" style="font-size:1.1rem; font-weight:bold; color:var(--primary); margin-top:0.25rem;"></div>
+        <div style="display:flex; gap:6px; margin-top:0.35rem;"><button class="icon-btn" id="playModel" aria-label="模範解答を再生">🔊</button><button class="icon-btn" id="slowModel" aria-label="ゆっくり再生">🐢</button></div>
         <div id="modelNote" class="ex-text"></div>
         <div id="diffBox" style="display:none; margin-top:0.75rem;">
           <div style="font-size:0.8rem; color:#64748b;">あなたの回答との照合（<span id="diffScore"></span>）</div>
@@ -56,7 +57,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=10"></script>
+  <script src="common.js?v=11"></script>
   <script src="usage-data.js?v=1"></script>
   <script>
     let currentItem = null, selfChecked = false;
@@ -110,7 +111,7 @@
       document.getElementById('selfCheckDone').style.display = 'none';
       document.getElementById('answerArea').style.display = 'block';
       document.getElementById('showAnswerBtn').style.display = 'none';
-      EA.speak(currentItem[1], 'en-US', 1.0);
+      EA.autoSpeak(currentItem[1], 'en-US', 1.0);
     }
 
     function selfCheck(ok) {
@@ -125,6 +126,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('playModel').addEventListener('click', () => { if (currentItem) EA.speak(currentItem[1], 'en-US', 1.0); });
+      document.getElementById('slowModel').addEventListener('click', () => { if (currentItem) EA.speak(currentItem[1], 'en-US', 0.7); });
       const select = document.getElementById('genreSelect');
       EA.populateGenreSelect(select);
       loadPrompt();
