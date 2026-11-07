@@ -378,6 +378,29 @@
     "I'm sure it will.": "相手の願いに、I hope so. より強く「大丈夫」と同意したいとき。",
     "Let's hope so.": "結果がまだ分からないことを、一緒に期待するとき。",
 
+    // ===== 文法ノート：get ＋ 形容詞 =====
+    "I'm getting hungry. Let's eat something.": "出かけている途中で、食事に誘うとき。",
+    "It's getting late. I should go home.": "デートや電話の終わりに、帰る・切る流れを作るとき。",
+    "Your English is getting better.": "相手の上達をほめるとき。体調が良くなってきたときにも使う。",
+    "Please don't get upset. I just want to talk.": "言いにくいことを話し始める前の前置き。",
+    "I always get nervous before I meet your friends.": "相手の友達や家族に会う前の気持ちを伝えるとき。",
+    "I get lonely when I don't hear from you.": "寂しい気持ちを素直に伝えるとき。責める感じにならないよう、やわらかく。",
+    "The movie was long, so I got bored.": "映画やイベントの感想を正直に言うとき。",
+    "I got lost on my way to the cafe.": "待ち合わせに遅れた理由を説明するとき。",
+    "I'm getting used to life in Japan.": "新しい環境での近況を話すとき。相手が日本の生活について話すときにも出る。",
+    "I'm getting ready. I'll be there in 10 minutes.": "待ち合わせ前のメッセージ。",
+
+    // ===== 文法ノート：There has / have been =====
+    "There has been a lot of rain this week.": "天気の雑談。this week など今につながる期間と一緒に。",
+    "There have been some changes at my work.": "近況を話すときの切り出し。",
+    "Has there been any news?": "結果や連絡を待っている相手に聞くとき。",
+    "There have been a lot of tourists in Kyoto lately.": "観光地の混み具合を話すとき。",
+    "There was an accident near the station yesterday.": "いつ起きたかを言うときは There was / were。",
+    "I think there's been a misunderstanding.": "すれ違いを、相手を責めずに話し始めるとき。",
+    "There haven't been any problems so far.": "心配している相手に、順調だと伝えるとき。",
+    "There has never been a day I didn't think about you.": "会えない期間のあとに、気持ちを伝えるロマンチックな言い方。",
+    "There's been a change of plans.": "待ち合わせや予定の変更を伝える最初のひと言。",
+
     // ===== マイ単語 =====
     "Has something fun happened lately?": "近況を聞くときの話題の振り方。How are you? より話が広がりやすい。",
     "improvisation": "前もって準備せず、その場で即興でやること（演劇・音楽・スピーチなど）。",

@@ -433,6 +433,131 @@
       { situation: '「来週会えたらいいなと思ってる」（控えめに）', sentence: "I'm ___ we can meet next week.", options: ['hoping', 'hope', 'hoped', 'wishing'], answer: 'hoping', full: "I'm hoping we can meet next week.", why: "I'm hoping で「〜だといいなと思ってる」。I'm wishing とはあまり言わない。" },
       { situation: '「プレゼン、うまくいくように祈ってる！」', sentence: '___ crossed for your presentation!', options: ['Fingers', 'Finger', 'Hands', 'Fingered'], answer: 'Fingers', full: 'Fingers crossed for your presentation!', why: '決まり文句の Fingers crossed!（指を交差させて幸運を祈る）。' }
     ]
+  }, {
+    id: 'get-adj',
+    title: 'get ＋ 形容詞：〜になる',
+    short: '「〜になる」（get ＋ 形容詞）',
+    intro: 'get ＋ 形容詞で「（その状態に）なる」と、変化を表します。be ＋ 形容詞が「〜だ（状態）」なのに対して、get は「〜になる（変化）」。会話では become よりずっとよく使います。「〜になってきた」は be getting ＋ 形容詞です。',
+    groups: [
+      {
+        name: '体・時間・天気の変化',
+        note: '体調、時間、天気の変化。日常会話で一番よく出る使い方です。',
+        forms: [
+          { key: 'get tired / hungry / sleepy', kana: 'ゲッ タイアード', kanaNote: '（get は「ゲッ」と短く）', label: 'get ＋ tired / hungry / sleepy / sick', ja: '疲れる／お腹がすく／眠くなる／体調を崩す', nuance: '体の状態が変わること。',
+            ex: ["I'm getting hungry. Let's eat something.", 'お腹すいてきた。何か食べよう。'], tone: "I'm hungry.（今お腹がすいている）と I'm getting hungry.（すいてきた）の違いに注目。" },
+          { key: "It's getting late / cold / dark", kana: 'イッツ ゲティン', kanaNote: '', label: "It's getting ＋ late / cold / dark", ja: '遅く／寒く／暗くなってきた', nuance: '時間や天気の変化は It を主語にします。',
+            ex: ["It's getting late. I should go home.", '遅くなってきた。そろそろ帰らなきゃ。'], tone: "デートの終わりの定番。It's getting colder and colder.（比較級の項目とつながります）" },
+          { key: 'get better / worse', kana: 'ゲッ ベター', kanaNote: '', label: 'get better / get worse', ja: '良くなる／悪くなる', nuance: '体調・状況・上達。比較級と組み合わせる形です。',
+            ex: ['Your English is getting better.', '英語、上手になってきてるね。'], tone: '体調の悪い相手には Get well soon!（早く良くなってね）が定番。' }
+        ]
+      },
+      {
+        name: '気持ちの変化',
+        note: '気持ちが「そうなった」瞬間を言います。',
+        forms: [
+          { key: 'get upset / angry', kana: 'ゲッ アップセット', kanaNote: '', label: 'get upset / get angry / get mad', ja: '気を悪くする・動揺する／怒る', nuance: 'be angry は「怒っている（状態）」、get angry は「怒りだす（変化）」。',
+            ex: ["Please don't get upset. I just want to talk.", '気を悪くしないでね。ただ話したいだけなの。'], tone: 'upset は「怒る」より広く、悲しい・動揺するも含みます。話し合いの前置きでよく使います。' },
+          { key: 'get nervous / excited / bored', kana: '', kanaNote: '', label: 'get nervous / get excited / get bored', ja: '緊張する／ワクワクする／退屈する', nuance: 'ある出来事をきっかけに気持ちが変わること。',
+            ex: ['I always get nervous before I meet your friends.', 'あなたの友達に会う前は、いつも緊張しちゃう。'], tone: 'get bored（人が退屈する）と get boring（物事がつまらなくなる）は別の意味。' },
+          { key: 'get lonely / jealous', kana: '', kanaNote: '', label: 'get lonely / get jealous', ja: '寂しくなる／やきもちを焼く', nuance: '恋人同士でよく使う気持ちの変化。',
+            ex: ["I get lonely when I don't hear from you.", '連絡がないと寂しくなる。'], tone: 'hear from you＝あなたから連絡がある。get ＋ 形容詞を現在形で言うと「いつもそうなる」。' }
+        ]
+      },
+      {
+        name: '決まった言い方',
+        note: 'get ＋ 形容詞（過去分詞）で、ひとつの動詞のように使う決まった言い方です。',
+        forms: [
+          { key: 'get ready', kana: 'ゲッ レディ', kanaNote: '', label: 'get ready（準備する）', ja: '準備する・支度する', nuance: '出かける支度・心の準備。',
+            ex: ["I'm getting ready. I'll be there in 10 minutes.", '今準備中。10分で行くね。'], tone: 'Get ready!（準備して）、I need to get ready for work.（仕事の支度しなきゃ）' },
+          { key: 'get lost / married / used to', kana: '', kanaNote: '', label: 'get lost / get married / get used to ～', ja: '道に迷う／結婚する／〜に慣れる', nuance: '形は過去分詞ですが、get ＋ 形容詞と同じ「その状態になる」です。',
+            ex: ['I got lost on my way to the cafe.', 'カフェに行く途中で道に迷った。'], tone: "get used to のあとは名詞か ～ing：I'm getting used to life in Japan.（日本の生活に慣れてきた）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「疲れる」',
+      rows: [
+        ["I'm tired.", '疲れている。（今の状態）'],
+        ["I'm getting tired.", '疲れてきた。（変化している最中）'],
+        ['I got tired.', '疲れた。（疲れた状態になった・過去）'],
+        ['I get tired easily.', 'すぐ疲れる。（いつもの傾向）'],
+        ['I became tired.', '疲れた。（意味は同じだけど、会話では get の方が自然）']
+      ]
+    },
+    cautions: [
+      'get のあとに to を入れない：get to tired（×）→ get tired（○）。get to ＋ 場所は「〜に着く」。',
+      "「〜になってきた」は be getting：It's getting cold.（寒くなってきた）",
+      '-ed と -ing を混ぜない：get bored（人が退屈する）／ get boring（話や物がつまらなくなる）。',
+      'become でも意味は通じますが、少しかたい言い方。会話では get が普通です。'
+    ],
+    quiz: [
+      { situation: 'お腹すいてきた。何か食べよう。', sentence: "I'm getting ___. Let's eat something.", options: ['hungry', 'hunger', 'to hungry', 'hungrily'], answer: 'hungry', full: "I'm getting hungry. Let's eat something.", why: 'get のあとは形容詞 hungry。hunger は名詞。' },
+      { situation: '遅くなってきた。そろそろ帰らなきゃ。', sentence: "It's getting ___. I should go home.", options: ['late', 'lately', 'later', 'to late'], answer: 'late', full: "It's getting late. I should go home.", why: 'late＝遅い（形容詞）。lately は「最近」という意味の別の語。' },
+      { situation: '英語、上手になってきてるね。', sentence: 'Your English is getting ___.', options: ['better', 'good', 'best', 'well'], answer: 'better', full: 'Your English is getting better.', why: '「上手になってきた」は get better（比較級で変化を表す）。' },
+      { situation: '気を悪くしないでね。ただ話したいだけなの。', sentence: "Please don't get ___. I just want to talk.", options: ['upset', 'upsetting', 'to upset', 'upsets'], answer: 'upset', full: "Please don't get upset. I just want to talk.", why: 'get upset で「気を悪くする・動揺する」。' },
+      { situation: 'あなたの友達に会う前は、いつも緊張しちゃう。', sentence: 'I always get ___ before I meet your friends.', options: ['nervous', 'nervously', 'nerve', 'nervousness'], answer: 'nervous', full: 'I always get nervous before I meet your friends.', why: 'get のあとは形容詞 nervous。nervously は副詞。' },
+      { situation: '連絡がないと寂しくなる。', sentence: "I get ___ when I don't hear from you.", options: ['lonely', 'alone', 'loneliness', 'lone'], answer: 'lonely', full: "I get lonely when I don't hear from you.", why: 'lonely＝寂しい（気持ち）。alone は「一人で」という状態。' },
+      { situation: '映画が長くて、途中で退屈しちゃった。', sentence: 'The movie was long, so I got ___.', options: ['bored', 'boring', 'bore', 'to bored'], answer: 'bored', full: 'The movie was long, so I got bored.', why: '人が退屈するのは bored。boring は「（映画が）つまらない」。' },
+      { situation: 'カフェに行く途中で道に迷った。', sentence: 'I got ___ on my way to the cafe.', options: ['lost', 'lose', 'losing', 'to lose'], answer: 'lost', full: 'I got lost on my way to the cafe.', why: 'get lost で「道に迷う」。過去なので got lost。' },
+      { situation: '日本の生活に慣れてきた。', sentence: "I'm getting ___ to life in Japan.", options: ['used', 'use', 'using', 'useful'], answer: 'used', full: "I'm getting used to life in Japan.", why: 'get used to ～ で「〜に慣れる」。' }
+    ]
+  }, {
+    id: 'there-have-been',
+    title: 'There has / have been ～',
+    short: '「〜があった・続いている」（There have been）',
+    intro: 'There is / are（〜がある）の現在完了形です。「（過去から今までに）〜があった」「（最近ずっと）〜が続いている」と、今につながる出来事や状態を言います。後ろの名詞が単数・数えられない名詞なら There has been、複数なら There have been。話すときは There\'s been と縮めることが多いです。',
+    groups: [
+      {
+        name: '形の作り方',
+        note: 'is → has been、are → have been。後ろの名詞で has / have が決まります。',
+        forms: [
+          { key: 'There has been ＋ 単数', kana: 'ゼアズ ビーン', kanaNote: '（There has は There\'s と縮める）', label: 'There has been ＋ 単数名詞／数えられない名詞', ja: '（今までに・最近）〜があった', nuance: '1つの出来事や、数えられないもの（rain, traffic, news など）。',
+            ex: ["There's been a lot of rain this week.", '今週は雨が多いね。'], tone: "There's は There is と There has の両方の短縮形。後ろが been なら has。" },
+          { key: 'There have been ＋ 複数', kana: 'ゼア ハヴ ビーン', kanaNote: '', label: 'There have been ＋ 複数名詞', ja: '（今までに・最近）〜がいくつもあった', nuance: '複数の出来事や物。',
+            ex: ['There have been some changes at my work.', '職場でいくつか変化があったんだ。'], tone: "会話では複数でも There's been と言う人がいますが、正しい形は have。" },
+          { key: 'Has there been ～?', kana: 'ハズ ゼア ビーン', kanaNote: '', label: 'Has there been ＋ 単数？／ Have there been ＋ 複数？', ja: '（今までに）〜はあった？', nuance: '疑問文は has / have を前に出します。',
+            ex: ['Has there been any news?', '何か知らせはあった？'], tone: "否定は There hasn't been / There haven't been（〜はなかった）。" }
+        ]
+      },
+      {
+        name: '会話でよく使う形',
+        note: '「最近」「今のところ」「今まで一度も」と一緒に使うと自然です。',
+        forms: [
+          { key: 'recently / lately', kana: '', kanaNote: '', label: 'There has / have been ＋ 名詞 ＋ recently / lately', ja: '最近〜が多い', nuance: '最近の様子を話すとき。',
+            ex: ['There have been a lot of tourists in Kyoto lately.', '最近、京都は観光客が多いね。'], tone: 'so many（こんなにたくさん）を付けると驚きが出ます。' },
+          { key: "There's been a misunderstanding", kana: '', kanaNote: '', label: "There's been a misunderstanding. / There's been a change of plans.", ja: '誤解があったみたい／予定が変わったんだ', nuance: '決まり文句。「あなたが」と人を主語にせず、状況として伝えられるやわらかい言い方です。',
+            ex: ["I think there's been a misunderstanding.", '誤解があったみたい。'], tone: '責める感じが出ないので、話し合いの切り出しに便利。' },
+          { key: 'There has never been', kana: '', kanaNote: '', label: 'There has / have never been ＋ 名詞', ja: '今まで一度も〜がなかった', nuance: '「一度もない」を出来事・物を主語にして言う形。',
+            ex: ["There has never been a day I didn't think about you.", 'あなたのことを考えなかった日は一日もないよ。'], tone: 'ロマンチックな言い方にもなります。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「雨」',
+      rows: [
+        ['There is a lot of rain here.', 'ここは雨が多い。（今の状態・一般的に）'],
+        ['There was a lot of rain yesterday.', '昨日は雨が多かった。（過去：いつかを言う）'],
+        ['There has been a lot of rain this week.', '今週は（ずっと）雨が多い。（今につながる）'],
+        ['There had been a lot of rain before we arrived.', '着く前に雨がたくさん降っていた。（過去完了）'],
+        ['There will be a lot of rain tomorrow.', '明日は雨が多いだろう。（未来）']
+      ]
+    },
+    cautions: [
+      '後ろの名詞に合わせる：There has been a problem.（単数）／ There have been some problems.（複数）。',
+      'yesterday / last week / ～ ago など過去の時点とは一緒に使わない：There was an accident yesterday.（○）／ There has been an accident yesterday.（×）',
+      'this week / today / recently / so far（今のところ）は今につながる期間なので、There has been と相性がいい。',
+      "There's been の 's は has。There's a ～ の 's は is。後ろが been かどうかで見分けます。"
+    ],
+    quiz: [
+      { situation: '今週は雨が多いね。', sentence: 'There ___ been a lot of rain this week.', options: ['has', 'have', 'is', 'was'], answer: 'has', full: 'There has been a lot of rain this week.', why: 'rain は数えられない名詞なので単数扱い → has。' },
+      { situation: '職場でいくつか変化があったんだ。', sentence: 'There ___ been some changes at my work.', options: ['have', 'has', 'is', 'are'], answer: 'have', full: 'There have been some changes at my work.', why: 'changes（複数）なので have。' },
+      { situation: '何か知らせはあった？', sentence: '___ there been any news?', options: ['Has', 'Have', 'Is', 'Did'], answer: 'Has', full: 'Has there been any news?', why: 'news は数えられない名詞（単数扱い）→ Has there been ～?' },
+      { situation: '最近、京都は観光客が多いね。', sentence: 'There have been a lot of tourists in Kyoto ___.', options: ['lately', 'yesterday', 'last week', 'ago'], answer: 'lately', full: 'There have been a lot of tourists in Kyoto lately.', why: 'lately（最近）は今につながる期間。yesterday などは過去形と一緒に使う。' },
+      { situation: '昨日、駅の近くで事故があった。', sentence: 'There ___ an accident near the station yesterday.', options: ['was', 'has been', 'have been', 'is'], answer: 'was', full: 'There was an accident near the station yesterday.', why: 'yesterday（過去の時点）があるので過去形 was。' },
+      { situation: '誤解があったみたい。', sentence: "I think there's ___ a misunderstanding.", options: ['been', 'be', 'being', 'was'], answer: 'been', full: "I think there's been a misunderstanding.", why: "there's been ＝ there has been。has のあとは been。" },
+      { situation: '今のところ、問題は何もないよ。', sentence: 'There ___ been any problems so far.', options: ["haven't", "hasn't", "aren't", "didn't"], answer: "haven't", full: "There haven't been any problems so far.", why: "problems（複数）の否定なので haven't。so far＝今のところ。" },
+      { situation: 'あなたのことを考えなかった日は一日もないよ。', sentence: "There has never ___ a day I didn't think about you.", options: ['been', 'be', 'was', 'being'], answer: 'been', full: "There has never been a day I didn't think about you.", why: 'has never のあとは過去分詞 been。' }
+    ]
   }];
 
 
