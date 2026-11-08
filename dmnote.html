@@ -103,7 +103,7 @@
     <a href="quiz.html">✍️ 練習</a>
   </nav>
   <script src="common.js?v=17"></script>
-  <script src="dm-data.js?v=1"></script>
+  <script src="dm-data.js?v=2"></script>
   <script>
     const KIND = { form: ['型', ''], de: ['ドイツ語っぽい', 'de'], word: ['単語', 'word'] };
     const EMOJI_RE = /\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic}️?)*/gu;
@@ -120,7 +120,7 @@
       const out = [];
       String(text).split(/\n+/).forEach(line => {
         line = line.trim(); if (!line) return;
-        const parts = line.split(/([.!?…]+)\s+/);
+        const parts = line.split(/([.!?…]+(?:\p{Extended_Pictographic}|\uFE0F|\u200D)*)\s+/u);
         const sents = [];
         for (let i = 0; i < parts.length; i += 2) { const s = (parts[i] || '') + (parts[i + 1] || ''); if (s.trim()) sents.push(s.trim()); }
         for (let i = 1; i < sents.length; i++) {

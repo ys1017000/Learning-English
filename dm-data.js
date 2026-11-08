@@ -64,7 +64,40 @@
     { id: 'glad_happy', k: 'form', scene: 'feeling', re: "(i'?m|i am|i was) (so |really )?(glad|happy)",
       en: "I'm so glad / happy ...", ja: 'うれしい', note: '' },
 
+    // ---- 近況・気遣い・移動（2通目 11/7 から） ----
+    { id: 'stressful', k: 'form', scene: 'busy', re: '\\bstressful\\b',
+      en: 'It was really stressful.', ja: 'すごく大変だった・ストレスだった', note: '忙しさを伝える定番。stressful は「（物事が）ストレスになる」、stressed は「（人が）ストレスを感じている」。',
+      say: ['The last few days have been really stressful.', 'ここ数日、本当に大変だった。（The last few days have been ～：ここ数日ずっと～）'] },
+    { id: 'a_lot_to_do', k: 'form', scene: 'busy', re: 'a lot to do',
+      en: 'I had a lot to do.', ja: 'やることがたくさんあった', note: 'a lot to do＝やるべきことがたくさん。理由を軽く言うときに便利。',
+      say: ['I have a lot to do this week.', '今週はやることがたくさんある。'] },
+    { id: 'until_late', k: 'form', scene: 'busy', re: 'until late',
+      en: 'until late at night', ja: '夜遅くまで', note: 'work on ～ until late で「遅くまで〜に取り組んだ」。',
+      say: ['I worked until late last night.', '昨日は夜遅くまで仕事した。（until late：遅くまで）'] },
+    { id: 'how_going', k: 'form', scene: 'asked', re: "how('s| is) (your [a-z ]{1,20}|it|everything) going",
+      en: 'How is your work going?', ja: '（仕事など）の調子はどう？', note: 'How\'s ～ going? で物事の調子を聞く。答えは It\'s going well. / It\'s been busy.',
+      say: ["How's your work going?", '仕事の調子はどう？（How\'s ～ going?）'] },
+    { id: 'how_doing', k: 'form', scene: 'asked', re: "how are you doing|how have you been",
+      en: 'How are you doing?', ja: '元気？・調子どう？', note: '相手を気遣う質問。返事のあとに And you? / How about you? と聞き返すと会話が続く。' },
+    { id: 'on_my_way', k: 'form', scene: 'travel', re: 'on my way( back| home)?',
+      en: "I'm on my way back.", ja: '帰る途中', note: 'on my way（向かっている途中）、on my way back / home（帰る途中）。',
+      say: ["I'm on my way back now.", '今帰ってるところ。（on my way back：帰る途中）'] },
+    { id: 'arrive_around', k: 'form', scene: 'travel', re: '(arrive|get (there|home|back)).{0,25}\\baround\\b',
+      en: 'will probably arrive around 9pm', ja: 'たぶん9時ごろ着く', note: 'probably＝たぶん、around＝〜ごろ。到着時間を伝える定番。',
+      say: ["I'll probably arrive around 9pm.", 'たぶん夜9時ごろ着く。（probably：たぶん、around：～ごろ）'] },
+    { id: 'was_beautiful', k: 'form', scene: 'enjoyed', re: '(it|that|the [a-z]+|my [a-z]+) (was|is) (so+|really|very)? ?(beautiful|amazing|great|nice|fun)',
+      en: 'It was soo beautiful!', ja: 'すごく綺麗だった／楽しかった', note: '楽しかったことを伝える。so / really で強めて、!! や 😍 で気持ちを足している。' },
+    { id: 'autumn_leaves', k: 'word', scene: 'enjoyed', re: '\\b(autumn|fall) (leaves|colou?rs)\\b',
+      en: 'autumn leaves', ja: '紅葉', note: 'イギリス英語寄りの言い方。アメリカ英語では fall leaves / fall colors。',
+      say: ['I saw the autumn leaves.', '紅葉を見た。（autumn leaves：紅葉。アメリカ英語では fall leaves）'] },
+    { id: 'stretch', k: 'form', re: '\\b(he[y]{2,}|so{2,}|ye{2,}s|no{2,}|cu{2,}te)\\b',
+      en: 'Heyy / soo', ja: '文字を重ねて気持ちを強調', note: 'チャットでよく使う。sooo beautiful のように長いほど気持ちが強い。まねしてもOK。' },
+
     // ---- ドイツ語っぽい言い方（意味が分かればOK。まねしなくてよい） ----
+    { id: 'last_days_were', k: 'de', re: '\\bthe last (few |couple of )?(days|weeks) were\\b',
+      en: 'The last days were ...', ja: 'ここ数日は〜だった（＝The last few days have been ...）', note: 'ドイツ語の Die letzten Tage waren ... の形。英語では今につながるので現在完了 have been、days の前に few を入れるのが普通。' },
+    { id: 'for_university', k: 'de', re: '\\bfor (the )?university\\b',
+      en: 'for university', ja: '大学の（課題）（＝for school / for uni）', note: 'ドイツ語の für die Uni から。アメリカ英語では for school、イギリス英語では for uni がよく使われる。' },
     { id: 'in_the_moment', k: 'de', re: '\\bin the moment\\b',
       en: 'in the moment', ja: '今のところ（＝at the moment / right now）', note: 'ドイツ語の im Moment をそのまま訳した形。英語では at the moment が普通。' },
     { id: 'next_week_day', k: 'de', re: 'next week ' + DAY,
@@ -93,7 +126,21 @@
       ['Good luck with your assignments!', '課題がんばってね！（Good luck with ～）'],
       ["Don't push yourself too hard.", '無理しすぎないでね。'],
       ["Don't forget to take a break.", '休憩するのを忘れないでね。'],
-      ["I'm cheering for you!", '応援してるよ！'] ] },
+      ["I'm cheering for you!", '応援してるよ！'],
+      ['You worked so hard. Get some rest tonight.', 'すごく頑張ったね。今夜はゆっくり休んでね。'],
+      ['That sounds really tough.', 'それは本当に大変だったね。'] ] },
+    { id: 'asked', emoji: '🙋', label: '自分の様子を聞かれたとき', replies: [
+      ["Work has been busy, but I'm doing well.", '仕事は忙しいけど、元気だよ。（現在完了 has been ＋ but）'],
+      ["I'm doing great, thanks for asking!", '元気だよ、聞いてくれてありがとう！'],
+      ["Pretty good! It's been a normal week.", 'まあまあいいよ！いつもどおりの1週間だった。'] ] },
+    { id: 'travel', emoji: '🚃', label: '移動中・帰り道', replies: [
+      ['Have a safe trip back!', '気をつけて帰ってね！'],
+      ["Text me when you get home so I know you're safe.", '着いたら連絡してね、安心したいから。'],
+      ['Get some rest when you get home!', '帰ったらゆっくり休んでね！'] ] },
+    { id: 'enjoyed', emoji: '🍁', label: '楽しかった話を聞いたとき', replies: [
+      ["I'm glad you had a great time!", '楽しめたみたいでよかった！'],
+      ["I'd love to see the photos!", '写真見たいな！'],
+      ['The autumn leaves must have been beautiful!', '紅葉、きっと綺麗だったんだろうね！（must have been：〜だったに違いない）'] ] },
     { id: 'invite', emoji: '📅', label: '誘い・代わりの日の提案', replies: [
       ['That works for me!', 'それで大丈夫だよ！（～ works for me：～で都合がいい。Thursday night works for me! のように日にちも入れられる）'],
       ["Sounds great! I'm looking forward to it.", 'いいね！楽しみにしてるね。'],
@@ -107,6 +154,14 @@
   ];
 
   var NOTES = [
+    { d: '2026-11-07', title: '日帰り旅行の帰りのDM（2通目）', points: [
+      '書き出しは Heyy ようちゃん！☺️ と日本語のニックネーム。Heyy / soo のように文字を重ねて、明るい気持ちを出している。',
+      '流れは「自分の近況（忙しかった）→ 相手への質問（仕事どう？元気？）→ 楽しかった話 → これからの予定（何時に着く）」。相手のことも必ず聞いてくれる。',
+      '忙しさは really stressful / a lot to do / until late at night で伝える。前回の It\'s getting a little bit much. と同じく、課題とプレゼンの話。',
+      '楽しかったことは It was soo beautiful!! 😍 のように、強調の so と !! と絵文字で表現する。',
+      'イギリス英語寄り：autumn（アメリカは fall）、university。',
+      'ドイツ語っぽい言い方：The last days were ...（＝The last few days have been ...）、for university（＝for school / uni）。文法ノートの現在完了・There have been と同じ考え方。'
+    ] },
     { d: '2026-11-06', title: '予定キャンセルのDM（1通目）', points: [
       '流れは「謝る → 理由 → 残念な気持ち → 代わりの日の提案」。最初と最後の2回謝る丁寧なタイプ。',
       'I think I actually can\'t ... のように、断るときは I think / actually でやわらげる。',

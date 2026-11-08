@@ -401,6 +401,20 @@
     "There has never been a day I didn't think about you.": "会えない期間のあとに、気持ちを伝えるロマンチックな言い方。",
     "There's been a change of plans.": "待ち合わせや予定の変更を伝える最初のひと言。",
 
+    // ===== DM（11/7）から =====
+    "The last few days have been really stressful.": "忙しかった・大変だった最近の様子を伝えるとき。今も続いている感じなので have been。",
+    "I have a lot to do this week.": "忙しい理由を軽く伝えるとき。返信が遅れそうなときの前置きにも。",
+    "I worked until late last night.": "昨日遅くまで働いて疲れていると伝えるとき。",
+    "How's your work going?": "相手の仕事や課題の調子を聞くとき。課題なら How's your presentation going?",
+    "I'm on my way back now.": "帰り道に連絡するとき。向かっている途中なら I'm on my way.",
+    "I'll probably arrive around 9pm.": "到着時間の目安を伝えるとき。はっきりしないので probably と around で幅を持たせる。",
+    "I saw the autumn leaves.": "紅葉を見に行った話をするとき。アメリカ英語なら fall leaves。",
+    "I'm glad you had a great time!": "相手が楽しかった話をしてくれたときの返事。",
+    "Have a safe trip back!": "旅行や遠出から帰る相手へのひと言。",
+    "Work has been busy, but I'm doing well.": "「仕事どう？元気？」と聞かれたときの返事。最近の様子なので has been。",
+    "I'd love to see the photos!": "相手が旅行や出かけた話をしたときに、興味を示して会話を広げる。",
+    "You worked so hard. Get some rest tonight.": "課題や仕事を頑張った相手へのねぎらいのメッセージ。",
+
     // ===== マイ単語 =====
     "Has something fun happened lately?": "近況を聞くときの話題の振り方。How are you? より話が広がりやすい。",
     "improvisation": "前もって準備せず、その場で即興でやること（演劇・音楽・スピーチなど）。",
