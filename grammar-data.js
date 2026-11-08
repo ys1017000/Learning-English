@@ -558,6 +558,76 @@
       { situation: '今のところ、問題は何もないよ。', sentence: 'There ___ been any problems so far.', options: ["haven't", "hasn't", "aren't", "didn't"], answer: "haven't", full: "There haven't been any problems so far.", why: "problems（複数）の否定なので haven't。so far＝今のところ。" },
       { situation: 'あなたのことを考えなかった日は一日もないよ。', sentence: "There has never ___ a day I didn't think about you.", options: ['been', 'be', 'was', 'being'], answer: 'been', full: "There has never been a day I didn't think about you.", why: 'has never のあとは過去分詞 been。' }
     ]
+  }, {
+    id: 'linking',
+    title: 'リンキング（音のつながり）',
+    short: '音のつながり（リンキング）',
+    intro: 'ネイティブの英語が速く聞こえる一番の理由は、単語と単語の音がつながったり、変わったり、消えたりするからです。主な型は3つ：①子音＋母音がつながる、②t / d ＋ you で音が変わる、③似た音が続くと前の音が消える。カタカナは目安なので、🔊（ふつう）と🐢（ゆっくり）を聞き比べて、つながる感じをつかみましょう。',
+    groups: [
+      {
+        name: '① 子音 ＋ 母音がつながる（連結）',
+        note: '前の単語の最後の子音と、次の単語の最初の母音がくっついて、1語のように聞こえます。いちばん多いリンキングです。',
+        forms: [
+          { key: 'Check it out', kana: 'チェキラウ(ト)', kanaNote: '（ck＋it、t＋out がつながる）', label: '子音 ＋ 母音', ja: '見てみて', nuance: 'check ＋ it → チェキッ、it ＋ out → イラウ。',
+            ex: ['Check it out!', '見てみて！'], tone: 'ほかに：Come on（カモン）、Not at all（ナラロー）、an apple（アナポー）。' },
+          { key: 'Can I ～?', kana: 'キャナイ', kanaNote: '（n＋I がつながる）', label: 'Can I / Could I / Did I', ja: '〜してもいい？', nuance: 'Can I → キャナイ、Could I → クダイ。',
+            ex: ['Can I ask you something?', 'ちょっと聞いてもいい？'], tone: 'ask you は「アスキュー」（k＋you がつながる）。' },
+          { key: 'pick you up', kana: 'ピッキュアップ', kanaNote: '', label: '動詞 ＋ it / you ＋ up / on / out', ja: '迎えに行く・拾う など', nuance: '動詞のかたまり（句動詞）は特によくつながります。',
+            ex: ["I'll pick you up at the station.", '駅まで迎えに行くね。'], tone: 'turn it on（ターニロン）、put it on（プリロン）、get up（ゲラップ）。' }
+        ]
+      },
+      {
+        name: '② t / d ＋ you で音が変わる（同化）',
+        note: 't / d と you がくっつくと、別の音に変わります。最初は聞き取れなくて当たり前なので、まずは「聞いて分かる」ことを目標に。',
+        forms: [
+          { key: 'Did you ～?', kana: 'ディジュ', kanaNote: '（d＋you → ジュ）', label: 'd ＋ you → ジュ', ja: '〜した？', nuance: 'Would you → ウジュ、Could you → クジュ も同じ。',
+            ex: ['Did you eat yet?', 'もう食べた？'], tone: 'Nice to meet you. は「ナイストゥミーチュ」（t＋you → チュ）。' },
+          { key: 'What do you ～?', kana: 'ワダヤ', kanaNote: '（会話ではまとめて短く）', label: 'What do you → ワダヤ／What are you → ワラヤ', ja: '何を〜する？', nuance: 'よく使う組み合わせは、かたまりで短くなります。',
+            ex: ['What do you want to do today?', '今日何したい？'], tone: 'want to → ワナ、going to → ゴナ、got to → ガラ も会話でよく聞きます（自分で言うときは無理にまねしなくてOK）。' },
+          { key: 'Let me', kana: 'レミ', kanaNote: '（t が消える）', label: 'Let me / Give me / Tell me', ja: '〜させて／〜して', nuance: 'Let me → レミ、Give me → ギミ、Tell me → テルミ。',
+            ex: ['Let me think.', 'ちょっと考えさせて。'], tone: 'Let me know.（レミノウ）は、メッセージでも会話でも毎日のように出ます。' }
+        ]
+      },
+      {
+        name: '③ 音が消える・弱くなる（脱落・弱形）',
+        note: '同じ音や似た音が続くと前の音が消えます。and / of / to のような短い単語も、弱く短くなります。',
+        forms: [
+          { key: 'next time', kana: 'ネクスタイム', kanaNote: '（t が続くので前の t が消える）', label: '同じ・似た子音が続く → 前の音が消える', ja: '次回', nuance: 'next の t と time の t が続くので、1回だけ発音します。',
+            ex: ['See you next time!', 'また次回ね！'], tone: 'good day（グッデイ）、bad dream（バッドリーム）、last night（ラスナイ）。' },
+          { key: 'a lot of', kana: 'アラロヴ', kanaNote: '（アメリカ英語）', label: '母音にはさまれた t → 軽いラ行の音', ja: 'たくさんの', nuance: 'アメリカ英語では、母音にはさまれた t が「ラ」行のような音になります。',
+            ex: ['I have a lot of things to do.', 'やることがたくさんある。'], tone: 'water（ワラー）、better（ベラー）、get it（ゲリッ）。ドイツの人はこの t をはっきり発音することが多いので、聞き比べると面白いです。' },
+          { key: 'and / of / to', kana: 'ン／ア／タ', kanaNote: '（弱く短く）', label: 'and / of / to / for などは弱く短く', ja: '（文の中で弱くなる短い単語）', nuance: 'and → ン、of → ア(ヴ)、to → タ、for → ファ。',
+            ex: ['Can you pass me the salt and pepper?', '塩とこしょう取ってくれる？'], tone: 'salt and pepper → ソルトゥンペッパー、a cup of tea → アカッパティー。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：単語ごとに読む → つなげて読む',
+      rows: [
+        ['Check it out!', 'チェック イット アウト → チェキラウ'],
+        ['Did you eat yet?', 'ディド ユー イート イェット → ディジュイーチェッ？'],
+        ['Let me know.', 'レット ミー ノウ → レミノウ'],
+        ['What do you want to do?', 'ワット ドゥー ユー ウォント トゥー ドゥー → ワダヤ ワナ ドゥ？'],
+        ["I'll pick you up.", 'アイル ピック ユー アップ → アイルピッキュアップ']
+      ]
+    },
+    cautions: [
+      'カタカナはあくまで目安。🔊（ふつう）と🐢（ゆっくり）を聞き比べて、どこがつながるかを耳でつかむのが一番です。',
+      '自分で話すときは、無理にくずさなくてもちゃんと通じます。まずは「聞き取れる」ことを目標に。',
+      'つながるのは意味のかたまりの中だけ。カンマやピリオドの区切りでは切ります。',
+      '音読するときは単語ごとに区切らず、かたまりで読むと自然につながるようになります（シャドーイングと相性がいい）。'
+    ],
+    quiz: [
+      { situation: 'Check it out! の聞こえ方に一番近いのは？', sentence: 'Check it out! → ___', options: ['チェキラウ', 'チェック イット アウト', 'チェクトゥアウト', 'チェッキトアウト'], answer: 'チェキラウ', full: 'Check it out!', why: 'ck＋it、t＋out がつながり、母音にはさまれた t がラ行っぽくなる。' },
+      { situation: 'Can I ask you something? の Can I は？', sentence: 'Can I → ___', options: ['キャナイ', 'キャン アイ', 'カンナイ', 'ケン アイ'], answer: 'キャナイ', full: 'Can I ask you something?', why: 'n＋I がつながって「キャナイ」。' },
+      { situation: 'Did you eat yet? の Did you は？', sentence: 'Did you → ___', options: ['ディジュ', 'ディド ユー', 'ディユー', 'ディッチュ'], answer: 'ディジュ', full: 'Did you eat yet?', why: 'd＋you は「ジュ」に変わる。' },
+      { situation: 'Nice to meet you. の meet you は？', sentence: 'meet you → ___', options: ['ミーチュ', 'ミート ユー', 'ミージュ', 'ミーユー'], answer: 'ミーチュ', full: 'Nice to meet you.', why: 't＋you は「チュ」に変わる。' },
+      { situation: 'Let me know. の聞こえ方は？', sentence: 'Let me know. → ___', options: ['レミノウ', 'レット ミー ノウ', 'レトミノウ', 'レッツノウ'], answer: 'レミノウ', full: 'Let me know.', why: 't が消えて Let me → レミ。' },
+      { situation: 'What do you want to do today? の What do you は？', sentence: 'What do you → ___', options: ['ワダヤ', 'ワット ドゥー ユー', 'ワッチュ', 'ワドゥユー'], answer: 'ワダヤ', full: 'What do you want to do today?', why: '会話では What do you がまとまって「ワダヤ」に聞こえる。' },
+      { situation: "I'll pick you up at the station. の pick you up は？", sentence: 'pick you up → ___', options: ['ピッキュアップ', 'ピック ユー アップ', 'ピクヤプ', 'ピッキャップ'], answer: 'ピッキュアップ', full: "I'll pick you up at the station.", why: 'k＋you（キュ）、you＋up がつながる。' },
+      { situation: 'See you next time! の next time は？', sentence: 'next time → ___', options: ['ネクスタイム', 'ネクスト タイム', 'ネクストゥタイム', 'ネッタイム'], answer: 'ネクスタイム', full: 'See you next time!', why: 'next の t と time の t が続くので、前の t が消える。' },
+      { situation: 'I have a lot of things to do. の a lot of は？（アメリカ英語）', sentence: 'a lot of → ___', options: ['アラロヴ', 'ア ロット オブ', 'アロットブ', 'アロトフ'], answer: 'アラロヴ', full: 'I have a lot of things to do.', why: '母音にはさまれた t がラ行っぽくなり、of は弱く「ア(ヴ)」になる。' }
+    ]
   }];
 
 

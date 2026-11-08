@@ -415,6 +415,18 @@
     "I'd love to see the photos!": "相手が旅行や出かけた話をしたときに、興味を示して会話を広げる。",
     "You worked so hard. Get some rest tonight.": "課題や仕事を頑張った相手へのねぎらいのメッセージ。",
 
+    // ===== 文法ノート：リンキング =====
+    "Check it out!": "面白いものを見せるとき・写真やリンクを送るとき。",
+    "Can I ask you something?": "質問や相談を切り出す前のひと言。",
+    "I'll pick you up at the station.": "待ち合わせで、迎えに行くと伝えるとき。",
+    "Did you eat yet?": "夜や昼のメッセージの定番。Have you eaten yet? とも言う。",
+    "Nice to meet you.": "初対面のあいさつ。別れ際なら Nice meeting you.",
+    "What do you want to do today?": "デートの日に、相手の希望を聞くとき。",
+    "Let me think.": "すぐに答えられないときの時間稼ぎ。",
+    "See you next time!": "別れ際に、次に会う日が決まっていないとき。",
+    "I have a lot of things to do.": "忙しいことを伝えるとき。",
+    "Can you pass me the salt and pepper?": "食事中に、テーブルの物を取ってもらうとき。",
+
     // ===== マイ単語 =====
     "Has something fun happened lately?": "近況を聞くときの話題の振り方。How are you? より話が広がりやすい。",
     "improvisation": "前もって準備せず、その場で即興でやること（演劇・音楽・スピーチなど）。",

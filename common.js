@@ -180,6 +180,17 @@
       ["文法・表現パターン", "There haven't been any problems so far.", "今のところ、問題は何もないよ。（so far：今のところ）"],
       ["文法・表現パターン", "There has never been a day I didn't think about you.", "あなたのことを考えなかった日は一日もないよ。"],
       ["文法・表現パターン", "There's been a change of plans.", "予定が変わったんだ。（決まり文句）"],
+      // ---- 文法ノート「リンキング（音のつながり）」（2026-11-08） ----
+      ["音のつながり（リンキング）", "Check it out!", "見てみて！（チェキラウ：子音＋母音がつながる）"],
+      ["音のつながり（リンキング）", "Can I ask you something?", "ちょっと聞いてもいい？（キャナイ・アスキュー）"],
+      ["音のつながり（リンキング）", "I'll pick you up at the station.", "駅まで迎えに行くね。（ピッキュアップ）"],
+      ["音のつながり（リンキング）", "Did you eat yet?", "もう食べた？（ディジュ：d＋you → ジュ）"],
+      ["音のつながり（リンキング）", "Nice to meet you.", "はじめまして。（ミーチュ：t＋you → チュ）"],
+      ["音のつながり（リンキング）", "What do you want to do today?", "今日何したい？（ワダヤ ワナ ドゥ）"],
+      ["音のつながり（リンキング）", "Let me think.", "ちょっと考えさせて。（レミスィンク）"],
+      ["音のつながり（リンキング）", "See you next time!", "また次回ね！（ネクスタイム：前の t が消える）"],
+      ["音のつながり（リンキング）", "I have a lot of things to do.", "やることがたくさんある。（アラロヴ）"],
+      ["音のつながり（リンキング）", "Can you pass me the salt and pepper?", "塩とこしょう取ってくれる？（ソルトゥンペッパー）"],
       // ---- 旧アプリ「気持ちを伝える英語」（review.html）から移行（2026-11-06） ----
       ["気持ち・関係を伝える", "I care about you, and I want to be honest with you.", "君のことを大切に思っているし、正直に話したい。"],
       ["気持ち・関係を伝える", "Sometimes I struggle to explain my feelings in English.", "英語で気持ちを説明するのが難しいときがある。"],
@@ -494,21 +505,83 @@
     return all.filter(p => p[0] === selected);
   }
 
+  /* ジャンル選択は2段階：①分類（GENRE_GROUPS）→ ②ジャンル。
+     実際の値は今までどおり select（#genreSelect）が持つので、各ページの処理は変えなくてよい。
+     ここに無いカテゴリは「その他」に入る。 */
+  const GENRE_GROUPS = [
+    { id: 'base', label: '🎯 全体・復習・マイ単語', cats: [] },
+    { id: 'love', label: '💕 恋人・気持ちを伝える', cats: ['恋人・パートナーへの思いやり', '愛情・絆を深める表現', 'would / could 恋人同士の会話', '気持ち・関係を伝える', '謝る・誤解をとく', '自分の経験・自分らしさ'] },
+    { id: 'care', label: '🤝 寄り添う・話し合う', cats: ['共感する・寄り添う', '励ます・応援する', '不安・悩みを受け止める', '話し合い・意見の違い', '差別・人権・文化を話す'] },
+    { id: 'talk', label: '💬 会話・雑談', cats: ['会話フレーズ', '実践フレーズ', '友達・カジュアル雑談', '短く言える版', 'else / tell you what', '音のつながり（リンキング）'] },
+    { id: 'gram', label: '📖 文法・単語', cats: ['文法・表現パターン', '文法・文型', '単語 (単体)', '熟語 (イディオム)', '単語・熟語 (形容詞＋名詞)', '単語・熟語 (副詞＋動詞)', '語彙・コロケーション'] },
+    { id: 'other', label: '📁 その他', cats: [] }
+  ];
+  function genreEntries() {
+    const all = getAllPhrases(), count = {};
+    all.forEach(p => { count[p[0]] = (count[p[0]] || 0) + 1; });
+    const list = [
+      { v: 'ALL', t: '✨ 全ジャンル（ランダム出題）', g: 'base' },
+      { v: 'WEAK', t: '🎯 苦手フレーズのみ（' + getWeakPhrases().length + '件）', g: 'base' },
+      { v: 'DUE', t: '⏰ 復習の時期が来たフレーズ（' + getDuePhrases().length + '件）', g: 'base' },
+      { v: 'FAV', t: '⭐ お気に入りフレーズのみ', g: 'base' }
+    ];
+    Object.keys(count).forEach(c => {
+      let g = c === CUSTOM_CAT ? 'base' : 'other';
+      GENRE_GROUPS.forEach(gr => { if (gr.cats.includes(c)) g = gr.id; });
+      list.push({ v: c, t: (c === CUSTOM_CAT ? '⭐ ' : '📁 ') + c + '（' + count[c] + '）', g });
+    });
+    // 分類の中は GENRE_GROUPS に書いた順に並べる
+    const order = c => { for (const gr of GENRE_GROUPS) { const i = gr.cats.indexOf(c); if (i >= 0) return i; } return 999; };
+    return list.sort((a, b) => a.g === b.g && a.g !== 'base' ? order(a.v) - order(b.v) : 0);
+  }
+  function groupSelectFor(select) {
+    let gs = document.getElementById(select.id + 'Group');
+    if (!gs) {
+      gs = document.createElement('select');
+      gs.id = select.id + 'Group';
+      gs.className = 'genre-select-box genre-group-box';
+      gs.setAttribute('aria-label', '出題の分類');
+      select.parentNode.insertBefore(gs, select);
+      gs.addEventListener('change', () => {
+        fillGenreOptions(select, gs.value);
+        select.value = select.options.length ? select.options[0].value : 'ALL';
+        select.dispatchEvent(new Event('change'));
+      });
+    }
+    return gs;
+  }
+  function fillGenreOptions(select, groupId) {
+    select.innerHTML = '';
+    (select._genres || []).filter(e => e.g === groupId).forEach(e => {
+      const o = document.createElement('option'); o.value = e.v; o.textContent = e.t; select.appendChild(o);
+    });
+  }
+  // ジャンルの値を指定して選ぶ（分類も合わせて切り替える）。change イベントは出さない
+  function setGenre(select, value) {
+    const e = (select._genres || []).find(x => x.v === value) || (select._genres || [])[0];
+    if (!e) return;
+    const gs = groupSelectFor(select);
+    gs.value = e.g;
+    fillGenreOptions(select, e.g);
+    select.value = e.v;
+  }
   function populateGenreSelect(select) {
     const params = new URLSearchParams(location.search);
-    const categories = Array.from(new Set(getAllPhrases().map(p => p[0])));
-    const weakCount = getWeakPhrases().length;
-    select.innerHTML = '';
-    const add = (v, t) => { const o = document.createElement('option'); o.value = v; o.textContent = t; select.appendChild(o); };
-    add('ALL', '✨ 全ジャンル (ランダム出題)');
-    add('WEAK', '🎯 苦手フレーズのみ (' + weakCount + '件)');
-    add('DUE', '⏰ 復習の時期が来たフレーズ (' + getDuePhrases().length + '件)');
-    add('FAV', '⭐ お気に入りフレーズのみ');
-    categories.forEach(c => add(c, (c === CUSTOM_CAT ? '⭐ ' : '📁 ') + c));
-    // ?mode=weak / ?genre=カテゴリ名 で開いたときの初期選択
+    const prev = select.value;
+    select._genres = genreEntries();
+    const gs = groupSelectFor(select);
+    gs.innerHTML = '';
+    GENRE_GROUPS.forEach(gr => {
+      const n = select._genres.filter(e => e.g === gr.id).length;
+      if (!n) return;
+      const o = document.createElement('option'); o.value = gr.id;
+      o.textContent = gr.label + (gr.id === 'base' ? '' : '（' + n + 'ジャンル）');
+      gs.appendChild(o);
+    });
+    // ?mode=weak / ?mode=due / ?genre=カテゴリ名 で開いたときの初期選択。再表示のときは今の選択を保つ
     const mode = params.get('mode');
-    const want = mode === 'weak' ? 'WEAK' : mode === 'due' ? 'DUE' : params.get('genre');
-    if (want && Array.from(select.options).some(o => o.value === want)) select.value = want;
+    const want = prev || (mode === 'weak' ? 'WEAK' : mode === 'due' ? 'DUE' : params.get('genre')) || 'ALL';
+    setGenre(select, select._genres.some(e => e.v === want) ? want : 'ALL');
   }
 
   // 選択が空（お気に入り0件など）なら全ジャンルに戻して知らせる
@@ -522,7 +595,7 @@
         ? 'お気に入りがまだありません。★を押して登録してください。'
         : '該当するフレーズがありません。';
     alert(msg);
-    select.value = 'ALL';
+    setGenre(select, 'ALL');
     return getPhrasesFor('ALL').length > 0;
   }
 
@@ -1325,7 +1398,7 @@
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
     esc, dateKey, getStore, saveStore, getCustomPhrases, saveCustomPhrases, getAllPhrases,
     isFavorite, toggleFavorite, markStudied, recordResult, countSpeak, getWeakPhrases, calcStreak, updateStreakBadge,
-    splitJa, usageFor, renderUsage, autoSpeak, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
+    splitJa, usageFor, renderUsage, autoSpeak, setGenre, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,
     getPrefs, setPref, hasPhrase, addCustomPhrase, addToReview,

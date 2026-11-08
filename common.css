@@ -249,3 +249,8 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--primary); }
 .rm-free { margin-top: 0.75rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); }
 .rm-free-btns { display: flex; flex-wrap: wrap; gap: 6px; }
 .rm-free-btns .tiny-btn { font-size: 0.8rem; padding: 5px 10px; }
+
+/* ジャンルの2段階選択：①分類 ②ジャンル */
+.genre-group-box { margin-bottom: 0.5rem; background: #eef2ff; border-color: #c7d2fe; color: #3730a3; }
+/* 文法ノートの項目選択 */
+.topic-select { margin-bottom: 0.9rem; }

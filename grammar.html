@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=17">
+  <link rel="stylesheet" href="common.css?v=19">
 </head>
 <body>
   <header>
@@ -24,7 +24,7 @@
     <a href="phrases.html">📚 表現集</a>
   </div>
   <div class="container">
-    <div class="chip-row" id="topicChips" role="group" aria-label="文法の項目" style="display:none;"></div>
+    <select id="topicSelect" class="genre-select-box topic-select" aria-label="文法の項目" style="display:none;"></select>
     <div class="chip-row" id="tabChips" role="group" aria-label="表示の切り替え">
       <button class="chip active" data-tab="note">📖 ノート</button>
       <button class="chip" data-tab="quiz">🎯 判定クイズ</button>
@@ -39,9 +39,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=17"></script>
-  <script src="usage-data.js?v=8"></script>
-  <script src="grammar-data.js?v=14"></script>
+  <script src="common.js?v=19"></script>
+  <script src="usage-data.js?v=9"></script>
+  <script src="grammar-data.js?v=15"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -139,16 +139,15 @@
       if (name === 'quiz') renderQuiz(); else renderNote();
     }
     function renderTopics() {
-      const box = $('topicChips');
+      const box = $('topicSelect');
       if (GR.TOPICS.length < 2) return;
       box.style.display = '';
-      box.innerHTML = GR.TOPICS.map((t, i) => '<button class="chip' + (i === topicIdx ? ' active' : '') + '" data-topic="' + i + '">' + esc(t.short) + '</button>').join('');
+      box.innerHTML = GR.TOPICS.map((t, i) => '<option value="' + i + '">📖 ' + (i + 1) + '. ' + esc(t.short) + '</option>').join('');
+      box.value = String(topicIdx);
     }
     document.addEventListener('click', e => {
       const sp = e.target.closest('[data-speak]');
       if (sp) { EA.speak(sp.dataset.speak, 'en-US', sp.dataset.slow ? 0.7 : 1); return; }
-      const tp = e.target.closest('[data-topic]');
-      if (tp) { topicIdx = +tp.dataset.topic; quiz = null; renderTopics(); setTab(tab); return; }
       const tb = e.target.closest('[data-tab]');
       if (tb) { setTab(tb.dataset.tab); return; }
       const op = e.target.closest('[data-opt]');
@@ -159,6 +158,12 @@
       else if (a.dataset.act === 'next') { quiz.i += 1; quiz.answered = false; quiz.opts = null; renderQuiz(); }
       else if (a.dataset.act === 'restart') { startQuiz(); }
       else if (a.dataset.act === 'retryMissed') { startQuiz(quiz.missed); }
+    });
+    try { const t = +localStorage.getItem('english_app_grammar_topic'); if (t > 0 && t < GR.TOPICS.length) topicIdx = t; } catch (err) {}
+    $('topicSelect').addEventListener('change', e => {
+      topicIdx = +e.target.value; quiz = null;
+      try { localStorage.setItem('english_app_grammar_topic', String(topicIdx)); } catch (err) {}
+      setTab(tab); window.scrollTo(0, 0);
     });
     renderTopics();
     renderNote();
