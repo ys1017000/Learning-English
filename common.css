@@ -254,3 +254,10 @@ input[type="checkbox"], input[type="radio"] { accent-color: var(--primary); }
 .genre-group-box { margin-bottom: 0.5rem; background: #eef2ff; border-color: #c7d2fe; color: #3730a3; }
 /* 文法ノートの項目選択 */
 .topic-select { margin-bottom: 0.9rem; }
+
+/* ロードマップ：日ごとのふり返り */
+button.rm-day { font: inherit; cursor: pointer; width: 100%; }
+button.rm-day:active { transform: scale(0.96); }
+.rm-daynav { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 0.75rem; }
+.rm-daynav .tiny-btn { flex: 1; font-size: 0.85rem; padding: 7px 6px; }
+.rm-day.viewing { outline: 2px solid #4f46e5; outline-offset: 1px; }

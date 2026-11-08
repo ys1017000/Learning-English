@@ -628,6 +628,60 @@
       { situation: 'See you next time! の next time は？', sentence: 'next time → ___', options: ['ネクスタイム', 'ネクスト タイム', 'ネクストゥタイム', 'ネッタイム'], answer: 'ネクスタイム', full: 'See you next time!', why: 'next の t と time の t が続くので、前の t が消える。' },
       { situation: 'I have a lot of things to do. の a lot of は？（アメリカ英語）', sentence: 'a lot of → ___', options: ['アラロヴ', 'ア ロット オブ', 'アロットブ', 'アロトフ'], answer: 'アラロヴ', full: 'I have a lot of things to do.', why: '母音にはさまれた t がラ行っぽくなり、of は弱く「ア(ヴ)」になる。' }
     ]
+  }, {
+    id: 'small-mistakes',
+    title: 'よくある小さなミス（AI英会話から）',
+    short: '小さなミスを直す（過去形・still・for ～ing）',
+    intro: 'AI英会話（11/8）で実際に出た、小さなミスのまとめです。どれも意味は伝わるので、会話中は気にしすぎなくて大丈夫。日記や音読のときに少しずつ直していきましょう。',
+    groups: [
+      {
+        name: '時制・冠詞',
+        note: '自分で文を組み立てると、過去の話が現在形に戻りがち。today / yesterday / last night があったら過去形のサインです。',
+        forms: [
+          { key: '過去の話は過去形', kana: '', kanaNote: '', label: '過去のこと → 動詞を過去形に', ja: '〜した', nuance: 'play → played、take → took、go → went、have → had。',
+            ex: ['I played "Over the Rainbow" today.', '今日「虹の彼方に」を弾いた。'], tone: '2文目以降も過去形のまま：It was hard, but fun.' },
+          { key: '曲名に the を付けない', kana: '', kanaNote: '', label: '曲名・映画名・本の題名には the を付けない', ja: '（タイトルはそのまま）', nuance: 'タイトルはそのまま名前として使います。書くときは " " で囲むと分かりやすい。',
+            ex: ['My favorite song is "Let It Be".', '好きな曲は「レット・イット・ビー」。'], tone: '楽器には the を付ける：play the piano（ピアノを弾く）。' }
+        ]
+      },
+      {
+        name: '語順・前置詞・目的語',
+        note: '語順や小さな単語の抜け。意味は通じますが、直すと一気に自然になります。',
+        forms: [
+          { key: 'still can\'t', kana: 'スティル キャント', kanaNote: '', label: '主語 ＋ still ＋ can\'t / don\'t ＋ 動詞', ja: 'まだ〜できない', nuance: 'still は否定（can\'t / don\'t）の前に置きます。',
+            ex: ["I still can't play it very well.", 'まだうまく弾けない。'], tone: "肯定文では be動詞のあと・一般動詞の前：I'm still learning. / I still remember." },
+          { key: 'Thank you for ～ing', kana: '', kanaNote: '', label: 'Thank you for ＋ ～ing / 名詞', ja: '〜してくれてありがとう', nuance: 'Thank you のあとに直接動詞を置かず、for を入れます。',
+            ex: ['Thank you for teaching me.', '教えてくれてありがとう。'], tone: 'Thank you for asking.（聞いてくれてありがとう）も自然な英語。AIに直されても気にしなくて大丈夫です。' },
+          { key: '動詞 ＋ it', kana: '', kanaNote: '', label: '動詞 ＋ it（目的語を忘れない）', ja: 'それを〜する', nuance: '日本語では「弾けない」と目的語を省きますが、英語では it が必要なことが多いです。',
+            ex: ["I like this song, but I can't sing it.", 'この曲好きだけど、歌えない。'], tone: 'I want to play it well.（上手に弾けるようになりたい）' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：AI英会話で言った文 → 直した文',
+      rows: [
+        ['I play the Over the Rainbow.', '→ I played "Over the Rainbow."（過去形・the なし）'],
+        ["I can't still play well.", "→ I still can't play it very well.（still の位置・it）"],
+        ['Thank you teaching me.', '→ Thank you for teaching me.（for ～ing）'],
+        ['Thank you for asking.', '→ そのままでOK（自然な英語）']
+      ]
+    },
+    cautions: [
+      'どれも意味は伝わるミス。会話中は止まらずに話し続ける方が大事です。',
+      'today / yesterday / last night が入った文は、過去形になっているか一度確認。英語日記を書いたあとのチェックにも。',
+      "still は「まだ（続いている）」、yet は否定文の最後で「まだ〜ない」：I haven't finished yet.",
+      'Thank you の後ろは for ＋ 名詞 / ～ing：Thanks for coming!（来てくれてありがとう）'
+    ],
+    quiz: [
+      { situation: '今日「虹の彼方に」を弾いた。', sentence: 'I ___ "Over the Rainbow" today.', options: ['played', 'play', 'playing', 'plays'], answer: 'played', full: 'I played "Over the Rainbow" today.', why: 'today（今日すでにしたこと）なので過去形 played。' },
+      { situation: '好きな曲は「レット・イット・ビー」。', sentence: 'My favorite song is ___.', options: ['"Let It Be"', 'the "Let It Be"', 'a "Let It Be"', 'the Let It Be'], answer: '"Let It Be"', full: 'My favorite song is "Let It Be".', why: '曲名には the や a を付けない。' },
+      { situation: 'まだうまく弾けない。', sentence: '___ play it very well.', options: ["I still can't", "I can't still", 'I still not can', 'I can still not'], answer: "I still can't", full: "I still can't play it very well.", why: "still は否定の can't の前に置く。" },
+      { situation: '教えてくれてありがとう。', sentence: 'Thank you ___ me.', options: ['for teaching', 'teaching', 'to teach', 'for teach'], answer: 'for teaching', full: 'Thank you for teaching me.', why: 'Thank you for ＋ ～ing で「〜してくれてありがとう」。' },
+      { situation: '「調子どう？」と聞かれて「聞いてくれてありがとう」', sentence: 'Thank you for ___.', options: ['asking', 'ask', 'to ask', 'asked'], answer: 'asking', full: 'Thank you for asking.', why: 'for のあとは ～ing。Thank you for asking. は自然な英語。' },
+      { situation: 'この曲好きだけど、歌えない。', sentence: "I like this song, but I can't ___.", options: ['sing it', 'sing', 'singing it', 'it sing'], answer: 'sing it', full: "I like this song, but I can't sing it.", why: '「その曲を」歌えないので、目的語 it が必要。' },
+      { situation: 'まだ練習中なんだ。', sentence: "I'm ___ practicing.", options: ['still', 'yet', 'already', 'ever'], answer: 'still', full: "I'm still practicing.", why: '「まだ（続いている）」は still。be動詞のあとに置く。' },
+      { situation: '昨日ピアノを2時間練習した。', sentence: 'I ___ the piano for two hours yesterday.', options: ['practiced', 'practice', 'am practicing', 'have practiced'], answer: 'practiced', full: 'I practiced the piano for two hours yesterday.', why: 'yesterday があるので過去形。現在完了は yesterday と一緒に使わない。' }
+    ]
   }];
 
 

@@ -191,6 +191,14 @@
       ["音のつながり（リンキング）", "See you next time!", "また次回ね！（ネクスタイム：前の t が消える）"],
       ["音のつながり（リンキング）", "I have a lot of things to do.", "やることがたくさんある。（アラロヴ）"],
       ["音のつながり（リンキング）", "Can you pass me the salt and pepper?", "塩とこしょう取ってくれる？（ソルトゥンペッパー）"],
+      // ---- 文法ノート「よくある小さなミス」（2026-11-09） ----
+      ["文法・表現パターン", "I played \"Over the Rainbow\" today.", "今日「虹の彼方に」を弾いた。（過去形・曲名に the を付けない）"],
+      ["文法・表現パターン", "My favorite song is \"Let It Be\".", "好きな曲は「レット・イット・ビー」。（曲名に the を付けない）"],
+      ["文法・表現パターン", "I still can't play it very well.", "まだうまく弾けない。（still は can't の前）"],
+      ["文法・表現パターン", "Thank you for asking.", "聞いてくれてありがとう。（自然な英語）"],
+      ["文法・表現パターン", "I like this song, but I can't sing it.", "この曲好きだけど、歌えない。（目的語 it を忘れない）"],
+      ["文法・表現パターン", "I'm still practicing.", "まだ練習中なんだ。（still：まだ続いている）"],
+      ["文法・表現パターン", "I practiced the piano for two hours yesterday.", "昨日ピアノを2時間練習した。（yesterday → 過去形）"],
       // ---- 旧アプリ「気持ちを伝える英語」（review.html）から移行（2026-11-06） ----
       ["気持ち・関係を伝える", "I care about you, and I want to be honest with you.", "君のことを大切に思っているし、正直に話したい。"],
       ["気持ち・関係を伝える", "Sometimes I struggle to explain my feelings in English.", "英語で気持ちを説明するのが難しいときがある。"],

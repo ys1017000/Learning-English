@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=19">
+  <link rel="stylesheet" href="common.css?v=20">
 </head>
 <body>
   <header>
@@ -41,8 +41,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=19"></script>
-  <script src="usage-data.js?v=9"></script>
+  <script src="common.js?v=20"></script>
+  <script src="usage-data.js?v=10"></script>
   <script src="roadmap-data.js?v=8"></script>
   <script>
     const RM = window.RM;
@@ -53,6 +53,7 @@
     const SYM = { full: '◎', min: '〇', skip: '✕', none: '・', future: '', before: '' };
     let rd = EA.getRoadmap();
     let tab = 'today', minimal = false, editStart = false, run = null;
+    let viewDay = null;   // 過去・先の日のメニューを見ているときの日付（null＝今日）
 
     const cardsMap = () => RM.cardsByWeek(EA.getCustomPhrases());
     function update(fn) { rd = EA.getRoadmap(); fn(rd); if (!EA.saveRoadmap(rd)) EA.toast('保存に失敗しました。ブラウザの保存領域を確認してください。'); rd = EA.getRoadmap(); }
@@ -92,8 +93,8 @@
         if (k < rd.start) st = 'before';
         else if (k <= today) st = RM.dayStatus({ dow: i + 1 }, rd.done[k], rd.skipped[k]);
         const sym = k === today && st === 'none' ? '…' : SYM[st];
-        return '<div class="rm-day' + (k === today ? ' today' : '') + ' st-' + st + '"><span>' + RM.DOW_JA[i] + '</span><b>' + sym + '</b></div>';
-      }).join('') + '</div><div class="muted" style="font-size:0.72rem; margin-top:0.35rem;">◎ 全部できた　〇 最低ライン（朝＋昼）　✕ 捨てた　・ できなかった</div>';
+        return '<button class="rm-day' + (k === today ? ' today' : '') + (viewDay && k === viewDay ? ' viewing' : '') + ' st-' + st + '" data-act="viewDay" data-day="' + k + '" aria-label="' + esc(fmt(k)) + 'のメニューを見る"><span>' + RM.DOW_JA[i] + '</span><b>' + sym + '</b></button>';
+      }).join('') + '</div><div class="muted" style="font-size:0.72rem; margin-top:0.35rem;">◎ 全部できた　〇 最低ライン（朝＋昼）　✕ 捨てた　・ できなかった　<b>曜日をタップでその日のメニューを見返せます</b></div>';
     }
     function deckFor(kind, p) {
       const b = cardsMap();
@@ -107,19 +108,20 @@
       return [];
     }
     const DECK_LABEL = { lunch: 'カード暗唱を始める', week: '今週のカードを通しで言う', weak: '言えなかったカードだけ言う', check: '月末チェックを始める' };
-    function slotHtml(s, done, p) {
+    function slotHtml(s, done, p, day) {
+      day = day || today;
       const links = (s.links || []).map(k => {
         const l = RM.LINKS[k];
         return '<a class="tiny-btn rm-link" href="' + esc(l.href) + '"' + (l.ext ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + esc(l.label) + (l.ext ? ' ↗' : '') + '</a>';
       }).join('');
       let deckBtn = '';
-      if (s.deck) {
+      if (s.deck && day === today) {
         const n = deckFor(s.deck, p).length;
         deckBtn = n ? '<button class="btn rm-deck" data-act="deck" data-deck="' + s.deck + '" data-slot="' + s.id + '">▶ ' + DECK_LABEL[s.deck] + '（' + n + '枚）</button>'
           : '<p class="muted rm-nodeck">' + (s.deck === 'weak' ? '言えなかったカードはまだありません。' : 'この枠で使うカードがまだありません。') + '</p>';
       }
       return '<div class="rm-slot' + (done ? ' done' : '') + '">' +
-        '<button class="rm-check" data-act="toggle" data-id="' + s.id + '" aria-pressed="' + (done ? 'true' : 'false') + '" aria-label="' + esc(s.title) + 'を' + (done ? '未完了に戻す' : '完了にする') + '">' + (done ? '✔' : '') + '</button>' +
+        '<button class="rm-check" data-act="toggle" data-id="' + s.id + '" data-day="' + day + '" aria-pressed="' + (done ? 'true' : 'false') + '" aria-label="' + esc(s.title) + 'を' + (done ? '未完了に戻す' : '完了にする') + '">' + (done ? '✔' : '') + '</button>' +
         '<div class="rm-slot-body"><div class="muted">' + (ICON[s.id] || '') + ' ' + esc(s.when) + '</div><div class="rm-title">' + esc(s.title) + '</div>' +
         (s.detail ? '<div class="muted">' + esc(s.detail) + '</div>' : '') +
         (links ? '<div class="rm-links">' + links + '</div>' : '') + deckBtn + '</div></div>';
@@ -131,6 +133,7 @@
         updateStartHint();
         return;
       }
+      if (viewDay && viewDay !== today) { renderDay(viewDay); return; }
       const p = pos();
       if (p.state === 'before') {
         box.innerHTML = '<div class="card next-step"><div class="countdown"><div class="lbl">' + esc(fmt(rd.start)) + ' に はじまります。あと</div><div class="num">' + p.daysUntil + '日</div></div>' +
@@ -200,7 +203,7 @@
             days = '<div class="rm-days" style="margin-top:0.5rem;">' + dates.map((k, i) => {
               let st = 'future';
               if (k < rd.start) st = 'before'; else if (k <= today) st = RM.dayStatus({ dow: i + 1 }, rd.done[k], rd.skipped[k]);
-              return '<div class="rm-day st-' + st + (k === today ? ' today' : '') + '"><span>' + RM.DOW_JA[i] + '</span><b>' + SYM[st] + '</b></div>';
+              return '<button class="rm-day st-' + st + (k === today ? ' today' : '') + '" data-act="viewDay" data-day="' + k + '" aria-label="' + esc(fmt(k)) + 'のメニューを見る"><span>' + RM.DOW_JA[i] + '</span><b>' + SYM[st] + '</b></button>';
             }).join('') + '</div>';
           }
           html += '<details class="day rm-week' + (W.buffer ? ' buffer' : '') + '"' + (cur ? ' open' : '') + '><summary style="padding:0.75rem 1rem; cursor:pointer;">' +
@@ -242,6 +245,57 @@
       run = { kind: 'free', free: { w, cat: cat || '', mode: mode || '' }, label, slot: null, all: cards, queue: shuffled(cards).map(c => ({ c, t: '練習' })), round: 1, i: 0, res: [], hist: [], said: {}, phase: 'card' };
       renderRun();
       $('runBox').scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+
+    /* ---------- 日ごとのふり返り（過去・先の日のメニューを見る） ---------- */
+    function dayCardsOf(k) {
+      const p = RM.position(rd.start, k);
+      if (p.state !== 'active') return [];
+      return RM.dayCards(cardsMap(), rd.start, p.week, p.dow);
+    }
+    function startFreeDay(k) {
+      const cards = dayCardsOf(k);
+      if (!cards.length) { EA.toast('この日のカードはありません'); return; }
+      run = { kind: 'free', free: { day: k }, label: fmt(k) + 'のカードを練習', slot: null, all: cards, queue: shuffled(cards).map(c => ({ c, t: '練習' })), round: 1, i: 0, res: [], hist: [], said: {}, phase: 'card' };
+      renderRun();
+      $('runBox').scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+    function cardMark(en) {
+      const l = rd.cardLog[en];
+      if (!l) return '<span class="muted">未</span>';
+      if (l.f) return '<span style="color:var(--ok);">◎</span>';
+      return l.ok ? '<span style="color:#b45309;">△</span>' : '<span style="color:var(--bad);">✕</span>';
+    }
+    function renderDay(k) {
+      const box = $('viewToday');
+      const p = RM.position(rd.start, k);
+      const nav = '<div class="rm-daynav"><button class="tiny-btn" data-act="dayShift" data-n="-1">◀ 前の日</button>' +
+        '<button class="tiny-btn" data-act="dayToday">📍 今日</button><button class="tiny-btn" data-act="dayShift" data-n="1">次の日 ▶</button></div>';
+      if (p.state !== 'active') {
+        box.innerHTML = nav + '<div class="notice">' + esc(fmt(k)) + ' はロードマップの期間外です（開始日：' + esc(fmt(rd.start)) + '）。</div>';
+        return;
+      }
+      const W = RM.WEEKS[p.week - 1], b = cardsMap(), doneIds = rd.done[k] || [];
+      const past = k < today;
+      const st = past ? RM.dayStatus({ dow: p.dow }, rd.done[k], rd.skipped[k]) : 'future';
+      const stLabel = { full: '◎ 全部できた', min: '〇 最低ライン（朝＋昼）', skip: '✕ 捨てた日', none: '・ できなかった', future: 'これからの日' }[st] || '';
+      let html = nav + '<div class="card next-step"><div class="muted">第' + p.week + '週 / 12　' + (past ? 'ふり返り' : '先の予定') + '</div>' +
+        '<h2 style="margin:0.2rem 0 0.4rem;">' + esc(fmt(k)) + 'のメニュー</h2><div class="muted">' + esc(W.theme) + '　<b>' + esc(stLabel) + '</b></div>' + dayChips(p) + '</div>';
+      html += '<div class="section-title" style="margin-top:0;">この日のメニュー</div>';
+      html += RM.planFor(p, b, rd.start).map(s => slotHtml(s, doneIds.includes(s.id), p, k)).join('');
+      if (past) html += '<p class="muted" style="margin-bottom:0.75rem;">チェックを付けると、あとからでもこの日の記録を直せます。</p>';
+      const cards = dayCardsOf(k);
+      if (cards.length) {
+        html += '<div class="card"><h2>📇 この日のカード（' + cards.length + '枚）</h2><div class="muted" style="margin-bottom:0.4rem;">◎ 1回目で言えた　△ 2回目以降で言えた　✕ 言えなかった　未 まだ</div>' +
+          cards.map(c => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:8px;"><div class="en-text" style="font-size:0.95rem;">' + esc(c.en) + '</div><div>' + cardMark(c.en) + '</div></div>' +
+            '<div class="ja-text muted">' + esc(c.ja) + (c.tag ? '　<span class="rm-badge">' + esc(c.tag) + '</span>' : '') + '</div>' + usageHtml(c.en) + '</div>').join('') +
+          '<button class="btn" data-act="freeDay" data-day="' + k + '" style="margin-top:0.6rem;">▶ この日のカードを練習（シャッフル・記録なし）</button></div>';
+      }
+      const ts = rd.sessions.filter(x => x.d === k);
+      if (ts.length) html += '<div class="card"><h2>📋 この日の暗唱の結果</h2>' + ts.map(sessionLine).join('') + '</div>';
+      const dk = EA.getDiary().filter(e => e && e.t && EA.dateKey(new Date(e.t)) === k);
+      if (dk.length) html += '<div class="card"><h2>📔 この日の英語日記</h2>' + dk.map(e => '<div class="item-row"><div class="en-text" style="font-size:0.95rem; white-space:pre-wrap;">' + esc(e.en || '') + '</div>' + (e.ja ? '<div class="ja-text muted" style="white-space:pre-wrap;">' + esc(e.ja) + '</div>' : '') + '</div>').join('') + '<a class="tiny-btn" href="diary.html" style="display:inline-block; margin-top:0.4rem;">📔 日記を開く</a></div>';
+      box.innerHTML = html;
     }
 
     /* ---------- カード暗唱（3秒チャレンジ・最大3ラウンド） ---------- */
@@ -378,13 +432,13 @@
       if (a === 'editStart') { editStart = true; setTab('today'); return; }
       if (a === 'tabWeeks') { setTab('weeks'); return; }
       if (a === 'toggle') {
-        const id = t.dataset.id;
+        const id = t.dataset.id, day = t.dataset.day || today;
         update(r => {
-          const cur = r.done[today] || [], i = cur.indexOf(id);
+          const cur = r.done[day] || [], i = cur.indexOf(id);
           if (i >= 0) cur.splice(i, 1); else cur.push(id);
-          if (cur.length) r.done[today] = cur; else delete r.done[today];
+          if (cur.length) r.done[day] = cur; else delete r.done[day];
         });
-        if ((rd.done[today] || []).includes(id)) touchToday();
+        if (day === today && (rd.done[today] || []).includes(id)) touchToday();
         render(); return;
       }
       if (a === 'minimal') { minimal = !minimal; renderToday(); return; }
@@ -392,7 +446,11 @@
       if (a === 'deck') { startRun(t.dataset.deck, t.dataset.slot); return; }
       if (a === 'reveal') { revealCard(); return; }
       if (a === 'free') { startFree(+t.dataset.w, t.dataset.cat || '', t.dataset.mode || ''); return; }
-      if (a === 'freeAgain') { const f = run && run.free; if (f) startFree(f.w, f.cat, f.mode); return; }
+      if (a === 'freeAgain') { const f = run && run.free; if (f && f.day) startFreeDay(f.day); else if (f) startFree(f.w, f.cat, f.mode); return; }
+      if (a === 'freeDay') { startFreeDay(t.dataset.day); return; }
+      if (a === 'viewDay') { viewDay = t.dataset.day === today ? null : t.dataset.day; setTab('today'); window.scrollTo(0, 0); return; }
+      if (a === 'dayShift') { const k = RM.addDaysKey(viewDay || today, +t.dataset.n); viewDay = k === today ? null : k; renderToday(); window.scrollTo(0, 0); return; }
+      if (a === 'dayToday') { viewDay = null; renderToday(); window.scrollTo(0, 0); return; }
       if (a === 'ok') { answer(true); return; }
       if (a === 'ng') { answer(false); return; }
       if (a === 'closeRun') { run = null; renderRun(); return; }
