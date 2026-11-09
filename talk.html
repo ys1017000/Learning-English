@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - お題で話す</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=22">
+  <style>
+    /* お題で話す */
+    .tk-step { font-size: 0.8rem; font-weight: bold; color: #4338ca; margin: 0.9rem 0 0.35rem; }
+    .tk-step .muted { font-weight: normal; }
+    .tk-q { font-size: 1.35rem; font-weight: 800; line-height: 1.4; color: #0f172a; margin: 0.4rem 0 0.2rem; word-break: break-word; }
+    .tk-ja { font-size: 0.95rem; color: var(--text-muted); }
+    .tk-meta { display: flex; flex-wrap: wrap; gap: 4px; font-size: 0.72rem; }
+    .tk-tag { background: #eef2ff; color: #3730a3; border-radius: 999px; padding: 1px 8px; }
+    .tk-pats { display: flex; flex-direction: column; gap: 6px; }
+    .tk-pat { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.4rem 0.6rem; font-size: 0.85rem; }
+    .tk-pat b { color: #4338ca; }
+    .tk-pat.ok { background: #f0fdf4; border-color: #86efac; }
+    .tk-pat.ok b::before { content: '✔ '; color: #16a34a; }
+    .tk-pat.miss { opacity: 0.75; }
+    .tk-pat .ex { color: var(--text-muted); font-size: 0.78rem; word-break: break-word; }
+    .tk-timer { font-size: 2rem; font-weight: 800; text-align: center; color: var(--primary); margin: 0.3rem 0; font-variant-numeric: tabular-nums; }
+    .tk-rec { display: flex; gap: 8px; }
+    .tk-rec .btn { flex: 1; }
+    .tk-live { min-height: 1.4em; font-size: 0.9rem; color: var(--text-muted); text-align: center; margin: 0.3rem 0; word-break: break-word; }
+    .tk-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; text-align: center; margin: 0.4rem 0 0.6rem; }
+    .tk-stats div { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.4rem 0; }
+    .tk-stats b { display: block; font-size: 1.2rem; color: var(--primary); }
+    .tk-stats span { font-size: 0.72rem; color: var(--text-muted); }
+    .tk-box { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 10px; padding: 0.6rem 0.8rem; font-size: 0.92rem; white-space: pre-wrap; word-break: break-word; }
+    .tk-model { background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 10px; padding: 0.6rem 0.8rem; }
+    .tk-model .en { font-weight: 600; word-break: break-word; }
+    .tk-model .ja { font-size: 0.85rem; color: var(--text-muted); margin-top: 0.25rem; }
+    .tk-self label { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; margin: 0.3rem 0; }
+    .tk-self input { width: 1.1rem; height: 1.1rem; }
+    .tk-hist { border-top: 1px dashed var(--border); padding: 0.5rem 0; }
+    .tk-hist:first-child { border-top: none; }
+    .tk-hist .q { font-weight: 600; font-size: 0.88rem; }
+    .tk-hist .t { font-size: 0.85rem; color: #334155; margin-top: 0.15rem; word-break: break-word; }
+    .tk-hist .m { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .tk-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tk-btns .tiny-btn { font-size: 0.82rem; padding: 6px 12px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="roadmap.html">🗺 計画</a>
+    <a href="grammar.html">📖 文法</a>
+    <a href="quiz.html">❓ クイズ</a>
+    <a href="writing.html">✍️ 英作文</a>
+    <a href="speaking.html">🎙️ 発音</a>
+    <a href="talk.html" class="active" aria-current="page">💭 お題</a>
+    <a href="addword.html">➕ 単語</a>
+    <a href="phrases.html">📚 表現集</a>
+  </div>
+  <div class="container">
+    <select id="catSelect" class="genre-select-box" aria-label="お題の分類"></select>
+    <div class="chip-row" id="lvChips" role="group" aria-label="難しさ">
+      <button class="chip active" data-lv="0">すべて</button>
+      <button class="chip" data-lv="1">★ 好み・2文</button>
+      <button class="chip" data-lv="2">★★ 理由・経験</button>
+      <button class="chip" data-lv="3">★★★ 意見・価値観</button>
+    </div>
+
+    <div class="card" id="promptCard">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:8px;">
+        <div class="tk-meta" id="promptMeta"></div>
+        <button class="tiny-btn" id="nextBtn">🎲 別のお題</button>
+      </div>
+      <div class="tk-q" id="promptQ"></div>
+      <div style="display:flex; align-items:center; gap:4px;">
+        <button class="icon-btn" id="playQ" aria-label="お題を読み上げ">🔊</button>
+        <span class="tk-ja" id="promptJa"></span>
+      </div>
+
+      <div class="tk-step">💡 使ってみたい型 <span class="muted">（3文くらいが目標）</span></div>
+      <div class="tk-pats" id="patList"></div>
+
+      <div class="tk-step">① 5秒考える → ② 声に出して話す <span class="muted">（20〜30秒）</span></div>
+      <div class="tk-timer" id="timer">0:00</div>
+      <div class="tk-rec">
+        <button class="btn btn-secondary" id="thinkBtn">⏱ 5秒考える</button>
+        <button class="btn btn-record" id="recBtn">🎙️ 話しはじめる</button>
+      </div>
+      <div class="tk-live" id="live"></div>
+      <p class="muted" id="recNote" style="font-size:0.8rem; display:none;"></p>
+
+      <div class="tk-step">③ 話した英語 <span class="muted">（認識結果。直しても、キーボードで入力してもOK）</span></div>
+      <textarea id="textIn" style="height:110px;" spellcheck="false" autocapitalize="sentences" aria-label="話した英語" placeholder="ここに話した英語が入ります"></textarea>
+      <button class="btn" id="checkBtn">✅ チェックする</button>
+
+      <div id="resultBox" style="display:none;">
+        <div class="tk-step">④ チェック</div>
+        <div class="tk-stats" id="stats"></div>
+        <div class="muted" style="font-size:0.8rem; margin-bottom:0.3rem;">使えた型（✔）</div>
+        <div class="tk-pats" id="usedList"></div>
+        <div class="tk-step">🌐 日本語に戻すと <span class="muted">（言いたかったことと合っていれば、意図は伝わっています）</span></div>
+        <div class="tk-box" id="backJa">翻訳中…</div>
+        <div class="tk-step">🙋 自分でチェック</div>
+        <div class="tk-self" id="selfList"></div>
+        <div class="tk-step">📗 答えの例 <span class="muted">（自分の答えと比べて、言い直してみよう）</span></div>
+        <button class="tiny-btn" id="showModel">答えの例を見る</button>
+        <div class="tk-model" id="modelBox" style="display:none;">
+          <div class="en" id="modelEn"></div>
+          <div class="ja" id="modelJa"></div>
+          <div style="display:flex; gap:4px; margin-top:0.3rem;">
+            <button class="icon-btn" id="playModel" aria-label="答えの例を再生">🔊</button>
+            <button class="icon-btn" id="slowModel" aria-label="ゆっくり再生">🐢</button>
+          </div>
+        </div>
+        <div class="tk-btns" style="margin-top:0.9rem;">
+          <button class="tiny-btn" id="againBtn">🔁 同じお題でもう一度</button>
+          <button class="tiny-btn" id="next2Btn">🎲 次のお題</button>
+        </div>
+        <p class="muted" style="font-size:0.78rem; margin-top:0.5rem;">チェックした内容は自動で保存されます（下の「話した記録」）。</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📒 話した記録</h2>
+      <p class="muted" style="margin-bottom:0.5rem;">文法や自然な言い方は、アプリでは判定できません。コピーしてClaudeのチャットに貼ると、添削してもらえます。</p>
+      <div class="tk-btns" id="copyBtns" style="margin-bottom:0.6rem;"></div>
+      <div id="histList"></div>
+    </div>
+  </div>
+
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="plan.html">📅 予習</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=22"></script>
+  <script src="talk-data.js?v=1"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    const esc = EA.esc;
+    const PATS = {}; TALK.PATTERNS.forEach(p => { PATS[p.id] = Object.assign({ rx: new RegExp(p.re, 'i') }, p); });
+    let cat = '', lv = 0, cur = null, sessionId = null, lastId = null;
+    let rec = null, recording = false, recText = '', startAt = 0, tick = null, thinking = null;
+
+    /* ---- お題を選ぶ ---- */
+    function pool() { return TALK.PROMPTS.filter(p => (!cat || p.cat === cat) && (!lv || p.lv === lv)); }
+    function pickNext(keep) {
+      const list = pool();
+      if (!list.length) { EA.toast('この条件のお題がありません'); return; }
+      const talks = EA.getTalks();
+      // まだ話していないお題を優先し、直前のお題は避ける
+      const fresh = list.filter(p => !talks.some(t => t.pid === p.id) && (!lastId || p.id !== lastId));
+      const cand = keep ? [keep] : (fresh.length ? fresh : list.filter(p => p.id !== lastId).concat(list.length === 1 ? list : []));
+      cur = cand[Math.floor(Math.random() * cand.length)];
+      lastId = cur.id; sessionId = null;
+      renderPrompt();
+    }
+    function renderPrompt() {
+      stopAll();
+      const c = TALK.CATS.find(x => x.id === cur.cat);
+      $('promptMeta').innerHTML = '<span class="tk-tag">' + esc(c ? c.label : '') + '</span><span class="tk-tag">' + '★'.repeat(cur.lv) + '</span>';
+      $('promptQ').textContent = cur.q;
+      $('promptJa').textContent = cur.ja;
+      $('patList').innerHTML = cur.pats.map(id => PATS[id]).filter(Boolean).map(p => '<div class="tk-pat"><div><b>' + esc(p.label) + '</b>　<span class="ex">' + esc(p.ex) + '</span></div></div>').join('');
+      $('textIn').value = ''; $('live').textContent = ''; $('timer').textContent = '0:00';
+      $('resultBox').style.display = 'none'; $('modelBox').style.display = 'none'; $('showModel').style.display = '';
+    }
+
+    /* ---- 考える・話す ---- */
+    const fmtSec = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    function stopAll() {
+      if (thinking) { clearInterval(thinking); thinking = null; $('thinkBtn').textContent = '⏱ 5秒考える'; }
+      if (recording) stopRec();
+    }
+    function think() {
+      if (recording) return;
+      if (thinking) { clearInterval(thinking); thinking = null; }
+      let n = 5; $('timer').textContent = '考える… ' + n; $('thinkBtn').textContent = '⏱ 考え中';
+      thinking = setInterval(() => {
+        n--;
+        if (n > 0) { $('timer').textContent = '考える… ' + n; return; }
+        clearInterval(thinking); thinking = null; $('thinkBtn').textContent = '⏱ 5秒考える';
+        $('timer').textContent = '話そう！';
+        if (rec) startRec();
+      }, 1000);
+    }
+    function startRec() {
+      if (!rec) { EA.toast('このブラウザでは音声認識が使えません。キーボードで入力してください'); return; }
+      if (thinking) { clearInterval(thinking); thinking = null; $('thinkBtn').textContent = '⏱ 5秒考える'; }
+      recording = true; recText = $('textIn').value.trim(); startAt = Date.now();
+      $('recBtn').textContent = '⏹ 話しおわった'; $('recBtn').classList.add('recording');
+      $('live').textContent = '聞いています…（間があいても続きます）';
+      clearInterval(tick);
+      tick = setInterval(() => { $('timer').textContent = fmtSec(Math.round((Date.now() - startAt) / 1000)); }, 500);
+      rec.start();
+    }
+    function stopRec() {
+      recording = false; clearInterval(tick);
+      $('recBtn').textContent = '🎙️ 話しはじめる'; $('recBtn').classList.remove('recording');
+      if (rec) rec.stop();
+      setTimeout(() => { if (!recording) $('live').textContent = $('textIn').value.trim() ? '「✅ チェックする」で確認しよう' : ''; }, 600);
+    }
+    function setupRec() {
+      rec = EA.createRecognizer({
+        lang: 'en-US',
+        onInterim: t => { if (recording) $('live').textContent = t; },
+        onFinal: alts => {
+          const t = (alts[0] || '').trim();
+          if (t) { recText = (recText ? recText + ' ' : '') + t; $('textIn').value = recText; }
+        },
+        onError: m => { if (!recording) $('live').textContent = m; },
+        // 1回の認識は間があくと終わるので、「話しおわった」を押すまで続けて聞く
+        onState: on => { if (!on && recording) setTimeout(() => { if (recording) { try { rec.start(); } catch (e) {} } }, 250); }
+      });
+      if (!rec) {
+        $('recBtn').disabled = true;
+        $('recNote').style.display = '';
+        $('recNote').textContent = 'このブラウザでは音声認識が使えません（ホーム画面に追加したアプリ内など）。Safari / Chrome で開くか、キーボードで入力してください。';
+      }
+    }
+
+    /* ---- チェック ---- */
+    const countWords = t => (String(t).match(/[A-Za-z]+(?:'[A-Za-z]+)?/g) || []).length;
+    const hasJapanese = t => /[぀-ヿ一-鿿]/.test(t);
+    async function check() {
+      stopAll();
+      const text = $('textIn').value.trim();
+      if (!text) { EA.toast('先に話すか、英語を入力してください'); return; }
+      const words = countWords(text), lower = text.toLowerCase().replace(/[’‘]/g, "'");
+      const used = TALK.PATTERNS.filter(p => PATS[p.id].rx.test(lower)).map(p => p.id);
+      const target = cur.pats, hit = target.filter(id => used.includes(id)).length;
+      const secs = startAt ? Math.round((Date.now() - startAt) / 1000) : 0;
+      $('stats').innerHTML = '<div><b>' + words + '</b><span>語（目安 25〜）</span></div><div><b>' + hit + '/' + target.length + '</b><span>使ってみたい型</span></div>' +
+        '<div><b>' + (hasJapanese(text) ? '△' : '◎') + '</b><span>' + (hasJapanese(text) ? '日本語が入った' : '英語だけで話せた') + '</span></div>';
+      const extra = used.filter(id => !target.includes(id));
+      $('usedList').innerHTML = target.concat(extra).map(id => PATS[id]).map(p => '<div class="tk-pat ' + (used.includes(p.id) ? 'ok' : 'miss') + '"><div><b>' + esc(p.label) + '</b>　<span class="ex">' + esc(p.ex) + '</span></div>' + (target.includes(p.id) ? '' : '<span class="tk-tag">おまけ</span>') + '</div>').join('');
+      $('selfList').innerHTML = TALK.SELF.map(s => '<label><input type="checkbox" data-self="' + s.id + '"> ' + esc(s.label) + '</label>').join('');
+      $('resultBox').style.display = '';
+      $('modelEn').textContent = cur.model[0]; $('modelJa').textContent = cur.model[1];
+      // 保存（同じ回のチェックし直しは上書き）
+      if (!sessionId) sessionId = EA.newId('tk');
+      saveCurrent({ text, words, used, tr: '' });
+      const s = EA.getStore(); s.history[EA.dateKey()] = true; EA.saveStore(s); EA.updateStreakBadge();
+      renderHistory();
+      $('resultBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      $('backJa').textContent = '翻訳中…';
+      const r = await EA.translate(text.slice(0, 480), 'en|ja');
+      $('backJa').textContent = r.ok ? r.text : r.text + '（日本語に戻せませんでした）';
+      if (r.ok) saveCurrent({ tr: r.text });
+    }
+    function saveCurrent(patch) {
+      const list = EA.getTalks();
+      let e = list.find(x => x.id === sessionId);
+      if (!e) { e = { id: sessionId, t: Date.now(), pid: cur.id, q: cur.q, text: '', words: 0, used: [], self: [], tr: '', c: false }; list.unshift(e); }
+      Object.assign(e, patch, { u: Date.now() });
+      if (patch.text != null) e.c = false;   // 話し直したら、まだ添削に出していない扱い
+      EA.saveTalks(list);
+    }
+
+    /* ---- 記録 ---- */
+    function renderHistory() {
+      const list = EA.getTalks();
+      const fresh = list.filter(x => !x.c);
+      $('copyBtns').innerHTML = list.length ? '<button class="tiny-btn" data-copy="fresh">📋 まだ送っていない分（' + fresh.length + '件）</button><button class="tiny-btn" data-copy="all">📋 全部（' + list.length + '件）</button>' : '';
+      if (!list.length) { $('histList').innerHTML = '<div class="muted">まだありません。お題に答えてチェックすると、ここにたまります。</div>'; return; }
+      $('histList').innerHTML = list.slice(0, 20).map(x => {
+        const d = new Date(x.t);
+        return '<div class="tk-hist"><div class="q">' + esc(x.q) + '</div><div class="t">' + esc(x.text) + '</div>' +
+          '<div class="m">' + (d.getMonth() + 1) + '/' + d.getDate() + '　' + x.words + '語　型 ' + x.used.length + '個' + (x.self.length ? '　🙋' + x.self.length : '') + (x.c ? '　🤖送信済み' : '') +
+          '　<button class="tiny-btn" data-redo="' + esc(x.pid) + '" style="font-size:0.72rem; padding:2px 8px;">🔁 また話す</button>' +
+          '　<button class="tiny-btn" data-del="' + esc(x.id) + '" style="font-size:0.72rem; padding:2px 8px;">🗑</button></div></div>';
+      }).join('');
+    }
+    async function copyText(text) {
+      try { await navigator.clipboard.writeText(text); return true; } catch (e) {}
+      try { const ta = document.createElement('textarea'); ta.value = text; ta.style.cssText = 'position:fixed; opacity:0;'; document.body.appendChild(ta); ta.select(); const ok = document.execCommand('copy'); ta.remove(); return ok; } catch (e) { return false; }
+    }
+    async function copyFor(kind) {
+      const list = EA.getTalks(), arr = kind === 'fresh' ? list.filter(x => !x.c) : list;
+      if (!arr.length) { EA.toast('コピーする記録がありません'); return; }
+      const text = '「お題で話す」で話した英語です。意図を変えずに、文法と自然な言い方を添削してください。よく使える言い換えがあれば教えてください。\n\n' +
+        arr.slice().reverse().map((x, i) => '【' + (i + 1) + '】お題：' + x.q + '\n話した英語：' + x.text + (x.tr ? '\n（日本語に戻すと：' + x.tr + '）' : '')).join('\n\n');
+      if (await copyText(text)) {
+        const ids = new Set(arr.map(x => x.id));
+        const l = EA.getTalks(); l.forEach(x => { if (ids.has(x.id)) x.c = true; }); EA.saveTalks(l);
+        EA.toast('📋 ' + arr.length + '件をコピーしました'); renderHistory();
+      } else EA.toast('コピーできませんでした');
+    }
+
+    /* ---- はじめ ---- */
+    document.addEventListener('DOMContentLoaded', () => {
+      $('catSelect').innerHTML = '<option value="">✨ すべての分類</option>' + TALK.CATS.map(c => '<option value="' + c.id + '">' + esc(c.label) + '（' + TALK.PROMPTS.filter(p => p.cat === c.id).length + '）</option>').join('');
+      $('catSelect').addEventListener('change', e => { cat = e.target.value; pickNext(); });
+      $('lvChips').addEventListener('click', e => {
+        const b = e.target.closest('[data-lv]'); if (!b) return;
+        lv = +b.dataset.lv;
+        document.querySelectorAll('#lvChips .chip').forEach(c => c.classList.toggle('active', c === b));
+        pickNext();
+      });
+      $('nextBtn').addEventListener('click', () => pickNext());
+      $('next2Btn').addEventListener('click', () => { pickNext(); window.scrollTo(0, 0); });
+      $('againBtn').addEventListener('click', () => { pickNext(cur); window.scrollTo(0, 0); });
+      $('playQ').addEventListener('click', () => EA.speak(cur.q, 'en-US', 0.95));
+      $('thinkBtn').addEventListener('click', think);
+      $('recBtn').addEventListener('click', () => { if (recording) stopRec(); else startRec(); });
+      $('checkBtn').addEventListener('click', check);
+      $('showModel').addEventListener('click', () => { $('modelBox').style.display = ''; $('showModel').style.display = 'none'; EA.autoSpeak(cur.model[0], 'en-US', 0.95); });
+      $('playModel').addEventListener('click', () => EA.speak(cur.model[0], 'en-US', 0.95));
+      $('slowModel').addEventListener('click', () => EA.speak(cur.model[0], 'en-US', 0.7));
+      $('selfList').addEventListener('change', () => {
+        const ids = Array.from(document.querySelectorAll('#selfList input:checked')).map(i => i.dataset.self);
+        if (sessionId) { saveCurrent({ self: ids }); renderHistory(); }
+      });
+      $('copyBtns').addEventListener('click', e => { const b = e.target.closest('[data-copy]'); if (b) copyFor(b.dataset.copy); });
+      $('histList').addEventListener('click', e => {
+        const r = e.target.closest('[data-redo]');
+        if (r) { const p = TALK.PROMPTS.find(x => x.id === r.dataset.redo); if (p) { pickNext(p); window.scrollTo(0, 0); } return; }
+        const d = e.target.closest('[data-del]');
+        if (d && confirm('この記録を削除しますか？')) { EA.saveTalks(EA.getTalks().filter(x => x.id !== d.dataset.del)); renderHistory(); }
+      });
+      setupRec();
+      const want = new URLSearchParams(location.search).get('id');
+      const first = TALK.PROMPTS.find(p => p.id === want);
+      if (first) pickNext(first); else pickNext();
+      renderHistory();
+    });
+  </script>
+</body>
+</html>

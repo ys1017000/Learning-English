@@ -804,7 +804,7 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 7,   // v6: 英語日記に翻訳の参考(ref)を追加 / v7: DMノート(dmNotes)を追加
+      version: 8,   // v6: 英語日記に翻訳の参考(ref)を追加 / v7: DMノート(dmNotes)を追加 / v8: お題で話す(talks)を追加
       exportedAt: new Date().toISOString(),
       data: getStore(),
       customPhrases: getCustomPhrases(),
@@ -819,7 +819,8 @@
       meetings: getMeetings(),
       nihongo: getNihongo(),
       roadmap: getRoadmap(),
-      dmNotes: getDmNotes()
+      dmNotes: getDmNotes(),
+      talks: getTalks()
     };
   }
   function downloadBackup() {
@@ -877,13 +878,16 @@
     const incRoad = sanitizeRoadmap(obj.roadmap);
     const hasDm = Array.isArray(obj.dmNotes);   // v6以前のバックアップには無いので、今のDMノートをそのまま残す
     const incDm = sanitizeDmNotes(obj.dmNotes);
-    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo, road, dm;
+    const hasTalks = Array.isArray(obj.talks);   // v7以前には無いので、今の記録をそのまま残す
+    const incTalks = sanitizeTalks(obj.talks);
+    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo, road, dm, talks;
     if (mode === 'replace') {
       store = inc; custom = incCustom; talk = incTalk;
       pins = incPins; keeps = incKeeps; lists = incLists; plan = incPlan;
       profile = incProfile; letters = incLetters; diary = incDiary; meetings = incMeet; nihongo = incNi;
       road = hasRoad ? incRoad : getRoadmap();
       dm = hasDm ? incDm : getDmNotes();
+      talks = hasTalks ? incTalks : getTalks();
     } else {
       const cur = getStore();
       store = {
@@ -920,10 +924,11 @@
       nihongo = sanitizeNihongo({ learned: getNihongo().learned.concat(incNi.learned) });
       road = mergeRoadmap(getRoadmap(), incRoad);
       dm = sanitizeDmNotes(getDmNotes().concat(incDm));
+      talks = sanitizeTalks(getTalks().concat(incTalks));
     }
-    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo) && saveRoadmap(road) && saveDmNotes(dm);
+    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo) && saveRoadmap(road) && saveDmNotes(dm) && saveTalks(talks);
     if (!okAll) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
-    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length, diary: diary.length, letters: letters.length, dm: dm.length };
+    return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length, diary: diary.length, letters: letters.length, dm: dm.length, talks: talks.length };
   }
 
 
@@ -1384,6 +1389,30 @@
     out.sort((a, b) => (b.d < a.d ? -1 : b.d > a.d ? 1 : b.t - a.t));
     return out.slice(0, 300);
   }
+  /* ---------- お題で話す（自分の意見を話した記録） ----------
+     { id, t: 時刻, u: 更新時刻, pid: お題ID, q: お題（英語）, text: 話した英語, words: 語数, used: [使えた型ID], self: [自己チェックID], tr: 日本語に戻した文, c: Claude用にコピー済み } */
+  const KEY_TALKS = 'english_app_talks';
+  function sanitizeTalks(list) {
+    const map = new Map();
+    (Array.isArray(list) ? list : []).forEach(n => {
+      if (!n || typeof n !== 'object' || typeof n.text !== 'string' || !n.text.trim()) return;
+      const id = String(n.id || ''); if (!id) return;
+      const strs = a => (Array.isArray(a) ? a : []).filter(x => typeof x === 'string').slice(0, 20);
+      const e = { id, t: Number(n.t) || Date.now(), u: Number(n.u) || Number(n.t) || 0, pid: String(n.pid || '').slice(0, 40),
+        q: String(n.q || '').slice(0, 300), text: n.text.trim().slice(0, 3000), words: Math.max(0, Number(n.words) || 0),
+        used: strs(n.used), self: strs(n.self), tr: typeof n.tr === 'string' ? n.tr.slice(0, 3000) : '', c: !!n.c };
+      const x = map.get(id);
+      if (!x) { map.set(id, e); return; }
+      const base = e.u >= x.u ? e : x, other = base === e ? x : e;
+      if (!base.tr) base.tr = other.tr;
+      base.c = base.c || other.c;
+      map.set(id, base);
+    });
+    return Array.from(map.values()).sort((a, b) => b.t - a.t).slice(0, 300);
+  }
+  function getTalks() { return sanitizeTalks(loadJSON(KEY_TALKS, [])); }
+  function saveTalks(list) { return safeSet(KEY_TALKS, JSON.stringify(sanitizeTalks(list))); }
+
   function getDmNotes() { return sanitizeDmNotes(loadJSON(KEY_DM, [])); }
   function saveDmNotes(list) { return safeSet(KEY_DM, JSON.stringify(sanitizeDmNotes(list))); }
 
@@ -1540,7 +1569,7 @@
     attachPronunciation, renderChips, PASS_SCORE, cardDrill, drillSecs,
     getProfile, saveProfile, getLetters, saveLetters, getDiary, saveDiary, addDiaryEntry, MOODS,
     getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId,
-    getDmNotes, saveDmNotes
+    getDmNotes, saveDmNotes, getTalks, saveTalks
   };
 
   document.addEventListener('DOMContentLoaded', updateStreakBadge);
