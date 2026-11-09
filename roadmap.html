@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=20">
+  <link rel="stylesheet" href="common.css?v=21">
 </head>
 <body>
   <header>
@@ -41,8 +41,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=20"></script>
-  <script src="usage-data.js?v=10"></script>
+  <script src="common.js?v=21"></script>
+  <script src="usage-data.js?v=12"></script>
   <script src="roadmap-data.js?v=8"></script>
   <script>
     const RM = window.RM;
@@ -348,7 +348,7 @@
       if (run.phase === 'roundEnd') {
         const h = run.hist[run.hist.length - 1], miss = run.res.filter(r => !r.ok);
         box.innerHTML = '<h2>' + CIRCLE[h.round] + ' ' + h.round + '回目 おわり</h2>' +
-          '<div class="stats-grid" style="grid-template-columns:repeat(2,1fr); margin-bottom:0.75rem;"><div><div class="stat-number">' + h.said + '/' + h.total + '</div><div class="stat-label">3秒以内に言えた</div></div>' +
+          '<div class="stats-grid" style="grid-template-columns:repeat(2,1fr); margin-bottom:0.75rem;"><div><div class="stat-number">' + h.said + '/' + h.total + '</div><div class="stat-label">' + EA.drillSecs() + '秒以内に言えた</div></div>' +
           '<div><div class="stat-number" style="color:var(--bad);">' + miss.length + '</div><div class="stat-label">言えなかった</div></div></div>' +
           '<div class="muted" style="margin-bottom:0.5rem;">言えなかったカード</div>' + miss.map(r => '<div class="item-row"><div class="en-text">' + esc(r.c.en) + '</div><div class="ja-text muted">' + esc(r.c.ja) + '</div>' + usageHtml(r.c.en) + '</div>').join('') +
           '<button class="btn" data-act="nextRound" style="margin-top:0.75rem;">▶ ' + (run.round + 1) + '回目：言えなかった' + miss.length + '枚だけ</button>' +
@@ -359,15 +359,15 @@
       box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;"><span class="muted">' + esc(title) + (run.kind === 'check' ? '' : ' ・ ' + run.round + '回目') + ' ・ ' + (run.i + 1) + '/' + run.queue.length +
         ' <span class="rm-badge">' + esc(cur.t) + '</span></span><button class="tiny-btn" data-act="closeRun">✕ やめる</button></div>' +
         '<div class="rm-ja">' + esc(c.ja) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill" id="timerFill"></div></div>' +
-        '<p class="muted" style="text-align:center;">日本語を見て、3秒以内に声に出して言ってみよう</p>' +
+        '<p class="muted" style="text-align:center;">日本語を見て、' + EA.drillSecs() + '秒以内に声に出して言ってみよう</p>' +
         '<div id="revealArea" style="display:none;"><div class="rm-en" id="enText">' + esc(c.en) + '</div>' + (c.tag ? '<div class="muted" style="text-align:center;">' + esc(c.tag) + '</div>' : '') + usageHtml(c.en) +
         '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button></div>' +
         '<div class="word-chips" id="chips"></div><div class="mini-score" id="micScore" style="text-align:center;"></div>' +
-        '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-act="ok" style="background:#16a34a; flex:1;">⭕ 3秒以内に言えた</button><button class="btn" data-act="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
+        '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-act="ok" style="background:#16a34a; flex:1;">⭕ ' + EA.drillSecs() + '秒以内に言えた</button><button class="btn" data-act="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
         '<button class="btn" data-act="reveal" id="revealBtn">答えを見る</button>';
       const f = $('timerFill');
       f.style.transition = 'none'; f.style.width = '100%'; void f.offsetWidth;
-      f.style.transition = 'width 3s linear'; f.style.width = '0%';
+      f.style.transition = 'width ' + EA.drillSecs() + 's linear'; f.style.width = '0%';
     }
     function usageHtml(en) { const u = EA.usageFor(en); return u ? '<div class="usage-line">🎬 場面：' + esc(u) + '</div>' : ''; }
     function revealCard() {

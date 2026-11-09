@@ -494,6 +494,38 @@
     "I went to a cafe after work. It was really nice.": "したこと＋感想の2文で、1日の出来事を話すとき。",
     "I practiced for an hour today.": "練習や勉強の時間を話すとき。for ＋ 時間。",
 
+    // ===== 文法ノート：for の使い方 =====
+    "I'm staying in Kyoto for three days.": "旅行の予定や滞在期間を話すとき。",
+    "I have water for only a week.": "残りの量が「どのくらいもつか」を言うとき。物語の一文から。",
+    "Let's go out for dinner.": "食事に誘うとき。for lunch / for a drink も同じ形。",
+    "This is for you.": "プレゼントや手作りの物を渡すとき。",
+    "English is still hard for me.": "うまく言えないときに、正直に伝えて助けてもらうとき。",
+    "I'm sorry for being late.": "待ち合わせに遅れて謝るとき。",
+    "I want to talk to you about our trip.": "話したい話題を切り出すとき。",
+    "I'll wait for you at the station.": "待ち合わせ場所を伝えるとき。",
+    "Thank you for the lovely day.": "デートの帰りやその夜のメッセージで。",
+    "I don't have anyone to talk to openly.": "打ち明けられる相手がいないと話すとき。",
+
+    // ===== 文法ノートの例文（追加分） =====
+    "I thought it would be hard to make friends here, but it was easy.": "前の予想と、実際のギャップを話すとき。",
+    "I thought Japanese would be hard to learn.": "始める前の思い込みを話すとき。",
+    "I always drink coffee in the morning.": "毎日の習慣を話すとき。",
+    "We often go to that cafe.": "お気に入りの場所を話すとき。",
+    "How long have you lived in Japan?": "相手が日本に来てからの期間を聞くとき。",
+    "I've been studying English for five years.": "自分の勉強歴を話すとき。",
+
+    // ===== DM（11/5）から =====
+    "I'm sorry for letting you know so late.": "直前に予定の変更やキャンセルを伝えるときの前置き。",
+    "I think I actually can't come.": "言いにくい断りを、I think と actually でやわらげて伝えるとき。",
+    "I can't finish it on time.": "締め切りや約束の時間に間に合わないと伝えるとき。",
+    "I'm free next Thursday night if you want to meet.": "会えない日の代わりに別の日を提案するとき。if you want で相手に選ばせる。",
+    "The worst part is over.": "忙しさや大変なことの山場を越えたと伝えるとき。",
+    "I have a day trip on Saturday.": "週末の予定を伝えるとき。day trip は2語で書く。",
+    "No worries at all!": "相手に謝られたとき・予定をキャンセルされたときの返事。",
+    "Thursday night works for me!": "提案された日時で大丈夫だと答えるとき。曜日を入れ替えて使える。",
+    "Good luck with your assignments!": "課題や仕事で忙しい相手を応援するとき。",
+    "Don't forget to take a break.": "頑張りすぎている相手を気遣うメッセージ。",
+
     // ===== マイ単語 =====
     "Has something fun happened lately?": "近況を聞くときの話題の振り方。How are you? より話が広がりやすい。",
     "improvisation": "前もって準備せず、その場で即興でやること（演劇・音楽・スピーチなど）。",

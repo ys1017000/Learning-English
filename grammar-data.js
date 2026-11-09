@@ -682,6 +682,71 @@
       { situation: 'まだ練習中なんだ。', sentence: "I'm ___ practicing.", options: ['still', 'yet', 'already', 'ever'], answer: 'still', full: "I'm still practicing.", why: '「まだ（続いている）」は still。be動詞のあとに置く。' },
       { situation: '昨日ピアノを2時間練習した。', sentence: 'I ___ the piano for two hours yesterday.', options: ['practiced', 'practice', 'am practicing', 'have practiced'], answer: 'practiced', full: 'I practiced the piano for two hours yesterday.', why: 'yesterday があるので過去形。現在完了は yesterday と一緒に使わない。' }
     ]
+  }, {
+    id: 'for-usage',
+    title: 'for の使い方',
+    short: 'for の使い方（期間・目的・相手・理由・〜にとって）',
+    intro: 'for は意味が広く、日本語の訳が文によって変わります。核になるイメージは「→ 向かう先・対象」。期間（〜の間）、目的・用途（〜のための）、相手（〜に）、理由（Thank you for）、〜にとって、を押さえれば会話ではほぼ足ります。話す相手は to、話題は about で、for とは区別しましょう。',
+    groups: [
+      {
+        name: '期間・目的',
+        note: '「どのくらいの長さ」と「何のため」。いちばんよく使う2つです。',
+        forms: [
+          { key: 'for ＋ 期間', kana: 'フォー', kanaNote: '（文の中では弱く「ファ」）', label: 'for ＋ 期間（〜の間・〜分）', ja: '〜の間', nuance: 'どれくらいの長さかを言います。for a week（1週間）、for two hours（2時間）。',
+            ex: ["I'm staying in Kyoto for three days.", '京都に3日間滞在する。'], tone: '「〜分しかない」は for only ～：I have water for only a week.（1週間分しか水がない）' },
+          { key: 'for ＋ 目的・用途', kana: '', kanaNote: '', label: 'for ＋ 名詞（〜のための・〜に）', ja: '〜のために／〜に', nuance: '何のためか・何に使うかを言います。',
+            ex: ["Let's go out for dinner.", '夕食を食べに出かけよう。'], tone: 'a table for two（2名の席）、a lot to do for university（大学の課題がたくさん）。' }
+        ]
+      },
+      {
+        name: '相手・理由・〜にとって',
+        note: '人と一緒に使う for。受け取る相手、お礼・おわびの理由、「〜にとって」の3つです。',
+        forms: [
+          { key: 'This is for you.', kana: '', kanaNote: '', label: 'for ＋ 人（〜に・〜のために）', ja: '〜に（あげる）／〜のために', nuance: '受け取る相手、役に立つ相手。',
+            ex: ['This is for you.', 'これ、あなたに。'], tone: 'I made it for you.（あなたのために作った）' },
+          { key: 'Thank you for ～', kana: '', kanaNote: '', label: 'Thank you for ／ Sorry for ＋ 名詞・～ing', ja: '〜をありがとう／〜してごめん', nuance: 'お礼やおわびの理由を言います。',
+            ex: ['Thank you for the lovely day.', '素敵な一日をありがとう。'], tone: "I'm sorry for being late.（遅れてごめん）。文法ノート11の Thank you for teaching me. と同じ形。" },
+          { key: '〜にとって', kana: '', kanaNote: '', label: '形容詞 ＋ for ＋ 人（〜にとって）', ja: '〜にとって…だ', nuance: '誰にとってそうなのかを言います。',
+            ex: ['English is still hard for me.', '英語はまだ私には難しい。'], tone: "It's too spicy for me.（私には辛すぎる）は食事の場面で便利。" }
+        ]
+      },
+      {
+        name: 'for / to / about の使い分け',
+        note: '日本語ではどれも「〜に」「〜について」になりやすいので注意。',
+        forms: [
+          { key: 'speak to / talk about', kana: '', kanaNote: '', label: '話す相手は to / with、話題は about', ja: '〜と話す／〜について話す', nuance: '「話す」には for を使いません：talk for you（×）。',
+            ex: ['I want to talk to you about our trip.', '旅行のことで話したいことがあるんだ。'], tone: '読んだ文：I never speak to this person about big snakes.（その人とは大蛇の話はしない）' },
+          { key: 'wait for / look for', kana: '', kanaNote: '', label: 'for とセットの動詞：wait for / look for / ask for', ja: '〜を待つ／〜を探す／〜を頼む', nuance: 'for を落とすと意味がずれる、決まった組み合わせです。',
+            ex: ["I'll wait for you at the station.", '駅で待ってるね。'], tone: "I'm looking for a cafe.（カフェを探してる）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「あなた」と前置詞',
+      rows: [
+        ['This is for you.', 'これ、あなたに。（for：受け取る相手）'],
+        ["I'll talk to you later.", 'あとで話そう。（to：話す相手）'],
+        ["Let's talk about you.", 'あなたの話をしよう。（about：話題）'],
+        ["I'll wait for you.", 'あなたを待ってるね。（wait for のセット）'],
+        ['It must be hard for you.', 'あなたにとっては大変だよね。（for：〜にとって）']
+      ]
+    },
+    cautions: [
+      '期間の for と since：for は長さ（for two years）、since は始まった時点（since 2024）。',
+      '話す相手は to / with、話題は about。for を使うと別の意味になります。',
+      'Thank you for ／ Sorry for のあとは名詞か ～ing：Thank you for help（×）→ Thank you for your help（○）',
+      "読んだ文 I don't know people for an open conversation. は少し不自然。会話なら I don't have anyone to talk to openly.（本音で話せる人がいない）"
+    ],
+    quiz: [
+      { situation: '京都に3日間滞在する。', sentence: "I'm staying in Kyoto ___ three days.", options: ['for', 'since', 'during', 'in'], answer: 'for', full: "I'm staying in Kyoto for three days.", why: '期間の長さ（three days）は for。' },
+      { situation: '1週間分しか水がない。', sentence: 'I have water ___ only a week.', options: ['for', 'since', 'by', 'until'], answer: 'for', full: 'I have water for only a week.', why: 'for ＋ 期間で「〜の間（もつ分）」。' },
+      { situation: '夕食を食べに出かけよう。', sentence: "Let's go out ___ dinner.", options: ['for', 'to', 'at', 'with'], answer: 'for', full: "Let's go out for dinner.", why: '目的（夕食のため）は for。' },
+      { situation: 'これ、あなたに。（プレゼントを渡す）', sentence: 'This is ___ you.', options: ['for', 'to', 'at', 'about'], answer: 'for', full: 'This is for you.', why: '受け取る相手は for。' },
+      { situation: '英語はまだ私には難しい。', sentence: 'English is still hard ___ me.', options: ['for', 'to', 'at', 'with'], answer: 'for', full: 'English is still hard for me.', why: '「〜にとって」は for。' },
+      { situation: '遅れてごめん。', sentence: "I'm sorry ___ being late.", options: ['for', 'to', 'of', 'at'], answer: 'for', full: "I'm sorry for being late.", why: 'おわびの理由は for ＋ ～ing。' },
+      { situation: '旅行のことで話したいことがあるんだ。', sentence: 'I want to talk to you ___ our trip.', options: ['about', 'for', 'to', 'at'], answer: 'about', full: 'I want to talk to you about our trip.', why: '話題は about。話す相手は to。' },
+      { situation: '駅で待ってるね。', sentence: "I'll wait ___ you at the station.", options: ['for', 'to', 'at', 'on'], answer: 'for', full: "I'll wait for you at the station.", why: '「〜を待つ」は wait for のセット。' }
+    ]
   }];
 
 

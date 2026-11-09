@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=20">
+  <link rel="stylesheet" href="common.css?v=21">
 </head>
 <body>
   <header>
@@ -28,9 +28,11 @@
     <div class="chip-row" id="tabChips" role="group" aria-label="表示の切り替え">
       <button class="chip active" data-tab="note">📖 ノート</button>
       <button class="chip" data-tab="quiz">🎯 判定クイズ</button>
+      <button class="chip" data-tab="drill">🗣 声に出す</button>
     </div>
     <div id="viewNote"></div>
     <div id="viewQuiz" style="display:none;"></div>
+    <div id="viewDrill" class="card" style="display:none;"></div>
   </div>
   <nav>
     <a href="index.html">🏠 ホーム</a>
@@ -39,9 +41,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=20"></script>
-  <script src="usage-data.js?v=10"></script>
-  <script src="grammar-data.js?v=16"></script>
+  <script src="common.js?v=21"></script>
+  <script src="usage-data.js?v=12"></script>
+  <script src="grammar-data.js?v=17"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -130,13 +132,31 @@
       $('grNext').textContent = quiz.i + 1 >= quiz.qs.length ? '結果を見る' : '次の問題へ';
     }
 
+    /* ---------- 声に出す（この項目の文を、日本語を見て言う） ---------- */
+    function drillItems(T) {
+      const all = EA.getAllPhrases(), out = [], seen = new Set();
+      const add = (en, ja) => {
+        const k = String(en).toLowerCase(); if (!en || seen.has(k)) return; seen.add(k);
+        const p = all.find(x => x[1].toLowerCase() === k);
+        out.push(p || ['文法・表現パターン', en, ja || '']);
+      };
+      T.groups.forEach(g => g.forms.forEach(f => { if (f.ex && f.ex[0]) add(f.ex[0], f.ex[1]); }));
+      T.quiz.forEach(q => add(q.full, q.situation));
+      return out.filter(p => p[2]);
+    }
+    function renderDrill() {
+      const T = GR.TOPICS[topicIdx];
+      EA.cardDrill($('viewDrill'), { title: T.short, items: drillItems(T), record: true });
+    }
+
     /* ---------- 切り替え ---------- */
     function setTab(name) {
       tab = name;
       document.querySelectorAll('#tabChips .chip').forEach(c => c.classList.toggle('active', c.dataset.tab === name));
       $('viewNote').style.display = name === 'note' ? '' : 'none';
       $('viewQuiz').style.display = name === 'quiz' ? '' : 'none';
-      if (name === 'quiz') renderQuiz(); else renderNote();
+      $('viewDrill').style.display = name === 'drill' ? '' : 'none';
+      if (name === 'quiz') renderQuiz(); else if (name === 'drill') renderDrill(); else renderNote();
     }
     function renderTopics() {
       const box = $('topicSelect');

@@ -199,6 +199,29 @@
       ["文法・表現パターン", "I like this song, but I can't sing it.", "この曲好きだけど、歌えない。（目的語 it を忘れない）"],
       ["文法・表現パターン", "I'm still practicing.", "まだ練習中なんだ。（still：まだ続いている）"],
       ["文法・表現パターン", "I practiced the piano for two hours yesterday.", "昨日ピアノを2時間練習した。（yesterday → 過去形）"],
+      // ---- 文法ノート「for の使い方」（2026-11-10） ----
+      ["文法・表現パターン", "I'm staying in Kyoto for three days.", "京都に3日間滞在する。（for ＋ 期間）"],
+      ["文法・表現パターン", "I have water for only a week.", "1週間分しか水がない。（for only ＋ 期間：〜分しかない）"],
+      ["文法・表現パターン", "Let's go out for dinner.", "夕食を食べに出かけよう。（for ＋ 目的）"],
+      ["文法・表現パターン", "This is for you.", "これ、あなたに。（for ＋ 受け取る相手）"],
+      ["文法・表現パターン", "English is still hard for me.", "英語はまだ私には難しい。（for ＋ 人：〜にとって）"],
+      ["文法・表現パターン", "I'm sorry for being late.", "遅れてごめん。（sorry for ＋ ～ing）"],
+      ["文法・表現パターン", "I want to talk to you about our trip.", "旅行のことで話したいことがあるんだ。（to：相手、about：話題）"],
+      ["文法・表現パターン", "I'll wait for you at the station.", "駅で待ってるね。（wait for：〜を待つ）"],
+      ["文法・表現パターン", "Thank you for the lovely day.", "素敵な一日をありがとう。（Thank you for ＋ 名詞）"],
+      ["文法・表現パターン", "I don't have anyone to talk to openly.", "本音で話せる人がいない。"],
+      // ---- 文法ノートのノート例文・クイズ文で、まだ表現集に無かったもの（2026-11-10） ----
+      ["文法・表現パターン", "He must've had too much to drink last night.", "彼、昨日飲みすぎたに違いない。（must've：〜したに違いない）"],
+      ["文法・表現パターン", "I should've told you earlier.", "もっと早く言えばよかった。（should've：〜すればよかった）"],
+      ["文法・表現パターン", "I could've picked you up if you had told me.", "言ってくれたら迎えに行けたのに。（could've：〜できたのに）"],
+      ["文法・表現パターン", "She must've loved the gift.", "彼女、プレゼントを気に入ったに違いない。"],
+      ["文法・表現パターン", "If it hadn't rained, the game would've started.", "雨が降っていなければ、試合は始まっていただろう。（would've：〜しただろう）"],
+      ["文法・表現パターン", "I thought it would be hard to make friends here, but it was easy.", "ここで友達を作るのは難しいと思っていたけど、簡単だった。"],
+      ["文法・表現パターン", "I thought Japanese would be hard to learn.", "日本語は覚えるのが難しいと思ってた。（hard to learn のあとに it を付けない）"],
+      ["文法・表現パターン", "I always drink coffee in the morning.", "朝はいつもコーヒーを飲む。（always：いつも）"],
+      ["文法・表現パターン", "We often go to that cafe.", "あのカフェにはよく行く。（often：よく）"],
+      ["文法・表現パターン", "How long have you lived in Japan?", "日本に住んでどのくらい？（How long have you ～?）"],
+      ["文法・表現パターン", "I've been studying English for five years.", "英語を5年間勉強している。（have been ～ing：ずっと〜している）"],
       // ---- 旧アプリ「気持ちを伝える英語」（review.html）から移行（2026-11-06） ----
       ["気持ち・関係を伝える", "I care about you, and I want to be honest with you.", "君のことを大切に思っているし、正直に話したい。"],
       ["気持ち・関係を伝える", "Sometimes I struggle to explain my feelings in English.", "英語で気持ちを説明するのが難しいときがある。"],
@@ -906,7 +929,7 @@
 
   /* ---------- 設定（端末ごと・バックアップ対象外） ---------- */
   const KEY_PREFS = 'english_app_prefs';
-  const DEFAULT_PREFS = { speakMine: true, speakPartner: false, kana: true, autoSpeak: true };
+  const DEFAULT_PREFS = { speakMine: true, speakPartner: false, kana: true, autoSpeak: true, drillSecs: 3, quizMode: 'quiz' };
   function getPrefs() {
     try { return Object.assign({}, DEFAULT_PREFS, JSON.parse(safeGet(KEY_PREFS)) || {}); } catch (e) { return Object.assign({}, DEFAULT_PREFS); }
   }
@@ -1396,6 +1419,105 @@
   }
   const PASS_SCORE = 75;
 
+  /* ---------- 声に出すカード（日本語を見て N 秒以内に英語を言う） ----------
+     クイズ・文法ノートなどで共通に使う。ロードマップのカード暗唱と同じ流れ：
+     日本語を見る → N 秒以内に声に出す → 答えを見る → 言えた／出なかった。最大3ラウンド（2回目以降は言えなかった分だけ）。
+     opts: { title, items: フレーズ配列 [カテゴリ, 英語, 日本語, 例文], record: 1回目の結果を復習(SRS)・苦手に入れるか, onClose } */
+  function drillSecs() { const n = +getPrefs().drillSecs; return [3, 4, 5].includes(n) ? n : 3; }
+  function cardDrill(box, opts) {
+    const MAX_ROUND = 3, CIRC = ['', '①', '②', '③'];
+    const shuf = a => { const x = a.slice(); for (let i = x.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [x[i], x[j]] = [x[j], x[i]]; } return x; };
+    const items = (opts.items || []).filter(p => p && p[1]);
+    let st = null;
+    const ja = p => splitJa(p[2]);
+    const usageLine = en => { const u = usageFor(en); return u ? '<div class="usage-line">🎬 場面：' + esc(u) + '</div>' : ''; };
+    function start() {
+      st = { round: 1, queue: shuf(items), i: 0, res: [], hist: [], first: {}, phase: 'card' };
+      render();
+    }
+    function render() {
+      const secs = drillSecs();
+      box.style.display = '';
+      if (!items.length) { box.innerHTML = '<p class="muted">練習できる文がありません。</p>'; return; }
+      if (st.phase === 'roundEnd' || st.phase === 'review') {
+        const h = st.hist[st.hist.length - 1], miss = st.res.filter(r => !r.ok);
+        const still = st.phase === 'review' ? items.filter(p => !st.hist.some(x => x.okSet.includes(p[1]))) : miss.map(r => r.p);
+        let html = '<h2>' + (st.phase === 'review' ? '📋 ふり返り：' + esc(opts.title || '') : CIRC[h.round] + ' ' + h.round + '回目 おわり') + '</h2>';
+        if (st.phase === 'review') {
+          html += '<div class="muted" style="margin-bottom:0.5rem;">' + st.hist.map(x => CIRC[x.round] + ' ' + x.said + '/' + x.total).join(' → ') + '　1回目で言えた：<b>' + st.hist[0].said + '/' + st.hist[0].total + '</b></div>';
+        } else {
+          html += '<div class="stats-grid" style="grid-template-columns:repeat(2,1fr); margin-bottom:0.75rem;"><div><div class="stat-number">' + h.said + '/' + h.total + '</div><div class="stat-label">' + secs + '秒以内に言えた</div></div>' +
+            '<div><div class="stat-number" style="color:var(--bad);">' + miss.length + '</div><div class="stat-label">言えなかった</div></div></div>';
+        }
+        if (still.length) html += '<div class="muted" style="margin-bottom:0.4rem;">' + (st.phase === 'review' ? 'まだ言えない文' : '言えなかった文') + '</div>' +
+          still.map(p => '<div class="item-row"><div class="en-text">' + esc(p[1]) + '</div><div class="ja-text muted">' + esc(ja(p).main) + '</div>' + usageLine(p[1]) + '</div>').join('');
+        else if (st.phase === 'review') html += '<p style="color:var(--ok); font-weight:bold;">全部言えました！</p>';
+        if (st.phase === 'roundEnd') {
+          html += '<button class="btn" data-dr="next" style="margin-top:0.75rem;">▶ ' + (st.round + 1) + '回目：言えなかった' + miss.length + '文だけ</button>' +
+            '<button class="btn btn-secondary" data-dr="end" style="margin-top:0.5rem;">ここでおわる</button>';
+        } else {
+          html += (opts.record ? '<p class="muted" style="margin:0.6rem 0;">1回目の結果は、苦手フレーズと「⏰復習の時期」に反映しました。</p>' : '') +
+            '<button class="btn" data-dr="again" style="margin-top:0.5rem;">🔀 もう一度（シャッフル）</button>' +
+            (opts.onClose ? '<button class="btn btn-secondary" data-dr="close" style="margin-top:0.5rem;">閉じる</button>' : '');
+        }
+        box.innerHTML = html;
+        return;
+      }
+      const p = st.queue[st.i], j = ja(p);
+      box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; gap:6px;"><span class="muted">' + esc(opts.title || '') + ' ・ ' + st.round + '回目 ・ ' + (st.i + 1) + '/' + st.queue.length + '</span>' +
+        (opts.onClose ? '<button class="tiny-btn" data-dr="close">✕ やめる</button>' : '') + '</div>' +
+        '<div class="rm-ja">' + esc(j.main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill"></div></div>' +
+        '<p class="muted" style="text-align:center;">日本語を見て、' + secs + '秒以内に声に出して言ってみよう</p>' +
+        '<div class="dr-reveal" style="display:none;"><div class="rm-en">' + esc(p[1]) + '</div>' +
+        (j.note ? '<div class="muted" style="text-align:center;">' + esc(j.note) + '</div>' : '') + usageLine(p[1]) +
+        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" data-dr="play" aria-label="英語を再生">🔊</button><button class="icon-btn" data-dr="slow" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record dr-mic" aria-label="発音をチェック">🎙️</button></div>' +
+        '<div class="word-chips dr-chips"></div><div class="mini-score dr-score" style="text-align:center;"></div>' +
+        '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-dr="ok" style="background:#16a34a; flex:1;">⭕ ' + secs + '秒以内に言えた</button><button class="btn" data-dr="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
+        '<button class="btn dr-revealbtn" data-dr="reveal">答えを見る</button>';
+      const f = box.querySelector('.rm-timer-fill');
+      f.style.transition = 'none'; f.style.width = '100%'; void f.offsetWidth;
+      f.style.transition = 'width ' + secs + 's linear'; f.style.width = '0%';
+    }
+    function reveal() {
+      if (!st || st.phase !== 'card') return;
+      const p = st.queue[st.i];
+      box.querySelector('.dr-reveal').style.display = ''; box.querySelector('.dr-revealbtn').style.display = 'none';
+      autoSpeak(p[1], 'en-US', 1);
+      attachPronunciation(box.querySelector('.dr-mic'), () => p[1], {
+        onResult: r => { renderChips(box.querySelector('.dr-chips'), r.words); box.querySelector('.dr-score').textContent = r.score + '点（' + (r.score >= PASS_SCORE ? '合格！' : 'もう一度') + '）'; countSpeak(); },
+        onError: m => { box.querySelector('.dr-score').textContent = m; }
+      });
+    }
+    function answer(ok) {
+      const p = st.queue[st.i];
+      st.res.push({ p, ok });
+      if (st.round === 1 && opts.record) recordResult(p, ok, 'recall');
+      st.i++;
+      if (st.i < st.queue.length) { render(); return; }
+      const okSet = st.res.filter(r => r.ok).map(r => r.p[1]);
+      st.hist.push({ round: st.round, said: okSet.length, total: st.res.length, okSet });
+      const miss = st.res.filter(r => !r.ok).length;
+      st.phase = miss === 0 || st.round >= MAX_ROUND ? 'review' : 'roundEnd';
+      if (st.phase === 'review') { const s = getStore(); touchToday(s); saveStore(s); updateStreakBadge(); }
+      render();
+    }
+    box.onclick = e => {
+      const t = e.target.closest('[data-dr]'); if (!t) return;
+      const a = t.dataset.dr, p = st && st.queue[st.i];
+      if (a === 'reveal') reveal();
+      else if (a === 'ok') answer(true);
+      else if (a === 'ng') answer(false);
+      else if (a === 'play' && p) speak(p[1], 'en-US', 1);
+      else if (a === 'slow' && p) speak(p[1], 'en-US', 0.7);
+      else if (a === 'next') { const miss = st.res.filter(r => !r.ok).map(r => r.p); st.round++; st.queue = shuf(miss); st.i = 0; st.res = []; st.phase = 'card'; render(); }
+      else if (a === 'end') { st.phase = 'review'; const s = getStore(); touchToday(s); saveStore(s); updateStreakBadge(); render(); }
+      else if (a === 'again') start();
+      else if (a === 'close' && opts.onClose) opts.onClose();
+    };
+    start();
+    return { restart: start };
+  }
+
   /* ---------- オフライン対応（Service Worker） ---------- */
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
     window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
@@ -1415,7 +1537,7 @@
     getPins, savePins, isPinned, togglePin, markPinUsed,
     getKeepsakes, saveKeepsakes, addKeepsake, hasKeepsake,
     getLists, saveLists, getPlan, savePlan, clearPlan,
-    attachPronunciation, renderChips, PASS_SCORE,
+    attachPronunciation, renderChips, PASS_SCORE, cardDrill, drillSecs,
     getProfile, saveProfile, getLetters, saveLetters, getDiary, saveDiary, addDiaryEntry, MOODS,
     getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId,
     getDmNotes, saveDmNotes

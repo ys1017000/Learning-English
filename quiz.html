@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=20">
+  <link rel="stylesheet" href="common.css?v=21">
 </head>
 <body>
   <header>
@@ -25,6 +25,11 @@
   </div>
   <div class="container">
     <select id="genreSelect" class="genre-select-box" aria-label="出題ジャンル"></select>
+    <div class="chip-row" id="modeChips" role="group" aria-label="出題のしかた" style="margin-bottom:0.75rem;">
+      <button class="chip active" data-mode="quiz">📝 4択クイズ</button>
+      <button class="chip" data-mode="drill">🗣 声に出すカード</button>
+    </div>
+    <div class="card" id="drillCard" style="display:none;"></div>
     <div class="card" id="quizCard">
       <button class="fav-star-btn" id="quizFavBtn" aria-label="お気に入りに追加">★</button>
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem; padding-right:2rem;">
@@ -57,8 +62,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=20"></script>
-  <script src="usage-data.js?v=10"></script>
+  <script src="common.js?v=21"></script>
+  <script src="usage-data.js?v=12"></script>
   <script>
     const QUIZ_SIZE = 10;
     let quizSet = [], currentIndex = 0, score = 0, answered = false, missed = [];
@@ -70,9 +75,29 @@
       return a;
     }
 
+    // 出題のしかた：4択クイズ（quiz）／声に出すカード（drill）。端末ごとに覚える
+    let mode = new URLSearchParams(location.search).get('format') === 'drill' ? 'drill' : (EA.getPrefs().quizMode === 'drill' ? 'drill' : 'quiz');
+    const DRILL_SIZE = 10;
+    function setMode(m) {
+      mode = m; EA.setPref('quizMode', m);
+      document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === m));
+      startQuiz();
+    }
+    function startDrill(select) {
+      document.getElementById('quizCard').style.display = 'none';
+      document.getElementById('resultCard').style.display = 'none';
+      const box = document.getElementById('drillCard');
+      const items = shuffle(EA.getPhrasesFor(select.value)).slice(0, DRILL_SIZE);
+      const label = select.options[select.selectedIndex] ? select.options[select.selectedIndex].textContent.replace(/（.*?）\s*$/, '') : '';
+      EA.cardDrill(box, { title: label, items, record: true });
+    }
+
     function startQuiz() {
       const select = document.getElementById('genreSelect');
       if (!EA.ensureNonEmpty(select)) return;
+      document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === mode));
+      if (mode === 'drill') { startDrill(select); return; }
+      document.getElementById('drillCard').style.display = 'none';
       quizSet = shuffle(EA.getPhrasesFor(select.value)).slice(0, QUIZ_SIZE);
       currentIndex = 0; score = 0; missed = [];
       document.getElementById('quizCard').style.display = 'block';
@@ -193,6 +218,7 @@
       EA.populateGenreSelect(select);
       startQuiz();
       select.addEventListener('change', startQuiz);
+      document.getElementById('modeChips').addEventListener('click', e => { const c = e.target.closest('[data-mode]'); if (c && c.dataset.mode !== mode) setMode(c.dataset.mode); });
       document.getElementById('nextBtn').addEventListener('click', () => { currentIndex++; showQuestion(); });
       document.getElementById('restartBtn').addEventListener('click', startQuiz);
       document.getElementById('weakReviewBtn').addEventListener('click', () => {
