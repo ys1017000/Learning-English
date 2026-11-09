@@ -1,5 +1,5 @@
 /* オフライン対応：一度開いたページ・ファイルを端末に保存して、電波がなくても使えるようにする */
-const CACHE = 'english-app-v30';
+const CACHE = 'english-app-v31';
 const ASSETS = ['./', 'index.html', 'quiz.html', 'writing.html', 'speaking.html', 'translator.html', 'recap.html',
   'scenes.html', 'plan.html', 'roleplay.html', 'mylist.html', 'topics.html', 'keepsake.html', 'dmnote.html', 'dm-data.js', 'usage-data.js', 'talk.html', 'talk-data.js', 'letter.html', 'nihongo.html', 'diary.html', 'report.html', 'roadmap.html', 'roadmap-data.js', 'grammar.html', 'grammar-data.js', 'content.js', 'addword.html', 'phrases.html', 'common.js', 'common.css', 'manifest.webmanifest',
   'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];

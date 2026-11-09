@@ -261,3 +261,4 @@ button.rm-day:active { transform: scale(0.96); }
 .rm-daynav { display: flex; justify-content: space-between; gap: 6px; margin-bottom: 0.75rem; }
 .rm-daynav .tiny-btn { flex: 1; font-size: 0.85rem; padding: 7px 6px; }
 .rm-day.viewing { outline: 2px solid #4f46e5; outline-offset: 1px; }
+.chip-legend { flex-basis: 100%; font-size: 0.75rem; color: var(--text-muted); text-align: center; font-weight: normal; line-height: 1.5; margin-top: 2px; }

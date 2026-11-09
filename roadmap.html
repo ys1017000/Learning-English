@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=22">
+  <link rel="stylesheet" href="common.css?v=23">
 </head>
 <body>
   <header>
@@ -42,7 +42,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=22"></script>
+  <script src="common.js?v=23"></script>
   <script src="usage-data.js?v=12"></script>
   <script src="roadmap-data.js?v=8"></script>
   <script>
@@ -395,7 +395,7 @@
       if (round === 1 && !run.free) EA.recordResult(itemFor(c), ok, 'recall');
       run.i += 1;
       if (run.i >= run.queue.length) endRound();
-      renderRun();
+      renderRun(); EA.scrollToCard($('runBox'), false);
     }
     function endRound() {
       const said = run.res.filter(r => r.ok).length, total = run.res.length;
@@ -447,7 +447,7 @@
       if (a === 'deck') { startRun(t.dataset.deck, t.dataset.slot); return; }
       if (a === 'reveal') { revealCard(); return; }
       if (a === 'free') { startFree(+t.dataset.w, t.dataset.cat || '', t.dataset.mode || ''); return; }
-      if (a === 'freeAgain') { const f = run && run.free; if (f && f.day) startFreeDay(f.day); else if (f) startFree(f.w, f.cat, f.mode); return; }
+      if (a === 'freeAgain') { const f = run && run.free; if (f && f.day) startFreeDay(f.day); else if (f) startFree(f.w, f.cat, f.mode); EA.scrollToCard($('runBox'), true); return; }
       if (a === 'freeDay') { startFreeDay(t.dataset.day); return; }
       if (a === 'viewDay') { viewDay = t.dataset.day === today ? null : t.dataset.day; setTab('today'); window.scrollTo(0, 0); return; }
       if (a === 'dayShift') { const k = RM.addDaysKey(viewDay || today, +t.dataset.n); viewDay = k === today ? null : k; renderToday(); window.scrollTo(0, 0); return; }
@@ -457,7 +457,7 @@
       if (a === 'closeRun') { run = null; renderRun(); return; }
       if (a === 'nextRound') {
         const miss = run.res.filter(r => !r.ok).map(r => ({ c: r.c, t: (run.round + 1) + '回目' }));
-        run.round += 1; run.queue = miss; run.i = 0; run.res = []; run.phase = 'card'; renderRun(); return;
+        run.round += 1; run.queue = miss; run.i = 0; run.res = []; run.phase = 'card'; renderRun(); EA.scrollToCard($('runBox'), true); return;
       }
       if (a === 'endSession') { finishSession(); renderRun(); return; }
       if (a === 'addCards') {

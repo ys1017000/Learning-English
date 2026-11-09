@@ -1445,6 +1445,19 @@
   function renderChips(container, words) {
     container.innerHTML = '';
     words.forEach(w => { const s = document.createElement('span'); s.className = 'word-chip ' + w.status; s.textContent = w.text; container.appendChild(s); });
+    // 赤い取り消し線の意味を添える（聞き落とされた単語）
+    if (words.some(w => w.status === 'miss')) {
+      const n = document.createElement('div'); n.className = 'chip-legend';
+      n.textContent = '赤い取り消し線＝聞き取ってもらえなかった単語。like you（ライキュー）のように前の単語とつながる所は聞き落とされやすいので、少しはっきり言ってみよう。';
+      container.appendChild(n);
+    }
+  }
+  // 要素の上端が画面の上（固定ヘッダーの下）に来るようにスクロール。force=false なら、上端が見えていないときだけ
+  function scrollToCard(el, force) {
+    if (!el || !el.getBoundingClientRect) return;
+    const head = document.querySelector('header'), off = (head ? head.offsetHeight : 60) + 8;
+    const top = el.getBoundingClientRect().top;
+    if (force || top < off || top > window.innerHeight * 0.5) window.scrollTo({ top: Math.max(0, top + window.scrollY - off), behavior: 'smooth' });
   }
   const PASS_SCORE = 75;
 
@@ -1522,7 +1535,7 @@
       st.res.push({ p, ok });
       if (st.round === 1 && opts.record) recordResult(p, ok, 'recall');
       st.i++;
-      if (st.i < st.queue.length) { render(); return; }
+      if (st.i < st.queue.length) { render(); scrollToCard(box, false); return; }
       const okSet = st.res.filter(r => r.ok).map(r => r.p[1]);
       st.hist.push({ round: st.round, said: okSet.length, total: st.res.length, okSet });
       const miss = st.res.filter(r => !r.ok).length;
@@ -1538,9 +1551,9 @@
       else if (a === 'ng') answer(false);
       else if (a === 'play' && p) speak(p[1], 'en-US', 1);
       else if (a === 'slow' && p) speak(p[1], 'en-US', 0.7);
-      else if (a === 'next') { const miss = st.res.filter(r => !r.ok).map(r => r.p); st.round++; st.queue = shuf(miss); st.i = 0; st.res = []; st.phase = 'card'; render(); }
+      else if (a === 'next') { const miss = st.res.filter(r => !r.ok).map(r => r.p); st.round++; st.queue = shuf(miss); st.i = 0; st.res = []; st.phase = 'card'; render(); scrollToCard(box, true); }
       else if (a === 'end') { st.phase = 'review'; const s = getStore(); touchToday(s); saveStore(s); updateStreakBadge(); render(); }
-      else if (a === 'again') start();
+      else if (a === 'again') { start(); scrollToCard(box, true); }
       else if (a === 'close' && opts.onClose) opts.onClose();
     };
     start();
@@ -1566,7 +1579,7 @@
     getPins, savePins, isPinned, togglePin, markPinUsed,
     getKeepsakes, saveKeepsakes, addKeepsake, hasKeepsake,
     getLists, saveLists, getPlan, savePlan, clearPlan,
-    attachPronunciation, renderChips, PASS_SCORE, cardDrill, drillSecs,
+    attachPronunciation, renderChips, PASS_SCORE, cardDrill, drillSecs, scrollToCard,
     getProfile, saveProfile, getLetters, saveLetters, getDiary, saveDiary, addDiaryEntry, MOODS,
     getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId,
     getDmNotes, saveDmNotes, getTalks, saveTalks

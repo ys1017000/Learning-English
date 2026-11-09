@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#4f46e5">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="stylesheet" href="common.css?v=22">
+  <link rel="stylesheet" href="common.css?v=23">
 </head>
 <body>
   <header>
@@ -66,7 +66,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=22"></script>
+  <script src="common.js?v=23"></script>
   <script src="usage-data.js?v=12"></script>
   <script>
     const PASS_SCORE = 75;      // この点数以上で「言えた」と記録（苦手カウントを減らす）
@@ -117,7 +117,7 @@
     function renderScore(result) {
       const chips = document.getElementById('wordChips');
       chips.innerHTML = '';
-      result.words.forEach(w => { const s = document.createElement('span'); s.className = 'word-chip ' + w.status; s.textContent = w.text; chips.appendChild(s); });
+      EA.renderChips(chips, result.words);
       document.getElementById('matchScore').textContent = 'スコア ' + result.score + ' 点';
       const s = result.score;
       document.getElementById('matchRating').textContent =
