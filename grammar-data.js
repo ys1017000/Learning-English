@@ -1040,6 +1040,70 @@
       { situation: '誰にも言わないよ。', sentence: 'I ___ tell anyone.', options: ["won't", 'want', "wasn't", "don't want"], answer: "won't", full: "I won't tell anyone.", why: "won't＝will not（〜しないつもり）。want（〜したい）と聞き間違えやすい。" },
       { situation: 'もう行かなきゃ。またあとでね！', sentence: 'I ___ go. Talk to you later!', options: ['gotta', 'gonna', 'wanna', 'gotten'], answer: 'gotta', full: 'I gotta go. Talk to you later!', why: 'gotta＝have got to（〜しなきゃ）。gonna は going to、wanna は want to。' }
     ]
+  }, {
+    id: 'think-of-about',
+    title: 'think of と think about',
+    short: 'think of／think about のちがい',
+    intro: 'イメージは、of＝頭に「ポンと浮かぶ」（点）、about＝そのまわりを「あれこれ考える」（円）。ただし実際の会話では、入れ替えても意味が通じる場面が多く、違いは「傾向」くらいです。はっきり差が出るのは、思い出す・思いつく（of）、じっくり検討する（about）、〜しようかと思っている（thinking of ～ing）の3つです。',
+    groups: [
+      {
+        name: 'think of：ポンと浮かぶ（点）',
+        note: '思い出す・思いつく・頭に浮かぶ。',
+        forms: [
+          { key: "can't think of", kana: 'キャント シンク オヴ', kanaNote: '', label: "can't think of ～（思い出せない・思いつかない）", ja: '〜が思い出せない／思いつかない', nuance: '記憶やアイデアが「出てこない」とき。ここは about にしません。',
+            ex: ["I can't think of his name.", '彼の名前が思い出せない。'], tone: "I can't think of a good idea.（いい案が思いつかない）" },
+          { key: "I'm thinking of you", kana: 'シンキング オヴ ユー', kanaNote: '', label: "I'm thinking of you.（あなたのことを想ってる）", ja: 'あなたのことを想ってる', nuance: '会えないときや、相手が大変なときの定番のひと言。about でもほぼ同じ意味です。',
+            ex: ["I'm thinking of you.", 'あなたのことを想ってるよ。'], tone: 'メッセージの締めに Thinking of you. だけでもOK。お見舞い・お悔やみカードの定番でもあります。' },
+          { key: "thinking of ～ing", kana: '', kanaNote: '', label: "I'm thinking of ～ing（〜しようかなと思ってる）", ja: '〜しようかなと思ってる', nuance: 'まだ決めていない予定やアイデアを言うとき。とても便利。about ～ing でもOK。',
+            ex: ["I'm thinking of visiting Germany next year.", '来年ドイツに行こうかなと思ってる。'], tone: "I'm going to ～ は「決めている」、I'm thinking of ～ing は「考え中」。" }
+        ]
+      },
+      {
+        name: 'think about：あれこれ考える（円）',
+        note: '時間をかけて考える・検討する。',
+        forms: [
+          { key: 'think about it', kana: 'シンク アバウ ディット', kanaNote: '', label: "think about it（じっくり考える）", ja: 'それについて考える', nuance: '結論を出すために時間をかけて考えるとき。',
+            ex: ['I need some time to think about it.', '少し考える時間がほしい。'], tone: "I'll think about it.（考えておくね）は、やんわり断るときにも使われます。" },
+          { key: 'What are you thinking about?', kana: '', kanaNote: '', label: 'What are you thinking about?（何考えてるの？）', ja: '何考えてるの？', nuance: '相手がぼんやりしているとき・考えこんでいるときに。',
+            ex: ['What are you thinking about?', '何考えてるの？'], tone: "Penny for your thoughts?（何考えてるの？）という古風でかわいい言い方もあります。" }
+        ]
+      },
+      {
+        name: '意見を聞く：どちらもOK',
+        note: 'What do you think of / about ～? はどちらも「〜をどう思う？」。',
+        forms: [
+          { key: 'What do you think of ～?', kana: '', kanaNote: '', label: 'What do you think of ～?（〜どう思う？）', ja: '〜どう思う？', nuance: 'of は「パッと感想を聞かせて」、about は「〜について考えを聞かせて」に少し寄るだけ。日常ではほぼ同じ。',
+            ex: ['What do you think of my English?', '私の英語どう思う？'], tone: '× How do you think ～? は「どうやって考える？」になってしまう。「どう思う？」は What で聞く。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：同じ think でも',
+      rows: [
+        ["I can't think of the word.", 'その単語が思い出せない。（of：浮かばない）'],
+        ['I need to think about it.', 'じっくり考えないと。（about：検討）'],
+        ["I'm thinking of moving.", '引っ越そうかなと思ってる。（of ～ing：考え中の予定）'],
+        ["I'm thinking of you.", 'あなたのことを想ってる。（about でもOK）'],
+        ['What do you think of it?', 'それ、どう思う？（about でもOK）']
+      ]
+    },
+    cautions: [
+      '違いは「傾向」。I\'m thinking of / about you、What do you think of / about ～? はどちらでも自然。',
+      "思い出せない・思いつかないは can't think of（about にしない）。",
+      "「どう思う？」は What do you think ～?。How do you think ～? は ×。",
+      "I'm thinking of ～ing のあとは ～ing：thinking of visit（×）→ thinking of visiting（○）。",
+      "I'll think about it. はやんわり断るサインのこともある。前向きなら I'll think about it and let you know.（考えて連絡するね）。"
+    ],
+    quiz: [
+      { situation: '彼の名前が思い出せない。', sentence: "I can't think ___ his name.", options: ['of', 'about', 'to', 'for'], answer: 'of', full: "I can't think of his name.", why: '記憶がポンと出てこない＝think of。' },
+      { situation: '少し考える時間がほしい。', sentence: 'I need some time to think ___ it.', options: ['about', 'of', 'to', 'at'], answer: 'about', full: 'I need some time to think about it.', why: '時間をかけてじっくり考える＝think about。' },
+      { situation: '来年ドイツに行こうかなと思ってる。', sentence: "I'm thinking of ___ Germany next year.", options: ['visiting', 'visit', 'to visit', 'visited'], answer: 'visiting', full: "I'm thinking of visiting Germany next year.", why: "thinking of のあとは ～ing。「〜しようかなと思ってる」。" },
+      { situation: '私の英語どう思う？', sentence: '___ do you think of my English?', options: ['What', 'How', 'Which', 'Why'], answer: 'What', full: 'What do you think of my English?', why: '「どう思う？」は What do you think ～?。How は ×。' },
+      { situation: '何考えてるの？', sentence: 'What are you thinking ___?', options: ['about', 'of it', 'to', 'for'], answer: 'about', full: 'What are you thinking about?', why: 'あれこれ考えている中身を聞く＝thinking about。' },
+      { situation: 'いい案が思いつかない。', sentence: "I can't think ___ a good idea.", options: ['of', 'about', 'on', 'with'], answer: 'of', full: "I can't think of a good idea.", why: 'アイデアが浮かばない＝think of。' },
+      { situation: 'あなたのことを想ってるよ。（会えない日のメッセージ）', sentence: "I'm thinking ___ you.", options: ['of', 'to', 'for', 'at'], answer: 'of', full: "I'm thinking of you.", why: 'Thinking of you. は定番のひと言（about でもOK）。to / for / at は ×。' },
+      { situation: '考えて、また連絡するね。', sentence: "I'll think ___ it and let you know.", options: ['about', 'of', 'to', 'on to'], answer: 'about', full: "I'll think about it and let you know.", why: '検討する＝think about。and let you know を付けると前向きな印象に。' }
+    ]
   }];
 
 

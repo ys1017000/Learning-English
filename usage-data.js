@@ -744,6 +744,14 @@
     "Where'd you go yesterday?": "話し言葉でよく聞く形。",
     "Let's grab lunch.": "気軽にランチに誘うとき。grab＝さっと食べる。",
     "I won't tell anyone.": "秘密を守ると伝えるとき。want と聞き間違えやすい。",
-    "I gotta go. Talk to you later!": "電話やチャットを切り上げるとき。くだけた言い方。"
+    "I gotta go. Talk to you later!": "電話やチャットを切り上げるとき。くだけた言い方。",
+    "I can't think of his name.": "名前や単語が出てこないとき。",
+    "I need some time to think about it.": "すぐに答えを出せないとき。",
+    "I'm thinking of visiting Germany next year.": "まだ決めていない予定を話すとき。",
+    "What do you think of my English?": "感想を聞くとき。How do you think は ×。",
+    "What are you thinking about?": "相手が考えこんでいるとき。",
+    "I can't think of a good idea.": "プレゼントや予定を考えているとき。",
+    "I'm thinking of you.": "会えない日や、相手が大変なときのメッセージに。",
+    "I'll think about it and let you know.": "誘いや提案への前向きな保留。I'll think about it. だけだと断りに聞こえることも。"
   };
 })();
