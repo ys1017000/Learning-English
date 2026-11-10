@@ -42,9 +42,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=24"></script>
-  <script src="usage-data.js?v=14"></script>
-  <script src="grammar-data.js?v=17"></script>
+  <script src="common.js?v=25"></script>
+  <script src="usage-data.js?v=15"></script>
+  <script src="grammar-data.js?v=18"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -180,10 +180,16 @@
       else if (a.dataset.act === 'restart') { startQuiz(); }
       else if (a.dataset.act === 'retryMissed') { startQuiz(quiz.missed); }
     });
-    try { const t = +localStorage.getItem('english_app_grammar_topic'); if (t > 0 && t < GR.TOPICS.length) topicIdx = t; } catch (err) {}
+    // 選んだ項目は id で覚える。以前は番号で覚えていたので、番号なら「時の表現」（5番目）を足す前の並びとして読み替える
+    try {
+      const s = localStorage.getItem('english_app_grammar_topic') || '';
+      let t = GR.TOPICS.findIndex(x => x.id === s);
+      if (t < 0 && /^\d+$/.test(s)) { t = +s; if (t >= 4) t += 1; }
+      if (t > 0 && t < GR.TOPICS.length) topicIdx = t;
+    } catch (err) {}
     $('topicSelect').addEventListener('change', e => {
       topicIdx = +e.target.value; quiz = null;
-      try { localStorage.setItem('english_app_grammar_topic', String(topicIdx)); } catch (err) {}
+      try { localStorage.setItem('english_app_grammar_topic', GR.TOPICS[topicIdx].id); } catch (err) {}
       setTab(tab); window.scrollTo(0, 0);
     });
     renderTopics();

@@ -702,6 +702,16 @@
     "You should have told me.": "相手がしなかったことを残念に思うとき。言い方がきつくならないよう注意。",
     "It seems that she is busy.": "様子から推測するとき。She seems busy. でもOK。",
     "It is important for us to talk.": "大切なことを伝えるとき。",
-    "I'd rather stay home tonight.": "やんわり希望を言うとき。I'd rather not.（できればやめたい）も便利。"
+    "I'd rather stay home tonight.": "やんわり希望を言うとき。I'd rather not.（できればやめたい）も便利。",
+    "I hope we can live together someday.": "将来の夢を伝えるとき。someday は未来だけ。",
+    "I sometimes cook German food.": "習慣を話すとき。sometime（いつか）と区別。",
+    "Let's have lunch sometime next week.": "日にちを決めずに誘うとき。",
+    "One day, I got lost in Kyoto.": "思い出話の書き出しに。",
+    "I saw a great movie the other day.": "最近あったことを話し始めるとき。",
+    "Let's do it another day.": "予定を変えたいとき。the other day（先日）と区別。",
+    "One day, I'll visit your hometown.": "相手の国や地元に行きたい気持ちを伝えるとき。",
+    "I once lived in Osaka.": "自分の過去を紹介するとき。",
+    "Let's go to Germany together one of these days.": "そのうちきっと、という前向きな約束に。",
+    "Call me sometime.": "別れぎわの軽いひと言に。"
   };
 })();

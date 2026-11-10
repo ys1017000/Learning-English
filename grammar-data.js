@@ -237,7 +237,8 @@
       'every のあとは単数：every weekend（○）、every weekends（×）。',
       'barely / hardly ever / rarely / never は、どれも否定の意味を含むので not を付けない：I don\'t barely sleep.（×）',
       'barely は「量・程度が少ない」、hardly ever / rarely は「回数が少ない」。I barely slept.（寝た時間がほとんどない）と I hardly ever sleep in.（寝坊はめったにしない）は別の意味。',
-      "always を相手の行動に使うと文句に聞こえやすい（You're always late.）。気持ちを伝えるなら sometimes や I feel like ～ でやわらげます。"
+      "always を相手の行動に使うと文句に聞こえやすい（You're always late.）。気持ちを伝えるなら sometimes や I feel like ～ でやわらげます。",
+      'someday / one day / sometime は頻度ではなく「いつのことか」を言う表現。sometimes（ときどき）と sometime（いつか）の違いは「時の表現」のトピックへ。'
     ],
     quiz: [
       { situation: '平日はたいてい家で料理する。', sentence: 'I ___ cook at home on weekdays.', options: ['usually', 'never', 'rarely', 'once'], answer: 'usually', full: 'I usually cook at home on weekdays.', why: '「たいてい（約80%）」は usually。一般動詞 cook の前に置く。' },
@@ -253,6 +254,67 @@
       { situation: 'ぎりぎり電車に間に合った。', sentence: 'I ___ made the train.', options: ['barely', 'hardly ever', 'rarely', 'never'], answer: 'barely', full: 'I barely made the train.', why: 'barely には「かろうじて・ぎりぎり（〜できた）」の意味もある。' },
       { situation: 'しょっちゅうメッセージを送り合ってるね。', sentence: 'We text each other ___.', options: ['all the time', 'always time', 'every times', 'all times'], answer: 'all the time', full: 'We text each other all the time.', why: 'all the time を文の最後に置いて「しょっちゅう」。' },
       { situation: 'たまに、一人で映画を見に行く。', sentence: 'I go to the movies alone ___.', options: ['once in a while', 'once a while', 'one time while', 'in once a while'], answer: 'once in a while', full: 'I go to the movies alone once in a while.', why: 'once in a while＝たまに（sometimes より少なめ）。' }
+    ]
+  }, {
+    id: 'time-someday',
+    title: '時の表現：someday / one day / sometime / the other day',
+    short: 'いつのこと？（頻度とのちがい）',
+    intro: 'someday や one day は「どのくらいの頻度か」ではなく「いつのことか」を言う表現です。頻度の sometimes（ときどき）と、時の sometime（いつか）は s 1文字で意味が変わるので要注意。置く場所はふつう文の最後（または最初）です。',
+    groups: [
+      {
+        name: '未来の「いつか」',
+        note: '遠い順に：someday（いつか叶えば）→ one day（いつか）→ sometime（そのうち・近いうち）。',
+        forms: [
+          { key: 'someday', kana: 'サムデイ', kanaNote: '', label: 'someday（いつか・遠い未来）', ja: 'いつか', nuance: '未来だけに使います。「いつ叶うかは分からないけど」という夢や願いの雰囲気。',
+            ex: ['I hope we can live together someday.', 'いつか一緒に暮らせたらいいな。'], tone: 'some day と2語で書いてもOK。過去の「ある日」には使えません。' },
+          { key: 'one day（未来）', kana: 'ワン デイ', kanaNote: '', label: 'one day（いつか）', ja: 'いつか', nuance: '未来の意味では someday とほぼ同じ。少し「きっと」という気持ちが強めです。',
+            ex: ["One day, I'll visit your hometown.", 'いつか、あなたの地元に行くね。'], tone: '文の最初に置いて One day, ～. とすることが多いです。' },
+          { key: 'sometime', kana: 'サムタイム', kanaNote: '（s なし）', label: 'sometime（そのうち・〜のどこかで）', ja: 'そのうち／〜のどこかで', nuance: 'someday より近い未来。軽いお誘いや予定の幅を言うときに使います。',
+            ex: ["Let's have lunch sometime next week.", '来週のどこかでランチしよう。'], tone: 'Call me sometime.（そのうち電話してね）。s を付けると sometimes（ときどき＝頻度）になるので注意。' },
+          { key: 'one of these days', kana: 'ワン ノヴ ジーズ デイズ', kanaNote: '', label: 'one of these days / someday soon（近いうちに）', ja: '近いうちに（そのうちきっと）', nuance: '「遠くないうちに必ず」という気持ち。文の最初か最後に。',
+            ex: ["Let's go to Germany together one of these days.", '近いうちに一緒にドイツに行こうね。'], tone: 'soon（すぐに）よりは少し先、someday よりは近いイメージ。' }
+        ]
+      },
+      {
+        name: '過去の「ある日」「このあいだ」',
+        note: '過去の話を始めるときの表現。動詞は過去形にします。',
+        forms: [
+          { key: 'one day（過去）', kana: 'ワン デイ', kanaNote: '', label: 'one day（ある日）', ja: 'ある日', nuance: '昔話やエピソードの書き出し。one day は過去にも未来にも使える唯一の語です。',
+            ex: ['One day, I got lost in Kyoto.', 'ある日、京都で道に迷ったんだ。'], tone: 'someday は過去には使えない：Someday I met her.（×）→ One day I met her.（○）' },
+          { key: 'the other day', kana: 'ジ アザー デイ', kanaNote: '', label: 'the other day（先日・このあいだ）', ja: '先日・このあいだ', nuance: '数日〜2週間くらい前のこと。過去にしか使いません。',
+            ex: ['I saw a great movie the other day.', 'このあいだ、いい映画を見たよ。'], tone: '「別の日」ではありません。未来の「また別の日に」は another day（Let\'s do it another day.）。' },
+          { key: 'once', kana: 'ワンス', kanaNote: '', label: 'once（かつて・昔一度）', ja: 'かつて・昔', nuance: '過去の文で動詞の前に置くと「昔〜したことがある」。',
+            ex: ['I once lived in Osaka.', '昔、大阪に住んでいたことがある。'], tone: '文の最後の once a week（週に1回）は頻度。置く場所で意味が変わります。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：s 1文字・置く場所で変わる',
+      rows: [
+        ['I sometimes cook.', 'ときどき料理する。（sometimes：頻度）'],
+        ["Let's cook together sometime.", 'そのうち一緒に料理しよう。（sometime：時）'],
+        ['I want to cook for you someday.', 'いつかあなたに料理を作りたい。（someday：遠い未来）'],
+        ['One day, I cooked for my friends.', 'ある日、友達に料理を作った。（one day：過去）'],
+        ['I cooked curry the other day.', 'このあいだカレーを作った。（the other day：先日）']
+      ]
+    },
+    cautions: [
+      '頻度（sometimes / often など）は「どのくらい」、時（someday / one day など）は「いつ」。頻度の副詞は動詞の前、時の表現は文の最後か最初が基本。',
+      'sometimes（ときどき）と sometime（いつか・そのうち）は別の語。s があると頻度。',
+      'someday は未来だけ。過去の「ある日」は one day。',
+      'the other day は過去の「先日」。未来の「別の日に」は another day。'
+    ],
+    quiz: [
+      { situation: 'いつか一緒に暮らせたらいいな。', sentence: 'I hope we can live together ___.', options: ['someday', 'sometimes', 'the other day', 'once'], answer: 'someday', full: 'I hope we can live together someday.', why: '未来の夢・願いは someday。sometimes は「ときどき」で頻度。' },
+      { situation: 'ときどきドイツ料理を作る。', sentence: 'I ___ cook German food.', options: ['sometimes', 'sometime', 'someday', 'one day'], answer: 'sometimes', full: 'I sometimes cook German food.', why: '「ときどき」は頻度なので s つきの sometimes。' },
+      { situation: '来週のどこかでランチしよう。', sentence: "Let's have lunch ___ next week.", options: ['sometime', 'sometimes', 'the other day', 'once'], answer: 'sometime', full: "Let's have lunch sometime next week.", why: '「〜のどこかで・そのうち」は s なしの sometime。' },
+      { situation: 'ある日、京都で道に迷ったんだ。', sentence: '___, I got lost in Kyoto.', options: ['One day', 'Someday', 'Sometime', 'Another day'], answer: 'One day', full: 'One day, I got lost in Kyoto.', why: '過去の「ある日」は one day。someday は未来だけ。' },
+      { situation: 'このあいだ、いい映画を見たよ。', sentence: 'I saw a great movie ___.', options: ['the other day', 'another day', 'someday', 'one of these days'], answer: 'the other day', full: 'I saw a great movie the other day.', why: '過去の「先日・このあいだ」は the other day。' },
+      { situation: '今日は無理だから、また別の日にしよう。', sentence: "Let's do it ___.", options: ['another day', 'the other day', 'sometimes', 'once'], answer: 'another day', full: "Let's do it another day.", why: '未来の「別の日に」は another day。the other day は過去の「先日」。' },
+      { situation: 'いつか、あなたの地元に行くね。', sentence: "___, I'll visit your hometown.", options: ['One day', 'The other day', 'Sometimes', 'Once'], answer: 'One day', full: "One day, I'll visit your hometown.", why: 'one day は未来の「いつか」にも使える。' },
+      { situation: '昔、大阪に住んでいたことがある。', sentence: 'I ___ lived in Osaka.', options: ['once', 'sometime', 'someday', 'one of these days'], answer: 'once', full: 'I once lived in Osaka.', why: '過去の文で動詞の前の once は「かつて・昔」。' },
+      { situation: '近いうちに一緒にドイツに行こうね。', sentence: "Let's go to Germany together ___.", options: ['one of these days', 'the other day', 'sometimes', 'once a week'], answer: 'one of these days', full: "Let's go to Germany together one of these days.", why: 'one of these days＝近いうちに（そのうちきっと）。' },
+      { situation: 'そのうち電話してね。', sentence: 'Call me ___.', options: ['sometime', 'sometimes', 'the other day', 'one day ago'], answer: 'sometime', full: 'Call me sometime.', why: '軽いお誘いの「そのうち」は sometime。' }
     ]
   }, {
     id: 'present-perfect',
