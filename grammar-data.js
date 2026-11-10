@@ -161,7 +161,8 @@
       'more と -er を重ねない：more easier（×）→ easier（○）。',
       '比較級を強めるのは much / a lot / far。very better は ×。',
       'than のあとの「私」は、会話では than me が普通です（She is taller than me.）。',
-      'not as ～ as（〜ほどじゃない）は、相手の物や好きな物を比べるときに角が立ちにくい言い方です。'
+      'not as ～ as（〜ほどじゃない）は、相手の物や好きな物を比べるときに角が立ちにくい言い方です。',
+      'as ～ as の応用（as soon as / as long as / as far as I know / twice as ～ as）は「as ～ as の使い方」の項目へ。'
     ],
     quiz: [
       { situation: '駅前の店より、ここの方が安い。', sentence: 'This place is ___ than the one near the station.', options: ['cheaper', 'more cheap', 'cheapest', 'more cheaper'], answer: 'cheaper', full: 'This place is cheaper than the one near the station.', why: '短い形容詞 cheap は -er。more と -er は重ねない。' },
@@ -1259,6 +1260,81 @@
       { situation: 'チケット取れた！（1回うまくできた）', sentence: 'I ___ to get tickets!', options: ['was able', 'could', 'would', 'can'], answer: 'was able', full: 'I was able to get tickets!', why: '1回だけ「うまくできた」は was able to が自然。could は昔の能力に。' },
       { situation: '知ってたら手伝ったのに。', sentence: "If I had known, I ___ helped you.", options: ["would've", 'would', 'will have', 'had'], answer: "would've", full: "If I had known, I would've helped you.", why: "過去の「もしも」は would've（would have）＋ 過去分詞。" },
       { situation: '今夜はどちらかといえば家にいたいな。', sentence: "I'd ___ stay in tonight.", options: ['rather', 'prefer', 'like', 'want'], answer: 'rather', full: "I'd rather stay in tonight.", why: "I'd rather ＋ 原形＝どちらかといえば〜したい。prefer なら I'd prefer to ～。" }
+    ]
+  }, {
+    id: 'as-as',
+    title: 'as ～ as（同じくらい・〜ほどじゃない・できるだけ）',
+    short: 'as ～ as の使い方',
+    intro: 'as ～ as は「…と同じくらい〜」。形容詞・副詞をはさむだけで、比べる・程度を言う・「できるだけ」まで言えます。会話では as soon as（〜したらすぐ）、as long as（〜さえすれば）、as far as I know（私の知る限り）のような決まった形もよく使います。',
+    groups: [
+      {
+        name: '比べる：同じくらい／〜ほどじゃない',
+        note: 'as ＋ 形容詞・副詞の元の形 ＋ as。比較級（-er）にしない。',
+        forms: [
+          { key: 'as ～ as', kana: 'アズ ～ アズ', kanaNote: '（会話では「アズ」が弱く「ァズ」）', label: 'A is as ～ as B.（AはBと同じくらい〜）', ja: '…と同じくらい〜', nuance: '「同じくらい」。少しでも差があると言いたいなら比較級。',
+            ex: ['This ramen is as good as the one in Tokyo.', 'このラーメン、東京のと同じくらいおいしい。'], tone: 'as good as は「同じくらいいい」。as well as は「〜も（and と同じ）」の意味でも使うので注意。' },
+          { key: 'not as ～ as', kana: '', kanaNote: '', label: "A isn't as ～ as B.（AはBほど〜じゃない）", ja: '…ほど〜じゃない', nuance: '「劣る」をやわらかく言える。相手の物や国を比べるときに角が立ちにくい。',
+            ex: ["Japanese summer isn't as dry as German summer.", '日本の夏はドイツの夏ほど乾燥してない。'], tone: "It wasn't as hard as I thought.（思ったほど難しくなかった）は会話の定番。" },
+          { key: 'twice as ～ as', kana: '', kanaNote: '', label: 'twice / three times as ～ as（〜倍…）', ja: '…の2倍（3倍）〜', nuance: '倍数は as の前に置く。',
+            ex: ['Tokyo is twice as expensive as my hometown.', '東京は地元の2倍物価が高い。'], tone: 'half as ～ as（半分の〜）もある。' },
+          { key: 'the same as', kana: '', kanaNote: '', label: 'the same (～) as …（…と同じ）', ja: '…と同じ', nuance: 'as ～ as の仲間。形容詞を入れずに「同じ」と言うとき。',
+            ex: ["I'll have the same as her.", '彼女と同じものをください。'], tone: "Same here.（私も同じ）は短い返事に便利。" }
+        ]
+      },
+      {
+        name: 'できるだけ・思ったとおり',
+        note: 'as ～ as possible / as ～ as I can。後ろの as は「…できる限り」「…と思ったのと」。',
+        forms: [
+          { key: 'as ～ as possible', kana: 'アズ スーン ナズ ポッシブル', kanaNote: '', label: 'as ～ as possible / as ～ as I can（できるだけ〜）', ja: 'できるだけ〜', nuance: 'possible（可能な限り）か I can（私ができる限り）。I can のほうが会話的。',
+            ex: ["I'll reply as soon as I can.", 'できるだけ早く返事するね。'], tone: 'ASAP（エイサップ）＝as soon as possible。急かして聞こえることがあるので、恋人には as soon as I can がやさしい。' },
+          { key: 'as ～ as I thought', kana: '', kanaNote: '', label: 'as ～ as I thought / expected（思ったとおり〜）', ja: '思ったとおり〜', nuance: '予想と比べる。否定にすると「思ったほど〜じゃない」。',
+            ex: ['It was as beautiful as I imagined.', '想像してたとおりきれいだった。'], tone: "文法ノート2番「思っていたのと違った」とセットで。" },
+          { key: 'as much / many as', kana: '', kanaNote: '', label: 'as much as ～ / as many as ～（〜と同じだけ・〜も）', ja: '〜と同じくらいたくさん', nuance: '量は much、数は many。気持ちの強さにも使える。',
+            ex: ['I miss you as much as you miss me.', 'あなたが私を恋しく思うのと同じくらい、私も会いたいよ。'], tone: "Eat as much as you want.（好きなだけ食べてね）" }
+        ]
+      },
+      {
+        name: '決まった形（会話でよく出る）',
+        note: 'as ～ as が「つなぎの言葉」として固まったもの。後ろに文が来ます。',
+        forms: [
+          { key: 'as soon as', kana: 'アズ スーン ナズ', kanaNote: '', label: 'as soon as ＋ 文（〜したらすぐ）', ja: '〜したらすぐ', nuance: '未来のことでも、as soon as の中は現在形。',
+            ex: ["I'll text you as soon as I get home.", '家に着いたらすぐ連絡するね。'], tone: 'as soon as I will get home（×）→ as soon as I get home（○）' },
+          { key: 'as long as', kana: 'アズ ロング ガズ', kanaNote: '', label: 'as long as ＋ 文（〜さえすれば・〜なら）', ja: '〜さえすれば・〜なら', nuance: '条件を言う。「〜する限り」の気持ち。',
+            ex: ["As long as you're happy, I'm happy.", 'あなたが幸せなら、私も幸せ。'], tone: "You can stay as long as you want.（好きなだけいていいよ）は「時間の長さ」の意味。" },
+          { key: 'as far as I know', kana: 'アズ ファー ラズ アイ ノウ', kanaNote: '', label: 'as far as I know（私の知る限り）', ja: '私の知る限り', nuance: '自信がないときの前置き。I could be wrong, but ～ と同じ使い方。',
+            ex: ["As far as I know, the shop is open until nine.", '私の知る限り、そのお店は9時まで開いてる。'], tone: "As far as I'm concerned（私としては）は少しかたい。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「このカフェ」と「あのカフェ」',
+      rows: [
+        ['This cafe is as nice as that one.', 'こっちもあっちと同じくらいいい。'],
+        ["This cafe isn't as nice as that one.", 'こっちはあっちほど良くない。（やわらかい）'],
+        ['This cafe is nicer than that one.', 'こっちのほうがいい。（比較級）'],
+        ['This cafe is twice as big as that one.', 'こっちはあっちの2倍広い。'],
+        ["Let's go as soon as it opens.", '開いたらすぐ行こう。（as soon as）']
+      ]
+    },
+    cautions: [
+      'as と as の間は元の形：as bigger as（×）→ as big as（○）。',
+      'as soon as / as long as の中は、未来でも現在形：as soon as I get home（○）。',
+      "比べる相手は「同じ種類」に：Tokyo's summer is as hot as Osaka（△）→ as hot as Osaka's / as Osaka in summer（○）。会話ならあまり気にしなくてOK。",
+      "as ～ as のあとの代名詞は会話では me / her が普通：She's as tall as me.（as I am でもOK）",
+      'ASAP は急かして聞こえることがある。やさしく言うなら as soon as I can。'
+    ],
+    quiz: [
+      { situation: 'このラーメン、東京のと同じくらいおいしい。', sentence: 'This ramen is ___ good as the one in Tokyo.', options: ['as', 'so', 'more', 'than'], answer: 'as', full: 'This ramen is as good as the one in Tokyo.', why: 'as ～ as＝同じくらい〜。' },
+      { situation: '思ったほど難しくなかった。', sentence: "It wasn't as ___ as I thought.", options: ['hard', 'harder', 'hardest', 'more hard'], answer: 'hard', full: "It wasn't as hard as I thought.", why: 'as と as の間は元の形。not as ～ as＝〜ほどじゃない。' },
+      { situation: '日本の夏はドイツの夏ほど乾燥してない。', sentence: "Japanese summer isn't ___ dry as German summer.", options: ['as', 'more', 'than', 'very'], answer: 'as', full: "Japanese summer isn't as dry as German summer.", why: 'not as ～ as で「…ほど〜じゃない」。' },
+      { situation: '東京は地元の2倍物価が高い。', sentence: 'Tokyo is ___ as expensive as my hometown.', options: ['twice', 'two', 'double more', 'two times more'], answer: 'twice', full: 'Tokyo is twice as expensive as my hometown.', why: '倍数は as の前：twice as ～ as。' },
+      { situation: 'できるだけ早く返事するね。', sentence: "I'll reply as soon as I ___.", options: ['can', 'could be', 'will', 'possible'], answer: 'can', full: "I'll reply as soon as I can.", why: 'as soon as I can＝できるだけ早く。possible なら as soon as possible。' },
+      { situation: '家に着いたらすぐ連絡するね。', sentence: "I'll text you as soon as I ___ home.", options: ['get', 'will get', 'got', 'getting'], answer: 'get', full: "I'll text you as soon as I get home.", why: 'as soon as の中は未来でも現在形。' },
+      { situation: 'あなたが幸せなら、私も幸せ。', sentence: "As ___ as you're happy, I'm happy.", options: ['long', 'soon', 'far', 'much'], answer: 'long', full: "As long as you're happy, I'm happy.", why: 'as long as＝〜さえすれば・〜なら（条件）。' },
+      { situation: '私の知る限り、そのお店は9時まで開いてる。', sentence: 'As ___ as I know, the shop is open until nine.', options: ['far', 'long', 'soon', 'much'], answer: 'far', full: 'As far as I know, the shop is open until nine.', why: 'as far as I know＝私の知る限り。' },
+      { situation: '想像してたとおりきれいだった。', sentence: 'It was as beautiful ___ I imagined.', options: ['as', 'than', 'that', 'so'], answer: 'as', full: 'It was as beautiful as I imagined.', why: 'as ～ as I imagined＝想像したのと同じくらい〜。' },
+      { situation: '好きなだけ食べてね。', sentence: 'Eat as ___ as you want.', options: ['much', 'many', 'long', 'more'], answer: 'much', full: 'Eat as much as you want.', why: '量（食べ物）は much。数なら many。' },
+      { situation: '彼女と同じものをください。', sentence: "I'll have the same ___ her.", options: ['as', 'than', 'like', 'with'], answer: 'as', full: "I'll have the same as her.", why: 'the same as ～＝〜と同じ。' }
     ]
   }];
 

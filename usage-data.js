@@ -774,6 +774,18 @@
     "I'd come if I could, but I have work.": "残念そうに誘いを断るとき。",
     "I was able to get tickets!": "うまくいったことを報告するとき。",
     "If I had known, I would've helped you.": "あとから知って残念に思うとき。",
-    "I'd rather stay in tonight.": "出かける誘いをやわらかく断るとき。"
+    "I'd rather stay in tonight.": "出かける誘いをやわらかく断るとき。",
+    "This ramen is as good as the one in Tokyo.": "食事中に、ほめながら比べるとき。",
+    "It wasn't as hard as I thought.": "やってみた感想に。",
+    "Japanese summer isn't as dry as German summer.": "国の違いを角を立てずに比べるとき。",
+    "Tokyo is twice as expensive as my hometown.": "倍数で比べるとき。",
+    "I'll reply as soon as I can.": "すぐ返せないときのひと言。ASAP よりやさしい。",
+    "I'll text you as soon as I get home.": "別れぎわの約束に。",
+    "As long as you're happy, I'm happy.": "相手を思う気持ちを伝えるとき。",
+    "As far as I know, the shop is open until nine.": "自信がない情報を伝えるとき。",
+    "It was as beautiful as I imagined.": "旅行や景色の感想に。",
+    "Eat as much as you want.": "料理をふるまうとき。",
+    "I'll have the same as her.": "注文のとき。",
+    "I miss you as much as you miss me.": "「会いたい」と言われたときの返事に。"
   };
 })();
