@@ -35,7 +35,9 @@
     diary: { label: '📔 英語日記に書く', href: 'diary.html?mode=write' },
     letter: { label: '💌 メッセージを書く', href: 'letter.html' },
     quiz: { label: '❓ クイズで確認', href: 'quiz.html' },
-    weak: { label: '🎯 弱点を復習', href: 'quiz.html?mode=weak' }
+    weak: { label: '🎯 弱点を復習', href: 'quiz.html?mode=weak' },
+    kobun1: { label: '🗣 構文暗唱（中学レベル・10文）', href: 'quiz.html?format=drill&genre=' + encodeURIComponent('構文暗唱・中学レベル') },
+    kobun2: { label: '🗣 構文暗唱（高校基礎・10文）', href: 'quiz.html?format=drill&genre=' + encodeURIComponent('構文暗唱・高校基礎') }
   };
 
   var DEEP = {
@@ -204,7 +206,7 @@
   /* ---------- 1日のメニュー ---------- */
   var EVENING = {
     1: { title: '読解', detail: 'B1〜B2前半の素材を1本。「自分も言いたい」表現を3つだけ拾う。彼女のDMも素材にしてOK。', links: ['voa', 'levels', 'addword'] },
-    2: { title: '構文暗唱', detail: null, links: ['writing'] },
+    2: { title: '構文暗唱', detail: null, links: ['kobun1'] },
     3: { title: 'リスニング', detail: 'スクリプト付き音源を1本。聞く → スクリプトで確認 → シャドーイング×3。', links: ['bbc', 'speaking'] },
     4: { title: 'ライティング', detail: null, links: ['diary'] },
     5: { title: '復習', detail: 'その週のカードを通しで言い、3秒以内に出なかったものに印をつける。', links: ['weak'], deck: 'week' }
@@ -231,10 +233,14 @@
       });
       var ev = (buffer ? BUFFER_EVENING : EVENING)[dow];
       var detail = ev.detail;
-      if (!buffer && dow === 2) detail = '日本語 → 英語を3秒以内に即答（' + (pos.month === 1 ? '中学レベル' : '高校基礎') + 'の例文10文）。最後に音読。';
+      var links = ev.links;
+      if (!buffer && dow === 2) {
+        detail = '日本語 → 英語を3秒以内に声で即答（' + (pos.month === 1 ? '中学レベル' : '高校基礎') + 'の例文10文）。終わったら、言えなかった文を🔊で聞いて音読×3。';
+        links = [pos.month === 1 ? 'kobun1' : 'kobun2'];
+      }
       if (!buffer && dow === 4) detail = '今週のテーマ「' + W.theme + '」で3〜5文。型カードの表現を使う。';
       if (buffer && dow === 5) detail = 'カードからランダムに10枚。日本語を見て3秒以内に言えるか確かめる。' + (pos.month === 3 ? '（総まとめ）' : '');
-      slots.push({ id: 'night', when: '夜', title: ev.title, detail: detail, links: ev.links, deck: ev.deck || null });
+      slots.push({ id: 'night', when: '夜', title: ev.title, detail: detail, links: links, deck: ev.deck || null });
     } else if (dow === 6) {
       if (buffer) {
         slots.push({ id: 'p1', when: '午前', title: '今月のカードの復習（60分）', detail: '印がついたカードを中心に、日本語 → 英語で言う。', links: ['weak'], deck: 'weak' });
