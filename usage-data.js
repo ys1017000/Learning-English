@@ -720,7 +720,7 @@
     "It's been a while since I had sushi.": "食事中に「久しぶり」と言うとき。",
     "I had ramen for the first time in a while.": "after a long time より自然。日記や近況報告に。",
     "How long has it been since we last met?": "再会したとき。答えは It's been ～.",
-    "It's so good to see you again.": "再会したときのひと言。",
+    "It's so good to see you again after so long.": "久しぶりに再会したときのひと言。again だけだと久しぶり感は弱い。",
     "I haven't had sushi in ages!": "食べる前にテンションが上がったとき。",
     "I haven't spoken German in years.": "しばらくやっていないことを言うとき。",
     "I can't stand the heat in Japan.": "夏の話題に。the のあとは名詞の heat。",
@@ -732,6 +732,18 @@
     "Your happiness is important to me.": "相手を大切に思う気持ちを伝えるとき。",
     "I'm scared of the dark.": "苦手なものの話に。",
     "Tell me the truth.": "真剣に聞きたいとき。少し強く聞こえるので、やわらかくするなら Please be honest with me.",
-    "I just want some peace and quiet.": "疲れて一人になりたいとき。"
+    "I just want some peace and quiet.": "疲れて一人になりたいとき。",
+    "She's been to Japan twice.": "'s の後ろが been なら has。",
+    "She's busy today.": "'s の後ろが形容詞なら is。",
+    "It's been a while.": "久しぶりに会ったとき・連絡したとき。受け身ではなく現在完了。",
+    "It's 3 o'clock.": "時刻を言うとき。会話では It's three. だけでもOK。",
+    "She's gone.": "もうその場にいないとき。She's going.（今行くところ）と区別。",
+    "I'd love to meet your family.": "相手の家族や友達の話が出たときに。",
+    "I'd never been to Kyoto before.": "旅行の思い出話で、そのときまでの経験を言うとき。",
+    "You'd better hurry.": "少し強めの忠告。やわらかくするなら You might want to hurry.",
+    "Where'd you go yesterday?": "話し言葉でよく聞く形。",
+    "Let's grab lunch.": "気軽にランチに誘うとき。grab＝さっと食べる。",
+    "I won't tell anyone.": "秘密を守ると伝えるとき。want と聞き間違えやすい。",
+    "I gotta go. Talk to you later!": "電話やチャットを切り上げるとき。くだけた言い方。"
   };
 })();

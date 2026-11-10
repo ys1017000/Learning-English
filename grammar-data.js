@@ -320,7 +320,7 @@
     id: 'long-time',
     title: '久しぶり：It\'s been a while / for the first time in ～',
     short: '「〜ぶり」「久しぶりに〜」',
-    intro: '日本語の「久しぶり」「〜ぶり」には、ぴったりの1語がありません。英語では「しばらくしていなかった（haven\'t ～ in a while）」や「〜年で初めて（for the first time in ～）」と言い換えます。I ate ramen after a long time. は意味は通じますが、少し不自然です。',
+    intro: '「久しぶり」はもともと「久しく（長いあいだ）〜なかった」という意味。英語も同じ発想で、「しばらくの間〜していない（haven\'t ～ in a while）」「前回から時間がたった（It\'s been a while since ～）」「この期間の中で初めて（for the first time in ～）」と言います。in a while / in three years の in は「その期間の中で」。I ate ramen after a long time. は意味は通じますが、少し不自然です。',
     groups: [
       {
         name: 'あいさつの「久しぶり！」',
@@ -350,8 +350,8 @@
             ex: ["I haven't done this in a while.", 'これやるの久しぶりなんだよね。'], tone: "for a while でもOK：I haven't done this for a while." },
           { key: "It's been a while since I ～", kana: '', kanaNote: '', label: "It's been a while since I ＋ 過去形", ja: '〜するのは久しぶり', nuance: '今まさにしていることにも使えます（食べながら・遊びながら）。',
             ex: ["It's been a while since I had sushi.", 'お寿司は久しぶりに食べるよ。'], tone: "食べる前なら I haven't had sushi in ages!（お寿司、すごく久しぶり！）" },
-          { key: 'again after so long', kana: '', kanaNote: '', label: 'It\'s so good to ～ again.', ja: '久しぶりに〜できてうれしい', nuance: 'again（また）で「久しぶり」の気持ちを出す言い方。会えたとき・来られたときに。',
-            ex: ["It's so good to see you again.", '久しぶりに会えて本当にうれしい。'], tone: "It feels good to be back.（戻ってこられてうれしい）も便利。" }
+          { key: 'again after so long', kana: '', kanaNote: '', label: 'It\'s so good to ～ again after so long.', ja: '久しぶりに〜できてうれしい', nuance: 'again（また）だけでは「久しぶり」の感じは弱い（先週会った人にも使える）。after so long（こんなに長くたって）を足すと、はっきり久しぶりになります。',
+            ex: ["It's so good to see you again after so long.", '久しぶりに会えて本当にうれしい。'], tone: "It's been a while! It's so good to see you.（久しぶり！会えてうれしい）のように、あいさつと組み合わせてもOK。" }
         ]
       }
     ],
@@ -366,6 +366,8 @@
       ]
     },
     cautions: [
+      "It's been a while の It's は It has（現在完了）。後ろに been や過去分詞が来たら has、それ以外（It's 3 o'clock / It's cold）は is。受け身ではありません。",
+      'in a while / in years / in three years の in は「その期間の中で」。haven\'t ～ in a while＝期間の中で一度もない、for the first time in ～＝期間の中で初めて。',
       '「久しぶりに〜した」を after a long time にしない。for the first time in a while が自然。',
       '「〇年ぶり」の期間は in のあと：for the first time in three years（○）、for three years（×：3年間、の意味になる）。',
       "It's been ～ since のあとは過去形：since I came here（○）、since I have come（×）。",
@@ -379,7 +381,7 @@
       { situation: 'お寿司は久しぶりに食べるよ。', sentence: "It's been a while since I ___ sushi.", options: ['had', 'have', 'have had', 'having'], answer: 'had', full: "It's been a while since I had sushi.", why: 'since のあとは過去形（had）。' },
       { situation: '久しぶりにラーメンを食べた。', sentence: 'I had ramen ___.', options: ['for the first time in a while', 'after a long time ago', 'since a while', 'in the first time'], answer: 'for the first time in a while', full: 'I had ramen for the first time in a while.', why: '「久しぶりに〜した」は for the first time in a while が自然。' },
       { situation: '最後に会ってからどのくらいぶりだっけ？', sentence: 'How long has it been ___ we last met?', options: ['since', 'for', 'from', 'after'], answer: 'since', full: 'How long has it been since we last met?', why: 'How long has it been since ～?＝〜してからどのくらいぶり？' },
-      { situation: '久しぶりに会えて本当にうれしい。', sentence: "It's so good to see you ___.", options: ['again', 'after long', 'in a while', 'since'], answer: 'again', full: "It's so good to see you again.", why: 'again（また）で「久しぶりに会えた」気持ちを出す。' },
+      { situation: '久しぶりに会えて本当にうれしい。', sentence: "It's so good to see you again ___.", options: ['after so long', 'after long', 'in so long', 'since long'], answer: 'after so long', full: "It's so good to see you again after so long.", why: 'again だけでは久しぶり感が弱い。after so long（こんなに長くたって）で「久しぶり」がはっきりする。' },
       { situation: 'お寿司、すごく久しぶり！（食べる前に）', sentence: "I haven't had sushi in ___!", options: ['ages', 'age', 'long', 'a long'], answer: 'ages', full: "I haven't had sushi in ages!", why: 'in ages＝ずいぶん長いこと。複数形 ages で。' },
       { situation: 'ドイツ語を話すのは久しぶり。', sentence: "I haven't ___ German in years.", options: ['spoken', 'spoke', 'speak', 'speaking'], answer: 'spoken', full: "I haven't spoken German in years.", why: "haven't のあとは過去分詞（spoken）。in years＝何年も。" }
     ]
@@ -963,6 +965,80 @@
       { situation: '暗いところが怖い。', sentence: "I'm scared of the ___.", options: ['dark', 'darkly', 'darken', 'darker'], answer: 'dark', full: "I'm scared of the dark.", why: 'dark は the を付けると名詞「暗やみ」になる。' },
       { situation: '本当のことを言って。', sentence: 'Tell me the ___.', options: ['truth', 'true', 'truly', 'trues'], answer: 'truth', full: 'Tell me the truth.', why: 'the のあとは名詞。true → truth。' },
       { situation: 'ただ静かに過ごしたい。', sentence: 'I just want some peace and ___.', options: ['quiet', 'quite', 'quietly', 'quietness of'], answer: 'quiet', full: 'I just want some peace and quiet.', why: 'peace and quiet で「静かな時間」。quite（かなり）と混同しやすい。' }
+    ]
+  }, {
+    id: 'contractions',
+    title: "省略の見分け方：'s（is / has）・'d（would / had）",
+    short: "短縮形の中身（'s・'d・gonna）",
+    intro: "会話やDMでは、ほとんどの文が短縮形です。とくに 's と 'd は2つの意味があるので、「すぐ後ろの語」で見分けます。後ろが been や過去分詞（gone / done / seen）なら has / had、それ以外なら is / would です。",
+    groups: [
+      {
+        name: "'s ＝ is か has か（Let's だけは us）",
+        note: "'s のすぐ後ろを見る。been・過去分詞 → has、それ以外（形容詞・名詞・～ing・場所） → is。",
+        forms: [
+          { key: "'s ＝ is", kana: '', kanaNote: '', label: "'s ＋ 形容詞・名詞・～ing ＝ is", ja: '〜だ・〜している', nuance: "It's cold. / She's a teacher. / He's coming.（今向かってる）",
+            ex: ["She's busy today.", '彼女は今日忙しい。'], tone: "It's 3 o'clock. も It is。時間・天気の It です。" },
+          { key: "'s ＝ has", kana: '', kanaNote: '', label: "'s ＋ been / 過去分詞 ＝ has（現在完了）", ja: '〜した・〜してきた', nuance: "It's been a while.（しばらくたった）、She's gone.（もう行っちゃった）",
+            ex: ["She's been to Japan twice.", '彼女は日本に2回来たことがある。'], tone: "She's gone. と She's going.（今行くところ）は別の意味。後ろの形で見分けます。" },
+          { key: "Let's ＝ Let us", kana: 'レッツ', kanaNote: '', label: "Let's ＝ Let us（〜しよう）", ja: '〜しよう', nuance: "'s が us になる唯一の形。今はほぼ Let's だけで使います。",
+            ex: ["Let's grab lunch.", 'お昼食べに行こう。'], tone: "Let us ～ と分けて言うと「私たちに〜させて」の意味になり、少しかたい。" }
+        ]
+      },
+      {
+        name: "'d ＝ would か had か",
+        note: "'d のすぐ後ろを見る。動詞の原形 → would、過去分詞（been / gone / forgotten） → had。better → had。",
+        forms: [
+          { key: "'d ＝ would", kana: '', kanaNote: '', label: "'d ＋ 動詞の原形 ＝ would", ja: '〜したい・〜するだろう', nuance: "I'd like ～（〜がほしい）、I'd love to ～（ぜひ〜したい）、I'd rather ～（むしろ〜したい）",
+            ex: ["I'd love to meet your family.", 'ぜひあなたの家族に会いたい。'], tone: "I'd like coffee.（コーヒーをお願いします）は注文の定番。" },
+          { key: "'d ＝ had", kana: '', kanaNote: '', label: "'d ＋ 過去分詞 ＝ had（過去完了）／ 'd better ＝ had better", ja: '（その時点で）もう〜していた／〜したほうがいい', nuance: "I'd forgotten.（忘れてた）、You'd better hurry.（急いだほうがいいよ）",
+            ex: ["I'd never been to Kyoto before.", 'それまで京都に行ったことがなかった。'], tone: "You'd better ～ は少し強い忠告。やわらかくするなら You might want to ～。" },
+          { key: "What'd ＝ did", kana: 'ワッドゥ', kanaNote: '', label: "What'd / Where'd / How'd ＋ you ＝ did（話し言葉）", ja: '何を／どこで／どうやって〜した？', nuance: '疑問詞のあとの \'d は did のことも。書くより聞くことが多い形です。',
+            ex: ["Where'd you go yesterday?", '昨日どこ行ったの？'], tone: "What'd you say?（なんて言った？）はよく聞きます。" }
+        ]
+      },
+      {
+        name: "その他の短縮形と、話し言葉の省略",
+        note: "書くときは 've / 'll / 're / won't まではOK。gonna / wanna / gotta はDMやくだけた会話向け。",
+        forms: [
+          { key: "'ve / 'll / 're / won't", kana: '', kanaNote: '', label: "'ve ＝ have / 'll ＝ will / 're ＝ are / won't ＝ will not", ja: '', nuance: "won't（ウォウント）は want（ウォント）と聞き間違えやすい。",
+            ex: ["I won't tell anyone.", '誰にも言わないよ。'], tone: "You've got this.（あなたならできる）、We're almost there.（もうすぐ着く）" },
+          { key: 'gonna / wanna / gotta', kana: 'ガナ / ワナ / ガタ', kanaNote: '', label: 'gonna ＝ going to / wanna ＝ want to / gotta ＝ have got to（have to）', ja: '〜するつもり／〜したい／〜しなきゃ', nuance: '話し言葉では、ていねいに going to と言っていても gonna に聞こえることが多いです。',
+            ex: ['I gotta go. Talk to you later!', 'もう行かなきゃ。またあとでね！'], tone: "Do you wanna ～? は Do you want to ～? のくだけた形。仕事のメールには書かない。" },
+          { key: "o'clock / goodbye", kana: '', kanaNote: '', label: "o'clock ＝ of the clock / goodbye ＝ God be with you", ja: '（雑学）', nuance: '昔の言い方が縮まって、今の形になったもの。',
+            ex: ["Let's meet at seven o'clock.", '7時に会おう。'], tone: "会話では at seven だけでもOK。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "例：後ろの語で中身が変わる",
+      rows: [
+        ["She's going.", '彼女は今行くところ。（is ＋ ～ing）'],
+        ["She's gone.", '彼女はもう行っちゃった。（has ＋ 過去分詞）'],
+        ["I'd like to go.", '行きたいな。（would ＋ 原形）'],
+        ["I'd already gone.", 'もう行ってしまっていた。（had ＋ 過去分詞）'],
+        ["You'd better go.", '行ったほうがいいよ。（had better）']
+      ]
+    },
+    cautions: [
+      "'s / 'd は「すぐ後ろの語」で見分ける。been・過去分詞が来たら has / had。",
+      "It's been ～（has）と It's 3 o'clock（is）は、同じ It's でも中身が違う。",
+      "Let's だけは 's が us。Let's＝Let us（〜しよう）。",
+      "won't（ウォウント：〜しない）と want（ウォント：〜したい）は聞き間違えやすい。I won't go. は「行かない」。",
+      "gonna / wanna / gotta は話し言葉。DMやカジュアルな会話ならOK、かしこまった文章では使わない。"
+    ],
+    quiz: [
+      { situation: "彼女は日本に2回来たことがある。（She's を元の形に）", sentence: "She ___ been to Japan twice.", options: ['has', 'is', 'was', 'does'], answer: 'has', full: "She's been to Japan twice.", why: "後ろが been なので has（現在完了）。" },
+      { situation: "彼女は今日忙しい。（She's を元の形に）", sentence: "She ___ busy today.", options: ['is', 'has', 'was', 'does'], answer: 'is', full: "She's busy today.", why: '後ろが形容詞 busy なので is。' },
+      { situation: "久しぶり（しばらくたったね）。（It's を元の形に）", sentence: "It ___ been a while.", options: ['has', 'is', 'was', 'had'], answer: 'has', full: "It's been a while.", why: '後ろが been なので has。受け身ではなく現在完了。' },
+      { situation: "3時だよ。（It's を元の形に）", sentence: "It ___ 3 o'clock.", options: ['is', 'has', 'was', 'does'], answer: 'is', full: "It's 3 o'clock.", why: '後ろが時刻（名詞）なので is。' },
+      { situation: 'もう行っちゃった（彼女はもういない）。', sentence: "She's ___.", options: ['gone', 'going', 'go', 'went'], answer: 'gone', full: "She's gone.", why: "She has gone. で「行ってしまって、もういない」。She's going. は「今行くところ」。" },
+      { situation: "ぜひあなたの家族に会いたい。（I'd を元の形に）", sentence: "I ___ love to meet your family.", options: ['would', 'had', 'did', 'could'], answer: 'would', full: "I'd love to meet your family.", why: "後ろが動詞の原形 love なので would。" },
+      { situation: "それまで京都に行ったことがなかった。（I'd を元の形に）", sentence: "I ___ never been to Kyoto before.", options: ['had', 'would', 'did', 'have'], answer: 'had', full: "I'd never been to Kyoto before.", why: '後ろが been（過去分詞）なので had（過去完了）。' },
+      { situation: "急いだほうがいいよ。（You'd を元の形に）", sentence: "You ___ better hurry.", options: ['had', 'would', 'should', 'did'], answer: 'had', full: "You'd better hurry.", why: "'d better は had better（〜したほうがいい）。" },
+      { situation: "昨日どこ行ったの？（Where'd を元の形に）", sentence: "Where ___ you go yesterday?", options: ['did', 'would', 'had', 'do'], answer: 'did', full: "Where'd you go yesterday?", why: '疑問詞のあとで、後ろが you go（原形）、yesterday があるので did。' },
+      { situation: "お昼食べに行こう。（Let's を元の形に）", sentence: "Let ___ grab lunch.", options: ['us', 'is', 'has', 'me'], answer: 'us', full: "Let's grab lunch.", why: "Let's は Let us の短縮形。's が us になる唯一の形。" },
+      { situation: '誰にも言わないよ。', sentence: 'I ___ tell anyone.', options: ["won't", 'want', "wasn't", "don't want"], answer: "won't", full: "I won't tell anyone.", why: "won't＝will not（〜しないつもり）。want（〜したい）と聞き間違えやすい。" },
+      { situation: 'もう行かなきゃ。またあとでね！', sentence: 'I ___ go. Talk to you later!', options: ['gotta', 'gonna', 'wanna', 'gotten'], answer: 'gotta', full: 'I gotta go. Talk to you later!', why: 'gotta＝have got to（〜しなきゃ）。gonna は going to、wanna は want to。' }
     ]
   }];
 
