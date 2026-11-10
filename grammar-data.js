@@ -1104,6 +1104,162 @@
       { situation: 'あなたのことを想ってるよ。（会えない日のメッセージ）', sentence: "I'm thinking ___ you.", options: ['of', 'to', 'for', 'at'], answer: 'of', full: "I'm thinking of you.", why: 'Thinking of you. は定番のひと言（about でもOK）。to / for / at は ×。' },
       { situation: '考えて、また連絡するね。', sentence: "I'll think ___ it and let you know.", options: ['about', 'of', 'to', 'on to'], answer: 'about', full: "I'll think about it and let you know.", why: '検討する＝think about。and let you know を付けると前向きな印象に。' }
     ]
+  }, {
+    id: 'remember',
+    title: '覚えてる・覚えてない・思い出した・思い出せない',
+    short: '「覚えてる」「思い出せない」（remember など）',
+    intro: 'remember は「覚えている」という状態と「思い出す」という動きの両方を表します。現在形 I remember. で「覚えてる」。I\'m remembering. とは言いません。「思い出した！」は、過去形よりも Now I remember! のように「今は覚えてる」と言うのが自然です。',
+    groups: [
+      {
+        name: '覚えてるよ／覚えてない',
+        note: '状態なので現在形で。don\'t は「記憶にない」、can\'t は「思い出そうとしても出てこない」。',
+        forms: [
+          { key: 'I remember', kana: 'アイ リメンバー', kanaNote: '', label: 'I remember (that / ～ing).（覚えてるよ）', ja: '覚えてるよ', nuance: "Of course I remember!（もちろん覚えてるよ！）が定番。思い出の中身は that ＋ 文 か ～ing で。",
+            ex: ['Of course I remember! We had ramen together.', 'もちろん覚えてるよ！一緒にラーメン食べたよね。'], tone: "I still remember ～（今でも覚えてる）、I remember meeting you.（あなたに会ったときのことを覚えてる）" },
+          { key: "I don't remember", kana: 'アイ ドント リメンバー', kanaNote: '', label: "I don't remember.（覚えてない・記憶にない）", ja: '覚えてない', nuance: '記憶にそもそも残っていないとき。',
+            ex: ["Sorry, I don't remember that.", 'ごめん、それ覚えてない。'], tone: "I don't really remember.（あんまり覚えてない）でやわらかく。" },
+          { key: 'I forgot', kana: 'アイ フォガット', kanaNote: '', label: 'I forgot.（忘れちゃった）', ja: '忘れちゃった', nuance: '「やるのを忘れた」「（今は）忘れちゃった」の両方に使える、会話でとても多い言い方。',
+            ex: ['Sorry, I forgot to text you.', 'ごめん、連絡するの忘れてた。'], tone: "forget to ～（〜するのを忘れる）。Don't forget to ～.（忘れずに〜してね）" }
+        ]
+      },
+      {
+        name: '思い出したよ／思い出せない',
+        note: '「思い出した！」は Now I remember!、「思い出せない」は can\'t remember。',
+        forms: [
+          { key: 'Now I remember!', kana: 'ナウ アイ リメンバー', kanaNote: '', label: "Oh, now I remember!（あ、思い出した！）", ja: '思い出した！', nuance: '「今は覚えてる」＝「思い出した」。会話ではこれが一番自然。',
+            ex: ['Oh, now I remember! It was that small cafe.', 'あ、思い出した！あの小さいカフェだ。'], tone: 'It came back to me.（記憶がよみがえった）、It just came to me.（ふと思い出した・思いついた）も便利。' },
+          { key: "I can't remember", kana: 'アイ キャント リメンバー', kanaNote: '', label: "I can't remember ～.（思い出せない）", ja: '思い出せない', nuance: '思い出そうとしているのに出てこないとき。I can\'t think of ～. もほぼ同じ。',
+            ex: ["I can't remember the name of the restaurant.", 'レストランの名前が思い出せない。'], tone: "It's on the tip of my tongue!（喉まで出かかってるのに！）" },
+          { key: 'remind', kana: 'リマインド', kanaNote: '', label: 'remind 人 of ～（〜を思い出させる）', ja: '〜を思い出させる', nuance: '「これを見ると〜を思い出す」は、物を主語にして remind で言います。',
+            ex: ['This song reminds me of you.', 'この曲を聞くとあなたを思い出す。'], tone: "That reminds me, ～.（そういえば、〜）は話題を変えるときの定番。Can you remind me later?（あとで教えて）" }
+        ]
+      },
+      {
+        name: 'remember to ～ と remember ～ing',
+        note: 'to は「これから（忘れずに）する」、～ing は「前にしたこと（を覚えてる）」。',
+        forms: [
+          { key: 'remember to', kana: '', kanaNote: '', label: 'Remember to ～.（忘れずに〜してね）', ja: '忘れずに〜してね', nuance: "これからすることを忘れないで、という意味。Don't forget to ～. とほぼ同じ。",
+            ex: ['Remember to bring your passport.', 'パスポート忘れずに持ってきてね。'], tone: '過去形 I remembered to ～. は「忘れずに〜できた」。' },
+          { key: 'remember ～ing', kana: '', kanaNote: '', label: 'I remember ～ing.（〜したのを覚えてる）', ja: '〜したのを覚えてる', nuance: '前にしたことの思い出。',
+            ex: ['I remember walking by the river with you.', 'あなたと川沿いを歩いたのを覚えてる。'], tone: "I'll never forget ～.（〜は絶対忘れない）も気持ちを伝えるのに使えます。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「あの店の名前」',
+      rows: [
+        ['I remember the name.', '名前、覚えてるよ。'],
+        ["I don't remember the name.", '名前、覚えてない（記憶にない）。'],
+        ["I can't remember the name.", '名前が思い出せない（出てこない）。'],
+        ['Oh, now I remember the name!', 'あ、名前思い出した！'],
+        ['I forgot the name.', '名前、忘れちゃった。']
+      ]
+    },
+    cautions: [
+      "「覚えてる」は現在形 I remember.。I'm remembering.（×）",
+      "「思い出した！」は Now I remember! が自然。I remembered. は「（忘れずに）思い出してできた」の意味になりやすい。",
+      "don't remember＝記憶にない、can't remember＝思い出せない。どちらも「覚えてない」と訳せるので、気持ちで選ぶ。",
+      "remember to ～（これから忘れずに）と remember ～ing（前にしたのを覚えてる）は意味が違う。",
+      "「〜を見ると…を思い出す」は remind：This reminds me of ～.。I remember you when I hear this song. より自然。"
+    ],
+    quiz: [
+      { situation: 'もちろん覚えてるよ！', sentence: 'Of course I ___!', options: ['remember', "'m remembering", 'remembered', 'remind'], answer: 'remember', full: 'Of course I remember!', why: '「覚えている」は状態なので現在形 remember。' },
+      { situation: 'ごめん、それ覚えてない。', sentence: "Sorry, I ___ remember that.", options: ["don't", "didn't", "haven't", "am not"], answer: "don't", full: "Sorry, I don't remember that.", why: '今、記憶にない＝現在形の否定 don\'t remember。' },
+      { situation: 'レストランの名前が思い出せない。', sentence: "I ___ remember the name of the restaurant.", options: ["can't", "don't have", "won't", "am not"], answer: "can't", full: "I can't remember the name of the restaurant.", why: '思い出そうとしても出てこない＝can\'t remember。' },
+      { situation: 'あ、思い出した！あの小さいカフェだ。', sentence: 'Oh, ___ I remember! It was that small cafe.', options: ['now', 'then', 'already', 'yet'], answer: 'now', full: 'Oh, now I remember! It was that small cafe.', why: 'Now I remember!＝「今は覚えてる」＝思い出した。' },
+      { situation: 'この曲を聞くとあなたを思い出す。', sentence: 'This song ___ me of you.', options: ['reminds', 'remembers', 'remind', 'memories'], answer: 'reminds', full: 'This song reminds me of you.', why: '物が主語で「思い出させる」は remind 人 of ～。主語が単数なので s。' },
+      { situation: 'パスポート忘れずに持ってきてね。', sentence: 'Remember ___ your passport.', options: ['to bring', 'bringing', 'bring', 'brought'], answer: 'to bring', full: 'Remember to bring your passport.', why: 'これから忘れずにすること＝remember to ～。' },
+      { situation: 'あなたと川沿いを歩いたのを覚えてる。', sentence: 'I remember ___ by the river with you.', options: ['walking', 'to walk', 'walk', 'walked'], answer: 'walking', full: 'I remember walking by the river with you.', why: '前にしたことの思い出＝remember ～ing。' },
+      { situation: 'ごめん、連絡するの忘れてた。', sentence: 'Sorry, I ___ to text you.', options: ['forgot', 'forget', "didn't remember", 'remind'], answer: 'forgot', full: 'Sorry, I forgot to text you.', why: 'forget to ～＝〜するのを忘れる。過去なので forgot。' },
+      { situation: '喉まで出かかってるのに！', sentence: "It's on the tip of my ___!", options: ['tongue', 'mouth', 'head', 'nose'], answer: 'tongue', full: "It's on the tip of my tongue!", why: 'tip of my tongue＝舌の先（喉まで出かかっている）。' },
+      { situation: 'そういえば、明日って空いてる？', sentence: "That ___ me, are you free tomorrow?", options: ['reminds', 'remembers', 'thinks', 'says'], answer: 'reminds', full: 'That reminds me, are you free tomorrow?', why: 'That reminds me, ～.＝「それで思い出したけど」＝そういえば。' }
+    ]
+  }, {
+    id: 'would-could',
+    title: 'would / could の使い分け（ていねい・意見・可能性・もしも）',
+    short: 'would / could（意見・お願い・かもしれない）',
+    intro: 'would と could は、どちらも根っこに「もしも」（仮定）の気持ちがあります。「もし〜なら、…する（would）／できる（could）」。だから、はっきり言い切らない「やわらかさ」が出ます。ていねいなお願い、控えめな意見、「〜かもしれない」は、全部この「もしも」の気持ちから来ています。自分の意見に I would ～ を使うのは正しく、とても自然です。',
+    groups: [
+      {
+        name: '自分の意見をやわらかく言う（would）',
+        note: '「もし私が決めるなら」の気持ち。I think よりも控えめで、押しつけない言い方になります。',
+        forms: [
+          { key: "I'd say", kana: 'アイド セイ', kanaNote: '', label: "I'd say ～.（〜かな・〜だと思う）", ja: '〜かな（控えめな意見）', nuance: '「強いて言うなら」。数字・印象・おすすめを言うときに便利。',
+            ex: ["I'd say the second one is better.", '2つ目のほうがいいかな。'], tone: "I think ～ でも間違いではない。I'd say は少し控えめ。" },
+          { key: "I'd recommend / I'd go with", kana: '', kanaNote: '', label: "I'd recommend ～ / I'd go with ～（私なら〜にする）", ja: '私なら〜をすすめる／〜にする', nuance: 'メニュー選びや行き先の相談で。「もし私が選ぶなら」。',
+            ex: ["I'd go with the ramen.", '私ならラーメンにするな。'], tone: "If it were me, I'd ～.（私だったら〜する）も同じ気持ち。" },
+          { key: "I wouldn't worry", kana: '', kanaNote: '', label: "I wouldn't ～.（私なら〜しない＝〜しなくていいと思う）", ja: '〜しなくていいと思うよ', nuance: '相手へのアドバイスを、命令せずにやわらかく言える形。',
+            ex: ["I wouldn't worry about it.", '気にしなくていいと思うよ。'], tone: "Don't worry. より、相手の気持ちを否定しない感じになります。" },
+          { key: "I'd rather", kana: 'アイド ラザー', kanaNote: '', label: "I'd rather ～ / I'd prefer ～（どちらかといえば〜がいい）", ja: 'どちらかといえば〜がいい', nuance: '希望をやんわり言う。I\'d rather not.（できればやめておきたい）は断りにも。',
+            ex: ["I'd rather stay in tonight.", '今夜はどちらかといえば家にいたいな。'], tone: "I want ～ より相手に気を使った言い方。" },
+          { key: 'I could be wrong, but', kana: '', kanaNote: '', label: "I could be wrong, but ～.（間違ってるかもだけど）", ja: '違うかもしれないけど', nuance: '意見の前置き。自信がないときや、相手と違う意見を言うときに。',
+            ex: ["I could be wrong, but I think it's closed today.", '違うかもしれないけど、今日は休みだと思う。'], tone: "I might be wrong, but ～ も同じ。" }
+        ]
+      },
+      {
+        name: 'ていねいなお願い・誘い',
+        note: "Can you ～? より Could you ～? がていねい。誘うときは Would you like to ～?",
+        forms: [
+          { key: 'Could you', kana: 'クッジュー', kanaNote: '（d と y がつながる）', label: 'Could you ～?（〜してもらえる？）', ja: '〜してもらえる？', nuance: 'Can you ～? のていねい版。お店の人にも恋人にも使える万能形。',
+            ex: ['Could you take a photo of us?', '写真撮ってもらえますか？'], tone: "Would you mind ～ing?（〜してもらってもいい？）はさらにていねい。答えの OK は Not at all.（全然いいよ）" },
+          { key: 'Would you like to', kana: 'ウッジュー ライク トゥ', kanaNote: '', label: 'Would you like to ～?（〜しない？）', ja: '〜しない？・〜したい？', nuance: '相手の気持ちを聞く、ていねいな誘い。',
+            ex: ['Would you like to have dinner with me?', '一緒に夜ごはん食べない？'], tone: "答え方：I'd love to!（ぜひ！）、I'd love to, but ～.（行きたいけど〜）" },
+          { key: "I'd love to", kana: 'アイド ラヴ トゥ', kanaNote: '', label: "I'd love to ～ / I'd like ～（ぜひ〜したい／〜がほしい）", ja: 'ぜひ〜したい／〜をお願いします', nuance: 'I want ～ のやわらかい・うれしそうな言い方。',
+            ex: ["I'd love to see you again.", 'また会いたいな。'], tone: "注文は I'd like a coffee, please.（コーヒーをお願いします）" }
+        ]
+      },
+      {
+        name: '「〜かもしれない」と「できた」（could）',
+        note: 'could は「可能性」と「過去にできた」の2つの顔があります。',
+        forms: [
+          { key: 'It could be', kana: '', kanaNote: '', label: 'It could ～.（〜かもしれない）', ja: '〜かもしれない', nuance: 'might とほぼ同じ。「ありえる」という可能性。',
+            ex: ['It could rain this afternoon.', '午後は雨が降るかもしれない。'], tone: "That could be true.（それはありえるね）、It couldn't be better.（最高！これ以上ない）" },
+          { key: 'could（過去にできた）', kana: '', kanaNote: '', label: 'I could ～（昔は〜できた）／ I was able to ～（そのとき〜できた）', ja: '（昔は）〜できた', nuance: '昔の能力は could。1回だけ「うまくできた」ことは was able to か managed to が自然。',
+            ex: ['I could swim well as a kid.', '子どものころは上手に泳げた。'], tone: "I was able to get tickets!（チケット取れた！）。否定の couldn't は1回のことにも使える：I couldn't sleep.（眠れなかった）" }
+        ]
+      },
+      {
+        name: 'もしも（仮定法）と後悔',
+        note: '今の「もしも」は過去形、過去の「もしも」は had ＋ 過去分詞。後悔は文法ノート1番も。',
+        forms: [
+          { key: 'I would if I could', kana: '', kanaNote: '', label: 'I would ～ if I could.（できるなら〜するのに）', ja: 'できるなら〜するのに', nuance: '今は無理なことを言う「仮定法過去」。誘いを残念そうに断るときにも。',
+            ex: ["I'd come if I could, but I have work.", '行けるなら行きたいけど、仕事があるんだ。'], tone: "If I were you, I'd ～.（私があなたなら〜する）もこの形。" },
+          { key: "could've / would've", kana: 'クダヴ / ウダヴ', kanaNote: '', label: "could've ／ would've ＋ 過去分詞（〜できたのに／〜したのに）", ja: '〜できたのに／〜したのに（後悔）', nuance: '過去の「もしも」。詳しくは文法ノート「1. 過去についての後悔・推測」。',
+            ex: ["If I had known, I would've helped you.", '知ってたら手伝ったのに。'], tone: "I could've done better.（もっとうまくできたのに）、I should've told you.（言えばよかった）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：同じ「意見」でも強さが違う',
+      rows: [
+        ['Go with the ramen.', 'ラーメンにしなよ。（命令：強い）'],
+        ['You should get the ramen.', 'ラーメンにするべきだよ。（はっきりすすめる）'],
+        ['I think the ramen is good.', 'ラーメンがいいと思う。（ふつう）'],
+        ["I'd go with the ramen.", '私ならラーメンにするな。（控えめ）'],
+        ["I wouldn't get the curry.", '私ならカレーはやめとくかな。（やわらかい否定）']
+      ]
+    },
+    cautions: [
+      "自分の意見に I would ～ / I'd say ～ を使うのは正しい。「もし私なら」の気持ちで、I think より控えめになるだけ。",
+      "would のあとは動詞の原形：I would going（×）→ I would go（○）。I'd は I would の短縮（後ろが原形なら would）。",
+      "If 〜 の中には would を入れない：If I would have time（×）→ If I had time, I would ～.（○）",
+      "1回だけ「うまくできた」は could より was able to：I could get tickets.（△）→ I was able to get tickets.（○）",
+      "Could you ～? はお願い、Can you ～? は「できる？」にも聞こえる。迷ったら Could you で。"
+    ],
+    quiz: [
+      { situation: '2つ目のほうがいいかな。（控えめな意見）', sentence: "I'd ___ the second one is better.", options: ['say', 'saying', 'said', 'to say'], answer: 'say', full: "I'd say the second one is better.", why: "I'd（would）のあとは原形。I'd say ～＝控えめに「〜かな」。" },
+      { situation: '私ならラーメンにするな。', sentence: "I'd ___ with the ramen.", options: ['go', 'went', 'going', 'gone'], answer: 'go', full: "I'd go with the ramen.", why: "I'd go with ～＝私なら〜にする。would のあとは原形。" },
+      { situation: '気にしなくていいと思うよ。', sentence: "I ___ worry about it.", options: ["wouldn't", "couldn't", "didn't", "won't be"], answer: "wouldn't", full: "I wouldn't worry about it.", why: "I wouldn't ～＝私なら〜しない＝やわらかいアドバイス。" },
+      { situation: '違うかもしれないけど、今日は休みだと思う。', sentence: "I ___ be wrong, but I think it's closed today.", options: ['could', 'would', 'should', 'will'], answer: 'could', full: "I could be wrong, but I think it's closed today.", why: "I could be wrong＝間違っている可能性がある（could＝かもしれない）。" },
+      { situation: '写真撮ってもらえますか？', sentence: '___ you take a photo of us?', options: ['Could', 'Should', 'Did', 'Might'], answer: 'Could', full: 'Could you take a photo of us?', why: 'ていねいなお願いは Could you ～?。' },
+      { situation: '一緒に夜ごはん食べない？', sentence: '___ you like to have dinner with me?', options: ['Would', 'Could', 'Do', 'Are'], answer: 'Would', full: 'Would you like to have dinner with me?', why: 'Would you like to ～?＝ていねいな誘い。' },
+      { situation: 'また会いたいな。', sentence: "I'd ___ to see you again.", options: ['love', 'loved', 'loving', 'be love'], answer: 'love', full: "I'd love to see you again.", why: "I'd love to ～＝ぜひ〜したい（I want より気持ちがこもる）。" },
+      { situation: '午後は雨が降るかもしれない。', sentence: 'It ___ rain this afternoon.', options: ['could', 'would', 'can', 'is'], answer: 'could', full: 'It could rain this afternoon.', why: 'could＝〜かもしれない（可能性）。' },
+      { situation: '行けるなら行きたいけど、仕事があるんだ。', sentence: "I'd come if I ___, but I have work.", options: ['could', 'can', 'would', 'will'], answer: 'could', full: "I'd come if I could, but I have work.", why: '今は無理なこと＝仮定法過去。if の中は過去形 could。' },
+      { situation: 'チケット取れた！（1回うまくできた）', sentence: 'I ___ to get tickets!', options: ['was able', 'could', 'would', 'can'], answer: 'was able', full: 'I was able to get tickets!', why: '1回だけ「うまくできた」は was able to が自然。could は昔の能力に。' },
+      { situation: '知ってたら手伝ったのに。', sentence: "If I had known, I ___ helped you.", options: ["would've", 'would', 'will have', 'had'], answer: "would've", full: "If I had known, I would've helped you.", why: "過去の「もしも」は would've（would have）＋ 過去分詞。" },
+      { situation: '今夜はどちらかといえば家にいたいな。', sentence: "I'd ___ stay in tonight.", options: ['rather', 'prefer', 'like', 'want'], answer: 'rather', full: "I'd rather stay in tonight.", why: "I'd rather ＋ 原形＝どちらかといえば〜したい。prefer なら I'd prefer to ～。" }
+    ]
   }];
 
 
