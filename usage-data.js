@@ -712,6 +712,26 @@
     "One day, I'll visit your hometown.": "相手の国や地元に行きたい気持ちを伝えるとき。",
     "I once lived in Osaka.": "自分の過去を紹介するとき。",
     "Let's go to Germany together one of these days.": "そのうちきっと、という前向きな約束に。",
-    "Call me sometime.": "別れぎわの軽いひと言に。"
+    "Call me sometime.": "別れぎわの軽いひと言に。",
+    "It's been a while! How have you been?": "会ったとき・久しぶりに連絡したときの第一声。",
+    "I haven't done this in a while.": "ボウリングや料理など、久しぶりにやるとき。",
+    "I went back to my hometown for the first time in three years.": "「〇年ぶりに〜した」と話すとき。for three years だと「3年間」。",
+    "It's been five years since I came here.": "思い出の場所に来たとき。",
+    "It's been a while since I had sushi.": "食事中に「久しぶり」と言うとき。",
+    "I had ramen for the first time in a while.": "after a long time より自然。日記や近況報告に。",
+    "How long has it been since we last met?": "再会したとき。答えは It's been ～.",
+    "It's so good to see you again.": "再会したときのひと言。",
+    "I haven't had sushi in ages!": "食べる前にテンションが上がったとき。",
+    "I haven't spoken German in years.": "しばらくやっていないことを言うとき。",
+    "I can't stand the heat in Japan.": "夏の話題に。the のあとは名詞の heat。",
+    "It's so hot today.": "天気のあいさつに。",
+    "I caught a cold.": "体調を伝えるとき。今ひいているなら I have a cold.",
+    "The humidity is the worst part of summer here.": "日本の夏を説明するとき。",
+    "I'm so hungry. Let's eat.": "食事に誘うとき。I'm hunger は ×。",
+    "I love the warmth of your hugs.": "気持ちを伝えるとき。",
+    "Your happiness is important to me.": "相手を大切に思う気持ちを伝えるとき。",
+    "I'm scared of the dark.": "苦手なものの話に。",
+    "Tell me the truth.": "真剣に聞きたいとき。少し強く聞こえるので、やわらかくするなら Please be honest with me.",
+    "I just want some peace and quiet.": "疲れて一人になりたいとき。"
   };
 })();

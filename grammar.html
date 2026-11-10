@@ -42,9 +42,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=25"></script>
-  <script src="usage-data.js?v=15"></script>
-  <script src="grammar-data.js?v=18"></script>
+  <script src="common.js?v=26"></script>
+  <script src="usage-data.js?v=16"></script>
+  <script src="grammar-data.js?v=19"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -180,11 +180,13 @@
       else if (a.dataset.act === 'restart') { startQuiz(); }
       else if (a.dataset.act === 'retryMissed') { startQuiz(quiz.missed); }
     });
-    // 選んだ項目は id で覚える。以前は番号で覚えていたので、番号なら「時の表現」（5番目）を足す前の並びとして読み替える
+    // 選んだ項目は id で覚える。以前は番号で覚えていたので、番号なら当時の並び（OLD）で id に読み替える
     try {
       const s = localStorage.getItem('english_app_grammar_topic') || '';
       let t = GR.TOPICS.findIndex(x => x.id === s);
-      if (t < 0 && /^\d+$/.test(s)) { t = +s; if (t >= 4) t += 1; }
+      // 2026-11-10 以前の並び（番号で保存されていたころ）
+      const OLD = ['modal-perfect', 'thought-would', 'comparative', 'frequency', 'present-perfect', 'past-perfect', 'hope-wish', 'get-adj', 'there-have-been', 'linking', 'small-mistakes', 'for-usage'];
+      if (t < 0 && /^\d+$/.test(s) && OLD[+s]) t = GR.TOPICS.findIndex(x => x.id === OLD[+s]);
       if (t > 0 && t < GR.TOPICS.length) topicIdx = t;
     } catch (err) {}
     $('topicSelect').addEventListener('change', e => {

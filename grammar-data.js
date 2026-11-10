@@ -317,6 +317,73 @@
       { situation: 'そのうち電話してね。', sentence: 'Call me ___.', options: ['sometime', 'sometimes', 'the other day', 'one day ago'], answer: 'sometime', full: 'Call me sometime.', why: '軽いお誘いの「そのうち」は sometime。' }
     ]
   }, {
+    id: 'long-time',
+    title: '久しぶり：It\'s been a while / for the first time in ～',
+    short: '「〜ぶり」「久しぶりに〜」',
+    intro: '日本語の「久しぶり」「〜ぶり」には、ぴったりの1語がありません。英語では「しばらくしていなかった（haven\'t ～ in a while）」や「〜年で初めて（for the first time in ～）」と言い換えます。I ate ramen after a long time. は意味は通じますが、少し不自然です。',
+    groups: [
+      {
+        name: 'あいさつの「久しぶり！」',
+        note: '会ったとき・連絡したときの第一声。',
+        forms: [
+          { key: "It's been a while!", kana: 'イッツ ビーン ナ ワイル', kanaNote: '', label: "It's been a while! / Long time no see!", ja: '久しぶり！', nuance: "It's been a while. が一番使いやすい。Long time no see! はくだけた言い方で、親しい相手に。",
+            ex: ["It's been a while! How have you been?", '久しぶり！元気にしてた？'], tone: "もっと長いなら It's been ages! / It's been forever!（すごく久しぶり！）。How have you been?（元気にしてた？）とセットで。" },
+          { key: 'How long has it been?', kana: 'ハウ ロング ハズ イット ビーン', kanaNote: '', label: 'How long has it been (since ～)?', ja: '何年（何か月）ぶり？', nuance: '「どのくらいぶり？」と聞く言い方。答えは It\'s been ～. で。',
+            ex: ['How long has it been since we last met?', '最後に会ってからどのくらいぶりだっけ？'], tone: "答え方：It's been two years.（2年ぶりだね）" }
+        ]
+      },
+      {
+        name: '「〜ぶり」：期間を言う',
+        note: "It's been ＋ 期間 ＋ since ＋ 過去の文。since のあとは過去形。",
+        forms: [
+          { key: "It's been ～ since ...", kana: 'イッツ ビーン ～ シンス', kanaNote: '', label: "It's been ＋ 期間 ＋ since ＋ 過去形", ja: '〜して以来、〇〇ぶり', nuance: '「最後に〜してから〇年たつ」＝「〇年ぶり」。',
+            ex: ["It's been five years since I came here.", 'ここに来るのは5年ぶり。'], tone: "期間をぼかすなら It's been a long time since ～ / It's been ages since ～。" },
+          { key: 'for the first time in ～', kana: 'フォー ザ ファースト タイム イン', kanaNote: '', label: '過去形 ＋ for the first time in ＋ 期間', ja: '〇年ぶりに〜した', nuance: '「〇年の中で初めて」＝「〇年ぶりに」。期間は in のあと。',
+            ex: ['I went back to my hometown for the first time in three years.', '3年ぶりに地元に帰った。'], tone: '期間をぼかすなら for the first time in a while / in years / in ages（久しぶりに）。' }
+        ]
+      },
+      {
+        name: '「久しぶりに〜する」「〜するの久しぶり」',
+        note: '「しばらくしていなかった」と現在完了の否定で言うのが一番自然です。',
+        forms: [
+          { key: "I haven't ～ in a while", kana: 'アイ ハヴント ～ イン ナ ワイル', kanaNote: '', label: "I haven't ＋ 過去分詞 ＋ in a while / in years", ja: 'しばらく〜していない＝〜するの久しぶり', nuance: '「これやるの久しぶりなんだよね」はこの形。in a while（しばらく）、in ages（ずいぶん長く）、in years（何年も）。',
+            ex: ["I haven't done this in a while.", 'これやるの久しぶりなんだよね。'], tone: "for a while でもOK：I haven't done this for a while." },
+          { key: "It's been a while since I ～", kana: '', kanaNote: '', label: "It's been a while since I ＋ 過去形", ja: '〜するのは久しぶり', nuance: '今まさにしていることにも使えます（食べながら・遊びながら）。',
+            ex: ["It's been a while since I had sushi.", 'お寿司は久しぶりに食べるよ。'], tone: "食べる前なら I haven't had sushi in ages!（お寿司、すごく久しぶり！）" },
+          { key: 'again after so long', kana: '', kanaNote: '', label: 'It\'s so good to ～ again.', ja: '久しぶりに〜できてうれしい', nuance: 'again（また）で「久しぶり」の気持ちを出す言い方。会えたとき・来られたときに。',
+            ex: ["It's so good to see you again.", '久しぶりに会えて本当にうれしい。'], tone: "It feels good to be back.（戻ってこられてうれしい）も便利。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「ラーメン」を久しぶりに食べる',
+      rows: [
+        ["I haven't had ramen in a while.", 'ラーメン、しばらく食べてない。（久しぶり）'],
+        ["It's been a while since I had ramen.", 'ラーメンは久しぶり。'],
+        ['I had ramen for the first time in a while.', '久しぶりにラーメンを食べた。'],
+        ['I had ramen for the first time in two years.', '2年ぶりにラーメンを食べた。'],
+        ['I ate ramen after a long time.', '（意味は通じるが不自然。上の言い方がおすすめ）']
+      ]
+    },
+    cautions: [
+      '「久しぶりに〜した」を after a long time にしない。for the first time in a while が自然。',
+      '「〇年ぶり」の期間は in のあと：for the first time in three years（○）、for three years（×：3年間、の意味になる）。',
+      "It's been ～ since のあとは過去形：since I came here（○）、since I have come（×）。",
+      "I haven't ～ in a while の動詞は過去分詞：I haven't eaten / seen / done / been（been は「行った」の意味）。"
+    ],
+    quiz: [
+      { situation: '（会ったとき）久しぶり！元気にしてた？', sentence: "It's been ___! How have you been?", options: ['a while', 'long time', 'after a long', 'first time'], answer: 'a while', full: "It's been a while! How have you been?", why: "It's been a while.＝久しぶり。一番使いやすいあいさつ。" },
+      { situation: 'これやるの久しぶりなんだよね。', sentence: "I haven't done this ___.", options: ['in a while', 'after a while', 'since a while', 'a while ago'], answer: 'in a while', full: "I haven't done this in a while.", why: "haven't ＋ 過去分詞 ＋ in a while で「しばらくしていない＝久しぶり」。" },
+      { situation: '3年ぶりに地元に帰った。', sentence: 'I went back to my hometown ___ three years.', options: ['for the first time in', 'after', 'for', 'since'], answer: 'for the first time in', full: 'I went back to my hometown for the first time in three years.', why: '「〇年ぶりに」は for the first time in ＋ 期間。for three years だと「3年間」。' },
+      { situation: 'ここに来るのは5年ぶり。', sentence: "It's been five years ___ I came here.", options: ['since', 'for', 'after', 'when'], answer: 'since', full: "It's been five years since I came here.", why: "It's been ＋ 期間 ＋ since ＋ 過去形。" },
+      { situation: 'お寿司は久しぶりに食べるよ。', sentence: "It's been a while since I ___ sushi.", options: ['had', 'have', 'have had', 'having'], answer: 'had', full: "It's been a while since I had sushi.", why: 'since のあとは過去形（had）。' },
+      { situation: '久しぶりにラーメンを食べた。', sentence: 'I had ramen ___.', options: ['for the first time in a while', 'after a long time ago', 'since a while', 'in the first time'], answer: 'for the first time in a while', full: 'I had ramen for the first time in a while.', why: '「久しぶりに〜した」は for the first time in a while が自然。' },
+      { situation: '最後に会ってからどのくらいぶりだっけ？', sentence: 'How long has it been ___ we last met?', options: ['since', 'for', 'from', 'after'], answer: 'since', full: 'How long has it been since we last met?', why: 'How long has it been since ～?＝〜してからどのくらいぶり？' },
+      { situation: '久しぶりに会えて本当にうれしい。', sentence: "It's so good to see you ___.", options: ['again', 'after long', 'in a while', 'since'], answer: 'again', full: "It's so good to see you again.", why: 'again（また）で「久しぶりに会えた」気持ちを出す。' },
+      { situation: 'お寿司、すごく久しぶり！（食べる前に）', sentence: "I haven't had sushi in ___!", options: ['ages', 'age', 'long', 'a long'], answer: 'ages', full: "I haven't had sushi in ages!", why: 'in ages＝ずいぶん長いこと。複数形 ages で。' },
+      { situation: 'ドイツ語を話すのは久しぶり。', sentence: "I haven't ___ German in years.", options: ['spoken', 'spoke', 'speak', 'speaking'], answer: 'spoken', full: "I haven't spoken German in years.", why: "haven't のあとは過去分詞（spoken）。in years＝何年も。" }
+    ]
+  }, {
     id: 'present-perfect',
     title: '現在完了：have / has ＋ 過去分詞',
     short: '今につながる過去（現在完了）',
@@ -808,6 +875,94 @@
       { situation: '遅れてごめん。', sentence: "I'm sorry ___ being late.", options: ['for', 'to', 'of', 'at'], answer: 'for', full: "I'm sorry for being late.", why: 'おわびの理由は for ＋ ～ing。' },
       { situation: '旅行のことで話したいことがあるんだ。', sentence: 'I want to talk to you ___ our trip.', options: ['about', 'for', 'to', 'at'], answer: 'about', full: 'I want to talk to you about our trip.', why: '話題は about。話す相手は to。' },
       { situation: '駅で待ってるね。', sentence: "I'll wait ___ you at the station.", options: ['for', 'to', 'at', 'on'], answer: 'for', full: "I'll wait for you at the station.", why: '「〜を待つ」は wait for のセット。' }
+    ]
+  }, {
+    id: 'adj-noun',
+    title: '形容詞と名詞：hot と heat、cold は両方',
+    short: '「暑い」と「暑さ」（形容詞と名詞）',
+    intro: "It's hot.（暑い）の hot は「様子」を言う形容詞。I can't stand the heat.（暑さに耐えられない）の heat は「もの・こと」を言う名詞です。the / my / can't stand / be afraid of / miss などのあとには名詞が来ます。英語には、形容詞と名詞で形が違う語と、cold のように同じ形の語があります。",
+    groups: [
+      {
+        name: '天気・体の感覚',
+        note: '会話でよく出るペア。左が形容詞（It\'s ～.）、右が名詞（the ～）。',
+        forms: [
+          { key: 'hot → heat', kana: 'ホット → ヒート', kanaNote: '', label: 'hot（暑い）→ heat（暑さ）', ja: '暑い／暑さ', nuance: "It's so hot today. と I can't stand the heat. で使い分け。",
+            ex: ["I can't stand the heat in Japan.", '日本の暑さには耐えられない。'], tone: 'heat は「熱」の意味も。heat it up（温め直す）。' },
+          { key: 'humid → humidity', kana: 'ヒューミッド → ヒューミディティ', kanaNote: '', label: 'humid（蒸し暑い）→ humidity（湿気）', ja: '蒸し暑い／湿気', nuance: '日本の夏の話に必須。ドイツは日本より湿気が少ないので話題になりやすい。',
+            ex: ["The humidity is the worst part of summer here.", 'ここの夏は湿気が一番つらい。'], tone: "It's so humid today.（今日はすごく蒸し暑い）" },
+          { key: 'warm → warmth', kana: 'ウォーム → ウォームス', kanaNote: '', label: 'warm（暖かい）→ warmth（暖かさ・ぬくもり）', ja: '暖かい／ぬくもり', nuance: 'warmth は人の「あたたかさ」にも使えます。',
+            ex: ['I love the warmth of your hugs.', 'あなたのハグのぬくもりが大好き。'], tone: 'warm の発音は「ウォーム」。worm（ワーム：虫）と区別。' },
+          { key: 'hungry → hunger', kana: 'ハングリー → ハンガー', kanaNote: '', label: 'hungry（お腹がすいた）→ hunger（空腹）', ja: 'お腹がすいた／空腹', nuance: "自分のことを言うときは形容詞で I'm hungry.。I'm hunger.（×）",
+            ex: ["I'm so hungry. Let's eat.", 'すごくお腹すいた。食べよう。'], tone: 'hanger（ハンガー：服をかけるもの）とつづりが違うので注意。' },
+          { key: 'sick → sickness', kana: '', kanaNote: '', label: 'sick（具合が悪い）→ sickness（病気・気分の悪さ）', ja: '具合が悪い／病気', nuance: "I feel sick.（気分が悪い）。名詞は motion sickness（乗り物酔い）の形でよく使う。",
+            ex: ['I get motion sickness on buses.', 'バスに乗ると酔っちゃう。'], tone: 'I\'m sick of ～ は「〜にうんざり」という別の意味。' }
+        ]
+      },
+      {
+        name: '気持ち・性格',
+        note: '-ness が付く語が多い。気持ちを「もの」として言いたいときに名詞を使います。',
+        forms: [
+          { key: 'happy → happiness', kana: 'ハピネス', kanaNote: '', label: 'happy → happiness / sad → sadness / lonely → loneliness', ja: '幸せ／悲しみ／さみしさ', nuance: '形容詞の y が i に変わって -ness。',
+            ex: ['Your happiness is important to me.', 'あなたの幸せは私にとって大切。'], tone: "ふだんの会話は形容詞が中心：I'm so happy.（すごくうれしい）" },
+          { key: 'angry → anger', kana: 'アングリー → アンガー', kanaNote: '', label: 'angry（怒っている）→ anger（怒り）', ja: '怒っている／怒り', nuance: "Are you angry?（怒ってる？）は形容詞。",
+            ex: ["I'm not angry, just a little sad.", '怒ってないよ、ちょっと悲しいだけ。'], tone: 'upset（動揺している・腹が立っている）のほうがやわらかい。' },
+          { key: 'proud → pride', kana: 'プラウド → プライド', kanaNote: '', label: 'proud（誇りに思う）→ pride（誇り）', ja: '誇りに思う／誇り', nuance: "I'm proud of you. は形容詞。名詞 pride は日本語の「プライド」と同じ。",
+            ex: ["I'm proud of you.", 'あなたのことを誇りに思う。'], tone: 'proud of ～（〜を誇りに思う）の形で覚える。' },
+          { key: 'kind → kindness', kana: 'カインドネス', kanaNote: '', label: 'kind → kindness / honest → honesty', ja: '優しい／優しさ・正直な／正直さ', nuance: '相手の性格をほめるときに、名詞にすると「その〜が好き」と言えます。',
+            ex: ['Thank you for your kindness.', '優しくしてくれてありがとう。'], tone: 'I really appreciate your honesty.（正直に言ってくれてありがとう）' },
+          { key: 'free → freedom', kana: 'フリー → フリーダム', kanaNote: '', label: 'free → freedom / true → truth', ja: '自由な／自由・本当の／真実', nuance: '-dom、-th で名詞になる語もあります。',
+            ex: ['Tell me the truth.', '本当のことを言って。'], tone: "That's true.（本当だね）は形容詞。" }
+        ]
+      },
+      {
+        name: '形が同じ（cold タイプ）',
+        note: 'このタイプは the を付けるだけで名詞になります。',
+        forms: [
+          { key: 'cold', kana: 'コールド', kanaNote: '', label: "cold（寒い／寒さ／風邪）", ja: '寒い／寒さ／風邪', nuance: "It's cold.（寒い）、the cold（寒さ）、a cold（風邪）。",
+            ex: ["I caught a cold.", '風邪をひいた。'], tone: "I can't stand the cold.（寒さが苦手）／ I have a cold.（風邪をひいている）" },
+          { key: 'dark', kana: 'ダーク', kanaNote: '', label: 'dark（暗い／暗やみ）', ja: '暗い／暗やみ', nuance: "It's getting dark.（暗くなってきた）は形容詞、the dark は名詞。",
+            ex: ["I'm scared of the dark.", '暗いところが怖い。'], tone: '名詞の darkness もあるが、会話では the dark が普通。' },
+          { key: 'quiet / calm', kana: 'クワイエット / カーム', kanaNote: '（l は読まない）', label: 'quiet（静かな／静けさ）・calm（落ち着いた／落ち着き）', ja: '静か／静けさ・落ち着き', nuance: 'peace and quiet（静かな時間）はよく使う組み合わせ。',
+            ex: ['I just want some peace and quiet.', 'ただ静かに過ごしたい。'], tone: "Stay calm.（落ち着いて）は形容詞。quite（クワイト：かなり）とつづりが似ているので注意。" }
+        ]
+      },
+      {
+        name: '大きさ・長さ（-th で名詞）',
+        note: '旅行・買い物・家の話で出てきます。',
+        forms: [
+          { key: 'long → length', kana: 'ロング → レングス', kanaNote: '', label: 'long → length / high → height / wide → width / deep → depth / strong → strength', ja: '長い／長さ・高い／高さ・広い／幅・深い／深さ・強い／強さ', nuance: '名詞は数字と一緒に使うことが多い：the height of the tower（塔の高さ）。',
+            ex: ["What's your height?", '身長はどのくらい？'], tone: "会話では How tall are you?（形容詞）のほうが自然。height（ハイト）は gh を読まない。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：同じ「暑い／寒い」でも',
+      rows: [
+        ["It's so hot today.", '今日はすごく暑い。（hot：形容詞）'],
+        ["I can't stand the heat.", '暑さに耐えられない。（heat：名詞）'],
+        ["It's so cold today.", '今日はすごく寒い。（cold：形容詞）'],
+        ["I can't stand the cold.", '寒さに耐えられない。（cold：名詞）'],
+        ["I have a cold.", '風邪をひいている。（a cold：名詞）']
+      ]
+    },
+    cautions: [
+      "be動詞のあと（I'm ～ / It's ～）は形容詞：I'm hungry（○）、I'm hunger（×）。",
+      "the / my / your / can't stand / be afraid of / miss / love のあとは名詞：the heat（○）、the hot（×）。",
+      "cold・dark・quiet・calm は同じ形で名詞にもなる。a cold は「風邪」。",
+      'busy（忙しい）→ business（ビジネス・仕事）のように、名詞になると意味が変わる語もある。忙しさは how busy I am と言う。'
+    ],
+    quiz: [
+      { situation: '日本の暑さには耐えられない。', sentence: "I can't stand the ___ in Japan.", options: ['heat', 'hot', 'hotness', 'heating'], answer: 'heat', full: "I can't stand the heat in Japan.", why: 'the のあとは名詞。hot（形容詞）→ heat（名詞）。' },
+      { situation: '今日はすごく暑い。', sentence: "It's so ___ today.", options: ['hot', 'heat', 'the heat', 'heated'], answer: 'hot', full: "It's so hot today.", why: "It's のあとは様子を言う形容詞 hot。" },
+      { situation: '寒さが苦手。', sentence: "I can't stand the ___.", options: ['cold', 'coldness', 'colder', 'chill cold'], answer: 'cold', full: "I can't stand the cold.", why: 'cold は形容詞と名詞が同じ形。the cold＝寒さ。' },
+      { situation: '風邪をひいた。', sentence: 'I caught ___.', options: ['a cold', 'cold', 'the cold', 'a coldness'], answer: 'a cold', full: 'I caught a cold.', why: '「風邪」は a cold。catch a cold（風邪をひく）。' },
+      { situation: 'ここの夏は湿気が一番つらい。', sentence: 'The ___ is the worst part of summer here.', options: ['humidity', 'humid', 'humidness', 'humids'], answer: 'humidity', full: 'The humidity is the worst part of summer here.', why: 'The のあとは名詞。humid（蒸し暑い）→ humidity（湿気）。' },
+      { situation: 'すごくお腹すいた。食べよう。', sentence: "I'm so ___. Let's eat.", options: ['hungry', 'hunger', 'hungers', 'hungriness'], answer: 'hungry', full: "I'm so hungry. Let's eat.", why: "I'm のあとは形容詞 hungry。hunger は名詞。" },
+      { situation: 'あなたのハグのぬくもりが大好き。', sentence: 'I love the ___ of your hugs.', options: ['warmth', 'warm', 'warming', 'warmly'], answer: 'warmth', full: 'I love the warmth of your hugs.', why: 'the ～ of ... の形なので名詞 warmth。' },
+      { situation: 'あなたの幸せは私にとって大切。', sentence: 'Your ___ is important to me.', options: ['happiness', 'happy', 'happily', 'happier'], answer: 'happiness', full: 'Your happiness is important to me.', why: 'Your のあとは名詞。happy → happiness。' },
+      { situation: '暗いところが怖い。', sentence: "I'm scared of the ___.", options: ['dark', 'darkly', 'darken', 'darker'], answer: 'dark', full: "I'm scared of the dark.", why: 'dark は the を付けると名詞「暗やみ」になる。' },
+      { situation: '本当のことを言って。', sentence: 'Tell me the ___.', options: ['truth', 'true', 'truly', 'trues'], answer: 'truth', full: 'Tell me the truth.', why: 'the のあとは名詞。true → truth。' },
+      { situation: 'ただ静かに過ごしたい。', sentence: 'I just want some peace and ___.', options: ['quiet', 'quite', 'quietly', 'quietness of'], answer: 'quiet', full: 'I just want some peace and quiet.', why: 'peace and quiet で「静かな時間」。quite（かなり）と混同しやすい。' }
     ]
   }];
 
