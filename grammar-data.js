@@ -1402,6 +1402,7 @@
       "「〜するつもりだった」は was going to ／ meant to ＋ 原形。I was going to called（×）。",
       "mean の過去形は meant（メント）。I didn't mean to のあとは原形。",
       "I didn't mean to ～（〜するつもりはなかった）と I don't mean to ～（〜するつもりはないんだけど）：I don't mean to be rude, but ～（失礼なつもりはないんだけど）は言う前の前置き。",
+      "I was going to ～ は「やろうとしたけど、やらなかった・途中で止まった」。もう実際にやったことの意図を説明するなら I was trying to ～ / I just wanted to ～（迷ったら I just wanted to が安全）。",
       "「〜のつもりで」の名詞は as：I meant it as a joke. 動詞なら to：I said it to make you laugh."
     ],
     quiz: [
@@ -1416,6 +1417,81 @@
       { situation: 'あきらめるつもりはないよ。', sentence: "I'm not ___ to give up.", options: ['going', 'meaning', 'meant', 'trying'], answer: 'going', full: "I'm not going to give up.", why: "I'm not going to ～＝〜するつもりはない（意思）。" },
       { situation: 'ほんのお礼の気持ちだよ。', sentence: "It's just my way of ___ thank you.", options: ['saying', 'say', 'to say', 'said'], answer: 'saying', full: "It's just my way of saying thank you.", why: 'of のあとは ～ing。my way of saying ～＝〜の気持ち。' },
       { situation: 'ずっと連絡しようと思ってたんだ。', sentence: "I've been ___ to text you.", options: ['meaning', 'meant', 'mean', 'going'], answer: 'meaning', full: "I've been meaning to text you.", why: "I've been meaning to ～＝ずっと〜しようと思ってた。" }
+    ]
+  }, {
+    id: 'being-done',
+    title: '「〜されるのが好き・嫌い」：like being ～ / I love it when you ～',
+    short: '「〜されるのが好き・嫌い」',
+    intro: '「〜されるのが好き／嫌い」は、like / hate の後ろに being ＋ 過去分詞（受け身の ～ing 形）を置きます。I don\'t like being rushed.（急かされるのは好きじゃない）。でも、受け身が言いにくいときは「（相手が）〜するのが好き」と言い換えるのが会話では一番ラク：I love it when you hold my hand.（手をつないでくれるのが好き）。',
+    groups: [
+      {
+        name: '① like / hate ＋ being ＋ 過去分詞',
+        note: '「〜されること」＝ being ＋ 過去分詞。being を忘れないのがポイント。',
+        forms: [
+          { key: "I don't like being", kana: 'ビーイング', kanaNote: '', label: "I don't like being ～.（〜されるのは好きじゃない）", ja: '〜されるのは好きじゃない', nuance: '苦手なことをやわらかく伝える。hate（大嫌い）より角が立たない。',
+            ex: ["I don't like being rushed.", '急かされるのは好きじゃない。'], tone: "I don't like being told what to do.（あれこれ指図されるのは苦手）" },
+          { key: 'I hate being', kana: '', kanaNote: '', label: 'I hate being ～.（〜されるのは大嫌い）', ja: '〜されるのは大嫌い', nuance: '強い「嫌」。自分のことを話すぶんには OK。',
+            ex: ['I hate being kept waiting.', '待たされるのは大嫌い。'], tone: "I can't stand being ～.（〜されるのは耐えられない）も同じくらい強い。" },
+          { key: 'I love being', kana: '', kanaNote: '', label: 'I love / like being ～.（〜されるのが好き）', ja: '〜されるのが好き', nuance: 'うれしいことを言う。',
+            ex: ['I love being spoiled by you.', 'あなたに甘やかされるのが好き。'], tone: "I like being called by my nickname.（あだ名で呼ばれるのが好き）" }
+        ]
+      },
+      {
+        name: '② 言い換え：I love it when you ～（〜してくれるのが好き）',
+        note: '受け身にせず「相手が〜するとき」と言う。会話ではこちらが自然なことが多い。',
+        forms: [
+          { key: 'I love it when you', kana: 'アイ ラヴ イット ウェン ユー', kanaNote: '', label: 'I love it when you ～.（あなたが〜してくれるのが好き）', ja: '〜してくれるのが好き', nuance: '恋人への気持ちを伝える定番。it を忘れずに。',
+            ex: ['I love it when you hold my hand.', '手をつないでくれるのが好き。'], tone: "I love it when you laugh.（あなたが笑うのが好き）" },
+          { key: "I don't like it when", kana: '', kanaNote: '', label: "I don't like it when ～.（〜されるのは嫌）", ja: '〜されるのは嫌', nuance: '嫌なことを、相手を責めずに「状況」として言える。',
+            ex: ["I don't like it when people stare at me.", 'じろじろ見られるのは嫌。'], tone: "相手に言うなら I feel sad when you ～.（〜されると悲しい）のほうがやわらかい。" }
+        ]
+      },
+      {
+        name: '③ get ＋ 過去分詞（会話の受け身）',
+        note: '「（うっかり）〜される・〜になる」は get を使うと口語的。',
+        forms: [
+          { key: 'getting ～', kana: '', kanaNote: '', label: 'I hate getting ～.（〜されるのが嫌・〜になるのが嫌）', ja: '〜になる（される）のが嫌', nuance: '道に迷う、雨にあう、刺されるなど「降りかかること」に。',
+            ex: ['I hate getting lost.', '道に迷うのは本当に嫌。'], tone: 'getting caught in the rain（雨にあう）、getting bitten by mosquitoes（蚊に刺される）' }
+        ]
+      },
+      {
+        name: '④ 平気・気にしない',
+        note: "I don't mind ～ing＝〜は気にならない・平気。",
+        forms: [
+          { key: "I don't mind being", kana: 'アイ ドン マインド', kanaNote: '', label: "I don't mind being ～ / I don't mind if you ～.（〜されても平気）", ja: '〜されても平気・気にしない', nuance: '相手を安心させる言い方。',
+            ex: ["I don't mind being teased by you.", 'あなたにからかわれるのは平気だよ。'], tone: "I don't mind if you're late.（遅れても気にしないよ）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「待たされる」',
+      rows: [
+        ['I hate being kept waiting.', '待たされるのは大嫌い。（受け身）'],
+        ["I don't like it when people make me wait.", '人に待たされるのは嫌。（言い換え）'],
+        ["I don't mind waiting.", '待つのは平気。（自分がする）'],
+        ["I don't mind if you're a little late.", 'ちょっと遅れても気にしないよ。'],
+        ['I love it when you wait for me.', '待っててくれるのがうれしい。']
+      ]
+    },
+    cautions: [
+      "「〜されるのが」は being ＋ 過去分詞：I don't like be told（×）／ I don't like told（×）→ I don't like being told（○）。",
+      "I love it when you ～ の it を忘れない：I love when you ～ も会話では聞くが、it ありが基本。",
+      "「〜するのが好き」（自分がする）は like ～ing：I like cooking. 「〜されるのが好き」は like being ～：I like being cooked for.（作ってもらうのが好き）",
+      "hate は強い言葉。相手の行動について言うなら I don't really like ～ / I feel sad when ～ でやわらかく。",
+      "like to be ～ も同じ意味で使える：I like to be on time.（時間どおりがいい）。迷ったら being で OK。"
+    ],
+    quiz: [
+      { situation: '急かされるのは好きじゃない。', sentence: "I don't like ___ rushed.", options: ['being', 'be', 'been', 'to'], answer: 'being', full: "I don't like being rushed.", why: '「〜されること」＝ being ＋ 過去分詞。' },
+      { situation: '待たされるのは大嫌い。', sentence: 'I hate being ___ waiting.', options: ['kept', 'keep', 'keeping', 'to keep'], answer: 'kept', full: 'I hate being kept waiting.', why: 'being のあとは過去分詞。keep 人 waiting（人を待たせる）の受け身。' },
+      { situation: 'あなたに甘やかされるのが好き。', sentence: 'I love being ___ by you.', options: ['spoiled', 'spoil', 'spoiling', 'to spoil'], answer: 'spoiled', full: 'I love being spoiled by you.', why: 'being ＋ 過去分詞 spoiled。by you で「あなたに」。' },
+      { situation: '手をつないでくれるのが好き。', sentence: 'I love ___ when you hold my hand.', options: ['it', 'that', 'this', 'being'], answer: 'it', full: 'I love it when you hold my hand.', why: 'I love it when you ～＝あなたが〜してくれるのが好き。' },
+      { situation: 'じろじろ見られるのは嫌。', sentence: "I don't like it ___ people stare at me.", options: ['when', 'that', 'if being', 'what'], answer: 'when', full: "I don't like it when people stare at me.", why: "I don't like it when ～＝〜されるのは嫌（受け身を使わない言い方）。" },
+      { situation: '道に迷うのは本当に嫌。', sentence: 'I hate ___ lost.', options: ['getting', 'get', 'got', 'to getting'], answer: 'getting', full: 'I hate getting lost.', why: 'get lost（迷う）を ～ing に。会話の受け身は get ＋ 過去分詞。' },
+      { situation: 'あなたにからかわれるのは平気だよ。', sentence: "I don't ___ being teased by you.", options: ['mind', 'care', 'matter', 'worry'], answer: 'mind', full: "I don't mind being teased by you.", why: "I don't mind ～ing＝〜は平気・気にならない。" },
+      { situation: 'あれこれ指図されるのは苦手。', sentence: "I don't like being ___ what to do.", options: ['told', 'tell', 'telling', 'said'], answer: 'told', full: "I don't like being told what to do.", why: 'tell 人 what to do の受け身＝being told what to do。' },
+      { situation: 'あだ名で呼ばれるのが好き。', sentence: 'I like being ___ by my nickname.', options: ['called', 'call', 'calling', 'named'], answer: 'called', full: 'I like being called by my nickname.', why: 'being ＋ 過去分詞 called。' },
+      { situation: 'ちょっと遅れても気にしないよ。', sentence: "I don't mind ___ you're a little late.", options: ['if', 'that', 'being', 'when it'], answer: 'if', full: "I don't mind if you're a little late.", why: "I don't mind if ～＝〜でも気にしない。" },
+      { situation: 'ご飯を作ってもらうのが好き。', sentence: 'I like being ___ for.', options: ['cooked', 'cooking', 'cook', 'to cook'], answer: 'cooked', full: 'I like being cooked for.', why: '「作ってもらう」＝ being cooked for。I like cooking. だと「自分が作るのが好き」。' }
     ]
   }];
 

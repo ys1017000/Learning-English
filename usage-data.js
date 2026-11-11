@@ -797,6 +797,17 @@
     "I bought this to say thank you.": "プレゼントを渡すとき。",
     "I'm not going to give up.": "決意を伝えるとき。",
     "It's just my way of saying thank you.": "ちょっとした物を渡すとき。",
-    "I've been meaning to text you.": "久しぶりに連絡するときの書き出し。"
+    "I've been meaning to text you.": "久しぶりに連絡するときの書き出し。",
+    "I don't like being rushed.": "苦手なことをやわらかく伝えるとき。",
+    "I hate being kept waiting.": "強い「嫌」。自分のことを話すときに。",
+    "I love being spoiled by you.": "甘えたいとき・気持ちを伝えるとき。",
+    "I love it when you hold my hand.": "相手のしてくれることがうれしいと伝えるとき。",
+    "I don't like it when people stare at me.": "受け身を使わずに「〜されるのは嫌」と言うとき。",
+    "I hate getting lost.": "旅行の話で。getting caught in the rain なども同じ形。",
+    "I don't mind being teased by you.": "相手を安心させるとき。",
+    "I don't like being told what to do.": "自分の性格を説明するとき。",
+    "I like being called by my nickname.": "呼び方の話になったとき。",
+    "I don't mind if you're a little late.": "待ち合わせで相手を気遣うとき。",
+    "I like being cooked for.": "I like cooking.（自分が作るのが好き）と区別。"
   };
 })();
