@@ -1101,7 +1101,7 @@
 
   /* ---------- 設定（端末ごと・バックアップ対象外） ---------- */
   const KEY_PREFS = 'english_app_prefs';
-  const DEFAULT_PREFS = { speakMine: true, speakPartner: false, kana: true, autoSpeak: true, drillSecs: 3, quizMode: 'quiz' };
+  const DEFAULT_PREFS = { speakMine: true, speakPartner: false, kana: true, autoSpeak: true, drillSecs: 3, quizMode: 'quiz', drillCount: 10 };
   function getPrefs() {
     try { return Object.assign({}, DEFAULT_PREFS, JSON.parse(safeGet(KEY_PREFS)) || {}); } catch (e) { return Object.assign({}, DEFAULT_PREFS); }
   }

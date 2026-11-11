@@ -30,6 +30,12 @@
       <button class="chip active" data-mode="quiz">📝 4択クイズ</button>
       <button class="chip" data-mode="drill">🗣 声に出すカード</button>
     </div>
+    <div class="chip-row" id="drillSizeChips" role="group" aria-label="声に出すカードの枚数" style="display:none; margin-bottom:0.75rem;">
+      <span class="muted" style="align-self:center; font-size:0.85rem;">枚数：</span>
+      <button class="chip" data-size="10">10枚</button>
+      <button class="chip" data-size="20">20枚</button>
+      <button class="chip" data-size="0">全部</button>
+    </div>
     <div class="card" id="drillCard" style="display:none;"></div>
     <div class="card" id="quizCard">
       <button class="fav-star-btn" id="quizFavBtn" aria-label="お気に入りに追加">★</button>
@@ -63,7 +69,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=34"></script>
+  <script src="common.js?v=35"></script>
   <script src="usage-data.js?v=24"></script>
   <script>
     const QUIZ_SIZE = 10;
@@ -78,7 +84,16 @@
 
     // 出題のしかた：4択クイズ（quiz）／声に出すカード（drill）。端末ごとに覚える
     let mode = new URLSearchParams(location.search).get('format') === 'drill' ? 'drill' : (EA.getPrefs().quizMode === 'drill' ? 'drill' : 'quiz');
-    const DRILL_SIZE = 10;
+    // 声に出すカードの枚数：10 / 20 / 0（全部）。端末ごとに覚える
+    function drillSize() { const n = Number(EA.getPrefs().drillCount); return [10, 20, 0].includes(n) ? n : 10; }
+    function refreshSizeChips(total) {
+      const row = document.getElementById('drillSizeChips');
+      row.style.display = mode === 'drill' ? '' : 'none';
+      row.querySelectorAll('.chip').forEach(c => {
+        c.classList.toggle('active', Number(c.dataset.size) === drillSize());
+        if (c.dataset.size === '0') c.textContent = '全部' + (total ? '（' + total + '枚）' : '');
+      });
+    }
     function setMode(m) {
       mode = m; EA.setPref('quizMode', m);
       document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === m));
@@ -88,7 +103,9 @@
       document.getElementById('quizCard').style.display = 'none';
       document.getElementById('resultCard').style.display = 'none';
       const box = document.getElementById('drillCard');
-      const items = shuffle(EA.getPhrasesFor(select.value)).slice(0, DRILL_SIZE);
+      const pool = EA.getPhrasesFor(select.value), n = drillSize();
+      refreshSizeChips(pool.length);
+      const items = n ? shuffle(pool).slice(0, n) : shuffle(pool);
       const label = select.options[select.selectedIndex] ? select.options[select.selectedIndex].textContent.replace(/（.*?）\s*$/, '') : '';
       EA.cardDrill(box, { title: label, items, record: true });
     }
@@ -98,6 +115,7 @@
       if (!EA.ensureNonEmpty(select)) return;
       document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === mode));
       if (mode === 'drill') { startDrill(select); return; }
+      refreshSizeChips(0);
       document.getElementById('drillCard').style.display = 'none';
       quizSet = shuffle(EA.getPhrasesFor(select.value)).slice(0, QUIZ_SIZE);
       currentIndex = 0; score = 0; missed = [];
@@ -220,6 +238,7 @@
       startQuiz();
       select.addEventListener('change', startQuiz);
       document.getElementById('modeChips').addEventListener('click', e => { const c = e.target.closest('[data-mode]'); if (c && c.dataset.mode !== mode) setMode(c.dataset.mode); });
+      document.getElementById('drillSizeChips').addEventListener('click', e => { const c = e.target.closest('[data-size]'); if (!c) return; EA.setPref('drillCount', Number(c.dataset.size)); startQuiz(); });
       document.getElementById('nextBtn').addEventListener('click', () => { currentIndex++; showQuestion(); });
       document.getElementById('restartBtn').addEventListener('click', startQuiz);
       document.getElementById('weakReviewBtn').addEventListener('click', () => {
