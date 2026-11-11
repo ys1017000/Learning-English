@@ -1336,6 +1336,87 @@
       { situation: '好きなだけ食べてね。', sentence: 'Eat as ___ as you want.', options: ['much', 'many', 'long', 'more'], answer: 'much', full: 'Eat as much as you want.', why: '量（食べ物）は much。数なら many。' },
       { situation: '彼女と同じものをください。', sentence: "I'll have the same ___ her.", options: ['as', 'than', 'like', 'with'], answer: 'as', full: "I'll have the same as her.", why: 'the same as ～＝〜と同じ。' }
     ]
+  }, {
+    id: 'intend',
+    title: '「つもり」：going to / meant to / didn\'t mean to',
+    short: '「〜のつもり」「〜のつもりだった」',
+    intro: '日本語の「つもり」は、①これからの予定（〜するつもり）、②やろうとしていたこと（〜するつもりだった）、③意図（〜のつもりで…した／そんなつもりじゃなかった）の3つに分かれます。英語では、①は going to / planning to、②は was going to / meant to、③は mean（意図する）と trying to で言います。mean は「意味する」だけでなく「〜するつもりで言う・する」の意味でよく使います。',
+    groups: [
+      {
+        name: '① これから「〜するつもり」',
+        note: '決めている予定は going to、考え中なら planning to / thinking of ～ing。',
+        forms: [
+          { key: "I'm going to", kana: 'アイム ゴナ', kanaNote: '（going to は「ゴナ」に聞こえる）', label: "I'm going to ～.（〜するつもり）", ja: '〜するつもり', nuance: 'もう決めている予定。will（その場で決めた）より「前から決めてた」感じ。',
+            ex: ["I'm going to take a day off on Friday.", '金曜日は休みを取るつもり。'], tone: "I'm planning to ～（〜する予定）は、少し計画っぽい言い方。I'm thinking of ～ing は「考え中」。" },
+          { key: "I'm not going to", kana: '', kanaNote: '', label: "I'm not going to ～.（〜するつもりはない）", ja: '〜するつもりはない', nuance: '自分の意思をはっきり言う。',
+            ex: ["I'm not going to give up.", 'あきらめるつもりはないよ。'], tone: "I don't plan to ～.（〜する予定はない）はもう少しやわらかい。" }
+        ]
+      },
+      {
+        name: '② 「〜するつもりだった」（けど、できなかった）',
+        note: 'was going to ／ meant to ＋ 原形。後ろに but … を続けることが多い。',
+        forms: [
+          { key: 'I was going to', kana: 'アイ ワズ ゴナ', kanaNote: '', label: "I was going to ～, but ….（〜するつもりだったんだけど…）", ja: '〜するつもりだったけど', nuance: '予定が変わった・できなかったとき。一番使いやすい形。',
+            ex: ['I was going to call you, but I fell asleep.', '電話するつもりだったんだけど、寝ちゃった。'], tone: "I was planning to ～ でも同じ。" },
+          { key: 'I meant to', kana: 'アイ メン トゥ', kanaNote: '', label: "I meant to ～.（〜するつもりだった・〜しようと思ってた）", ja: '〜しようと思ってたのに', nuance: '「やろうと思ってたのに、うっかりできなかった」。ちょっと申し訳ない気持ち。',
+            ex: ['Sorry, I meant to reply earlier.', 'ごめん、もっと早く返事するつもりだったんだ。'], tone: "mean の過去形 meant（メント）。I've been meaning to ～.（ずっと〜しようと思ってた）も便利。" }
+        ]
+      },
+      {
+        name: '③ 「〜のつもりで」（意図・目的）',
+        note: '「〜しようとして…した」は trying to、「〜のつもりで言った／した」は mean / meant。',
+        forms: [
+          { key: 'I was trying to', kana: '', kanaNote: '', label: "I was trying to ～.（〜しようとしてたんだ・〜のつもりだった）", ja: '〜のつもりで（〜しようとして）', nuance: '結果がうまくいかなかったとき、意図を説明する言い方。',
+            ex: ['I was trying to surprise you.', 'サプライズのつもりだったんだ。'], tone: "I just wanted to ～.（ただ〜したかっただけなんだ）もやわらかく意図を伝えられる。" },
+          { key: 'I meant it as', kana: 'アイ メント イット アズ', kanaNote: '', label: 'I meant it as ～.（〜のつもりで言った・した）', ja: '〜のつもりだった', nuance: '言葉や行動の「つもり」を説明する。as のあとは名詞（a joke / a compliment / a thank-you）。',
+            ex: ['I meant it as a joke.', '冗談のつもりだったんだ。'], tone: "I meant it as a compliment.（ほめたつもりだった）" },
+          { key: 'to ～（目的）', kana: '', kanaNote: '', label: '動詞 ＋ to ～／ so that ～（〜のために・〜するように）', ja: '〜のつもりで…した', nuance: '「〜のつもりでこうした」の「目的」を言う形。',
+            ex: ['I bought this to say thank you.', 'お礼のつもりでこれを買ったんだ。'], tone: "I left early so that I wouldn't be late.（遅れないように早めに出た）" },
+          { key: 'This is my way of', kana: '', kanaNote: '', label: "It's my way of saying ～.（〜の気持ちのつもり）", ja: '〜の気持ち（のつもり）', nuance: 'プレゼントや行動に「気持ち」を込めたとき。',
+            ex: ["It's just my way of saying thank you.", 'ほんのお礼の気持ちだよ。'], tone: "It's just a little something.（ほんの気持ちだよ）" }
+        ]
+      },
+      {
+        name: '④ 「そんなつもりじゃなかった」',
+        note: 'すれ違ったときの大事な言い方。mean の否定。',
+        forms: [
+          { key: "I didn't mean to", kana: 'アイ ディドゥン ミーン トゥ', kanaNote: '', label: "I didn't mean to ～.（〜するつもりはなかった）", ja: '〜するつもりはなかった', nuance: '相手を傷つけた・困らせたときのあやまり方。',
+            ex: ["I didn't mean to hurt you.", '傷つけるつもりはなかったんだ。'], tone: "I didn't mean it.（本気じゃなかった）、That's not what I meant.（そういう意味じゃなかった）" },
+          { key: "That's not what I meant", kana: '', kanaNote: '', label: "That's not what I meant.（そういうつもりで言ったんじゃない）", ja: 'そういう意味（つもり）じゃない', nuance: '誤解されたときに。続けて What I meant was ～.（言いたかったのは〜）で言い直す。',
+            ex: ["That's not what I meant. I just wanted to help.", 'そういうつもりじゃなくて、ただ手伝いたかったんだ。'], tone: "No offense.（悪気はないよ）は言う前の前置きに。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「電話」の「つもり」いろいろ',
+      rows: [
+        ["I'm going to call you tonight.", '今夜電話するつもり。（予定）'],
+        ['I was going to call you, but I fell asleep.', '電話するつもりだったけど、寝ちゃった。'],
+        ['I meant to call you yesterday.', '昨日電話しようと思ってたのに。（うっかり）'],
+        ["I didn't mean to call you so late.", 'こんなに遅く電話するつもりじゃなかった。'],
+        ['I called to say I miss you.', '会いたいって言いたくて電話したんだ。（目的）']
+      ]
+    },
+    cautions: [
+      "「つもり」を intend で言うのはかたい。会話は going to / meant to / didn't mean to で十分。",
+      "「〜するつもりだった」は was going to ／ meant to ＋ 原形。I was going to called（×）。",
+      "mean の過去形は meant（メント）。I didn't mean to のあとは原形。",
+      "I didn't mean to ～（〜するつもりはなかった）と I don't mean to ～（〜するつもりはないんだけど）：I don't mean to be rude, but ～（失礼なつもりはないんだけど）は言う前の前置き。",
+      "「〜のつもりで」の名詞は as：I meant it as a joke. 動詞なら to：I said it to make you laugh."
+    ],
+    quiz: [
+      { situation: '金曜日は休みを取るつもり。', sentence: "I'm ___ to take a day off on Friday.", options: ['going', 'go', 'went', 'meaning'], answer: 'going', full: "I'm going to take a day off on Friday.", why: '決めている予定＝be going to。' },
+      { situation: '電話するつもりだったんだけど、寝ちゃった。', sentence: 'I ___ going to call you, but I fell asleep.', options: ['was', 'am', 'have', 'did'], answer: 'was', full: 'I was going to call you, but I fell asleep.', why: '「〜するつもりだった」＝was going to。' },
+      { situation: 'ごめん、もっと早く返事するつもりだったんだ。', sentence: 'Sorry, I ___ to reply earlier.', options: ['meant', 'mean', 'meaning', 'means'], answer: 'meant', full: 'Sorry, I meant to reply earlier.', why: 'meant to ＋ 原形＝しようと思ってたのに（できなかった）。' },
+      { situation: '冗談のつもりだったんだ。', sentence: 'I meant it ___ a joke.', options: ['as', 'to', 'for', 'like'], answer: 'as', full: 'I meant it as a joke.', why: '「〜のつもりで」＋ 名詞は as。' },
+      { situation: 'サプライズのつもりだったんだ。', sentence: 'I was ___ to surprise you.', options: ['trying', 'meaning', 'going', 'planning on'], answer: 'trying', full: 'I was trying to surprise you.', why: '「〜しようとしてた」＝was trying to。意図を説明する。' },
+      { situation: '傷つけるつもりはなかったんだ。', sentence: "I didn't ___ to hurt you.", options: ['mean', 'meant', 'try', 'going'], answer: 'mean', full: "I didn't mean to hurt you.", why: "didn't のあとは原形 mean。didn't mean to＝〜するつもりはなかった。" },
+      { situation: 'そういうつもりじゃなくて、ただ手伝いたかったんだ。', sentence: "That's not what I ___. I just wanted to help.", options: ['meant', 'mean to', 'thought it', 'said it'], answer: 'meant', full: "That's not what I meant. I just wanted to help.", why: "That's not what I meant.＝そういう意味（つもり）じゃない。" },
+      { situation: 'お礼のつもりでこれを買ったんだ。', sentence: 'I bought this ___ say thank you.', options: ['to', 'for', 'as', 'so'], answer: 'to', full: 'I bought this to say thank you.', why: '目的の to ＋ 動詞＝〜するために（〜のつもりで）。' },
+      { situation: 'あきらめるつもりはないよ。', sentence: "I'm not ___ to give up.", options: ['going', 'meaning', 'meant', 'trying'], answer: 'going', full: "I'm not going to give up.", why: "I'm not going to ～＝〜するつもりはない（意思）。" },
+      { situation: 'ほんのお礼の気持ちだよ。', sentence: "It's just my way of ___ thank you.", options: ['saying', 'say', 'to say', 'said'], answer: 'saying', full: "It's just my way of saying thank you.", why: 'of のあとは ～ing。my way of saying ～＝〜の気持ち。' },
+      { situation: 'ずっと連絡しようと思ってたんだ。', sentence: "I've been ___ to text you.", options: ['meaning', 'meant', 'mean', 'going'], answer: 'meaning', full: "I've been meaning to text you.", why: "I've been meaning to ～＝ずっと〜しようと思ってた。" }
+    ]
   }];
 
 

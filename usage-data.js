@@ -786,6 +786,17 @@
     "It was as beautiful as I imagined.": "旅行や景色の感想に。",
     "Eat as much as you want.": "料理をふるまうとき。",
     "I'll have the same as her.": "注文のとき。",
-    "I miss you as much as you miss me.": "「会いたい」と言われたときの返事に。"
+    "I miss you as much as you miss me.": "「会いたい」と言われたときの返事に。",
+    "I'm going to take a day off on Friday.": "予定を伝えるとき。",
+    "I was going to call you, but I fell asleep.": "できなかったことの言い訳に。",
+    "Sorry, I meant to reply earlier.": "返信が遅れたとき。",
+    "I meant it as a joke.": "冗談が通じなかったとき。",
+    "I was trying to surprise you.": "意図がうまく伝わらなかったとき。",
+    "I didn't mean to hurt you.": "すれ違ったときのあやまり方。",
+    "That's not what I meant. I just wanted to help.": "誤解されたときに言い直す。",
+    "I bought this to say thank you.": "プレゼントを渡すとき。",
+    "I'm not going to give up.": "決意を伝えるとき。",
+    "It's just my way of saying thank you.": "ちょっとした物を渡すとき。",
+    "I've been meaning to text you.": "久しぶりに連絡するときの書き出し。"
   };
 })();
