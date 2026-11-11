@@ -93,7 +93,23 @@
     { id: 'stretch', k: 'form', re: '\\b(he[y]{2,}|so{2,}|ye{2,}s|no{2,}|cu{2,}te)\\b',
       en: 'Heyy / soo', ja: '文字を重ねて気持ちを強調', note: 'チャットでよく使う。sooo beautiful のように長いほど気持ちが強い。まねしてもOK。' },
 
+    { id: 'sorry_not_texting', k: 'form', scene: 'apology', re: "sorry for not (texting|writing|replying|answering)",
+      en: "Sorry for not texting ...", ja: '連絡できなくてごめんね', note: 'sorry for not ～ing＝〜しなくてごめん。not は ～ing の前。',
+      say: ['Sorry for not texting much the last few days.', 'ここ数日あまり連絡できなくてごめんね。（sorry for not ～ing）'] },
+    { id: 'wish_best', k: 'form', scene: 'thanks', re: "wish(ing|ed)? (me|you) (the best|luck|good luck)",
+      en: 'Thank you for wishing me the best!', ja: '応援してくれてありがとう', note: 'wish 人 the best / luck＝うまくいくよう願う。返事は Thank you for wishing me luck!',
+      say: ['Thank you for wishing me luck!', '応援してくれてありがとう！（wish 人 luck）'] },
+    { id: 'hope_you_had', k: 'form', scene: 'asked', re: "i hope you had",
+      en: 'I hope you had fun!', ja: '楽しかったならいいな', note: '過去のことを I hope you had ～ で気遣う。答えは I had a great time!',
+      say: ['I hope you had fun with your coworkers.', '同僚と楽しく過ごせたならいいな。（I hope you had ～）'] },
+    { id: 'lets_meet_day', k: 'form', scene: 'invite', re: "let'?s meet (on )?" + DAY,
+      en: "Let's meet Thursday night!", ja: '木曜の夜に会おうね', note: '曜日の前の on は会話では省略されることが多い。',
+      say: ["Let's meet Thursday night!", '木曜の夜に会おうね！'] },
     // ---- ドイツ語っぽい言い方（意味が分かればOK。まねしなくてよい） ----
+    { id: 'have_still', k: 'de', re: '\\bi have still\\b',
+      en: 'I have still ...', ja: 'まだ〜がある', note: 'ドイツ語の ich habe noch の語順。英語では I still have ...（still は have の前）。' },
+    { id: 'the_last_days', k: 'de', re: '\\bthe last days\\b(?! were)',
+      en: 'the last days', ja: 'ここ数日', note: 'ドイツ語の die letzten Tage。英語では the last few days。' },
     { id: 'last_days_were', k: 'de', re: '\\bthe last (few |couple of )?(days|weeks) were\\b',
       en: 'The last days were ...', ja: 'ここ数日は〜だった（＝The last few days have been ...）', note: 'ドイツ語の Die letzten Tage waren ... の形。英語では今につながるので現在完了 have been、days の前に few を入れるのが普通。' },
     { id: 'for_university', k: 'de', re: '\\bfor (the )?university\\b',
@@ -122,13 +138,21 @@
     { id: 'apology', emoji: '🤝', label: '謝られたとき', replies: [
       ["It's totally fine!", '全然大丈夫だよ！'],
       ["You don't have to apologize.", '謝らなくていいよ。'] ] },
+    { id: 'thanks', emoji: '🙌', label: '応援してくれた・ありがとうと言われたとき', replies: [
+      ["Of course! I'm always rooting for you.", 'もちろん！いつも応援してるよ。'],
+      ['How did it go?', 'どうだった？（終わったあとに）'],
+      ["You're welcome! You've got this!", 'どういたしまして！あなたならできる！'] ] },
     { id: 'busy', emoji: '📚', label: '忙しい・課題がある', replies: [
       ['Good luck with your assignments!', '課題がんばってね！（Good luck with ～）'],
       ["Don't push yourself too hard.", '無理しすぎないでね。'],
       ["Don't forget to take a break.", '休憩するのを忘れないでね。'],
       ["I'm cheering for you!", '応援してるよ！'],
       ['You worked so hard. Get some rest tonight.', 'すごく頑張ったね。今夜はゆっくり休んでね。'],
-      ['That sounds really tough.', 'それは本当に大変だったね。'] ] },
+      ['That sounds really tough.', 'それは本当に大変だったね。'],
+      ["You've been working so hard.", 'すごく頑張ってるね。'],
+      ['Great job on your presentations!', 'プレゼンお疲れさま！よく頑張ったね！'],
+      ["I'm sure you'll do great.", 'きっとうまくいくよ。'],
+      ['Hang in there!', 'もうひと踏ん張り！'] ] },
     { id: 'asked', emoji: '🙋', label: '自分の様子を聞かれたとき', replies: [
       ["Work has been busy, but I'm doing well.", '仕事は忙しいけど、元気だよ。（現在完了 has been ＋ but）'],
       ["I'm doing great, thanks for asking!", '元気だよ、聞いてくれてありがとう！'],
@@ -154,6 +178,13 @@
   ];
 
   var NOTES = [
+    { d: '2026-11-11', title: 'プレゼン続きの近況と「木曜に会おう」（3通目）', points: [
+      '流れは「連絡できなかったお詫び → 応援へのお礼 → 近況（プレゼン2つ終わった・あと3つ）→ 相手への質問（元気？土曜楽しめた？）→ 会う約束」。今回も自分の話のあとに相手のことを聞いてくれる。',
+      'お詫びは I\'m sorry for not texting so much ...（sorry for not ～ing）、お礼は Thank you for wishing me the best for ...。',
+      '相手の予定を覚えていて I hope you had fun with your coworkers in Machida on Saturday! と気遣ってくれる。こちらも次に会ったとき・DMで相手の予定（プレゼン）を聞き返すと喜ばれる。',
+      '忙しさは今回も It\'s a lot to do! 😣 と軽く。11月はプレゼンが続くので、ねぎらいの一言（You\'ve been working so hard. / Great job on your presentations!）が使いどころ。',
+      'ドイツ語っぽい言い方：the last days（＝the last few days）、I have still 3 more（＝I still have 3 more）。読めればOK。'
+    ] },
     { d: '2026-11-07', title: '日帰り旅行の帰りのDM（2通目）', points: [
       '書き出しは Heyy ようちゃん！☺️ と日本語のニックネーム。Heyy / soo のように文字を重ねて、明るい気持ちを出している。',
       '流れは「自分の近況（忙しかった）→ 相手への質問（仕事どう？元気？）→ 楽しかった話 → これからの予定（何時に着く）」。相手のことも必ず聞いてくれる。',
