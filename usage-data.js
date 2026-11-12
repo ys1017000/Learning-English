@@ -808,6 +808,16 @@
     "I don't like being told what to do.": "自分の性格を説明するとき。",
     "I like being called by my nickname.": "呼び方の話になったとき。",
     "I don't mind if you're a little late.": "待ち合わせで相手を気遣うとき。",
-    "I like being cooked for.": "I like cooking.（自分が作るのが好き）と区別。"
+    "I like being cooked for.": "I like cooking.（自分が作るのが好き）と区別。",
+    "I'm a little worried about you.": "相手を気遣うとき。I'm worry は ×。",
+    "This street is dangerous at night.": "危ないことを伝えるとき。It's danger は ×。",
+    "I have no confidence in my English.": "自信のなさを伝えるとき。",
+    "I'm confident about it.": "自信があると伝えるとき。",
+    "What's the difference?": "違いを聞くとき。",
+    "I'm bored. Let's go out.": "家で暇なとき。I'm boring は「私はつまらない人」。",
+    "The movie was really interesting.": "感想を言うとき。",
+    "I'm so excited about our trip!": "楽しみな予定の前に。",
+    "Are you staying healthy?": "忙しい相手を気遣うとき。",
+    "I was really lucky to meet you.": "気持ちを伝えるとき。"
   };
 })();

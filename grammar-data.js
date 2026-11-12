@@ -968,6 +968,80 @@
       { situation: 'ただ静かに過ごしたい。', sentence: 'I just want some peace and ___.', options: ['quiet', 'quite', 'quietly', 'quietness of'], answer: 'quiet', full: 'I just want some peace and quiet.', why: 'peace and quiet で「静かな時間」。quite（かなり）と混同しやすい。' }
     ]
   }, {
+    id: 'adj-noun-2',
+    title: '形容詞と名詞②：語尾で見分ける・-ed と -ing',
+    short: '形容詞？名詞？（語尾で見分ける・-ed／-ing）',
+    intro: '迷ったら「置く場所」と「語尾」の2つで決めます。① 置く場所：I\'m ～ / It\'s ～ / very ～ のあとは形容詞、a / the / my / some / have のあとは名詞。② 語尾：-ful / -ous / -y / -ent / -able / -ive は形容詞が多く、-ness / -ence / -ty / -tion / -ment / -th は名詞が多い。さらに「気持ち」は -ed（I\'m bored）、「原因」は -ing（It\'s boring）で区別します。',
+    groups: [
+      {
+        name: '① 置く場所で決める',
+        note: '同じ意味でも、前の言葉で形が決まります。',
+        forms: [
+          { key: "I'm ～ / It's ～ → 形容詞", kana: '', kanaNote: '', label: "I'm / It's / very / so ＋ 形容詞", ja: '〜だ（様子・性質）', nuance: 'be動詞や very のあとは「どんな様子か」を言う形容詞。',
+            ex: ["I'm confident about it.", 'それには自信がある。'], tone: "I'm confidence.（×）→ I'm confident.（○）" },
+          { key: 'a / the / my / have → 名詞', kana: '', kanaNote: '', label: 'a / the / my / some / have / no ＋ 名詞', ja: '〜（もの・こと）', nuance: '冠詞・my・have のあとは「もの・こと」を言う名詞。',
+            ex: ['I have no confidence in my English.', '自分の英語に自信がない。'], tone: "I have confident.（×）→ I have confidence. / I'm confident.（○）" }
+        ]
+      },
+      {
+        name: '② 語尾で見分ける',
+        note: '絶対ではないけれど、迷ったときの目安になります。',
+        forms: [
+          { key: '形容詞の語尾', kana: '', kanaNote: '', label: '-ful / -ous / -y / -ent・-ant / -able / -ive・-al → 形容詞', ja: '形容詞が多い語尾', nuance: 'beautiful, careful, dangerous, nervous, lucky, healthy, different, important, comfortable, expensive, natural',
+            ex: ['This street is dangerous at night.', 'この道は夜危ない。'], tone: "It's danger.（×）→ It's dangerous.（○）" },
+          { key: '名詞の語尾', kana: '', kanaNote: '', label: '-ness / -ence・-ance / -ty・-ity / -tion / -ment / -th → 名詞', ja: '名詞が多い語尾', nuance: 'kindness, difference, importance, safety, possibility, decision, excitement, health, truth',
+            ex: ["What's the difference?", '何が違うの？（違いは何？）'], tone: "different（違う）→ difference（違い）、important（大切な）→ importance（大切さ）" },
+          { key: 'よく間違えるペア', kana: '', kanaNote: '', label: 'success ↔ successful / health ↔ healthy / luck ↔ lucky / worry ↔ worried', ja: '成功・成功した／健康・健康的な／運・運がいい／心配・心配している', nuance: '日本語では同じ「〜」でも、英語は形が変わる。',
+            ex: ["I'm a little worried about you.", 'あなたのことがちょっと心配。'], tone: "I'm worry.（×）→ I'm worried.（○）。名詞の worry は Don't worry. の形で動詞としてよく使う。" },
+          { key: 'fun と funny', kana: 'ファン / ファニー', kanaNote: '', label: 'fun（楽しい）と funny（おかしい・笑える）', ja: '楽しい／おもしろい（笑える）', nuance: 'fun は名詞でも形容詞でも使えるが「楽しい」。funny は「笑える・変な」。',
+            ex: ['It was so much fun!', 'すごく楽しかった！'], tone: "It was funny. だと「笑えた・変だった」。楽しかったなら fun。much fun の much は名詞の fun だから。" }
+        ]
+      },
+      {
+        name: '③ -ed（気持ち）と -ing（原因）',
+        note: '人が「〜と感じる」は -ed、物や人が「〜させる」は -ing。',
+        forms: [
+          { key: 'bored / boring', kana: 'ボアード / ボーリング', kanaNote: '', label: "I'm bored.（退屈）／ It's boring.（退屈なもの）", ja: '退屈している／退屈な', nuance: "I'm boring. は「私はつまらない人間」になってしまう！",
+            ex: ["I'm bored. Let's go out.", '退屈だな。出かけよう。'], tone: '同じ形：tired / tiring、excited / exciting、surprised / surprising、confused / confusing' },
+          { key: 'interested / interesting', kana: 'インタレスティッド', kanaNote: '', label: "I'm interested in ～.／ It's interesting.", ja: '興味がある／おもしろい', nuance: '興味を持っているのは人（-ed）、興味を引くのは物（-ing）。',
+            ex: ["I'm interested in German culture.", 'ドイツの文化に興味がある。'], tone: "I'm interesting in ～（×）" },
+          { key: 'excited / exciting', kana: '', kanaNote: '', label: "I'm excited.／ It's exciting.", ja: 'ワクワクしている／ワクワクする（もの）', nuance: '彼女の DM の I\'m excited to see you again! も -ed（気持ち）。',
+            ex: ["I'm so excited about our trip!", '旅行すごく楽しみ！'], tone: "The trip will be exciting.（旅行はワクワクするものになりそう）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：同じ意味でも形が変わる',
+      rows: [
+        ["I'm confident.", '自信がある。（形容詞）'],
+        ['I have confidence.', '自信がある。（名詞）'],
+        ["It's important.", '大切だ。（形容詞）'],
+        ['I know the importance of it.', 'その大切さは分かってる。（名詞）'],
+        ["I'm bored. / It's boring.", '退屈してる（気持ち）／退屈なもの（原因）']
+      ]
+    },
+    cautions: [
+      "I'm / It's / very / so のあとは形容詞：I'm worry（×）→ I'm worried（○）。",
+      'a / the / my / have / no のあとは名詞：have confident（×）→ have confidence（○）。',
+      '語尾の目安：-ful -ous -y -ent -able -ive は形容詞、-ness -ence -ty -tion -ment -th は名詞。',
+      "人の気持ちは -ed：I'm bored / interested / excited。I'm boring は「私はつまらない人」。",
+      '楽しかった＝fun、笑えた＝funny。'
+    ],
+    quiz: [
+      { situation: 'あなたのことがちょっと心配。', sentence: "I'm a little ___ about you.", options: ['worried', 'worry', 'worrying', 'worries'], answer: 'worried', full: "I'm a little worried about you.", why: "I'm のあとは形容詞。気持ちなので -ed の worried。" },
+      { situation: 'この道は夜危ない。', sentence: 'This street is ___ at night.', options: ['dangerous', 'danger', 'dangerously', 'endanger'], answer: 'dangerous', full: 'This street is dangerous at night.', why: 'is のあとは形容詞。-ous で形容詞。danger は名詞。' },
+      { situation: '自分の英語に自信がない。', sentence: 'I have no ___ in my English.', options: ['confidence', 'confident', 'confidently', 'confide'], answer: 'confidence', full: 'I have no confidence in my English.', why: 'have no のあとは名詞。-ence で名詞。' },
+      { situation: 'それには自信がある。', sentence: "I'm ___ about it.", options: ['confident', 'confidence', 'confidently', 'confide'], answer: 'confident', full: "I'm confident about it.", why: "I'm のあとは形容詞。-ent で形容詞。" },
+      { situation: '何が違うの？', sentence: "What's the ___?", options: ['difference', 'different', 'differently', 'differ'], answer: 'difference', full: "What's the difference?", why: 'the のあとは名詞。different → difference。' },
+      { situation: 'すごく楽しかった！', sentence: 'It was so much ___!', options: ['fun', 'funny', 'funnier', 'fan'], answer: 'fun', full: 'It was so much fun!', why: '楽しい＝fun。much のあとなので名詞の fun。funny は「笑える」。' },
+      { situation: '退屈だな。出かけよう。', sentence: "I'm ___. Let's go out.", options: ['bored', 'boring', 'bore', 'boredom'], answer: 'bored', full: "I'm bored. Let's go out.", why: "自分の気持ちは -ed。I'm boring は「私はつまらない人」。" },
+      { situation: 'ドイツの文化に興味がある。', sentence: "I'm ___ in German culture.", options: ['interested', 'interesting', 'interest', 'interests'], answer: 'interested', full: "I'm interested in German culture.", why: '興味を持っている人の気持ち＝-ed。' },
+      { situation: 'その映画、おもしろかった。', sentence: 'The movie was really ___.', options: ['interesting', 'interested', 'interest', 'interestingly'], answer: 'interesting', full: 'The movie was really interesting.', why: '興味を引く「もの」は -ing。' },
+      { situation: '旅行すごく楽しみ！', sentence: "I'm so ___ about our trip!", options: ['excited', 'exciting', 'excite', 'excitement'], answer: 'excited', full: "I'm so excited about our trip!", why: "ワクワクしている気持ち＝excited。" },
+      { situation: '最近ちゃんと健康的に過ごしてる？', sentence: 'Are you staying ___?', options: ['healthy', 'health', 'healthily', 'heal'], answer: 'healthy', full: 'Are you staying healthy?', why: 'stay ＋ 形容詞（〜のままでいる）。-y で形容詞。health は名詞。' },
+      { situation: '会えて本当にラッキーだった。', sentence: 'I was really ___ to meet you.', options: ['lucky', 'luck', 'luckily', 'lucks'], answer: 'lucky', full: 'I was really lucky to meet you.', why: 'was のあとは形容詞 lucky。luck は名詞（Good luck!）。' }
+    ]
+  }, {
     id: 'contractions',
     title: "省略の見分け方：'s（is / has）・'d（would / had）",
     short: "短縮形の中身（'s・'d・gonna）",
@@ -1496,6 +1570,15 @@
   }];
 
 
-  var GR = { TOPICS: TOPICS };
+  // 項目のジャンル（文法ノートの2段階選択）。ここにない項目は「その他」に入る
+  var GROUPS = [
+    { name: '🕐 時制・いつのこと', ids: ['present-perfect', 'past-perfect', 'there-have-been', 'frequency', 'time-someday', 'long-time'] },
+    { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
+    { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
+    { name: '🧩 語の形（名詞・形容詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'get-adj', 'being-done'] },
+    { name: '🔀 似た表現の使い分け', ids: ['think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
+    { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] }
+  ];
+  var GR = { TOPICS: TOPICS, GROUPS: GROUPS };
   if (typeof module !== 'undefined' && module.exports) module.exports = GR; else root.GR = GR;
 })(typeof window !== 'undefined' ? window : this);

@@ -25,6 +25,7 @@
     <a href="phrases.html">📚 表現集</a>
   </div>
   <div class="container">
+    <select id="topicGroup" class="genre-select-box genre-group-box" aria-label="文法のジャンル" style="display:none;"></select>
     <select id="topicSelect" class="genre-select-box topic-select" aria-label="文法の項目" style="display:none;"></select>
     <div class="chip-row" id="tabChips" role="group" aria-label="表示の切り替え">
       <button class="chip active" data-tab="note">📖 ノート</button>
@@ -42,9 +43,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=35"></script>
-  <script src="usage-data.js?v=24"></script>
-  <script src="grammar-data.js?v=27"></script>
+  <script src="common.js?v=36"></script>
+  <script src="usage-data.js?v=25"></script>
+  <script src="grammar-data.js?v=28"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -159,11 +160,31 @@
       $('viewDrill').style.display = name === 'drill' ? '' : 'none';
       if (name === 'quiz') renderQuiz(); else if (name === 'drill') renderDrill(); else renderNote();
     }
+    // ジャンル（GR.GROUPS）→ 項目の2段階で選ぶ。先頭は「すべて」、どのジャンルにもない項目は「その他」
+    let groupKey = '';
+    function topicGroups() {
+      const ids = GR.TOPICS.map(t => t.id), used = new Set();
+      const gs = (GR.GROUPS || []).map((g, k) => {
+        const idx = g.ids.map(id => ids.indexOf(id)).filter(i => i >= 0);
+        idx.forEach(i => used.add(i));
+        return { key: 'g' + k, name: g.name, idx: idx.sort((a, b) => a - b) };
+      }).filter(g => g.idx.length);
+      const rest = ids.map((_, i) => i).filter(i => !used.has(i));
+      if (rest.length) gs.push({ key: 'rest', name: '📁 その他', idx: rest });
+      return [{ key: 'all', name: '📚 すべての項目', idx: ids.map((_, i) => i) }].concat(gs);
+    }
     function renderTopics() {
-      const box = $('topicSelect');
+      const box = $('topicSelect'), gbox = $('topicGroup');
       if (GR.TOPICS.length < 2) return;
+      const gs = topicGroups();
+      let g = gs.find(x => x.key === groupKey && x.idx.includes(topicIdx));
+      if (!g) g = gs.find(x => x.key !== 'all' && x.idx.includes(topicIdx)) || gs[0];
+      groupKey = g.key;
+      gbox.style.display = gs.length > 1 ? '' : 'none';
+      gbox.innerHTML = gs.map(x => '<option value="' + x.key + '">' + esc(x.name) + '（' + x.idx.length + '）</option>').join('');
+      gbox.value = g.key;
       box.style.display = '';
-      box.innerHTML = GR.TOPICS.map((t, i) => '<option value="' + i + '">📖 ' + (i + 1) + '. ' + esc(t.short) + '</option>').join('');
+      box.innerHTML = g.idx.map(i => '<option value="' + i + '">📖 ' + (i + 1) + '. ' + esc(GR.TOPICS[i].short) + '</option>').join('');
       box.value = String(topicIdx);
     }
     document.addEventListener('click', e => {
@@ -189,10 +210,18 @@
       if (t < 0 && /^\d+$/.test(s) && OLD[+s]) t = GR.TOPICS.findIndex(x => x.id === OLD[+s]);
       if (t > 0 && t < GR.TOPICS.length) topicIdx = t;
     } catch (err) {}
-    $('topicSelect').addEventListener('change', e => {
-      topicIdx = +e.target.value; quiz = null;
+    function selectTopic(i) {
+      topicIdx = i; quiz = null;
       try { localStorage.setItem('english_app_grammar_topic', GR.TOPICS[topicIdx].id); } catch (err) {}
-      setTab(tab); window.scrollTo(0, 0);
+      renderTopics(); setTab(tab); window.scrollTo(0, 0);
+    }
+    $('topicSelect').addEventListener('change', e => selectTopic(+e.target.value));
+    // ジャンルを変えたら、そのジャンルの最初の項目を開く
+    $('topicGroup').addEventListener('change', e => {
+      const g = topicGroups().find(x => x.key === e.target.value);
+      if (!g) return;
+      groupKey = g.key;
+      selectTopic(g.idx.includes(topicIdx) ? topicIdx : g.idx[0]);
     });
     renderTopics();
     renderNote();
