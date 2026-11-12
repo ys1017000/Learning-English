@@ -557,7 +557,29 @@
       ["構文暗唱・高校基礎", "You should have told me.", "言ってくれればよかったのに。（should have ＋ 過去分詞）"],
       ["構文暗唱・高校基礎", "It seems that she is busy.", "彼女は忙しいみたい。（It seems that ＋ 文）"],
       ["構文暗唱・高校基礎", "It is important for us to talk.", "私たちが話し合うことは大切だ。（It is ～ for 人 to ...）"],
-      ["構文暗唱・高校基礎", "I'd rather stay home tonight.", "今夜はむしろ家にいたい。（would rather ＋ 動詞）"]
+      ["構文暗唱・高校基礎", "I'd rather stay home tonight.", "今夜はむしろ家にいたい。（would rather ＋ 動詞）"],
+      ["会う直前・会ったときの一言", "I missed you!", "会いたかった！（miss：いなくてさみしい）"],
+      ["会う直前・会ったときの一言", "I've been looking forward to seeing you all week.", "今週ずっと会えるのを楽しみにしてたよ。（have been ～ing：ずっと〜してた）"],
+      ["会う直前・会ったときの一言", "You look so beautiful tonight.", "今夜すごくきれいだね。（look ＋ 形容詞）"],
+      ["会う直前・会ったときの一言", "I love your outfit today!", "今日の服すごくいいね！（outfit：コーディネート）"],
+      ["会う直前・会ったときの一言", "That looks great on you.", "それすごく似合ってるね。（look great on 人）"],
+      ["会う直前・会ったときの一言", "Your hair looks really nice today.", "今日の髪型すごくいいね。"],
+      ["会う直前・会ったときの一言", "You're so cute today.", "今日すごくかわいいね。"],
+      ["会う直前・会ったときの一言", "Thank you for making time for me. I know you're busy.", "時間を作ってくれてありがとう。忙しいのに。"],
+      ["会う直前・会ったときの一言", "Thanks for coming all the way here.", "わざわざ来てくれてありがとう。（all the way：はるばる）"],
+      ["会う直前・会ったときの一言", "I'm so happy we could meet today.", "今日会えて本当にうれしい。"],
+      ["会う直前・会ったときの一言", "How was your day today?", "今日はどんな一日だった？"],
+      ["会う直前・会ったときの一言", "How did your audition go?", "オーディションどうだった？"],
+      ["会う直前・会ったときの一言", "You must be tired. Thanks for coming anyway.", "疲れてるでしょ。それでも来てくれてありがとう。"],
+      ["会う直前・会ったときの一言", "Are you hungry?", "お腹すいてる？"],
+      ["会う直前・会ったときの一言", "What do you feel like eating?", "何食べたい気分？（feel like ～ing／名詞：〜したい気分）"],
+      ["会う直前・会ったときの一言", "I found a nice place. I think you'll like it.", "いいお店見つけたよ。気に入ると思う。"],
+      ["会う直前・会ったときの一言", "I brought you something small.", "ちょっとしたものを持ってきたよ。"],
+      ["会う直前・会ったときの一言", "I'm here! Where are you?", "着いたよ！どこにいる？"],
+      ["会う直前・会ったときの一言", "I'm right by the ticket gate.", "改札のすぐそばにいるよ。（ticket gate：改札）"],
+      ["会う直前・会ったときの一言", "I'll be there in five minutes.", "あと5分で着くよ。（in ＋ 時間：〜後に）"],
+      ["会う直前・会ったときの一言", "Sorry I'm late! Thanks for waiting.", "遅れてごめん！待っててくれてありがとう。"],
+      ["会う直前・会ったときの一言", "Shall we go?", "じゃあ行こうか？"]
   ];
 
   const KEY_DATA = 'english_app_data';
@@ -748,7 +770,7 @@
      ここに無いカテゴリは「その他」に入る。 */
   const GENRE_GROUPS = [
     { id: 'base', label: '🎯 全体・復習・マイ単語', cats: [] },
-    { id: 'love', label: '💕 恋人・気持ちを伝える', cats: ['恋人・パートナーへの思いやり', '愛情・絆を深める表現', 'would / could 恋人同士の会話', '気持ち・関係を伝える', '謝る・誤解をとく', '自分の経験・自分らしさ'] },
+    { id: 'love', label: '💕 恋人・気持ちを伝える', cats: ['会う直前・会ったときの一言', '恋人・パートナーへの思いやり', '愛情・絆を深める表現', 'would / could 恋人同士の会話', '気持ち・関係を伝える', '謝る・誤解をとく', '自分の経験・自分らしさ'] },
     { id: 'care', label: '🤝 寄り添う・話し合う', cats: ['共感する・寄り添う', '励ます・応援する', '不安・悩みを受け止める', '話し合い・意見の違い', '差別・人権・文化を話す'] },
     { id: 'talk', label: '💬 会話・雑談', cats: ['会話フレーズ', '実践フレーズ', '友達・カジュアル雑談', '短く言える版', 'else / tell you what', '音のつながり（リンキング）'] },
     { id: 'gram', label: '📖 文法・単語', cats: ['文法・表現パターン', '文法・文型', '構文暗唱・中学レベル', '構文暗唱・高校基礎', '単語 (単体)', '熟語 (イディオム)', '単語・熟語 (形容詞＋名詞)', '単語・熟語 (副詞＋動詞)', '語彙・コロケーション'] },

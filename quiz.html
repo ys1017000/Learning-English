@@ -26,6 +26,7 @@
   </div>
   <div class="container">
     <select id="genreSelect" class="genre-select-box" aria-label="出題ジャンル"></select>
+    <select id="subSelect" class="genre-select-box" aria-label="マイ単語の分類" style="display:none; margin-top:-0.75rem;"></select>
     <div class="chip-row" id="modeChips" role="group" aria-label="出題のしかた" style="margin-bottom:0.75rem;">
       <button class="chip active" data-mode="quiz">📝 4択クイズ</button>
       <button class="chip" data-mode="drill">🗣 声に出すカード</button>
@@ -69,8 +70,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=40"></script>
-  <script src="usage-data.js?v=29"></script>
+  <script src="common.js?v=41"></script>
+  <script src="usage-data.js?v=30"></script>
   <script>
     const QUIZ_SIZE = 10;
     let quizSet = [], currentIndex = 0, score = 0, answered = false, missed = [];
@@ -99,25 +100,58 @@
       document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === m));
       startQuiz();
     }
+    // マイ単語・フレーズは、例文欄の書き方から「分類」を取り出して絞り込めるようにする
+    //   第3週カード12（送る）→「送る」／ DM 11/11: … →「DMの表現」／ （DM 11/11 の返信）→「DMの返信」
+    const SUB_KEY = 'english_app_quiz_subcat';
+    let subCat = '';
+    try { subCat = localStorage.getItem(SUB_KEY) || ''; } catch (e) {}
+    function subTag(p) {
+      const ex = String(p[3] || '');
+      let m = /^第\d+週カード\d+[（(](.+?)[）)]/.exec(ex);
+      if (m) return m[1];
+      if (/^DM \d+\/\d+/.test(ex)) return 'DMの表現';
+      if (/DM \d+\/\d+ の返信/.test(ex)) return 'DMの返信';
+      if (/^第\d+週カード/.test(ex)) return 'ロードマップ（分類なし）';
+      return 'その他（単語など）';
+    }
+    function isCustomGenre(v) { return v === 'マイ単語・フレーズ'; }
+    function refreshSub(select) {
+      const box = document.getElementById('subSelect');
+      if (!isCustomGenre(select.value)) { box.style.display = 'none'; return; }
+      const pool = EA.getPhrasesFor(select.value), count = {};
+      pool.forEach(p => { const t = subTag(p); count[t] = (count[t] || 0) + 1; });
+      const tags = Object.keys(count).sort((a, b) => count[b] - count[a]);
+      if (subCat && !count[subCat]) subCat = '';
+      box.innerHTML = '<option value="">📂 すべての分類（' + pool.length + '）</option>' +
+        tags.map(t => '<option value="' + EA.esc(t) + '">　' + EA.esc(t) + '（' + count[t] + '）</option>').join('');
+      box.value = subCat;
+      box.style.display = tags.length > 1 ? '' : 'none';
+    }
+    function poolFor(select) {
+      const pool = EA.getPhrasesFor(select.value);
+      return isCustomGenre(select.value) && subCat ? pool.filter(p => subTag(p) === subCat) : pool;
+    }
     function startDrill(select) {
       document.getElementById('quizCard').style.display = 'none';
       document.getElementById('resultCard').style.display = 'none';
       const box = document.getElementById('drillCard');
-      const pool = EA.getPhrasesFor(select.value), n = drillSize();
+      const pool = poolFor(select), n = drillSize();
       refreshSizeChips(pool.length);
       const items = n ? shuffle(pool).slice(0, n) : shuffle(pool);
-      const label = select.options[select.selectedIndex] ? select.options[select.selectedIndex].textContent.replace(/（.*?）\s*$/, '') : '';
+      let label = select.options[select.selectedIndex] ? select.options[select.selectedIndex].textContent.replace(/（.*?）\s*$/, '') : '';
+      if (isCustomGenre(select.value) && subCat) label += '・' + subCat;
       EA.cardDrill(box, { title: label, items, record: true });
     }
 
     function startQuiz() {
       const select = document.getElementById('genreSelect');
       if (!EA.ensureNonEmpty(select)) return;
+      refreshSub(select);
       document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === mode));
       if (mode === 'drill') { startDrill(select); return; }
       refreshSizeChips(0);
       document.getElementById('drillCard').style.display = 'none';
-      quizSet = shuffle(EA.getPhrasesFor(select.value)).slice(0, QUIZ_SIZE);
+      quizSet = shuffle(poolFor(select)).slice(0, QUIZ_SIZE);
       currentIndex = 0; score = 0; missed = [];
       document.getElementById('quizCard').style.display = 'block';
       document.getElementById('resultCard').style.display = 'none';
@@ -237,6 +271,11 @@
       EA.populateGenreSelect(select);
       startQuiz();
       select.addEventListener('change', startQuiz);
+      document.getElementById('subSelect').addEventListener('change', e => {
+        subCat = e.target.value;
+        try { localStorage.setItem(SUB_KEY, subCat); } catch (err) {}
+        startQuiz();
+      });
       document.getElementById('modeChips').addEventListener('click', e => { const c = e.target.closest('[data-mode]'); if (c && c.dataset.mode !== mode) setMode(c.dataset.mode); });
       document.getElementById('drillSizeChips').addEventListener('click', e => { const c = e.target.closest('[data-size]'); if (!c) return; EA.setPref('drillCount', Number(c.dataset.size)); startQuiz(); });
       document.getElementById('nextBtn').addEventListener('click', () => { currentIndex++; showQuestion(); });
