@@ -828,6 +828,24 @@
     "It's so good to see you! How have you been?": "10日ぶりくらいに会ったとき。How have you been?＝この前から今まで元気だった？",
     "Long time no see!": "長く会っていなかったとき。数日〜10日だと冗談っぽくなる。",
     "It's been a while! You look great!": "しばらくぶりに会ったとき。",
-    "I've been good! Work's been busy, but I'm doing well.": "How have you been? と聞かれたときの返事。"
+    "I've been good! Work's been busy, but I'm doing well.": "How have you been? と聞かれたときの返事。",
+    "I feel so supported by you.": "支えてくれる相手への感謝を伝えるとき。",
+    "Thank you for your support.": "応援や助けへのお礼。",
+    "You always make me feel special.": "気持ちを伝えるとき。",
+    "I feel valued at work.": "仕事の話で。valuable（価値のある）と区別。",
+    "I felt a little left out.": "つらかった気持ちを、責めずに伝えるとき。",
+    "I feel loved.": "幸せな気持ちを伝えるとき。",
+    "You make me feel at home.": "一緒にいて安心すると伝えるとき。",
+    "I feel understood.": "話を聞いてもらえたとき。",
+    "I really worry about you.": "相手を気遣うとき。",
+    "I worry about you too much.": "心配性な気持ちを伝えるとき。",
+    "I like sushi very much.": "I like very much sushi は ×。I really like sushi. でもOK。",
+    "I'm always happy when I'm with you.": "気持ちを伝えるとき。",
+    "I miss you so much.": "会えないときのメッセージに。",
+    "I can't really explain it.": "言葉にしにくいとき。",
+    "You speak English very well.": "相手をほめるとき。",
+    "We met at a cafe in Naka-Meguro yesterday.": "できごとを話すとき。",
+    "Sometimes I miss Japanese food.": "海外の話をするとき。",
+    "I've already eaten.": "食事に誘われたとき。"
   };
 })();

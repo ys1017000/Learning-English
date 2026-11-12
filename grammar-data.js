@@ -1085,6 +1085,74 @@
       { situation: '彼女すごく気さくだね。', sentence: "She's so ___.", options: ['friendly', 'friend', 'friendlily', 'friendship'], answer: 'friendly', full: "She's so friendly.", why: 'friendly は -ly だけど形容詞。' }
     ]
   }, {
+    id: 'adverb-position',
+    title: '副詞を置く場所：really は動詞の前、too much は文の最後',
+    short: '副詞の置き場所（really／too much／yesterday）',
+    intro: '副詞の場所は3つに分けて覚えます。① 1語の「頻度・気持ち」の副詞（always / really / just / still / never など）は動詞の前（be動詞・can などのあと）。② 2語以上の「量・程度」（too much / a lot / so much / very much / a little）と well / hard / again は文の最後。③ 時・場所（yesterday / at home）も文の最後で、「場所 → 時」の順。英語では「動詞」と「目的語（〜を）」の間には何も入れません。',
+    groups: [
+      {
+        name: '① 1語の副詞：動詞の前（be動詞・can のあと）',
+        note: 'always / usually / often / sometimes / never / really / just / still / already / also / even / probably',
+        forms: [
+          { key: 'really ＋ 動詞', kana: '', kanaNote: '', label: '主語 ＋ really / always / just ＋ 動詞', ja: '本当に〜する／いつも〜する', nuance: '一般動詞なら、その前に置く。',
+            ex: ['I really worry about you.', '本当にあなたのことが心配。'], tone: 'I always think of you.（いつもあなたのことを考えてる）' },
+          { key: 'be / can ＋ always', kana: '', kanaNote: '', label: "I'm ＋ always ／ I can't ＋ really", ja: 'be動詞・助動詞のあと', nuance: 'be動詞（am / is / are）と can / will / have のあとに置く。',
+            ex: ["I'm always happy when I'm with you.", 'あなたといるといつも幸せ。'], tone: "I can't really explain it.（うまく説明できない）、I've already eaten.（もう食べた）" },
+          { key: 'sometimes / maybe は文頭もOK', kana: '', kanaNote: '', label: 'Sometimes ～ / Maybe ～ / Actually ～（文の最初も可）', ja: 'ときどき・たぶん・実は', nuance: '文全体にかかる副詞は、文の最初に置いてもいい。',
+            ex: ['Sometimes I miss Japanese food.', 'ときどき日本食が恋しくなる。'], tone: 'Maybe we can go next week.（来週行けるかも）' }
+        ]
+      },
+      {
+        name: '② 2語以上の「量・程度」と well / hard：文の最後',
+        note: 'too much / a lot / so much / very much / a little / well / hard / again / together',
+        forms: [
+          { key: 'too much', kana: 'トゥー マッチ', kanaNote: '', label: '動詞 ＋ 目的語 ＋ too much / a lot / so much', ja: '〜しすぎる・たくさん〜する', nuance: '目的語（〜を・〜について）のあと、文の最後が基本。',
+            ex: ['I worry about you too much.', 'あなたのことを心配しすぎちゃう。'], tone: 'I worry too much about you. もOK。I too much worry（×）、about too much you（×）' },
+          { key: 'very much', kana: '', kanaNote: '', label: 'I like it very much.（very much は最後）', ja: 'とても〜', nuance: '動詞と目的語の間に入れない。日本語の順番につられやすい！',
+            ex: ['I miss you so much.', 'すごく会いたい。'], tone: 'I like very much sushi.（×）→ I like sushi very much.（○）／I really like sushi.（○）' },
+          { key: 'well / hard / again', kana: '', kanaNote: '', label: 'well / hard / again / together も文の最後', ja: '上手に・一生懸命・また・一緒に', nuance: '動き方を言う副詞は、目的語のあと。',
+            ex: ['You speak English very well.', '英語すごく上手だね。'], tone: "Let's go there again together.（また一緒に行こう）" }
+        ]
+      },
+      {
+        name: '③ 時・場所：文の最後（場所 → 時）',
+        note: '日本語は「昨日、カフェで」でも、英語は「カフェで、昨日」の順。',
+        forms: [
+          { key: '場所 → 時', kana: '', kanaNote: '', label: '動詞 ＋ （目的語）＋ 場所 ＋ 時', ja: '…で、いつ', nuance: 'at a cafe（場所）→ yesterday（時）。時は文の最初に出してもOK。',
+            ex: ['We met at a cafe in Naka-Meguro yesterday.', '昨日、中目黒のカフェで会った。'], tone: 'Yesterday, we met at a cafe. も自然。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「あなたのことを心配する」に副詞を足す',
+      rows: [
+        ['I really worry about you.', '本当に心配。（1語 → 動詞の前）'],
+        ["I'm always worried about you.", 'いつも心配してる。（be動詞のあと）'],
+        ['I worry about you too much.', '心配しすぎちゃう。（2語 → 文の最後）'],
+        ['I worried about you a lot yesterday.', '昨日はすごく心配した。（量 → 時の順）'],
+        ['Sometimes I worry about you.', 'ときどき心配になる。（文頭もOK）']
+      ]
+    },
+    cautions: [
+      '動詞と目的語の間には何も入れない：I like very much sushi（×）→ I like sushi very much（○）。',
+      '1語の always / really / just / never は動詞の前、be動詞・can・have のあと。',
+      '2語以上の too much / a lot / so much / very much / a little は文の最後。',
+      '時と場所はどちらも最後。並べるときは「場所 → 時」：at home yesterday。',
+      '迷ったら、1語なら動詞の前、2語以上なら文の最後。'
+    ],
+    quiz: [
+      { situation: '本当にあなたのことが心配。', sentence: 'I ___ worry about you.', options: ['really', 'too much', 'a lot', 'very much'], answer: 'really', full: 'I really worry about you.', why: '1語の really は動詞の前に置ける。2語の副詞はここに入らない。' },
+      { situation: 'あなたのことを心配しすぎちゃう。', sentence: 'I worry about you ___.', options: ['too much', 'really', 'always', 'just'], answer: 'too much', full: 'I worry about you too much.', why: '2語の too much は文の最後。' },
+      { situation: 'お寿司がすごく好き。', sentence: 'I like sushi ___.', options: ['very much', 'really', 'very', 'always'], answer: 'very much', full: 'I like sushi very much.', why: 'very much は文の最後。I like very much sushi は ×。' },
+      { situation: 'あなたといるといつも幸せ。', sentence: "I'm ___ happy when I'm with you.", options: ['always', 'a lot', 'too much', 'very much'], answer: 'always', full: "I'm always happy when I'm with you.", why: 'be動詞（am）のあとに always。' },
+      { situation: 'すごく会いたい。', sentence: 'I miss you ___.', options: ['so much', 'really', 'always', 'just'], answer: 'so much', full: 'I miss you so much.', why: 'so much は目的語（you）のあと、文の最後。' },
+      { situation: 'うまく説明できない。', sentence: "I can't ___ explain it.", options: ['really', 'very much', 'a lot', 'so much'], answer: 'really', full: "I can't really explain it.", why: "can't のあと、動詞の前に really。" },
+      { situation: '英語すごく上手だね。', sentence: 'You speak English very ___.', options: ['well', 'good', 'much', 'a lot'], answer: 'well', full: 'You speak English very well.', why: 'well は目的語（English）のあと。speak（動詞）を説明するので well。' },
+      { situation: '昨日、中目黒のカフェで会った。', sentence: 'We met at a cafe in Naka-Meguro ___.', options: ['yesterday', 'the yesterday', 'in yesterday', 'at yesterday'], answer: 'yesterday', full: 'We met at a cafe in Naka-Meguro yesterday.', why: '「場所 → 時」の順で、時は最後。yesterday に前置詞はいらない。' },
+      { situation: 'ときどき日本食が恋しくなる。', sentence: '___ I miss Japanese food.', options: ['Sometimes', 'Too much', 'A lot', 'Very much'], answer: 'Sometimes', full: 'Sometimes I miss Japanese food.', why: 'sometimes は文の最初にも置ける。' },
+      { situation: 'もう食べたよ。', sentence: "I've ___ eaten.", options: ['already', 'a lot', 'too much', 'very much'], answer: 'already', full: "I've already eaten.", why: '1語の already は have のあと、過去分詞の前。' }
+    ]
+  }, {
     id: 'contractions',
     title: "省略の見分け方：'s（is / has）・'d（would / had）",
     short: "短縮形の中身（'s・'d・gonna）",
@@ -1537,8 +1605,8 @@
     ]
   }, {
     id: 'being-done',
-    title: '「〜されるのが好き・嫌い」：like being ～ / I love it when you ～',
-    short: '「〜されるのが好き・嫌い」',
+    title: '「〜されるのが好き・嫌い」「〜されてると感じる」：like being ～ / feel loved',
+    short: '「〜されるのが好き・嫌い」「〜されてると感じる」',
     intro: '「〜されるのが好き／嫌い」は、like / hate の後ろに being ＋ 過去分詞（受け身の ～ing 形）を置きます。I don\'t like being rushed.（急かされるのは好きじゃない）。でも、受け身が言いにくいときは「（相手が）〜するのが好き」と言い換えるのが会話では一番ラク：I love it when you hold my hand.（手をつないでくれるのが好き）。',
     groups: [
       {
@@ -1578,6 +1646,18 @@
           { key: "I don't mind being", kana: 'アイ ドン マインド', kanaNote: '', label: "I don't mind being ～ / I don't mind if you ～.（〜されても平気）", ja: '〜されても平気・気にしない', nuance: '相手を安心させる言い方。',
             ex: ["I don't mind being teased by you.", 'あなたにからかわれるのは平気だよ。'], tone: "I don't mind if you're late.（遅れても気にしないよ）" }
         ]
+      },
+      {
+        name: '⑤ feel ＋ 過去分詞（〜されていると感じる）／ make 人 feel ～',
+        note: '「大切にされてる」「支えられてる」と感じる気持ちは feel ＋ 過去分詞。相手のおかげでそう感じるなら You make me feel ～.',
+        forms: [
+          { key: 'I feel loved', kana: 'アイ フィール ラヴド', kanaNote: '', label: 'I feel loved / supported / valued / appreciated.', ja: '愛されてる・支えられてる・大切にされてる・感謝されてると感じる', nuance: 'feel のあとの過去分詞は「〜された状態」。being はいらない。',
+            ex: ['I feel so supported by you.', 'あなたにすごく支えられてると感じる。'], tone: 'support（支え）は名詞：Thank you for your support.（支えてくれてありがとう）' },
+          { key: 'You make me feel', kana: 'ユー メイク ミー フィール', kanaNote: '', label: 'You make me feel ～.（あなたといると〜な気持ちになる）', ja: 'あなたのおかげで〜と感じる', nuance: 'make 人 ＋ 動詞の原形（feel）＋ 形容詞・過去分詞。気持ちを伝える定番の形。',
+            ex: ['You always make me feel special.', 'あなたはいつも私を特別な気持ちにしてくれる。'], tone: "You make me feel at home.（あなたといると落ち着く）、You make me feel happy." },
+          { key: 'I feel left out', kana: '', kanaNote: '', label: 'I feel left out / ignored / misunderstood.（ネガティブ）', ja: '仲間外れ・無視されてる・誤解されてると感じる', nuance: 'つらい気持ちを、相手を責めずに「自分がどう感じたか」で伝えられる。',
+            ex: ['I felt a little left out.', 'ちょっと仲間外れな気がした。'], tone: "I feel understood.（分かってもらえてると感じる）はポジティブ版。" }
+        ]
       }
     ],
     compare: {
@@ -1595,6 +1675,7 @@
       "I love it when you ～ の it を忘れない：I love when you ～ も会話では聞くが、it ありが基本。",
       "「〜するのが好き」（自分がする）は like ～ing：I like cooking. 「〜されるのが好き」は like being ～：I like being cooked for.（作ってもらうのが好き）",
       "hate は強い言葉。相手の行動について言うなら I don't really like ～ / I feel sad when ～ でやわらかく。",
+      "「〜されていると感じる」は feel ＋ 過去分詞（being なし）：I feel loved.。相手のおかげなら You make me feel ～（make 人 ＋ 原形）。",
       "like to be ～ も同じ意味で使える：I like to be on time.（時間どおりがいい）。迷ったら being で OK。"
     ],
     quiz: [
@@ -1608,7 +1689,12 @@
       { situation: 'あれこれ指図されるのは苦手。', sentence: "I don't like being ___ what to do.", options: ['told', 'tell', 'telling', 'said'], answer: 'told', full: "I don't like being told what to do.", why: 'tell 人 what to do の受け身＝being told what to do。' },
       { situation: 'あだ名で呼ばれるのが好き。', sentence: 'I like being ___ by my nickname.', options: ['called', 'call', 'calling', 'named'], answer: 'called', full: 'I like being called by my nickname.', why: 'being ＋ 過去分詞 called。' },
       { situation: 'ちょっと遅れても気にしないよ。', sentence: "I don't mind ___ you're a little late.", options: ['if', 'that', 'being', 'when it'], answer: 'if', full: "I don't mind if you're a little late.", why: "I don't mind if ～＝〜でも気にしない。" },
-      { situation: 'ご飯を作ってもらうのが好き。', sentence: 'I like being ___ for.', options: ['cooked', 'cooking', 'cook', 'to cook'], answer: 'cooked', full: 'I like being cooked for.', why: '「作ってもらう」＝ being cooked for。I like cooking. だと「自分が作るのが好き」。' }
+      { situation: 'ご飯を作ってもらうのが好き。', sentence: 'I like being ___ for.', options: ['cooked', 'cooking', 'cook', 'to cook'], answer: 'cooked', full: 'I like being cooked for.', why: '「作ってもらう」＝ being cooked for。I like cooking. だと「自分が作るのが好き」。' },
+      { situation: 'あなたにすごく支えられてると感じる。', sentence: 'I feel so ___ by you.', options: ['supported', 'support', 'supporting', 'being support'], answer: 'supported', full: 'I feel so supported by you.', why: 'feel ＋ 過去分詞＝〜されていると感じる。being はいらない。' },
+      { situation: '支えてくれてありがとう。', sentence: 'Thank you for your ___.', options: ['support', 'supported', 'supporting', 'supportive'], answer: 'support', full: 'Thank you for your support.', why: 'your のあとは名詞 support。' },
+      { situation: 'あなたはいつも私を特別な気持ちにしてくれる。', sentence: 'You always make me ___ special.', options: ['feel', 'to feel', 'feeling', 'felt'], answer: 'feel', full: 'You always make me feel special.', why: 'make 人 ＋ 動詞の原形。to は付けない。' },
+      { situation: '職場で大切にされてると感じる。', sentence: 'I feel ___ at work.', options: ['valued', 'value', 'valuable', 'valuing'], answer: 'valued', full: 'I feel valued at work.', why: 'valued＝大切にされている（過去分詞）。valuable は「価値のある（物）」。' },
+      { situation: 'ちょっと仲間外れな気がした。', sentence: 'I felt a little left ___.', options: ['out', 'off', 'away', 'behind me'], answer: 'out', full: 'I felt a little left out.', why: 'left out＝仲間外れにされた。' }
     ]
   }];
 
@@ -1618,7 +1704,7 @@
     { name: '🕐 時制・いつのこと', ids: ['present-perfect', 'past-perfect', 'there-have-been', 'frequency', 'time-someday', 'long-time'] },
     { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
-    { name: '🧩 語の形（名詞・形容詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'get-adj', 'being-done'] },
+    { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
     { name: '🔀 似た表現の使い分け', ids: ['think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] }
   ];
