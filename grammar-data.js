@@ -324,6 +324,20 @@
     intro: '「久しぶり」はもともと「久しく（長いあいだ）〜なかった」という意味。英語も同じ発想で、「しばらくの間〜していない（haven\'t ～ in a while）」「前回から時間がたった（It\'s been a while since ～）」「この期間の中で初めて（for the first time in ～）」と言います。in a while / in three years の in は「その期間の中で」。I ate ramen after a long time. は意味は通じますが、少し不自然です。',
     groups: [
       {
+        name: '会ったときの第一声：どのくらいぶり？で選ぶ',
+        note: '「久しぶり」の強さは、会っていなかった期間で変わります。迷ったら It\'s so good to see you! ＋ How have you been? が万能。',
+        forms: [
+          { key: 'How are you? / How\'s it going?', kana: 'ハウズ イット ゴーイング', kanaNote: '', label: '毎日〜数日ぶり：How are you? / How\'s it going?', ja: '元気？・調子どう？', nuance: 'ふだんのあいさつ。「久しぶり」の気持ちは入らない。', 
+            ex: ["Hey! How's it going?", 'やあ、調子どう？'], tone: '返事は Good! / Pretty good! How about you?' },
+          { key: 'How have you been?', kana: 'ハウ ヴ ユー ビーン', kanaNote: '（have は弱く「ヴ」）', label: '1〜2週間ぶり：It\'s so good to see you! How have you been?', ja: '会えてうれしい！元気にしてた？', nuance: 'How have you been? は「この前から今日まで」を聞く現在完了。10日ぶりくらいにぴったり。',
+            ex: ["Hey! It's so good to see you! How have you been?", '会えてうれしい！元気にしてた？'], tone: "返事は I've been good! / I've been busy, but I'm doing well." },
+          { key: "It's been a while!", kana: '', kanaNote: '', label: '数週間〜数か月ぶり：It\'s been a while!', ja: '久しぶり！', nuance: '「しばらく会ってなかったね」。10日でも言えるが、少し大げさに聞こえることも。',
+            ex: ["It's been a while! You look great!", '久しぶり！元気そうだね！'], tone: 'You look great!（元気そう・すてき）とセットで。' },
+          { key: 'Long time no see!', kana: '', kanaNote: '', label: '何か月〜何年ぶり：Long time no see! / It\'s been ages! / It\'s been forever!', ja: 'すっごく久しぶり！', nuance: '長い期間会っていないとき。数日〜10日で言うと冗談っぽくなる。',
+            ex: ["Long time no see! It's been ages!", 'すっごく久しぶり！何年ぶり？'], tone: 'It\'s been forever! は大げさに言うくだけた言い方。' }
+        ]
+      },
+      {
         name: 'あいさつの「久しぶり！」',
         note: '会ったとき・連絡したときの第一声。',
         forms: [
@@ -369,6 +383,7 @@
     cautions: [
       "It's been a while の It's は It has（現在完了）。後ろに been や過去分詞が来たら has、それ以外（It's 3 o'clock / It's cold）は is。受け身ではありません。",
       'in a while / in years / in three years の in は「その期間の中で」。haven\'t ～ in a while＝期間の中で一度もない、for the first time in ～＝期間の中で初めて。',
+      '会ったときの「久しぶり」は期間で選ぶ：数日＝How are you?／1〜2週間＝It\'s so good to see you! How have you been?／数週間〜数か月＝It\'s been a while!／何か月〜年＝Long time no see!',
       '「久しぶりに〜した」を after a long time にしない。for the first time in a while が自然。',
       '「〇年ぶり」の期間は in のあと：for the first time in three years（○）、for three years（×：3年間、の意味になる）。',
       "It's been ～ since のあとは過去形：since I came here（○）、since I have come（×）。",
@@ -384,7 +399,10 @@
       { situation: '最後に会ってからどのくらいぶりだっけ？', sentence: 'How long has it been ___ we last met?', options: ['since', 'for', 'from', 'after'], answer: 'since', full: 'How long has it been since we last met?', why: 'How long has it been since ～?＝〜してからどのくらいぶり？' },
       { situation: '久しぶりに会えて本当にうれしい。', sentence: "It's so good to see you again ___.", options: ['after so long', 'after long', 'in so long', 'since long'], answer: 'after so long', full: "It's so good to see you again after so long.", why: 'again だけでは久しぶり感が弱い。after so long（こんなに長くたって）で「久しぶり」がはっきりする。' },
       { situation: 'お寿司、すごく久しぶり！（食べる前に）', sentence: "I haven't had sushi in ___!", options: ['ages', 'age', 'long', 'a long'], answer: 'ages', full: "I haven't had sushi in ages!", why: 'in ages＝ずいぶん長いこと。複数形 ages で。' },
-      { situation: 'ドイツ語を話すのは久しぶり。', sentence: "I haven't ___ German in years.", options: ['spoken', 'spoke', 'speak', 'speaking'], answer: 'spoken', full: "I haven't spoken German in years.", why: "haven't のあとは過去分詞（spoken）。in years＝何年も。" }
+      { situation: 'ドイツ語を話すのは久しぶり。', sentence: "I haven't ___ German in years.", options: ['spoken', 'spoke', 'speak', 'speaking'], answer: 'spoken', full: "I haven't spoken German in years.", why: "haven't のあとは過去分詞（spoken）。in years＝何年も。" },
+      { situation: '（10日ぶりに会って）会えてうれしい！元気にしてた？', sentence: "It's so good to see you! How ___ you been?", options: ['have', 'are', 'did', 'do'], answer: 'have', full: "It's so good to see you! How have you been?", why: 'How have you been?＝この前から今まで元気だった？（現在完了）。1〜2週間ぶりにぴったり。' },
+      { situation: '（何年かぶりに会って）すっごく久しぶり！', sentence: '___ time no see!', options: ['Long', 'Much', 'Many', 'Far'], answer: 'Long', full: 'Long time no see!', why: 'Long time no see! は長い期間会っていなかったときのあいさつ。' },
+      { situation: '（会って）久しぶり！元気そうだね！', sentence: "It's been a while! You look ___!", options: ['great', 'greatly', 'well done', 'greatness'], answer: 'great', full: "It's been a while! You look great!", why: 'look のあとは形容詞 great。You look great! は会ったときの定番のほめ言葉。' }
     ]
   }, {
     id: 'present-perfect',

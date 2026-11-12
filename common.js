@@ -333,6 +333,10 @@
       ["文法・表現パターン", "I've hardly slept lately.", "最近ほとんど寝てないの。（hardly：ほとんど〜ない／lately：最近）"],
       ["文法・表現パターン", "That sounds great!", "それ、すごくいいね！（sound ＋ 形容詞）"],
       ["文法・表現パターン", "She's so friendly.", "彼女すごく気さくだね。（friendly：-ly だけど形容詞）"],
+      ["文法・表現パターン", "It's so good to see you! How have you been?", "会えてうれしい！元気にしてた？（1〜2週間ぶりの第一声）"],
+      ["文法・表現パターン", "Long time no see!", "すっごく久しぶり！（何か月〜何年ぶり）"],
+      ["文法・表現パターン", "It's been a while! You look great!", "久しぶり！元気そうだね！（数週間〜数か月ぶり）"],
+      ["文法・表現パターン", "I've been good! Work's been busy, but I'm doing well.", "元気だったよ！仕事は忙しかったけど、元気にしてる。"],
       ["文法・表現パターン", "Thank you for the lovely day.", "素敵な一日をありがとう。（Thank you for ＋ 名詞）"],
       ["文法・表現パターン", "I don't have anyone to talk to openly.", "本音で話せる人がいない。"],
       // ---- 文法ノートのノート例文・クイズ文で、まだ表現集に無かったもの（2026-11-10） ----

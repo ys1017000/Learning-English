@@ -824,6 +824,10 @@
     "You speak Japanese really well!": "相手の日本語をほめるとき。",
     "You worked harder than usual yesterday.": "頑張った相手をねぎらうとき。",
     "I've hardly slept lately.": "忙しさを伝えるとき。hard とは意味が別。",
-    "She's so friendly.": "人の印象を言うとき。"
+    "She's so friendly.": "人の印象を言うとき。",
+    "It's so good to see you! How have you been?": "10日ぶりくらいに会ったとき。How have you been?＝この前から今まで元気だった？",
+    "Long time no see!": "長く会っていなかったとき。数日〜10日だと冗談っぽくなる。",
+    "It's been a while! You look great!": "しばらくぶりに会ったとき。",
+    "I've been good! Work's been busy, but I'm doing well.": "How have you been? と聞かれたときの返事。"
   };
 })();
