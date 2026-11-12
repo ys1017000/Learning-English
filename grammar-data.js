@@ -969,9 +969,9 @@
     ]
   }, {
     id: 'adj-noun-2',
-    title: '形容詞と名詞②：語尾で見分ける・-ed と -ing',
-    short: '形容詞？名詞？（語尾で見分ける・-ed／-ing）',
-    intro: '迷ったら「置く場所」と「語尾」の2つで決めます。① 置く場所：I\'m ～ / It\'s ～ / very ～ のあとは形容詞、a / the / my / some / have のあとは名詞。② 語尾：-ful / -ous / -y / -ent / -able / -ive は形容詞が多く、-ness / -ence / -ty / -tion / -ment / -th は名詞が多い。さらに「気持ち」は -ed（I\'m bored）、「原因」は -ing（It\'s boring）で区別します。',
+    title: '形容詞と名詞②：語尾で見分ける・-ed と -ing・副詞（-ly）',
+    short: '形容詞？名詞？副詞？（語尾・-ed／-ing・-ly）',
+    intro: '迷ったら「置く場所」と「語尾」の2つで決めます。① 置く場所：I\'m ～ / It\'s ～ / very ～ のあとは形容詞、a / the / my / some / have のあとは名詞。② 語尾：-ful / -ous / -y / -ent / -able / -ive は形容詞が多く、-ness / -ence / -ty / -tion / -ment / -th は名詞が多い。さらに「気持ち」は -ed（I\'m bored）、「原因」は -ing（It\'s boring）で区別します。副詞（動詞を説明する）は日本語の「〜く・〜に」：美しい花＝a beautiful flower、美しく歌う＝sing beautifully。',
     groups: [
       {
         name: '① 置く場所で決める',
@@ -1008,6 +1008,22 @@
           { key: 'excited / exciting', kana: '', kanaNote: '', label: "I'm excited.／ It's exciting.", ja: 'ワクワクしている／ワクワクする（もの）', nuance: '彼女の DM の I\'m excited to see you again! も -ed（気持ち）。',
             ex: ["I'm so excited about our trip!", '旅行すごく楽しみ！'], tone: "The trip will be exciting.（旅行はワクワクするものになりそう）" }
         ]
+      },
+      {
+        name: '④ 形容詞と副詞（-ly＝「〜く・〜に」）',
+        note: '「どんな？」に答える＝形容詞（名詞を説明）、「どうやって？」に答える＝副詞（動詞を説明）。',
+        forms: [
+          { key: 'い・な ／ く・に', kana: '', kanaNote: '', label: '形容詞（〜い・〜な）と副詞（〜く・〜に ＝ -ly）', ja: '静かな部屋／静かに話す', nuance: 'a quiet room（静かな部屋）、speak quietly（静かに話す）。日本語が「〜く・〜に」なら -ly。',
+            ex: ['Could you speak a little more slowly?', 'もう少しゆっくり話してもらえる？'], tone: 'careful → carefully、easy → easily（y は i に）、happy → happily' },
+          { key: 'look / feel / sound ＋ 形容詞', kana: '', kanaNote: '', label: 'look / feel / sound / taste / smell ＋ 形容詞（-ly にしない）', ja: '〜に見える・〜に感じる・〜そう', nuance: '「様子」を言っているので形容詞。日本語は「きれいに見える」でも beautifully にしない。',
+            ex: ['You look beautiful tonight.', '今夜すごくきれいだね。'], tone: "It tastes good. / That sounds great. / I feel bad. / You look tired." },
+          { key: 'good と well', kana: '', kanaNote: '', label: 'good（形容詞）と well（副詞）', ja: '上手な／上手に', nuance: 'You\'re a good cook.（料理上手な人）、You cook well.（料理が上手に作れる）',
+            ex: ['You speak Japanese really well!', '日本語すごく上手だね！'], tone: "I'm well.（元気です）の well だけは「体調がいい」という形容詞。I'm good. も「元気」で会話ではよく使う。" },
+          { key: 'hard / hardly', kana: 'ハード / ハードリー', kanaNote: '', label: 'hard（一生懸命・激しく）と hardly（ほとんど〜ない）', ja: '一生懸命／ほとんど〜ない', nuance: 'hard は形容詞も副詞も同じ形。-ly を付けると意味が変わる！ late（遅く）と lately（最近）も同じタイプ。',
+            ex: ['You worked harder than usual yesterday.', '昨日はいつもより頑張ってたね。'], tone: "I work hard.（一生懸命働く）⇔ I hardly work.（ほとんど働かない）。fast も -ly なしで副詞：You walk fast." },
+          { key: '-ly でも形容詞', kana: '', kanaNote: '', label: 'friendly / lonely / lovely / lively は形容詞', ja: '気さくな・さみしい・すてきな・にぎやかな', nuance: '-ly で終わるけど形容詞なので、副詞にはできない。副詞にしたいときは in a ～ way。',
+            ex: ["She's so friendly.", '彼女すごく気さくだね。'], tone: "She smiled in a friendly way.（親しげに笑った）" }
+        ]
       }
     ],
     compare: {
@@ -1025,7 +1041,9 @@
       'a / the / my / have / no のあとは名詞：have confident（×）→ have confidence（○）。',
       '語尾の目安：-ful -ous -y -ent -able -ive は形容詞、-ness -ence -ty -tion -ment -th は名詞。',
       "人の気持ちは -ed：I'm bored / interested / excited。I'm boring は「私はつまらない人」。",
-      '楽しかった＝fun、笑えた＝funny。'
+      '楽しかった＝fun、笑えた＝funny。',
+      '「〜く・〜に」は副詞（-ly）：speak slowly / sing beautifully。ただし look / feel / sound / taste のあとは形容詞：You look beautiful.（beautifully は ×）。',
+      'hard（一生懸命）と hardly（ほとんど〜ない）、late（遅く）と lately（最近）は意味が別物。fast・hard・late は -ly なしで副詞。'
     ],
     quiz: [
       { situation: 'あなたのことがちょっと心配。', sentence: "I'm a little ___ about you.", options: ['worried', 'worry', 'worrying', 'worries'], answer: 'worried', full: "I'm a little worried about you.", why: "I'm のあとは形容詞。気持ちなので -ed の worried。" },
@@ -1039,7 +1057,14 @@
       { situation: 'その映画、おもしろかった。', sentence: 'The movie was really ___.', options: ['interesting', 'interested', 'interest', 'interestingly'], answer: 'interesting', full: 'The movie was really interesting.', why: '興味を引く「もの」は -ing。' },
       { situation: '旅行すごく楽しみ！', sentence: "I'm so ___ about our trip!", options: ['excited', 'exciting', 'excite', 'excitement'], answer: 'excited', full: "I'm so excited about our trip!", why: "ワクワクしている気持ち＝excited。" },
       { situation: '最近ちゃんと健康的に過ごしてる？', sentence: 'Are you staying ___?', options: ['healthy', 'health', 'healthily', 'heal'], answer: 'healthy', full: 'Are you staying healthy?', why: 'stay ＋ 形容詞（〜のままでいる）。-y で形容詞。health は名詞。' },
-      { situation: '会えて本当にラッキーだった。', sentence: 'I was really ___ to meet you.', options: ['lucky', 'luck', 'luckily', 'lucks'], answer: 'lucky', full: 'I was really lucky to meet you.', why: 'was のあとは形容詞 lucky。luck は名詞（Good luck!）。' }
+      { situation: '会えて本当にラッキーだった。', sentence: 'I was really ___ to meet you.', options: ['lucky', 'luck', 'luckily', 'lucks'], answer: 'lucky', full: 'I was really lucky to meet you.', why: 'was のあとは形容詞 lucky。luck は名詞（Good luck!）。' },
+      { situation: 'もう少しゆっくり話してもらえる？', sentence: 'Could you speak a little more ___?', options: ['slowly', 'slow', 'slowness', 'slower than'], answer: 'slowly', full: 'Could you speak a little more slowly?', why: '「ゆっくり（〜に）話す」は動詞を説明する副詞 slowly。' },
+      { situation: '今夜すごくきれいだね。', sentence: 'You look ___ tonight.', options: ['beautiful', 'beautifully', 'beauty', 'beautify'], answer: 'beautiful', full: 'You look beautiful tonight.', why: 'look のあとは「様子」を言う形容詞。beautifully にしない。' },
+      { situation: '日本語すごく上手だね！', sentence: 'You speak Japanese really ___!', options: ['well', 'good', 'goodly', 'better than'], answer: 'well', full: 'You speak Japanese really well!', why: 'speak（動詞）を説明するので副詞 well。good は形容詞。' },
+      { situation: '昨日はいつもより頑張ってたね。', sentence: 'You worked ___ than usual yesterday.', options: ['harder', 'hardlier', 'more hardly', 'hardly'], answer: 'harder', full: 'You worked harder than usual yesterday.', why: 'hard は副詞も同じ形。比較級は harder。hardly は「ほとんど〜ない」。' },
+      { situation: '最近ほとんど寝てないの。', sentence: "I've ___ slept lately.", options: ['hardly', 'hard', 'harder', 'hardness'], answer: 'hardly', full: "I've hardly slept lately.", why: 'hardly＝ほとんど〜ない。lately＝最近。' },
+      { situation: 'それ、すごくいいね！（提案を聞いて）', sentence: 'That sounds ___!', options: ['great', 'greatly', 'greatness', 'well'], answer: 'great', full: 'That sounds great!', why: 'sound のあとは形容詞。' },
+      { situation: '彼女すごく気さくだね。', sentence: "She's so ___.", options: ['friendly', 'friend', 'friendlily', 'friendship'], answer: 'friendly', full: "She's so friendly.", why: 'friendly は -ly だけど形容詞。' }
     ]
   }, {
     id: 'contractions',

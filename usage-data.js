@@ -818,6 +818,12 @@
     "The movie was really interesting.": "感想を言うとき。",
     "I'm so excited about our trip!": "楽しみな予定の前に。",
     "Are you staying healthy?": "忙しい相手を気遣うとき。",
-    "I was really lucky to meet you.": "気持ちを伝えるとき。"
+    "I was really lucky to meet you.": "気持ちを伝えるとき。",
+    "Could you speak a little more slowly?": "聞き取れないとき。",
+    "You look beautiful tonight.": "会ったときのほめ言葉。",
+    "You speak Japanese really well!": "相手の日本語をほめるとき。",
+    "You worked harder than usual yesterday.": "頑張った相手をねぎらうとき。",
+    "I've hardly slept lately.": "忙しさを伝えるとき。hard とは意味が別。",
+    "She's so friendly.": "人の印象を言うとき。"
   };
 })();

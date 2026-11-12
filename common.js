@@ -326,6 +326,13 @@
       ["文法・表現パターン", "I'm so excited about our trip!", "旅行すごく楽しみ！（excited：気持ちは -ed）"],
       ["文法・表現パターン", "Are you staying healthy?", "ちゃんと健康的に過ごしてる？（healthy：形容詞／health：名詞）"],
       ["文法・表現パターン", "I was really lucky to meet you.", "会えて本当にラッキーだった。（lucky：形容詞／luck：名詞）"],
+      ["文法・表現パターン", "Could you speak a little more slowly?", "もう少しゆっくり話してもらえる？（slowly：副詞＝「〜に」）"],
+      ["文法・表現パターン", "You look beautiful tonight.", "今夜すごくきれいだね。（look ＋ 形容詞。beautifully にしない）"],
+      ["文法・表現パターン", "You speak Japanese really well!", "日本語すごく上手だね！（well：副詞／good：形容詞）"],
+      ["文法・表現パターン", "You worked harder than usual yesterday.", "昨日はいつもより頑張ってたね。（hard の比較級 harder）"],
+      ["文法・表現パターン", "I've hardly slept lately.", "最近ほとんど寝てないの。（hardly：ほとんど〜ない／lately：最近）"],
+      ["文法・表現パターン", "That sounds great!", "それ、すごくいいね！（sound ＋ 形容詞）"],
+      ["文法・表現パターン", "She's so friendly.", "彼女すごく気さくだね。（friendly：-ly だけど形容詞）"],
       ["文法・表現パターン", "Thank you for the lovely day.", "素敵な一日をありがとう。（Thank you for ＋ 名詞）"],
       ["文法・表現パターン", "I don't have anyone to talk to openly.", "本音で話せる人がいない。"],
       // ---- 文法ノートのノート例文・クイズ文で、まだ表現集に無かったもの（2026-11-10） ----
