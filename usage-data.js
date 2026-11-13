@@ -868,6 +868,18 @@
     "I'm right by the ticket gate.": "待ち合わせ場所を伝えるとき。",
     "I'll be there in five minutes.": "少し遅れそうなとき。",
     "Sorry I'm late! Thanks for waiting.": "謝ってから感謝で締める。",
-    "Shall we go?": "合流してお店に向かうとき。Let's go! でもOK。"
+    "Shall we go?": "合流してお店に向かうとき。Let's go! でもOK。",
+    "I live in Tokyo.": "自己紹介で。",
+    "Let's meet on Thursday.": "予定を決めるとき。",
+    "I'll meet you at the station at 8:30.": "待ち合わせを決めるとき。",
+    "I'll go home after dinner.": "帰る予定を伝えるとき。",
+    "Let's discuss it tomorrow.": "話し合いを後にしたいとき。",
+    "I bought this for you.": "プレゼントを渡すとき。",
+    "We arrived at the station at nine.": "できごとを話すとき。arrive to は ×。",
+    "I need to finish it by Friday.": "締め切りの話。until は「ずっと」。",
+    "I'll see you in three days.": "次に会う日の話。",
+    "Can I eat this with chopsticks?": "食事のとき。",
+    "She's from Germany.": "人を紹介するとき。",
+    "I'm on the train.": "移動中のメッセージに。"
   };
 })();

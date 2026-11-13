@@ -70,8 +70,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=41"></script>
-  <script src="usage-data.js?v=30"></script>
+  <script src="common.js?v=42"></script>
+  <script src="usage-data.js?v=31"></script>
   <script>
     const QUIZ_SIZE = 10;
     let quizSet = [], currentIndex = 0, score = 0, answered = false, missed = [];
@@ -108,6 +108,8 @@
     function subTag(p) {
       const ex = String(p[3] || '');
       let m = /^第\d+週カード\d+[（(](.+?)[）)]/.exec(ex);
+      if (m) return m[1];
+      m = /^〔(.+?)〕/.exec(ex);
       if (m) return m[1];
       if (/^DM \d+\/\d+/.test(ex)) return 'DMの表現';
       if (/DM \d+\/\d+ の返信/.test(ex)) return 'DMの返信';

@@ -1153,6 +1153,96 @@
       { situation: 'もう食べたよ。', sentence: "I've ___ eaten.", options: ['already', 'a lot', 'too much', 'very much'], answer: 'already', full: "I've already eaten.", why: '1語の already は have のあと、過去分詞の前。' }
     ]
   }, {
+    id: 'prepositions',
+    title: '前置詞のコアイメージ：in / on / at / to / for …と、日本語の罠',
+    short: '前置詞のイメージ（in・on・at…）と日本語の罠',
+    intro: '前置詞は日本語の助詞（に・で・へ・から・と）に近いけれど、1対1では対応しません。訳で覚えるより「絵（位置や動き）」で覚えるのがコツ。そしてもう一つ、「に」「で」「と」を見てすぐ前置詞を当てはめない。動詞そのものに「〜に・〜について・〜と」が入っていることがあります（go home / discuss it / marry her）。',
+    groups: [
+      {
+        name: '① 場所・時間の3兄弟：in（中）・on（くっつく）・at（点）',
+        note: '広い・囲まれている → in、面に接している・日付 → on、ピンポイントの地点・時刻 → at。',
+        forms: [
+          { key: 'in', kana: 'イン', kanaNote: '', label: 'in ＝ 囲まれた空間の中', ja: '〜の中に・〜に（広い範囲）', nuance: '国・都市・部屋・月・年・季節など、枠の中にいるイメージ。',
+            ex: ['I live in Tokyo.', '東京に住んでるよ。'], tone: 'in November / in 2026 / in the morning / in the car（車の中）' },
+          { key: 'on', kana: 'オン', kanaNote: '', label: 'on ＝ 面にくっついている', ja: '〜の上に・〜に（接触・日付）', nuance: '机の上、壁、曜日・日付、電車やバスなど「乗り物の床に立てる」もの。',
+            ex: ["Let's meet on Thursday.", '木曜に会おう。'], tone: 'on the table / on the wall / on November 12 / on the train（電車に乗って）' },
+          { key: 'at', kana: 'アット', kanaNote: '', label: 'at ＝ 地図上の一点', ja: '〜で・〜に（地点・時刻）', nuance: '駅・お店・入口などピンポイントの場所と、時刻。',
+            ex: ["I'll meet you at the station at 8:30.", '8時半に駅で会おう。'], tone: 'at home / at work / at night / at the cafe' }
+        ]
+      },
+      {
+        name: '② 動きの矢印：to（到着）・for（向かう）・from（出発点）',
+        note: 'to は矢印の先に「着く」、for は矢印が「向いている」だけ、from は矢印の根元。',
+        forms: [
+          { key: 'to', kana: 'トゥ', kanaNote: '', label: 'to ＝ 矢印の先に到着', ja: '〜へ・〜に（到着）', nuance: '行き先・相手にちゃんと届くイメージ。',
+            ex: ["I'm going to Kyoto next week.", '来週京都に行くよ。'], tone: 'talk to you / give it to her / from 9 to 5' },
+          { key: 'for', kana: 'フォー', kanaNote: '', label: 'for ＝ 矢印がそっちを向いている', ja: '〜のために・〜に向けて', nuance: '到着は含まない。「〜のため」「〜宛て」「〜の間（期間）」。',
+            ex: ['I bought this for you.', 'これ、あなたに買ったんだ。'], tone: 'leave for Osaka（大阪に向けて出発）/ for three years（3年間）' },
+          { key: 'from', kana: 'フロム', kanaNote: '', label: 'from ＝ 出発点', ja: '〜から', nuance: '場所・時間・人の出どころ。',
+            ex: ["She's from Germany.", '彼女はドイツ出身だよ。'], tone: 'a message from her / from Monday to Friday' }
+        ]
+      },
+      {
+        name: '③ つながりの前置詞：of・with・by・about',
+        note: 'of は「一部・所属」、with は「一緒・道具」、by は「すぐそば → 手段・期限」、about は「周りをぐるっと」。',
+        forms: [
+          { key: 'of', kana: 'オヴ', kanaNote: '', label: 'of ＝ 全体の一部・〜に属する', ja: '〜の', nuance: 'a cup of coffee（コーヒーの1杯分）、one of my friends（友達の中の1人）。',
+            ex: ["She's one of my best friends.", '彼女は親友の一人なんだ。'], tone: 'the name of the restaurant / a lot of people' },
+          { key: 'with', kana: 'ウィズ', kanaNote: '', label: 'with ＝ 一緒にいる・道具を持っている', ja: '〜と一緒に・〜で（道具）', nuance: '人と一緒、道具を使って。',
+            ex: ['Can I eat this with chopsticks?', 'これ、お箸で食べてもいい？'], tone: 'with you / a girl with long hair（髪の長い女の子）' },
+          { key: 'by', kana: 'バイ', kanaNote: '', label: 'by ＝ すぐそば → 手段・期限', ja: '〜のそばに・〜で（手段）・〜までに', nuance: 'by the window（窓のそば）、by train（電車で）、by Friday（金曜までに）。',
+            ex: ['I need to finish it by Friday.', '金曜までに終わらせないと。'], tone: 'until（〜までずっと）と by（〜までに）は別！' },
+          { key: 'about', kana: 'アバウト', kanaNote: '', label: 'about ＝ 周りをぐるっと', ja: '〜について・だいたい', nuance: '話題の周り、数字の周り（約）。',
+            ex: ["Let's talk about it later.", 'それについては後で話そう。'], tone: 'about 10 people（だいたい10人）' }
+        ]
+      },
+      {
+        name: '④ 日本語に引っ張られる罠（前置詞がいらない・違う）',
+        note: '「に・で・と・について」を見ても、すぐ前置詞を入れない。動詞にもう入っていることがある。',
+        forms: [
+          { key: 'go home', kana: '', kanaNote: '', label: '家に帰る ＝ go home（to はいらない）', ja: '家に帰る', nuance: 'home は「家へ」まで含む。here / there / abroad / downtown も同じ。',
+            ex: ["I'll go home after dinner.", '夜ごはんのあと家に帰るね。'], tone: 'go to home（×）／ go abroad（海外に行く）' },
+          { key: 'discuss / marry / enter', kana: '', kanaNote: '', label: 'discuss it / marry her / enter the room（前置詞なし）', ja: '〜について話し合う／〜と結婚する／〜に入る', nuance: '動詞の中に「について」「と」「に」が入っている。',
+            ex: ["Let's discuss it tomorrow.", '明日それについて話し合おう。'], tone: 'discuss about（×）／ marry with（×）／ enter into the room（×）' },
+          { key: 'arrive at / in', kana: '', kanaNote: '', label: '〜に着く ＝ arrive at（地点）/ arrive in（都市・国）', ja: '〜に着く', nuance: 'arrive to（×）。get to ～ なら to でOK。',
+            ex: ['We arrived at the station at nine.', '9時に駅に着いた。'], tone: 'arrive in Tokyo / get to the station' },
+          { key: 'in 3 days / for 3 years', kana: '', kanaNote: '', label: '3日後に ＝ in 3 days ／ 3年間 ＝ for 3 years', ja: '（今から）〜後に／〜の間', nuance: '未来の「〜後」は in、続いた期間は for。',
+            ex: ["I'll see you in three days.", '3日後に会おうね。'], tone: 'after 3 days は過去の話で「その3日後」。I lived there for three years.' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：日本語の「に」がいろいろな英語になる',
+      rows: [
+        ['I live in Tokyo.', '東京に住む（中 → in）'],
+        ["Let's meet on Thursday.", '木曜に会う（日付 → on）'],
+        ["I'll be there at 8:30.", '8時半に行く（時刻 → at）'],
+        ["I'm going to Kyoto.", '京都に行く（到着 → to）'],
+        ["I'll go home.", '家に帰る（前置詞なし）']
+      ]
+    },
+    cautions: [
+      '「に」「で」を見てすぐ前置詞を当てはめない。まず動詞が前置詞を必要とするか確認（go home / discuss it / marry her / enter the room）。',
+      '場所：広い・中 → in、接触・日付・乗り物 → on、地点・時刻 → at。',
+      'to は「着く」、for は「向かう・ため」。leave for Osaka（大阪に向けて出発）。',
+      '「〜までに」は by、「〜までずっと」は until。by Friday / until Friday。',
+      '「〜後に」：今から未来なら in（in 3 days）、続いた期間は for（for 3 years）。'
+    ],
+    quiz: [
+      { situation: '東京に住んでるよ。', sentence: 'I live ___ Tokyo.', options: ['in', 'on', 'at', 'to'], answer: 'in', full: 'I live in Tokyo.', why: '都市は囲まれた空間 → in。' },
+      { situation: '木曜に会おう。', sentence: "Let's meet ___ Thursday.", options: ['on', 'in', 'at', 'to'], answer: 'on', full: "Let's meet on Thursday.", why: '曜日・日付は on。' },
+      { situation: '8時半に駅で会おう。', sentence: "I'll meet you at the station ___ 8:30.", options: ['at', 'on', 'in', 'by'], answer: 'at', full: "I'll meet you at the station at 8:30.", why: '時刻はピンポイント → at。' },
+      { situation: '夜ごはんのあと家に帰るね。', sentence: "I'll go ___ after dinner.", options: ['home', 'to home', 'at home', 'in home'], answer: 'home', full: "I'll go home after dinner.", why: 'home に「家へ」が入っているので to はいらない。' },
+      { situation: '明日それについて話し合おう。', sentence: "Let's ___ it tomorrow.", options: ['discuss', 'discuss about', 'discuss on', 'discuss for'], answer: 'discuss', full: "Let's discuss it tomorrow.", why: 'discuss に「について」が入っている。about はいらない。' },
+      { situation: 'これ、あなたに買ったんだ。', sentence: 'I bought this ___ you.', options: ['for', 'to', 'at', 'with'], answer: 'for', full: 'I bought this for you.', why: '「あなたのために」→ for（矢印が向いている）。' },
+      { situation: '9時に駅に着いた。', sentence: 'We arrived ___ the station at nine.', options: ['at', 'to', 'in', 'on'], answer: 'at', full: 'We arrived at the station at nine.', why: 'arrive のあとの地点は at。arrive to は ×。' },
+      { situation: '金曜までに終わらせないと。', sentence: 'I need to finish it ___ Friday.', options: ['by', 'until', 'in', 'for'], answer: 'by', full: 'I need to finish it by Friday.', why: '期限「〜までに」は by。until は「〜までずっと」。' },
+      { situation: '3日後に会おうね。', sentence: "I'll see you ___ three days.", options: ['in', 'after', 'for', 'on'], answer: 'in', full: "I'll see you in three days.", why: '今から未来の「〜後」は in。' },
+      { situation: 'これ、お箸で食べてもいい？', sentence: 'Can I eat this ___ chopsticks?', options: ['with', 'by', 'in', 'on'], answer: 'with', full: 'Can I eat this with chopsticks?', why: '道具を使って → with。' },
+      { situation: '彼女はドイツ出身だよ。', sentence: "She's ___ Germany.", options: ['from', 'of', 'in', 'to'], answer: 'from', full: "She's from Germany.", why: '出どころ・出発点 → from。' },
+      { situation: '電車に乗ってるよ。', sentence: "I'm ___ the train.", options: ['on', 'in', 'at', 'by'], answer: 'on', full: "I'm on the train.", why: '電車・バス・飛行機は床に立てる乗り物 → on。車は in。' }
+    ]
+  }, {
     id: 'contractions',
     title: "省略の見分け方：'s（is / has）・'d（would / had）",
     short: "短縮形の中身（'s・'d・gonna）",
@@ -1705,7 +1795,7 @@
     { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
-    { name: '🔀 似た表現の使い分け', ids: ['think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
+    { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] }
   ];
   var GR = { TOPICS: TOPICS, GROUPS: GROUPS };
