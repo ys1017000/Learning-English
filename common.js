@@ -1714,6 +1714,9 @@
     let st = null;
     const ja = p => splitJa(p[2]);
     const usageLine = en => { const u = usageFor(en); return u ? '<div class="usage-line">🎬 場面：' + esc(u) + '</div>' : ''; };
+    // ⭐ お気に入り（4択クイズ・表現集と同じ favorites。バックアップにも入る）
+    const favBtn = (en, i) => { const on = isFavorite(en); return '<button class="tiny-btn dr-fav" data-dr="fav"' + (i != null ? ' data-i="' + i + '"' : '') + ' aria-pressed="' + on + '" aria-label="' + (on ? 'お気に入りから外す' : 'お気に入りに追加') + '" style="white-space:nowrap; flex-shrink:0; font-size:1.1rem; padding:2px 10px;' + (on ? ' color:var(--fav); border-color:var(--fav);' : '') + '">' + (on ? '★' : '☆') + '</button>'; };
+    let listed = [];
     function start() {
       st = { round: 1, queue: shuf(items), i: 0, res: [], hist: [], first: {}, phase: 'card' };
       render();
@@ -1732,8 +1735,9 @@
           html += '<div class="stats-grid" style="grid-template-columns:repeat(2,1fr); margin-bottom:0.75rem;"><div><div class="stat-number">' + h.said + '/' + h.total + '</div><div class="stat-label">' + secs + '秒以内に言えた</div></div>' +
             '<div><div class="stat-number" style="color:var(--bad);">' + miss.length + '</div><div class="stat-label">言えなかった</div></div></div>';
         }
+        listed = still;
         if (still.length) html += '<div class="muted" style="margin-bottom:0.4rem;">' + (st.phase === 'review' ? 'まだ言えない文' : '言えなかった文') + '</div>' +
-          still.map(p => '<div class="item-row"><div class="en-text">' + esc(p[1]) + '</div><div class="ja-text muted">' + esc(ja(p).main) + '</div>' + usageLine(p[1]) + '</div>').join('');
+          still.map((p, i) => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:flex-start;"><div class="en-text">' + esc(p[1]) + '</div>' + favBtn(p[1], i) + '</div><div class="ja-text muted">' + esc(ja(p).main) + '</div>' + usageLine(p[1]) + '</div>').join('');
         else if (st.phase === 'review') html += '<p style="color:var(--ok); font-weight:bold;">全部言えました！</p>';
         if (st.phase === 'roundEnd') {
           html += '<button class="btn" data-dr="next" style="margin-top:0.75rem;">▶ ' + (st.round + 1) + '回目：言えなかった' + miss.length + '文だけ</button>' +
@@ -1748,7 +1752,7 @@
       }
       const p = st.queue[st.i], j = ja(p);
       box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; gap:6px;"><span class="muted">' + esc(opts.title || '') + ' ・ ' + st.round + '回目 ・ ' + (st.i + 1) + '/' + st.queue.length + '</span>' +
-        (opts.onClose ? '<button class="tiny-btn" data-dr="close">✕ やめる</button>' : '') + '</div>' +
+        '<span style="display:flex; gap:6px; flex-shrink:0;">' + favBtn(p[1]) + (opts.onClose ? '<button class="tiny-btn" data-dr="close">✕ やめる</button>' : '') + '</span></div>' +
         '<div class="rm-ja">' + esc(j.main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、' + secs + '秒以内に声に出して言ってみよう</p>' +
         '<div class="dr-reveal" style="display:none;"><div class="rm-en">' + esc(p[1]) + '</div>' +
@@ -1790,6 +1794,15 @@
       if (a === 'reveal') reveal();
       else if (a === 'ok') answer(true);
       else if (a === 'ng') answer(false);
+      else if (a === 'fav') {
+        const tp = t.dataset.i != null ? listed[+t.dataset.i] : p;
+        if (!tp) return;
+        const on = toggleFavorite(tp[1]);
+        t.textContent = on ? '★' : '☆';
+        t.style.color = on ? 'var(--fav)' : ''; t.style.borderColor = on ? 'var(--fav)' : '';
+        t.setAttribute('aria-pressed', on); t.setAttribute('aria-label', on ? 'お気に入りから外す' : 'お気に入りに追加');
+        toast(on ? '⭐ お気に入りに追加しました' : 'お気に入りから外しました');
+      }
       else if (a === 'play' && p) speak(p[1], 'en-US', 1);
       else if (a === 'slow' && p) speak(p[1], 'en-US', 0.7);
       else if (a === 'next') { const miss = st.res.filter(r => !r.ok).map(r => r.p); st.round++; st.queue = shuf(miss); st.i = 0; st.res = []; st.phase = 'card'; render(); scrollToCard(box, true); }
