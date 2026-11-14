@@ -367,6 +367,15 @@
       ["文法・表現パターン", "Can I eat this with chopsticks?", "これ、お箸で食べてもいい？（with：道具）"],
       ["文法・表現パターン", "She's from Germany.", "彼女はドイツ出身だよ。（from：出身）"],
       ["文法・表現パターン", "I'm on the train.", "今電車に乗ってるよ。（電車・バスは on、車は in）"],
+      ["文法・表現パターン", "I slept well last night.", "昨日はよく眠れた。（SV＋どのように＋いつ）"],
+      ["文法・表現パターン", "You look tired today.", "今日は疲れてるみたいだね。（SVC：look ＋ 形容詞）"],
+      ["文法・表現パターン", "I really love sushi.", "お寿司が本当に大好き。（SVO：really は動詞の前）"],
+      ["文法・表現パターン", "She gave me a candle for my birthday.", "彼女が誕生日にキャンドルをくれた。（SVOO：人 → 物）"],
+      ["文法・表現パターン", "You always make me happy.", "あなたはいつも私を幸せにしてくれる。（SVOC：make 人 ＋ 形容詞）"],
+      ["文法・表現パターン", "I had coffee at a cafe yesterday.", "昨日カフェでコーヒーを飲んだ。（場所 → 時の順）"],
+      ["文法・表現パターン", "I always think about you.", "いつもあなたのことを考えてる。（1語の always は動詞の前）"],
+      ["文法・表現パターン", "What do you usually do on weekends?", "週末はたいてい何してるの？（疑問詞 → do → 主語 → 動詞）"],
+      ["文法・表現パターン", "I didn't sleep much last night.", "昨日はあまり寝なかった。（didn't ＋ 原形）"],
       ["文法・表現パターン", "Thank you for the lovely day.", "素敵な一日をありがとう。（Thank you for ＋ 名詞）"],
       ["文法・表現パターン", "I don't have anyone to talk to openly.", "本音で話せる人がいない。"],
       // ---- 文法ノートのノート例文・クイズ文で、まだ表現集に無かったもの（2026-11-10） ----
@@ -617,13 +626,14 @@
 
   /* ---------- 学習データ ---------- */
   function defaultStore() {
-    return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, weakPhrases: {}, favorites: [], srs: {} };
+    return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, weakPhrases: {}, favorites: [], resting: [], srs: {} };
   }
   function normalizeStore(s) {
     const d = defaultStore();
     if (!s || typeof s !== 'object') return d;
     d.studied = Array.isArray(s.studied) ? s.studied.filter(x => typeof x === 'string') : [];
     d.favorites = Array.isArray(s.favorites) ? s.favorites.filter(x => typeof x === 'string') : [];
+    d.resting = Array.isArray(s.resting) ? s.resting.filter(x => typeof x === 'string') : [];
     const qs = s.quizStats || {};
     d.quizStats = { correct: Number(qs.correct) || 0, total: Number(qs.total) || 0 };
     d.speakCount = Number(s.speakCount) || 0;
@@ -704,8 +714,8 @@
     s.srs[en] = { box, due: dateKey(addDays(new Date(), SRS_INTERVALS[box])) };
   }
   function getDuePhrases() {
-    const srs = getStore().srs, today = dateKey();
-    return getAllPhrases().filter(p => srs[p[1]] && srs[p[1]].due <= today);
+    const st = getStore(), srs = st.srs, today = dateKey(), rest = new Set(st.resting);
+    return getAllPhrases().filter(p => !rest.has(p[1]) && srs[p[1]] && srs[p[1]].due <= today);
   }
   function countSpeak() {
     const s = getStore();
@@ -715,8 +725,8 @@
   }
 
   function getWeakPhrases() {
-    const wp = getStore().weakPhrases;
-    return getAllPhrases().filter(p => wp[p[1]] > 0);
+    const st = getStore(), wp = st.weakPhrases, rest = new Set(st.resting);
+    return getAllPhrases().filter(p => !rest.has(p[1]) && wp[p[1]] > 0);
   }
 
   // 連続学習日数（今日まだなら昨日までの連続を数える）
@@ -770,11 +780,14 @@
 
   function getPhrasesFor(selected) {
     const all = getAllPhrases();
-    if (selected === 'FAV') { const f = getStore().favorites; return all.filter(p => f.includes(p[1])); }
+    const rest = new Set(getStore().resting);
+    if (selected === 'REST') return all.filter(p => rest.has(p[1]));
+    const act = all.filter(p => !rest.has(p[1]));
+    if (selected === 'FAV') { const f = getStore().favorites; return act.filter(p => f.includes(p[1])); }
     if (selected === 'WEAK') return getWeakPhrases();
     if (selected === 'DUE') return getDuePhrases();
-    if (selected === 'ALL' || !selected) return all;
-    return all.filter(p => p[0] === selected);
+    if (selected === 'ALL' || !selected) return act;
+    return act.filter(p => p[0] === selected);
   }
 
   /* ジャンル選択は2段階：①分類（GENRE_GROUPS）→ ②ジャンル。
@@ -788,14 +801,31 @@
     { id: 'gram', label: '📖 文法・単語', cats: ['文法・表現パターン', '文法・文型', '構文暗唱・中学レベル', '構文暗唱・高校基礎', '単語 (単体)', '熟語 (イディオム)', '単語・熟語 (形容詞＋名詞)', '単語・熟語 (副詞＋動詞)', '語彙・コロケーション'] },
     { id: 'other', label: '📁 その他', cats: [] }
   ];
+  // 💤 お休み（練習に出さない。あとで戻せる）
+  function isResting(en) { return getStore().resting.includes(en); }
+  function toggleResting(en) {
+    const s = getStore();
+    const i = s.resting.indexOf(en);
+    if (i >= 0) s.resting.splice(i, 1); else s.resting.push(en);
+    saveStore(s);
+    return i < 0;
+  }
+  function setResting(list, on) {
+    const s = getStore(), set = new Set(s.resting);
+    (list || []).forEach(en => { if (on) set.add(en); else set.delete(en); });
+    s.resting = Array.from(set);
+    saveStore(s);
+    return s.resting.length;
+  }
   function genreEntries() {
-    const all = getAllPhrases(), count = {};
+    const rest = new Set(getStore().resting), all = getAllPhrases().filter(p => !rest.has(p[1])), count = {};
     all.forEach(p => { count[p[0]] = (count[p[0]] || 0) + 1; });
     const list = [
       { v: 'ALL', t: '✨ 全ジャンル（ランダム出題）', g: 'base' },
       { v: 'WEAK', t: '🎯 苦手フレーズのみ（' + getWeakPhrases().length + '件）', g: 'base' },
       { v: 'DUE', t: '⏰ 復習の時期が来たフレーズ（' + getDuePhrases().length + '件）', g: 'base' },
-      { v: 'FAV', t: '⭐ お気に入りフレーズのみ', g: 'base' }
+      { v: 'FAV', t: '⭐ お気に入りフレーズのみ', g: 'base' },
+      { v: 'REST', t: '💤 お休み中のフレーズ（' + getStore().resting.length + '件）', g: 'base' }
     ];
     Object.keys(count).forEach(c => {
       let g = c === CUSTOM_CAT ? 'base' : 'other';
@@ -865,6 +895,8 @@
         ? '今日復習するフレーズはありません。練習したフレーズが、時間をおいてここに戻ってきます。'
       : select.value === 'FAV'
         ? 'お気に入りがまだありません。★を押して登録してください。'
+      : select.value === 'REST'
+        ? 'お休み中のフレーズはありません。練習中に💤を押すと、そのカードは練習に出なくなります。'
         : '該当するフレーズがありません。';
     alert(msg);
     setGenre(select, 'ALL');
@@ -1134,6 +1166,7 @@
       store = {
         studied: Array.from(new Set(cur.studied.concat(inc.studied))),
         favorites: Array.from(new Set(cur.favorites.concat(inc.favorites))),
+        resting: Array.from(new Set(cur.resting.concat(inc.resting))),
         history: Object.assign({}, cur.history, inc.history),
         quizStats: {
           correct: Math.max(cur.quizStats.correct, inc.quizStats.correct),
@@ -1716,6 +1749,7 @@
     const usageLine = en => { const u = usageFor(en); return u ? '<div class="usage-line">🎬 場面：' + esc(u) + '</div>' : ''; };
     // ⭐ お気に入り（4択クイズ・表現集と同じ favorites。バックアップにも入る）
     const favBtn = (en, i) => { const on = isFavorite(en); return '<button class="tiny-btn dr-fav" data-dr="fav"' + (i != null ? ' data-i="' + i + '"' : '') + ' aria-pressed="' + on + '" aria-label="' + (on ? 'お気に入りから外す' : 'お気に入りに追加') + '" style="white-space:nowrap; flex-shrink:0; font-size:1.1rem; padding:2px 10px;' + (on ? ' color:var(--fav); border-color:var(--fav);' : '') + '">' + (on ? '★' : '☆') + '</button>'; };
+    const restBtn = (en, i) => { const on = isResting(en); return '<button class="tiny-btn dr-rest" data-dr="rest"' + (i != null ? ' data-i="' + i + '"' : '') + ' aria-pressed="' + on + '" aria-label="' + (on ? 'お休みをやめて練習に戻す' : 'お休みにする（練習に出さない）') + '" title="お休み（練習に出さない）" style="white-space:nowrap; flex-shrink:0; font-size:1rem; padding:2px 8px;' + (on ? ' background:var(--accent-soft, #eef); border-color:var(--accent, #88a);' : ' opacity:.75;') + '">' + (on ? '💤済' : '💤') + '</button>'; };
     let listed = [];
     function start() {
       st = { round: 1, queue: shuf(items), i: 0, res: [], hist: [], first: {}, phase: 'card' };
@@ -1737,7 +1771,7 @@
         }
         listed = still;
         if (still.length) html += '<div class="muted" style="margin-bottom:0.4rem;">' + (st.phase === 'review' ? 'まだ言えない文' : '言えなかった文') + '</div>' +
-          still.map((p, i) => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:flex-start;"><div class="en-text">' + esc(p[1]) + '</div>' + favBtn(p[1], i) + '</div><div class="ja-text muted">' + esc(ja(p).main) + '</div>' + usageLine(p[1]) + '</div>').join('');
+          still.map((p, i) => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:flex-start;"><div class="en-text">' + esc(p[1]) + '</div><span style="display:flex; gap:4px; flex-shrink:0;">' + favBtn(p[1], i) + restBtn(p[1], i) + '</span></div><div class="ja-text muted">' + esc(ja(p).main) + '</div>' + usageLine(p[1]) + '</div>').join('');
         else if (st.phase === 'review') html += '<p style="color:var(--ok); font-weight:bold;">全部言えました！</p>';
         if (st.phase === 'roundEnd') {
           html += '<button class="btn" data-dr="next" style="margin-top:0.75rem;">▶ ' + (st.round + 1) + '回目：言えなかった' + miss.length + '文だけ</button>' +
@@ -1752,7 +1786,7 @@
       }
       const p = st.queue[st.i], j = ja(p);
       box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; gap:6px;"><span class="muted">' + esc(opts.title || '') + ' ・ ' + st.round + '回目 ・ ' + (st.i + 1) + '/' + st.queue.length + '</span>' +
-        '<span style="display:flex; gap:6px; flex-shrink:0;">' + favBtn(p[1]) + (opts.onClose ? '<button class="tiny-btn" data-dr="close">✕ やめる</button>' : '') + '</span></div>' +
+        '<span style="display:flex; gap:6px; flex-shrink:0;">' + favBtn(p[1]) + restBtn(p[1]) + (opts.onClose ? '<button class="tiny-btn" data-dr="close">✕ やめる</button>' : '') + '</span></div>' +
         '<div class="rm-ja">' + esc(j.main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、' + secs + '秒以内に声に出して言ってみよう</p>' +
         '<div class="dr-reveal" style="display:none;"><div class="rm-en">' + esc(p[1]) + '</div>' +
@@ -1803,6 +1837,13 @@
         t.setAttribute('aria-pressed', on); t.setAttribute('aria-label', on ? 'お気に入りから外す' : 'お気に入りに追加');
         toast(on ? '⭐ お気に入りに追加しました' : 'お気に入りから外しました');
       }
+      else if (a === 'rest') {
+        const tp = t.dataset.i != null ? listed[+t.dataset.i] : p;
+        if (!tp) return;
+        const on = toggleResting(tp[1]);
+        t.outerHTML = restBtn(tp[1], t.dataset.i != null ? +t.dataset.i : null);
+        toast(on ? '💤 お休みにしました（次から練習に出ません。「💤 お休み中」から戻せます）' : '練習に戻しました');
+      }
       else if (a === 'play' && p) speak(p[1], 'en-US', 1);
       else if (a === 'slow' && p) speak(p[1], 'en-US', 0.7);
       else if (a === 'next') { const miss = st.res.filter(r => !r.ok).map(r => r.p); st.round++; st.queue = shuf(miss); st.i = 0; st.res = []; st.phase = 'card'; render(); scrollToCard(box, true); }
@@ -1823,7 +1864,7 @@
   window.EA = {
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
     esc, dateKey, getStore, saveStore, getCustomPhrases, saveCustomPhrases, getAllPhrases,
-    isFavorite, toggleFavorite, markStudied, recordResult, countSpeak, getWeakPhrases, calcStreak, updateStreakBadge,
+    isFavorite, toggleFavorite, touchToday, isResting, toggleResting, setResting, markStudied, recordResult, countSpeak, getWeakPhrases, calcStreak, updateStreakBadge,
     splitJa, usageFor, renderUsage, autoSpeak, setGenre, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,

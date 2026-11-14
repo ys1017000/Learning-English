@@ -3,6 +3,84 @@
   'use strict';
 
   var TOPICS = [{
+    id: 'word-order',
+    title: '基本の語順（5文型）：誰が → どうする → 何を → どこで → いつ',
+    short: '基本の語順（SVO・5文型）と修飾語の置き場所',
+    intro: '日本語は「私は 昨日 カフェで コーヒーを 飲んだ」と順番を入れ替えても通じますが、英語は語順で意味が決まります。基本は「誰が（S）→ どうする（V）→ 何を（O）」の一本道。そのあとに「どこで → いつ」を付け足します。そして「動詞と目的語は離さない」。副詞や場所・時はその外側に置きます。',
+    groups: [
+      {
+        name: '① 5つの基本の形（文型）',
+        note: 'S＝誰が、V＝どうする、O＝何を・誰に、C＝どんな状態。日常会話の文は、ほぼこの5つのどれかです。',
+        forms: [
+          { key: 'SV', kana: '', kanaNote: '', label: 'S ＋ V（誰が＋する）', ja: '〜する', nuance: '目的語がいらない動詞。sleep / go / come / laugh など。',
+            ex: ['I slept well last night.', '昨日はよく眠れた。'], tone: 'well（よく）や last night（昨夜）は付け足しの修飾語。' },
+          { key: 'SVC', kana: '', kanaNote: '', label: 'S ＋ V ＋ C（誰が＋be／look など＋様子）', ja: '〜だ・〜に見える', nuance: 'be / look / feel / sound / get / become のあとに「様子（形容詞）」や「何者か（名詞）」。S＝C の関係。',
+            ex: ['You look tired today.', '今日は疲れてるみたいだね。'], tone: 'look のあとは形容詞（tiredly にしない）。' },
+          { key: 'SVO', kana: '', kanaNote: '', label: 'S ＋ V ＋ O（誰が＋する＋何を）', ja: '〜を…する', nuance: '一番よく使う形。動詞と目的語はくっつける。',
+            ex: ['I really love sushi.', 'お寿司が本当に大好き。'], tone: 'I love really sushi.（×）動詞と目的語の間に入れない。' },
+          { key: 'SVOO', kana: '', kanaNote: '', label: 'S ＋ V ＋ O（人）＋ O（物）（誰が＋あげる＋人に＋物を）', ja: '（人）に（物）を…する', nuance: 'give / send / show / tell / buy など。「人 → 物」の順。',
+            ex: ['She gave me a candle for my birthday.', '彼女が誕生日にキャンドルをくれた。'], tone: '物を先にするなら to / for：She gave a candle to me.' },
+          { key: 'SVOC', kana: '', kanaNote: '', label: 'S ＋ V ＋ O ＋ C（誰が＋する＋人を＋状態に）', ja: '（人）を〜にする・〜と呼ぶ', nuance: 'make / keep / call / find など。O＝C の関係。',
+            ex: ['You always make me happy.', 'あなたはいつも私を幸せにしてくれる。'], tone: 'They call me Yo-chan.（みんな私をようちゃんって呼ぶ）' }
+        ]
+      },
+      {
+        name: '② 付け足し（修飾語）の置き場所',
+        note: '文の骨組み（SVO）を言い切ってから、最後に付け足すのが基本。',
+        forms: [
+          { key: '場所 → 時', kana: '', kanaNote: '', label: 'S V O ＋ 場所 ＋ 時', ja: '…で、いつ', nuance: '日本語と逆で「どこで → いつ」の順。時は文頭に出してもOK。',
+            ex: ['I had coffee at a cafe yesterday.', '昨日カフェでコーヒーを飲んだ。'], tone: 'Yesterday, I had coffee at a cafe. も自然。I yesterday had（×）' },
+          { key: '1語の副詞', kana: '', kanaNote: '', label: 'always / often / really / just は動詞の前（be・can のあと）', ja: 'いつも・よく・本当に', nuance: '1語の頻度・気持ちの副詞だけは、動詞の前に入れられる。',
+            ex: ["I always think about you.", 'いつもあなたのことを考えてる。'], tone: "I'm always happy. / I can't really explain it.（詳しくは「副詞の置き場所」）" },
+          { key: '2語以上は最後', kana: '', kanaNote: '', label: 'a lot / so much / very much / every day は文の最後', ja: 'たくさん・とても・毎日', nuance: '2語以上の副詞や頻度は、目的語の後ろ。',
+            ex: ['I miss you so much.', 'すごく会いたい。'], tone: 'I miss so much you.（×）' }
+        ]
+      },
+      {
+        name: '③ 疑問文・否定文の語順',
+        note: '疑問文は「助動詞（do / did / be / can）を前に出す」、否定文は「助動詞＋not を動詞の前に」。',
+        forms: [
+          { key: 'Do you ～?', kana: '', kanaNote: '', label: '（疑問詞）＋ do / did / are / can ＋ S ＋ V ...?', ja: '〜する？／何を〜する？', nuance: '疑問詞（What / Where / When）は先頭、そのあとは疑問文の語順。',
+            ex: ['What do you usually do on weekends?', '週末はたいてい何してるの？'], tone: 'What you usually do?（×）do を忘れない。' },
+          { key: "don't / didn't", kana: '', kanaNote: '', label: "S ＋ don't / didn't / can't ＋ V（原形）", ja: '〜しない／しなかった', nuance: 'not は動詞の前。didn\'t のあとは原形。',
+            ex: ["I didn't sleep much last night.", '昨日はあまり寝なかった。'], tone: "I didn't slept（×）／ I not sleep（×）" },
+          { key: '間接疑問', kana: '', kanaNote: '', label: 'Do you know where ＋ S ＋ V?（文の中の疑問は普通の語順）', ja: '〜がどこか知ってる？', nuance: '文の中に入った疑問は、普通の語順（S V）に戻る。',
+            ex: ['Do you know where the station is?', '駅がどこか知ってる？'], tone: 'Do you know where is the station?（×）' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：同じ「コーヒー」で文型と付け足しを変える',
+      rows: [
+        ['I had coffee.', 'コーヒーを飲んだ。（SVO）'],
+        ['I had coffee at a cafe yesterday.', '昨日カフェでコーヒーを飲んだ。（SVO＋場所＋時）'],
+        ['She made me a coffee.', '彼女がコーヒーを入れてくれた。（SVOO）'],
+        ['The coffee made me sleepy.', 'コーヒーで眠くなった…？（SVOC）'],
+        ['Do you drink coffee every day?', '毎日コーヒー飲む？（疑問文＋頻度）']
+      ]
+    },
+    cautions: [
+      '基本は「誰が → どうする → 何を → どこで → いつ」。まず骨組み（S V O）を言い切ってから付け足す。',
+      '動詞と目的語は離さない：I like very much sushi（×）→ I like sushi very much（○）。',
+      '1語の always / often / really だけは動詞の前に入れられる。2語以上や場所・時は文の最後。',
+      '疑問文は do / did / be / can を主語の前に。疑問詞（What / Where）はその前。',
+      '文の中の疑問（Do you know where ～?）は普通の語順：where the station is。'
+    ],
+    quiz: [
+      { situation: '昨日カフェでコーヒーを飲んだ。', sentence: 'I had coffee ___.', options: ['at a cafe yesterday', 'yesterday at a cafe', 'at yesterday a cafe', 'a cafe at yesterday'], answer: 'at a cafe yesterday', full: 'I had coffee at a cafe yesterday.', why: '付け足しは「場所 → 時」の順。' },
+      { situation: 'お寿司が本当に大好き。', sentence: 'I ___ sushi.', options: ['really love', 'love really', 'love very much', 'very love'], answer: 'really love', full: 'I really love sushi.', why: '1語の really は動詞の前。動詞と目的語の間には入れない。' },
+      { situation: 'お寿司がすごく好き。', sentence: 'I like sushi ___.', options: ['very much', 'really', 'very', 'so'], answer: 'very much', full: 'I like sushi very much.', why: '2語の very much は目的語のあと、文の最後。' },
+      { situation: '彼女が誕生日にキャンドルをくれた。', sentence: 'She gave ___ for my birthday.', options: ['me a candle', 'a candle me', 'to me a candle', 'me to a candle'], answer: 'me a candle', full: 'She gave me a candle for my birthday.', why: 'SVOO は「人 → 物」の順。物を先にするなら a candle to me。' },
+      { situation: 'あなたはいつも私を幸せにしてくれる。', sentence: 'You always make ___.', options: ['me happy', 'happy me', 'me happily', 'happy to me'], answer: 'me happy', full: 'You always make me happy.', why: 'SVOC は「人 → 状態」の順。make 人 ＋ 形容詞。' },
+      { situation: '今日は疲れてるみたいだね。', sentence: 'You look ___ today.', options: ['tired', 'tiredly', 'tire', 'to tired'], answer: 'tired', full: 'You look tired today.', why: 'SVC：look のあとは様子を言う形容詞。' },
+      { situation: '週末はたいてい何してるの？', sentence: 'What ___ on weekends?', options: ['do you usually do', 'you usually do', 'usually you do', 'do usually you do'], answer: 'do you usually do', full: 'What do you usually do on weekends?', why: '疑問詞 → do → 主語 → 1語の副詞 → 動詞。' },
+      { situation: '昨日はあまり寝なかった。', sentence: "I ___ much last night.", options: ["didn't sleep", "didn't slept", "not slept", "don't slept"], answer: "didn't sleep", full: "I didn't sleep much last night.", why: "didn't のあとは原形。" },
+      { situation: '駅がどこか知ってる？', sentence: 'Do you know where ___?', options: ['the station is', 'is the station', 'the station', 'does the station'], answer: 'the station is', full: 'Do you know where the station is?', why: '文の中の疑問は普通の語順（S V）。' },
+      { situation: 'すごく会いたい。', sentence: 'I miss ___.', options: ['you so much', 'so much you', 'you so', 'much so you'], answer: 'you so much', full: 'I miss you so much.', why: '動詞 miss と目的語 you をくっつけて、so much は最後。' },
+      { situation: '昨日はよく眠れた。', sentence: 'I slept ___.', options: ['well last night', 'last night well', 'good last night', 'well at last night'], answer: 'well last night', full: 'I slept well last night.', why: '「どのように（well）→ いつ（last night）」の順。slept（動詞）を説明するので well。' },
+      { situation: 'いつもあなたのことを考えてる。', sentence: 'I ___ about you.', options: ['always think', 'think always', 'always am thinking', 'think about always'], answer: 'always think', full: 'I always think about you.', why: '1語の always は一般動詞の前。' }
+    ]
+  }, {
     id: 'modal-perfect',
     title: 'should\'ve / could\'ve / would\'ve / must\'ve',
     short: '過去についての後悔・推測',
@@ -1791,6 +1869,7 @@
 
   // 項目のジャンル（文法ノートの2段階選択）。ここにない項目は「その他」に入る
   var GROUPS = [
+    { name: '🧱 基本の語順', ids: ['word-order', 'adverb-position', 'prepositions'] },
     { name: '🕐 時制・いつのこと', ids: ['present-perfect', 'past-perfect', 'there-have-been', 'frequency', 'time-someday', 'long-time'] },
     { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },

@@ -26,7 +26,9 @@
   </div>
   <div class="container">
     <select id="genreSelect" class="genre-select-box" aria-label="出題ジャンル"></select>
+    <select id="subGroup" class="genre-select-box" aria-label="マイ単語の種類" style="display:none; margin-top:-0.75rem;"></select>
     <select id="subSelect" class="genre-select-box" aria-label="マイ単語の分類" style="display:none; margin-top:-0.75rem;"></select>
+    <div id="restBulkRow" style="display:none; margin:-0.5rem 0 0.75rem; text-align:right;"><button class="tiny-btn" id="restBulkBtn" type="button"></button></div>
     <div class="chip-row" id="modeChips" role="group" aria-label="出題のしかた" style="margin-bottom:0.75rem;">
       <button class="chip active" data-mode="quiz">📝 4択クイズ</button>
       <button class="chip" data-mode="drill">🗣 声に出すカード</button>
@@ -70,8 +72,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=43"></script>
-  <script src="usage-data.js?v=31"></script>
+  <script src="common.js?v=45"></script>
+  <script src="usage-data.js?v=32"></script>
   <script>
     const QUIZ_SIZE = 10;
     let quizSet = [], currentIndex = 0, score = 0, answered = false, missed = [];
@@ -117,21 +119,86 @@
       return 'その他（単語など）';
     }
     function isCustomGenre(v) { return v === 'マイ単語・フレーズ'; }
+    // 分類が増えたので「種類 → 分類」の2段階にする。種類は例文欄の書き方で決まる
+    const SUBG_KEY = 'english_app_quiz_subgroup';
+    let subGrp = '';
+    try { subGrp = localStorage.getItem(SUBG_KEY) || ''; } catch (e) {}
+    const GROUP_ORDER = ['📩 DM', '📖 文法・言い方の型', '❓ 質問の言い方', '💬 気持ち・場面', '🗨️ 会話アプリの文', '🔤 単語'];
+    function subGroupOf(p) {
+      const ex = String(p[3] || ''), t = subTag(p);
+      const w = /^第(\d+)週カード/.exec(ex);
+      if (w) return '📅 第' + w[1] + '週のカード';
+      if (t === 'DMの表現' || t === 'DMの返信') return '📩 DM';
+      if (/^質問/.test(t)) return '❓ 質問の言い方';
+      if (t === '会話アプリの文') return '🗨️ 会話アプリの文';
+      if (t === '単語' || t === 'その他（単語など）') return '🔤 単語';
+      if (/[a-zA-Z]|の位置|言い分け|慣れる/.test(t)) return '📖 文法・言い方の型';
+      return '💬 気持ち・場面';
+    }
     function refreshSub(select) {
-      const box = document.getElementById('subSelect');
-      if (!isCustomGenre(select.value)) { box.style.display = 'none'; return; }
-      const pool = EA.getPhrasesFor(select.value), count = {};
-      pool.forEach(p => { const t = subTag(p); count[t] = (count[t] || 0) + 1; });
-      const tags = Object.keys(count).sort((a, b) => count[b] - count[a]);
-      if (subCat && !count[subCat]) subCat = '';
-      box.innerHTML = '<option value="">📂 すべての分類（' + pool.length + '）</option>' +
-        tags.map(t => '<option value="' + EA.esc(t) + '">　' + EA.esc(t) + '（' + count[t] + '）</option>').join('');
+      const gbox = document.getElementById('subGroup'), box = document.getElementById('subSelect');
+      if (!isCustomGenre(select.value)) { gbox.style.display = 'none'; box.style.display = 'none'; return; }
+      const pool = EA.getPhrasesFor(select.value), gcount = {}, tagsBy = {};
+      pool.forEach(p => {
+        const g = subGroupOf(p), t = subTag(p);
+        gcount[g] = (gcount[g] || 0) + 1;
+        (tagsBy[g] = tagsBy[g] || {})[t] = (tagsBy[g][t] || 0) + 1;
+      });
+      const weeks = Object.keys(gcount).filter(g => /^📅 第\d+週/.test(g)).sort((a, b) => parseInt(a.replace(/\D/g, '')) - parseInt(b.replace(/\D/g, '')));
+      const groups = weeks.concat(GROUP_ORDER.filter(g => gcount[g]));
+      if (subGrp && !gcount[subGrp]) { subGrp = ''; subCat = ''; }
+      gbox.innerHTML = '<option value="">📂 すべて（' + pool.length + '）</option>' +
+        groups.map(g => '<option value="' + EA.esc(g) + '">' + EA.esc(g) + '（' + gcount[g] + '）</option>').join('');
+      gbox.value = subGrp;
+      gbox.style.display = groups.length > 1 ? '' : 'none';
+      const tags = subGrp ? Object.keys(tagsBy[subGrp]).sort((a, b) => tagsBy[subGrp][b] - tagsBy[subGrp][a]) : [];
+      if (subCat && !tags.includes(subCat)) subCat = '';
+      box.innerHTML = '<option value="">　すべての分類（' + (subGrp ? gcount[subGrp] : pool.length) + '）</option>' +
+        tags.map(t => '<option value="' + EA.esc(t) + '">　' + EA.esc(t) + '（' + tagsBy[subGrp][t] + '）</option>').join('');
       box.value = subCat;
       box.style.display = tags.length > 1 ? '' : 'none';
     }
     function poolFor(select) {
-      const pool = EA.getPhrasesFor(select.value);
-      return isCustomGenre(select.value) && subCat ? pool.filter(p => subTag(p) === subCat) : pool;
+      let pool = EA.getPhrasesFor(select.value);
+      if (!isCustomGenre(select.value)) return pool;
+      if (subGrp) pool = pool.filter(p => subGroupOf(p) === subGrp);
+      if (subCat) pool = pool.filter(p => subTag(p) === subCat);
+      return pool;
+    }
+    // 💤 まとめてお休み／戻す
+    function refreshRestBulk(select) {
+      const row = document.getElementById('restBulkRow'), btn = document.getElementById('restBulkBtn');
+      if (select.value === 'REST') {
+        const n = EA.getPhrasesFor('REST').length;
+        btn.textContent = '↩️ お休み中の' + n + '件をすべて練習に戻す'; btn.dataset.act = 'wake';
+        row.style.display = n ? '' : 'none'; return;
+      }
+      if (isCustomGenre(select.value) && (subGrp || subCat)) {
+        const n = poolFor(select).length;
+        btn.textContent = '💤 この分類の' + n + '件をお休みにする'; btn.dataset.act = 'rest';
+        row.style.display = n ? '' : 'none'; return;
+      }
+      row.style.display = 'none';
+    }
+    function bulkRest() {
+      const select = document.getElementById('genreSelect'), btn = document.getElementById('restBulkBtn');
+      if (btn.dataset.act === 'wake') {
+        const list = EA.getPhrasesFor('REST').map(p => p[1]);
+        if (!confirm('お休み中の' + list.length + '件を、すべて練習に戻しますか？')) return;
+        EA.setResting(list, false);
+        EA.toast('↩️ ' + list.length + '件を練習に戻しました');
+        EA.populateGenreSelect(select); EA.setGenre(select, 'ALL');
+      } else {
+        const list = poolFor(select).map(p => p[1]);
+        const name = subCat || subGrp;
+        if (!confirm('「' + name + '」の' + list.length + '件をお休みにしますか？\n\n練習・クイズに出なくなります（消えはしません）。\nジャンルの「💤 お休み中のフレーズ」から、いつでも戻せます。')) return;
+        EA.setResting(list, true);
+        EA.toast('💤 ' + list.length + '件をお休みにしました');
+        subGrp = ''; subCat = '';
+        try { localStorage.setItem(SUBG_KEY, ''); localStorage.setItem(SUB_KEY, ''); } catch (err) {}
+        EA.populateGenreSelect(select); EA.setGenre(select, 'マイ単語・フレーズ');
+      }
+      startQuiz();
     }
     function startDrill(select) {
       document.getElementById('quizCard').style.display = 'none';
@@ -141,7 +208,7 @@
       refreshSizeChips(pool.length);
       const items = n ? shuffle(pool).slice(0, n) : shuffle(pool);
       let label = select.options[select.selectedIndex] ? select.options[select.selectedIndex].textContent.replace(/（.*?）\s*$/, '') : '';
-      if (isCustomGenre(select.value) && subCat) label += '・' + subCat;
+      if (isCustomGenre(select.value) && (subCat || subGrp)) label += '・' + (subCat || subGrp.replace(/^\S+\s/, ''));
       EA.cardDrill(box, { title: label, items, record: true });
     }
 
@@ -149,6 +216,7 @@
       const select = document.getElementById('genreSelect');
       if (!EA.ensureNonEmpty(select)) return;
       refreshSub(select);
+      refreshRestBulk(select);
       document.querySelectorAll('#modeChips .chip').forEach(c => c.classList.toggle('active', c.dataset.mode === mode));
       if (mode === 'drill') { startDrill(select); return; }
       refreshSizeChips(0);
@@ -273,11 +341,17 @@
       EA.populateGenreSelect(select);
       startQuiz();
       select.addEventListener('change', startQuiz);
+      document.getElementById('subGroup').addEventListener('change', e => {
+        subGrp = e.target.value; subCat = '';
+        try { localStorage.setItem(SUBG_KEY, subGrp); localStorage.setItem(SUB_KEY, ''); } catch (err) {}
+        startQuiz();
+      });
       document.getElementById('subSelect').addEventListener('change', e => {
         subCat = e.target.value;
         try { localStorage.setItem(SUB_KEY, subCat); } catch (err) {}
         startQuiz();
       });
+      document.getElementById('restBulkBtn').addEventListener('click', bulkRest);
       document.getElementById('modeChips').addEventListener('click', e => { const c = e.target.closest('[data-mode]'); if (c && c.dataset.mode !== mode) setMode(c.dataset.mode); });
       document.getElementById('drillSizeChips').addEventListener('click', e => { const c = e.target.closest('[data-size]'); if (!c) return; EA.setPref('drillCount', Number(c.dataset.size)); startQuiz(); });
       document.getElementById('nextBtn').addEventListener('click', () => { currentIndex++; showQuestion(); });

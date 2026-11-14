@@ -880,6 +880,15 @@
     "I'll see you in three days.": "次に会う日の話。",
     "Can I eat this with chopsticks?": "食事のとき。",
     "She's from Germany.": "人を紹介するとき。",
-    "I'm on the train.": "移動中のメッセージに。"
+    "I'm on the train.": "移動中のメッセージに。",
+    "I slept well last night.": "朝のあいさつや体調の話に。",
+    "You look tired today.": "相手を気遣うとき。",
+    "I really love sushi.": "好きな食べ物の話に。",
+    "She gave me a candle for my birthday.": "もらったものの話に。",
+    "You always make me happy.": "気持ちを伝えるとき。",
+    "I had coffee at a cafe yesterday.": "昨日のことを話すとき。",
+    "I always think about you.": "気持ちを伝えるとき。",
+    "What do you usually do on weekends?": "相手の生活を聞くとき。",
+    "I didn't sleep much last night.": "寝不足のとき。"
   };
 })();

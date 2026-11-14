@@ -27,13 +27,16 @@
   <div class="container">
     <select id="topicGroup" class="genre-select-box genre-group-box" aria-label="文法のジャンル" style="display:none;"></select>
     <select id="topicSelect" class="genre-select-box topic-select" aria-label="文法の項目" style="display:none;"></select>
+    <style>#tabChips { flex-wrap: nowrap; overflow-x: auto; } #tabChips .chip { padding: 0.4rem 0.55rem; white-space: nowrap; flex-shrink: 0; }</style>
     <div class="chip-row" id="tabChips" role="group" aria-label="表示の切り替え">
       <button class="chip active" data-tab="note">📖 ノート</button>
-      <button class="chip" data-tab="quiz">🎯 判定クイズ</button>
+      <button class="chip" data-tab="quiz">🎯 クイズ</button>
+      <button class="chip" data-tab="order">🧩 並べ替え</button>
       <button class="chip" data-tab="drill">🗣 声に出す</button>
     </div>
     <div id="viewNote"></div>
     <div id="viewQuiz" style="display:none;"></div>
+    <div id="viewOrder" class="card" style="display:none;"></div>
     <div id="viewDrill" class="card" style="display:none;"></div>
   </div>
   <nav>
@@ -43,9 +46,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=43"></script>
-  <script src="usage-data.js?v=31"></script>
-  <script src="grammar-data.js?v=33"></script>
+  <script src="common.js?v=45"></script>
+  <script src="usage-data.js?v=32"></script>
+  <script src="grammar-data.js?v=34"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -144,11 +147,116 @@
       };
       T.groups.forEach(g => g.forms.forEach(f => { if (f.ex && f.ex[0]) add(f.ex[0], f.ex[1]); }));
       T.quiz.forEach(q => add(q.full, q.situation));
-      return out.filter(p => p[2]);
+      const ok = out.filter(p => p[2]), act = ok.filter(p => !EA.isResting(p[1]));
+      return act.length ? act : ok;
     }
     function renderDrill() {
       const T = GR.TOPICS[topicIdx];
       EA.cardDrill($('viewDrill'), { title: T.short, items: drillItems(T), record: true });
+    }
+
+    /* ---------- 🧩 並べ替え（日本語を見て、単語カードを正しい順に並べる＝文の「形」を体で覚える） ---------- */
+    const ORDER_SIZE = 8;
+    let ord = null;
+    function orderItems(T) {
+      const out = [], seen = new Set();
+      const add = (en, ja) => {
+        en = String(en || '').trim(); const k = en.toLowerCase();
+        if (!en || !ja || seen.has(k)) return;
+        const n = en.split(/\s+/).length;
+        if (n < 3 || n > 12) return;
+        seen.add(k); out.push({ en, ja: EA.splitJa ? EA.splitJa(ja).main : ja });
+      };
+      T.groups.forEach(g => g.forms.forEach(f => { if (f.ex && f.ex[0]) add(f.ex[0], f.ex[1]); }));
+      T.quiz.forEach(q => { const p = itemFor(q.full); add(q.full, p[2]); });
+      return out;
+    }
+    function startOrder(list) {
+      const T = topic();
+      const pool = list || shuffle(orderItems(T)).slice(0, ORDER_SIZE);
+      ord = { id: T.id, list: pool, i: 0, ok: 0, missed: [], done: false };
+      newOrderQ();
+      renderOrder();
+    }
+    function newOrderQ() {
+      const q = ord.list[ord.i]; if (!q) return;
+      const words = q.en.split(/\s+/);
+      let bank = shuffle(words.map((w, k) => ({ w, k })));
+      // たまたま正解と同じ並びになったら、ずらす
+      if (words.length > 1 && bank.every((b, k) => b.w === words[k])) bank = bank.slice(1).concat(bank[0]);
+      ord.words = words; ord.bank = bank; ord.picked = []; ord.checked = false; ord.hint = 0;
+    }
+    const norm = w => w.toLowerCase().replace(/[^a-z0-9']/g, '');
+    function renderOrder() {
+      const box = $('viewOrder'), T = topic();
+      if (!ord || ord.id !== T.id) { startOrder(); return; }
+      if (!ord.list.length) { box.innerHTML = '<p class="muted">この項目には、並べ替えに使える例文がまだありません。</p>'; return; }
+      if (ord.i >= ord.list.length) {
+        const n = ord.list.length;
+        box.innerHTML = '<h3 style="margin-bottom:0.5rem;">🧩 並べ替え おわり</h3>' +
+          '<div class="stats-grid" style="grid-template-columns:1fr; margin-bottom:0.75rem;"><div><div class="stat-number">' + ord.ok + '/' + n + '</div><div class="stat-label">ヒントなしで正解</div></div></div>' +
+          (ord.missed.length ? '<p class="muted" style="margin-bottom:0.5rem;">もう一度やると覚えやすい文：</p>' + ord.missed.map(q => '<div class="item-row"><div class="en-text">' + esc(q.en) + '</div><div class="ja-text muted">' + esc(q.ja) + '</div></div>').join('') : '<p style="margin-bottom:0.5rem;">全部ヒントなしで並べられました 🎉</p>') +
+          '<div style="display:flex; gap:8px; margin-top:0.75rem; flex-wrap:wrap;">' +
+          (ord.missed.length ? '<button class="btn" data-ord="retry" style="flex:1;">🔁 まちがえた文だけ</button>' : '') +
+          '<button class="btn" data-ord="restart" style="flex:1;' + (ord.missed.length ? ' background:#64748b;' : '') + '">🔀 別の文でもう一回</button></div>';
+        const s = EA.getStore(); if (EA.touchToday) EA.touchToday(s); EA.saveStore(s); EA.updateStreakBadge();
+        return;
+      }
+      const q = ord.list[ord.i];
+      const built = ord.picked.map(k => ord.words[k]);
+      const chip = (w, attrs, extra) => '<button class="chip" ' + attrs + ' style="font-size:1rem; padding:0.45rem 0.8rem;' + (extra || '') + '">' + esc(w) + '</button>';
+      let res = '';
+      if (ord.checked) {
+        const ok = built.map(norm).join(' ') === ord.words.map(norm).join(' ');
+        res = '<div style="margin-top:0.75rem; padding:0.75rem; border-radius:8px; background:' + (ok ? '#dcfce7' : '#fee2e2') + ';">' +
+          '<div style="font-weight:bold; margin-bottom:0.25rem;">' + (ok ? '⭕ 正解！' : '❌ 正しい順番はこちら') + '</div>' +
+          '<div class="en-text">' + esc(q.en) + '</div>' +
+          '<div style="display:flex; gap:6px; margin-top:0.5rem;"><button class="tiny-btn" data-speak="' + esc(q.en) + '">🔊 聞く</button><button class="tiny-btn" data-speak="' + esc(q.en) + '" data-slow="1">🐢 ゆっくり</button></div>' +
+          '<p class="muted" style="font-size:0.85rem; margin-top:0.4rem;">聞いたあと、声に出して1回まねしてみよう。</p></div>' +
+          '<button class="btn" data-ord="next" style="margin-top:0.75rem; width:100%;">' + (ord.i + 1 < ord.list.length ? '次へ ▶' : '結果を見る') + '</button>';
+      }
+      box.innerHTML =
+        '<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;"><h3 style="font-size:1rem;">🧩 並べ替え（' + (ord.i + 1) + '/' + ord.list.length + '）</h3><span class="muted" style="font-size:0.8rem;">' + esc(T.short) + '</span></div>' +
+        '<p class="muted" style="font-size:0.85rem; margin-bottom:0.5rem;">日本語の意味になるように、下の単語をタップして順に並べよう。</p>' +
+        '<div class="ja-text" style="font-size:1.05rem; font-weight:600; margin-bottom:0.75rem;">' + esc(q.ja) + '</div>' +
+        '<div id="ordBuilt" style="min-height:3rem; border:2px dashed var(--border); border-radius:8px; padding:0.5rem; display:flex; flex-wrap:wrap; gap:6px; margin-bottom:0.75rem;">' +
+          (built.length ? ord.picked.map((k, j) => chip(ord.words[k], ord.checked ? 'disabled' : 'data-ord="back" data-j="' + j + '"', ' background:#eef2ff; border-color:var(--primary);' + (j < ord.hint ? ' outline:2px solid #f59e0b;' : ''))).join('') : '<span class="muted" style="font-size:0.85rem; align-self:center;">ここに並びます（まちがえたら単語をタップで戻せます）</span>') +
+        '</div>' +
+        (ord.checked ? '' :
+          '<div style="display:flex; flex-wrap:wrap; gap:6px; margin-bottom:0.75rem;">' +
+            ord.bank.map((b, j) => ord.picked.includes(b.k) ? '' : chip(b.w, 'data-ord="pick" data-j="' + j + '"')).join('') +
+          '</div>' +
+          '<div style="display:flex; gap:8px;">' +
+            '<button class="tiny-btn" data-ord="hint" style="flex:1;">💡 ヒント</button>' +
+            '<button class="tiny-btn" data-ord="clear" style="flex:1;">↺ 戻す</button>' +
+            '<button class="btn" data-ord="check" style="flex:2;"' + (ord.picked.length === ord.words.length ? '' : ' disabled') + '>✓ 答え合わせ</button>' +
+          '</div>') + res;
+    }
+    function orderAct(t) {
+      const a = t.dataset.ord;
+      if (a === 'restart') { startOrder(); return; }
+      if (a === 'retry') { startOrder(shuffle(ord.missed)); return; }
+      if (a === 'pick') { const b = ord.bank[+t.dataset.j]; if (b && !ord.picked.includes(b.k)) ord.picked.push(b.k); }
+      else if (a === 'back') { const j = +t.dataset.j; if (j >= ord.hint) ord.picked.splice(j, 1); }
+      else if (a === 'clear') { ord.picked = ord.picked.slice(0, ord.hint); }
+      else if (a === 'hint') {
+        // 先頭から合っている所まで残し、次の正しい1語を置く（同じ単語が複数あっても OK）
+        let n = 0; while (n < ord.picked.length && norm(ord.words[ord.picked[n]]) === norm(ord.words[n])) n++;
+        if (n >= ord.words.length) return;
+        ord.picked = ord.picked.slice(0, n);
+        const want = norm(ord.words[n]);
+        const k = ord.words.map((w, i) => i).find(i => !ord.picked.includes(i) && norm(ord.words[i]) === want);
+        ord.picked.push(k); ord.hint = n + 1; ord.usedHint = true;
+      }
+      else if (a === 'check') {
+        ord.checked = true;
+        const ok = ord.picked.map(k => norm(ord.words[k])).join(' ') === ord.words.map(norm).join(' ');
+        const q = ord.list[ord.i];
+        if (ok && !ord.hint) ord.ok++; else ord.missed.push(q);
+        if (ok) EA.speak(q.en, 'en-US', 1);
+      }
+      else if (a === 'next') { ord.i++; newOrderQ(); renderOrder(); EA.scrollToCard && EA.scrollToCard($('viewOrder'), false); return; }
+      renderOrder();
     }
 
     /* ---------- 切り替え ---------- */
@@ -158,7 +266,8 @@
       $('viewNote').style.display = name === 'note' ? '' : 'none';
       $('viewQuiz').style.display = name === 'quiz' ? '' : 'none';
       $('viewDrill').style.display = name === 'drill' ? '' : 'none';
-      if (name === 'quiz') renderQuiz(); else if (name === 'drill') renderDrill(); else renderNote();
+      $('viewOrder').style.display = name === 'order' ? '' : 'none';
+      if (name === 'quiz') renderQuiz(); else if (name === 'drill') renderDrill(); else if (name === 'order') { if (!ord) startOrder(); else renderOrder(); } else renderNote();
     }
     // ジャンル（GR.GROUPS）→ 項目の2段階で選ぶ。先頭は「すべて」、どのジャンルにもない項目は「その他」
     let groupKey = '';
@@ -190,6 +299,8 @@
     document.addEventListener('click', e => {
       const sp = e.target.closest('[data-speak]');
       if (sp) { EA.speak(sp.dataset.speak, 'en-US', sp.dataset.slow ? 0.7 : 1); return; }
+      const od = e.target.closest('[data-ord]');
+      if (od) { if (!od.disabled) orderAct(od); return; }
       const tb = e.target.closest('[data-tab]');
       if (tb) { setTab(tb.dataset.tab); return; }
       const op = e.target.closest('[data-opt]');
@@ -211,7 +322,7 @@
       if (t > 0 && t < GR.TOPICS.length) topicIdx = t;
     } catch (err) {}
     function selectTopic(i) {
-      topicIdx = i; quiz = null;
+      topicIdx = i; quiz = null; ord = null;
       try { localStorage.setItem('english_app_grammar_topic', GR.TOPICS[topicIdx].id); } catch (err) {}
       renderTopics(); setTab(tab); window.scrollTo(0, 0);
     }
