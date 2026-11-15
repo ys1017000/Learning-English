@@ -889,6 +889,17 @@
     "I had coffee at a cafe yesterday.": "昨日のことを話すとき。",
     "I always think about you.": "気持ちを伝えるとき。",
     "What do you usually do on weekends?": "相手の生活を聞くとき。",
-    "I didn't sleep much last night.": "寝不足のとき。"
+    "I didn't sleep much last night.": "寝不足のとき。",
+    "I bought a new watch recently.": "最近の出来事を話すとき。",
+    "I recently started yoga.": "新しく始めたことを話すとき。",
+    "We started dating recently.": "二人の関係を人に紹介するとき。",
+    "Have you seen any good movies recently?": "話題を広げたいとき。",
+    "I've been really busy lately.": "返信が遅れた理由や近況を話すとき。",
+    "I haven't slept well lately.": "体調や疲れを伝えるとき。",
+    "How have you been lately?": "久しぶりのDMや電話の最初に。",
+    "What have you been up to lately?": "近況を聞くとき。How are you? より話が広がる。",
+    "You've been studying Japanese hard lately.": "相手のがんばりをほめるとき。",
+    "I go to the gym a lot these days.": "今の習慣を話すとき。",
+    "It's cold these days.": "天気の話から会話を始めるとき。"
   };
 })();

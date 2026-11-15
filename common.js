@@ -378,6 +378,18 @@
       ["文法・表現パターン", "I didn't sleep much last night.", "昨日はあまり寝なかった。（didn't ＋ 原形）"],
       ["文法・表現パターン", "Thank you for the lovely day.", "素敵な一日をありがとう。（Thank you for ＋ 名詞）"],
       ["文法・表現パターン", "I don't have anyone to talk to openly.", "本音で話せる人がいない。"],
+      // ---- 「最近」recently / lately / these days（2026-11-14） ----
+      ["文法・表現パターン", "I bought a new watch recently.", "最近、新しい時計を買ったんだ。（recently ＋ 過去形）"],
+      ["文法・表現パターン", "I recently started yoga.", "最近ヨガを始めたんだ。（recently は動詞の前にも置ける）"],
+      ["文法・表現パターン", "We started dating recently.", "私たち、最近付き合い始めたばかりなの。（recently ＋ 過去形）"],
+      ["文法・表現パターン", "Have you seen any good movies recently?", "最近、何かいい映画見た？（recently / lately どちらもOK）"],
+      ["文法・表現パターン", "I've been really busy lately.", "最近ずっと忙しくて。（have been ＋ lately）"],
+      ["文法・表現パターン", "I haven't slept well lately.", "最近よく眠れてない。（haven't ＋ lately）"],
+      ["文法・表現パターン", "How have you been lately?", "最近どうしてた？（久しぶりの相手に）"],
+      ["文法・表現パターン", "What have you been up to lately?", "最近、何してたの？（be up to ～：〜をしている）"],
+      ["文法・表現パターン", "You've been studying Japanese hard lately.", "最近、日本語の勉強がんばってるね。（have been ～ing ＋ lately）"],
+      ["文法・表現パターン", "I go to the gym a lot these days.", "最近はよくジムに行ってる。（現在形 ＋ these days）"],
+      ["文法・表現パターン", "It's cold these days.", "最近は寒いね。（現在形 ＋ these days）"],
       // ---- 文法ノートのノート例文・クイズ文で、まだ表現集に無かったもの（2026-11-10） ----
       ["文法・表現パターン", "He must've had too much to drink last night.", "彼、昨日飲みすぎたに違いない。（must've：〜したに違いない）"],
       ["文法・表現パターン", "I should've told you earlier.", "もっと早く言えばよかった。（should've：〜すればよかった）"],

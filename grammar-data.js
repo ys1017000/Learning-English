@@ -483,6 +483,71 @@
       { situation: '（会って）久しぶり！元気そうだね！', sentence: "It's been a while! You look ___!", options: ['great', 'greatly', 'well done', 'greatness'], answer: 'great', full: "It's been a while! You look great!", why: 'look のあとは形容詞 great。You look great! は会ったときの定番のほめ言葉。' }
     ]
   }, {
+    id: 'lately-recently',
+    title: '「最近」の言い方：recently / lately / these days',
+    short: '「最近」recently・lately・these days',
+    intro: '日本語の「最近」は、英語では3つに分かれます。①最近〜した（1回の出来事）＝ recently、②ここ最近ずっと〜している（今も続いている）＝ lately、③最近は〜する（今の習慣・状態）＝ these days。迷ったら動詞の形で決めます：過去形なら recently、have been / haven\'t なら lately、現在形なら these days。',
+    groups: [
+      {
+        name: 'recently（つい最近〜した）',
+        note: '1回きりの出来事や変化。過去形と一緒に使えるのは recently。迷ったらこれ。',
+        forms: [
+          { key: 'recently ＋ 過去形', kana: 'リースントリー', kanaNote: '', label: 'recently ＋ 過去形（最近〜した）', ja: '最近〜した', nuance: '「最近ある出来事があった」。買った・始めた・引っ越した など。',
+            ex: ['I bought a new watch recently.', '最近、新しい時計を買ったんだ。'], tone: '置き場所は文の最後か、動詞の前（I recently bought ～）。' },
+          { key: 'recently ＋ 疑問文', kana: 'リースントリー', kanaNote: '', label: 'Have you ＋ 過去分詞 ＋ recently?（最近〜した？）', ja: '最近〜した？', nuance: '相手に最近の出来事を聞くとき。ここは lately でもOK。',
+            ex: ['Have you seen any good movies recently?', '最近、何かいい映画見た？'], tone: 'Did you ～ recently? でも通じます。' }
+        ]
+      },
+      {
+        name: 'lately（ここ最近ずっと）',
+        note: '今も続いている状態や習慣。have been ～ / haven\'t ～ と一緒に使うことが多い。',
+        forms: [
+          { key: 'have been ＋ lately', kana: 'レイトリー', kanaNote: '', label: "I've been ～ lately.（最近ずっと〜）", ja: '最近ずっと〜だ', nuance: 'しばらく前から今まで続いている感じ。',
+            ex: ["I've been really busy lately.", '最近ずっと忙しくて。'], tone: 'lately は過去形の1回の出来事にはふつう使わない：I bought a watch lately.（△）' },
+          { key: "haven't ＋ lately", kana: 'レイトリー', kanaNote: '', label: "I haven't ～ lately.（最近〜してない）", ja: '最近〜してない', nuance: '否定文と相性がいい。「ここしばらく〜していない」。',
+            ex: ["I haven't slept well lately.", '最近よく眠れてない。'], tone: 'late（遅く）とは別の語。It\'s getting late.＝遅くなってきた。' },
+          { key: '近況を聞く', kana: 'ワッ ハヴュー ビン アップ トゥ', kanaNote: '', label: 'What have you been up to lately?（最近何してた？）', ja: '最近、何してたの？', nuance: '久しぶりのDMや電話の最初に。How have you been lately?（最近どう？）も定番。',
+            ex: ['What have you been up to lately?', '最近、何してたの？'], tone: 'be up to ～＝〜をしている（何してるの？の決まり文句）。' }
+        ]
+      },
+      {
+        name: 'these days（最近は〜している＝今の習慣）',
+        note: '現在形の「最近は」。昔と比べて今は、という感じ。',
+        forms: [
+          { key: 'these days ＋ 現在形', kana: 'ジーズ デイズ', kanaNote: '', label: '現在形 ＋ these days（最近は〜している）', ja: '最近は〜している', nuance: '今の習慣や状態。recently / lately は現在形とは使いにくい。',
+            ex: ['I go to the gym a lot these days.', '最近はよくジムに行ってる。'], tone: 'Recently I go to the gym.（×）→ I go to the gym these days.（○）。nowadays も同じ意味（少しかため）。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「最近ヨガ」を3通りで',
+      rows: [
+        ['I started yoga recently.', '最近ヨガを始めた。（recently：1回の出来事・過去形）'],
+        ["I've been doing yoga a lot lately.", 'ここ最近ずっとヨガをしてる。（lately：have been）'],
+        ['I do yoga every morning these days.', '最近は毎朝ヨガしてる。（these days：現在形・今の習慣）'],
+        ["I'm busy these days. / I've been busy lately.", '最近忙しい。（I\'m busy recently. は不自然）']
+      ]
+    },
+    cautions: [
+      '過去形（bought / started など）と一緒に使う「最近」は recently。lately はふつう使わない。',
+      '「ここ最近ずっと」は have been ～ / haven\'t ～ ＋ lately。この形なら recently でも通じる。',
+      '現在形の「最近は〜してる」は these days。I\'m busy recently. は不自然。',
+      'late（遅く・遅い）と lately（最近）は意味が別。',
+      '近況を聞くなら How have you been lately? / What have you been up to lately?'
+    ],
+    quiz: [
+      { situation: '最近、新しい時計を買ったんだ。', sentence: 'I bought a new watch ___.', options: ['recently', 'lately', 'these days', 'late'], answer: 'recently', full: 'I bought a new watch recently.', why: '過去形の1回の出来事は recently。lately は過去形とはふつう使わない。' },
+      { situation: '最近ずっと忙しくて。', sentence: "I've been really busy ___.", options: ['lately', 'late', 'the other day', 'once'], answer: 'lately', full: "I've been really busy lately.", why: 'have been（今も続いている）＋ lately で「最近ずっと」。late は「遅く」。' },
+      { situation: '最近はよくジムに行ってる。', sentence: 'I go to the gym a lot ___.', options: ['these days', 'recently', 'lately', 'the other day'], answer: 'these days', full: 'I go to the gym a lot these days.', why: '現在形（go）の「最近は」は these days。' },
+      { situation: '最近どうしてた？', sentence: 'How have you ___ lately?', options: ['been', 'be', 'were', 'are'], answer: 'been', full: 'How have you been lately?', why: 'have ＋ been（過去分詞）。久しぶりの相手に。' },
+      { situation: '最近よく眠れてない。', sentence: 'I ___ slept well lately.', options: ["haven't", "didn't", "don't", "wasn't"], answer: "haven't", full: "I haven't slept well lately.", why: 'lately は「今も続いている」ので haven\'t ＋ 過去分詞。' },
+      { situation: '最近ヨガを始めたんだ。', sentence: 'I ___ started yoga.', options: ['recently', 'lately', 'these days', 'late'], answer: 'recently', full: 'I recently started yoga.', why: '過去形の前に置けるのは recently。' },
+      { situation: '最近、何してたの？', sentence: 'What have you been ___ to lately?', options: ['up', 'on', 'in', 'at'], answer: 'up', full: 'What have you been up to lately?', why: 'be up to ～＝〜をしている。近況を聞く決まり文句。' },
+      { situation: '最近は寒いね。', sentence: "It's cold ___.", options: ['these days', 'recently', 'the other day', 'late'], answer: 'these days', full: "It's cold these days.", why: '現在形（It\'s）の「最近は」は these days。' },
+      { situation: '私たち、最近付き合い始めたばかりなの。', sentence: 'We ___ dating recently.', options: ['started', 'start', 'have start', 'are start'], answer: 'started', full: 'We started dating recently.', why: 'recently ＋ 過去形で「最近〜した」。' },
+      { situation: '最近、日本語の勉強がんばってるね。', sentence: "You've been studying Japanese hard ___.", options: ['lately', 'late', 'these day', 'the other day'], answer: 'lately', full: "You've been studying Japanese hard lately.", why: 'have been ～ing（ずっと続いている）＋ lately。these day は s が必要。' }
+    ]
+  }, {
     id: 'present-perfect',
     title: '現在完了：have / has ＋ 過去分詞',
     short: '今につながる過去（現在完了）',
@@ -1870,11 +1935,11 @@
   // 項目のジャンル（文法ノートの2段階選択）。ここにない項目は「その他」に入る
   var GROUPS = [
     { name: '🧱 基本の語順', ids: ['word-order', 'adverb-position', 'prepositions'] },
-    { name: '🕐 時制・いつのこと', ids: ['present-perfect', 'past-perfect', 'there-have-been', 'frequency', 'time-someday', 'long-time'] },
+    { name: '🕐 時制・いつのこと', ids: ['present-perfect', 'past-perfect', 'there-have-been', 'frequency', 'time-someday', 'lately-recently', 'long-time'] },
     { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
-    { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
+    { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] }
   ];
   var GR = { TOPICS: TOPICS, GROUPS: GROUPS };
