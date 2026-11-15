@@ -548,6 +548,82 @@
       { situation: '最近、日本語の勉強がんばってるね。', sentence: "You've been studying Japanese hard ___.", options: ['lately', 'late', 'these day', 'the other day'], answer: 'lately', full: "You've been studying Japanese hard lately.", why: 'have been ～ing（ずっと続いている）＋ lately。these day は s が必要。' }
     ]
   }, {
+    id: 'else-other',
+    title: '「他・それ以外」の言い方：else / other / another / except / besides',
+    short: '「他・それ以外」else・other・except',
+    intro: '日本語の「他」「それ以外」は、英語ではいくつにも分かれます。①ほかに何か・誰か＝ else（anything / what などの後ろ）、②ほかの〜・もう1つ・もう片方＝ other / another / the other（名詞の前）、③〜以外＝ except / other than（除く）、〜のほかに＝ besides（加える）。まず「後ろに置くのか、名詞の前か」「除くのか、加えるのか」で分けると迷いにくくなります。',
+    groups: [
+      {
+        name: 'else（ほかに何か・誰か・どこか）',
+        note: 'else は「後ろ」に置く語。anything / someone / somewhere や what / who のすぐ後ろ。',
+        forms: [
+          { key: 'anything else', kana: 'エニスィング エルス', kanaNote: '', label: 'anything else（ほかに何か）', ja: 'ほかに何か', nuance: 'お店でも家でも使う定番。Anything else? だけでも通じます。',
+            ex: ['Do you need anything else?', 'ほかに何かいる？'], tone: 'else は後ろ：else anything（×）。nothing else（ほかには何もない）も便利。' },
+          { key: 'somewhere else', kana: 'サムウェア エルス', kanaNote: '', label: 'someone / somewhere else（ほかの人・ほかの場所）', ja: 'ほかの人・ほかの場所', nuance: 'お店が混んでいるとき、別の人に聞くときなど。',
+            ex: ["Let's go somewhere else.", 'ほかの場所に行こう。'], tone: 'Ask someone else.（ほかの人に聞いて）。' },
+          { key: 'what else', kana: 'ワット エルス', kanaNote: '', label: 'what / who / where else（ほかに何・誰・どこ）', ja: 'ほかに何を・誰が・どこに', nuance: '疑問詞のすぐ後ろに else。会話を広げるのに便利。',
+            ex: ['What else do you want to eat?', 'ほかに何食べたい？'], tone: 'Who else is coming?（ほかに誰が来るの？）' }
+        ]
+      },
+      {
+        name: 'other / another / the other（名詞の前）',
+        note: '数で分ける：other ＋ 複数、another ＋ 1つ、the other ＝ 2つのうち残りの1つ。',
+        forms: [
+          { key: 'other', kana: 'アザー', kanaNote: '', label: 'other ＋ 複数の名詞（ほかの〜）', ja: 'ほかの〜', nuance: 'other people / other places のように後ろは複数が基本。any other ～ で「ほかに何か〜」。',
+            ex: ['Do you know any other good places?', 'ほかにいい場所知ってる？'], tone: 'other だけで名詞の代わりにはしない。名詞なしなら others（ほかの人たち・ほかのもの）。' },
+          { key: 'another', kana: 'アナザー', kanaNote: '', label: 'another ＋ 1つの名詞（もう1つの・別の）', ja: 'もう1つの・別の', nuance: 'an ＋ other がくっついた語。「おかわり」や「別の機会」に。',
+            ex: ['Can I have another beer?', 'ビールもう1杯もらえる？'], tone: 'another の後ろは単数：another people（×）。Let\'s do it another time.（また今度にしよう）' },
+          { key: 'the other', kana: 'ジ アザー', kanaNote: '', label: 'the other（2つのうちの、もう片方）', ja: 'もう片方の', nuance: '2つあって、1つ目じゃない方。靴・箸・手など。',
+            ex: ["Where's the other chopstick?", 'もう片方のお箸どこ？'], tone: '3つ以上の「残り全部」は the others。the other day は「先日」で別の意味。' },
+          { key: 'others', kana: 'アザーズ', kanaNote: '', label: 'some ～, others ～（〜な人もいれば、〜な人もいる）', ja: '〜な人もいれば、〜な人もいる', nuance: 'others＝ほかの人たち（名詞の代わり）。好みや意見が分かれる話に。',
+            ex: ["Some people like natto, and others don't.", '納豆が好きな人もいれば、そうじゃない人もいる。'], tone: 'the others＝（決まった集まりの）残りの人全員。' }
+        ]
+      },
+      {
+        name: '「〜以外」と「〜のほかに」（except / other than / besides）',
+        note: '向きが逆なので注意：except / other than は「除く」、besides は「加える」。',
+        forms: [
+          { key: 'except', kana: 'イクセプト', kanaNote: '', label: 'except ＋ 名詞（〜以外は・〜を除いて）', ja: '〜以外は', nuance: 'everything / everyone / all / every day など「全部」と一緒に使う。',
+            ex: ['I eat everything except natto.', '納豆以外は何でも食べるよ。'], tone: 'except for ～ でもOK。文の最初なら Except for ～, が自然。' },
+          { key: 'other than', kana: 'アザー ザン', kanaNote: '', label: 'other than ＋ 名詞（〜以外に・〜以外は）', ja: '〜以外に', nuance: '否定文や no / any と相性がいい。except とほぼ同じ場面も多い。',
+            ex: ["I don't have any plans other than work.", '仕事以外、予定はないよ。'], tone: 'Other than that, I\'m fine.（それ以外は大丈夫）は会話の定番。' },
+          { key: 'besides', kana: 'ビサイズ', kanaNote: '', label: 'besides ＋ 名詞（〜のほかに・〜に加えて）', ja: '〜のほかに', nuance: '「それも入れて、さらに」。except（除く）と逆の向き。',
+            ex: ['Besides sushi, what do you like?', 'お寿司のほかに何が好き？'], tone: 'beside（s なし）は「〜のそばに」で別の語。Besides, ～.（それに・そもそも）と文頭で理由を足す使い方もある。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：「他」「以外」を言い分ける',
+      rows: [
+        ['Anything else?', 'ほかに何かある？（else：anything の後ろ）'],
+        ['Can I have another coffee?', 'コーヒーもう1杯もらえる？（another：もう1つ）'],
+        ["Where's the other one?", 'もう片方はどこ？（the other：2つのうち残り）'],
+        ['Everyone came except Tom.', 'トム以外はみんな来た。（except：除く。トムは来ていない）'],
+        ['Besides Tom, Anna came too.', 'トムのほかにアンナも来た。（besides：加える。トムも来ている）']
+      ]
+    },
+    cautions: [
+      'else は anything / someone / somewhere や what / who の後ろに置く。else anything（×）。',
+      'other の後ろは複数（other people）、another の後ろは単数（another cup）。another people（×）。',
+      '2つのうちの「もう片方」は the other。3つ以上の残り全部は the others。',
+      'except / other than は「除く」、besides は「加える」。向きが逆なので、言いたいのはどっちか考える。',
+      'Other than that, ～（それ以外は〜）は会話でよく使う決まり文句。'
+    ],
+    quiz: [
+      { situation: 'ほかに何かいる？', sentence: 'Do you need anything ___?', options: ['else', 'other', 'another', 'others'], answer: 'else', full: 'Do you need anything else?', why: 'anything の後ろに置く「ほかに」は else。' },
+      { situation: 'ビールもう1杯もらえる？', sentence: 'Can I have ___ beer?', options: ['another', 'other', 'the other', 'else'], answer: 'another', full: 'Can I have another beer?', why: '「もう1つ（1杯）」は another ＋ 単数。' },
+      { situation: 'もう片方のお箸どこ？', sentence: "Where's the ___ chopstick?", options: ['other', 'another', 'else', 'others'], answer: 'other', full: "Where's the other chopstick?", why: '2本のうちの「もう片方」は the other。' },
+      { situation: '納豆以外は何でも食べるよ。', sentence: 'I eat everything ___ natto.', options: ['except', 'besides', 'else', 'another'], answer: 'except', full: 'I eat everything except natto.', why: 'everything から納豆を「除く」ので except。besides だと「加える」になる。' },
+      { situation: 'お寿司のほかに何が好き？', sentence: '___ sushi, what do you like?', options: ['Besides', 'Except', 'Else', 'Another'], answer: 'Besides', full: 'Besides sushi, what do you like?', why: 'お寿司も好きで「それに加えて」なので besides。' },
+      { situation: 'ほかの場所に行こう。', sentence: "Let's go somewhere ___.", options: ['else', 'other', 'another', 'others'], answer: 'else', full: "Let's go somewhere else.", why: 'somewhere の後ろの「ほかの」は else。' },
+      { situation: 'ほかにいい場所知ってる？', sentence: 'Do you know any ___ good places?', options: ['other', 'else', 'another', 'the other'], answer: 'other', full: 'Do you know any other good places?', why: '複数の名詞（places）の前は other。another は単数の前。' },
+      { situation: '仕事以外、予定はないよ。', sentence: "I don't have any plans ___ work.", options: ['other than', 'besides of', 'else', 'another'], answer: 'other than', full: "I don't have any plans other than work.", why: '否定文の「〜以外」は other than が自然。besides of という形はない。' },
+      { situation: 'ほかに誰か来るの？', sentence: 'Is anyone ___ coming?', options: ['else', 'other', 'another', 'others'], answer: 'else', full: 'Is anyone else coming?', why: 'anyone の後ろの「ほかに」は else。' },
+      { situation: '納豆が好きな人もいれば、そうじゃない人もいる。', sentence: "Some people like natto, and ___ don't.", options: ['others', 'other', 'another', 'else'], answer: 'others', full: "Some people like natto, and others don't.", why: '名詞なしで「ほかの人たち」は others。' },
+      { situation: '今日は無理だから、また今度にしよう。', sentence: "Let's do it ___ time.", options: ['another', 'other', 'else', 'the other'], answer: 'another', full: "Let's do it another time.", why: '「別のとき（1回）」は another time。' },
+      { situation: 'ちょっと疲れてるけど、それ以外は元気だよ。', sentence: "I'm a little tired, but ___ that, I'm fine.", options: ['other than', 'except of', 'besides of', 'else'], answer: 'other than', full: "I'm a little tired, but other than that, I'm fine.", why: 'Other than that（それ以外は）は会話の決まり文句。' }
+    ]
+  }, {
     id: 'present-perfect',
     title: '現在完了：have / has ＋ 過去分詞',
     short: '今につながる過去（現在完了）',
@@ -1939,7 +2015,7 @@
     { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
-    { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
+    { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'else-other', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] }
   ];
   var GR = { TOPICS: TOPICS, GROUPS: GROUPS };

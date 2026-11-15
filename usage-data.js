@@ -900,6 +900,18 @@
     "What have you been up to lately?": "近況を聞くとき。How are you? より話が広がる。",
     "You've been studying Japanese hard lately.": "相手のがんばりをほめるとき。",
     "I go to the gym a lot these days.": "今の習慣を話すとき。",
-    "It's cold these days.": "天気の話から会話を始めるとき。"
+    "It's cold these days.": "天気の話から会話を始めるとき。",
+    "Do you need anything else?": "食事や買い物で、相手に追加がいるか聞くとき。",
+    "Let's go somewhere else.": "お店が混んでいる・合わないとき。",
+    "What else do you want to eat?": "注文を追加するときや、献立を決めるとき。",
+    "Do you know any other good places?": "観光やお店選びで、おすすめを聞くとき。",
+    "Can I have another beer?": "おかわりを頼むとき。",
+    "Where's the other chopstick?": "家で食事の準備をしているとき。",
+    "Some people like natto, and others don't.": "好みが分かれるものの話をするとき。",
+    "I eat everything except natto.": "好き嫌いを聞かれたとき。",
+    "I don't have any plans other than work.": "予定を聞かれたとき。誘いを受けやすい返し。",
+    "Besides sushi, what do you like?": "好きな食べ物の話を広げるとき。",
+    "Let's do it another time.": "予定が合わないとき、やわらかく断る・延ばすとき。",
+    "I'm a little tired, but other than that, I'm fine.": "調子を聞かれたとき。"
   };
 })();
