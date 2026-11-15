@@ -2005,6 +2005,232 @@
       { situation: '職場で大切にされてると感じる。', sentence: 'I feel ___ at work.', options: ['valued', 'value', 'valuable', 'valuing'], answer: 'valued', full: 'I feel valued at work.', why: 'valued＝大切にされている（過去分詞）。valuable は「価値のある（物）」。' },
       { situation: 'ちょっと仲間外れな気がした。', sentence: 'I felt a little left ___.', options: ['out', 'off', 'away', 'behind me'], answer: 'out', full: 'I felt a little left out.', why: 'left out＝仲間外れにされた。' }
     ]
+  }, {
+    id: "think-person",
+    title: "発想①「物・場所」より「人」を主語に",
+    short: "発想① 人を主語にする",
+    intro: "日本語は「ここは」「頭が」「お店は」のように、場所や物を主語にしがちです。英語は「私・あなた・お店の人」を主語にして、「誰がどうする・どうなっている」で考えると自然になります。訳す前に「これ、誰の話？」と考えるのがコツです。",
+    groups: [
+      {
+        name: "「〜は」を「人」に言いかえる",
+        note: "「ここはどこ？」→「私はどこにいる？」のように、主語を人に変えてから英語にする。",
+        forms: [
+          { key: "Where am I?", kana: "ウェア アム アイ", kanaNote: '', label: "ここはどこ？ → Where am I?", ja: "（私は）どこにいるの？", nuance: "「ここ」ではなく「私」がどこにいるかを聞く。Where is here?（×）。",
+            ex: ["Where am I?", "ここはどこ？（道に迷って）"], tone: "地図を見せて Where are we on this map?（この地図でいまどこ？）も便利。" },
+          { key: "What time do you close?", kana: "ワッタイム ドゥユー クローズ", kanaNote: '', label: "このお店何時まで？ → What time do you close?", ja: "（あなたたちは）何時に閉めますか？", nuance: "お店の人（you）を主語にする。Until what time is this shop?（×）。",
+            ex: ["What time do you close?", "このお店、何時まで？"], tone: "What time do you open?（何時に開く？）も同じ形。" },
+          { key: "I have a headache.", kana: "ヘデイク", kanaNote: '', label: "頭が痛い → I have a headache.", ja: "（私は）頭痛がある", nuance: "体のことは「私は〜を持っている（have）」で言う。My head is painful.（△）。",
+            ex: ["I have a headache.", "頭が痛い。"], tone: "I have a stomachache.（お腹が痛い）／ I have a cold.（風邪をひいた）" }
+        ]
+      },
+      {
+        name: "「状態」を「私は〜だ」で言う",
+        note: "「お腹がすいた」「道に迷った」は、私がどういう状態かを形容詞で言う。",
+        forms: [
+          { key: "I'm lost.", kana: "アイム ロスト", kanaNote: '', label: "道に迷った → I'm lost.", ja: "（私は）迷子だ", nuance: "lost＝迷っている状態。I lost the way.（△）より自然。",
+            ex: ["I'm lost.", "道に迷っちゃった。"], tone: "We're lost.（私たち迷ってる）" },
+          { key: "I can't find", kana: "キャント ファインド", kanaNote: '', label: "〇〇がない！ → I can't find 〜", ja: "（私は）〜が見つからない", nuance: "「財布がない」は「私が見つけられない」と考える。There is no wallet.（×）。",
+            ex: ["I can't find my wallet!", "財布がない！"], tone: "I left my umbrella at the shop.（お店に傘を忘れた）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "日本語の主語 → 英語の主語",
+      rows: [["ここはどこ？", "Where am I?（私）"], ["このお店何時まで？", "What time do you close?（お店の人）"], ["頭が痛い", "I have a headache.（私）"], ["財布がない！", "I can't find my wallet!（私）"]]
+    },
+    cautions: ["訳す前に「これは誰の話？」と考え、その人を主語にする。", "場所（ここ・お店）や体の一部（頭・お腹）を主語にした直訳は、通じても不自然になりやすい。", "「〜がない」は There is no 〜 より I can't find 〜／I don't have 〜 が多い。"],
+    quiz: [
+      { situation: "道に迷って、自分がどこにいるか分からない。「ここはどこ？」", sentence: '___', options: ["Where am I?", "Where is here?", "What is this place here?"], answer: "Where am I?", full: "Where am I?", why: "「ここ」ではなく「私がどこにいるか」を聞く。主語を人（I）にするのがコツ。" },
+      { situation: "お店に入って店員さんに。「このお店、何時まで？」", sentence: '___', options: ["What time do you close?", "Until what time is this shop?", "What time is this shop finish?"], answer: "What time do you close?", full: "What time do you close?", why: "お店の人（you）を主語にして「何時に閉める？」と聞く。" },
+      { situation: "朝から体調が悪い。「頭が痛い」", sentence: '___', options: ["I have a headache.", "My head is painful.", "My head hurts me pain."], answer: "I have a headache.", full: "I have a headache.", why: "体の不調は「私は〜を持っている（have）」で言う。My head hurts. も OK。" },
+      { situation: "「お腹すいた〜」", sentence: '___', options: ["I'm hungry.", "My stomach is empty.", "My stomach is hungry."], answer: "I'm hungry.", full: "I'm hungry.", why: "お腹ではなく「私」が空腹。I'm starving.（腹ペコ）も会話でよく使う。" },
+      { situation: "観光中。「道に迷っちゃった」", sentence: '___', options: ["I'm lost.", "I lost the way.", "The road is lost."], answer: "I'm lost.", full: "I'm lost.", why: "「私は迷子の状態」と考えて I'm lost." },
+      { situation: "カバンを探しても見つからない。「財布がない！」", sentence: '___', options: ["I can't find my wallet!", "There is no wallet!", "My wallet is nothing!"], answer: "I can't find my wallet!", full: "I can't find my wallet!", why: "「ない」は「私が見つけられない」と考える。" },
+      { situation: "カフェで。「日本語できる？」と聞きたい", sentence: '___', options: ["Do you speak Japanese?", "Can you do Japanese?", "Is Japanese OK for you?"], answer: "Do you speak Japanese?", full: "Do you speak Japanese?", why: "言語は speak で聞く。can を使うと「能力を試す」感じになるので、Do you speak 〜? が自然。" },
+      { situation: "「今日は仕事休みなんだ」", sentence: '___', options: ["I'm off today.", "Today is rest.", "Today is my holiday rest."], answer: "I'm off today.", full: "I'm off today.", why: "「今日は」ではなく「私が休み（off）」と考える。I have the day off. も OK。" },
+      { situation: "景色を見ながら。「ここ、景色いいね」", sentence: '___', options: ["You get a great view from here.", "Here is a good scenery.", "This place scenery is good."], answer: "You get a great view from here.", full: "You get a great view from here.", why: "「ここから（人が）いい眺めを得られる」と考える。The view is amazing! も自然。" },
+      { situation: "ホテルで。「Wi-Fi ありますか？」", sentence: '___', options: ["Do you have Wi-Fi?", "Is there Wi-Fi in here?", "Wi-Fi exists?"], answer: "Do you have Wi-Fi?", full: "Do you have Wi-Fi?", why: "お店やホテルにあるかは「あなたたちは持ってる？」と聞く。Is there Wi-Fi here? も通じるが、Do you have 〜? が定番。" }
+    ]
+  }, {
+    id: "think-have",
+    title: "発想②「ある・いる」は have か there is か",
+    short: "発想② ある・いる＝have",
+    intro: "日本語の「〜がある・いる」は、英語ではまず have（持っている）で考えます。兄弟・時間・予定・熱・アイデアなど、人に属するものは have。「その場所に存在する」ときだけ there is / there are を使います。",
+    groups: [
+      {
+        name: "人に属するものは have",
+        note: "家族・時間・予定・体調・考え → 「私（あなた）は〜を持っている」。",
+        forms: [
+          { key: "Do you have", kana: "ドゥユー ハヴ", kanaNote: '', label: "兄弟いる？ → Do you have any siblings?", ja: "兄弟・姉妹はいる？", nuance: "家族は「持っている」と考える。Are there brothers?（×）。",
+            ex: ["Do you have any siblings?", "兄弟いる？"], tone: "siblings＝兄弟姉妹（男女まとめて）。" },
+          { key: "I have plans", kana: "アイ ハヴ プランズ", kanaNote: '', label: "予定がある → I have plans.", ja: "予定がある", nuance: "予定・用事・約束も have。",
+            ex: ["I have plans tonight.", "今夜は予定がある。"], tone: "I have work tomorrow.（明日は仕事がある）" }
+        ]
+      },
+      {
+        name: "場所に存在するなら there is",
+        note: "「（その場所に）〜がある」は there is / there are。",
+        forms: [
+          { key: "Is there", kana: "イズ ゼア", kanaNote: '', label: "近くに〜ある？ → Is there a 〜 nearby?", ja: "近くに〜はある？", nuance: "場所に存在するかを聞くときは there is。",
+            ex: ["Is there a convenience store nearby?", "近くにコンビニある？"], tone: "There are a lot of people here.（ここ人が多いね）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "have と there is の分け方",
+      rows: [["時間ある？", "Do you have time?（あなたが持っている）"], ["熱がある", "I have a fever.（私が持っている）"], ["近くにATMある？", "Is there an ATM nearby?（場所に存在）"]]
+    },
+    cautions: ["まず「誰が持っている？」と考える。持ち主がいれば have。", "「その場所に存在する」ときだけ there is / there are。", "「時間ある？」は Are you free? でも OK。"],
+    quiz: [
+      { situation: "初めて会った人に。「兄弟いる？」", sentence: '___', options: ["Do you have any siblings?", "Are there your brothers?", "Is there a brother?"], answer: "Do you have any siblings?", full: "Do you have any siblings?", why: "家族は「持っている」と考えて have。siblings は兄弟姉妹をまとめた言い方。" },
+      { situation: "「今ちょっと時間ある？」", sentence: '___', options: ["Do you have a minute?", "Is there a time now?", "Is time OK now?"], answer: "Do you have a minute?", full: "Do you have a minute?", why: "時間も「持っている」と考える。a minute で「ちょっと」の感じ。Are you free? も OK。" },
+      { situation: "誘いを断るとき。「今夜は予定があるんだ」", sentence: '___', options: ["I have plans tonight.", "There is a plan tonight.", "Tonight is a schedule."], answer: "I have plans tonight.", full: "I have plans tonight.", why: "予定は have。plans と複数にするのが自然。" },
+      { situation: "「熱がある」", sentence: '___', options: ["I have a fever.", "There is a fever.", "My body has heat."], answer: "I have a fever.", full: "I have a fever.", why: "体の症状は have。" },
+      { situation: "「何かいい考えある？」", sentence: '___', options: ["Do you have any ideas?", "Is there any good idea?", "Are there ideas in you?"], answer: "Do you have any ideas?", full: "Do you have any ideas?", why: "考えも「持っている」。any ideas と複数で聞くのが自然。" },
+      { situation: "街で。「近くにコンビニある？」", sentence: '___', options: ["Is there a convenience store nearby?", "Do you have a convenience store nearby?", "Have a convenience store near?"], answer: "Is there a convenience store nearby?", full: "Is there a convenience store nearby?", why: "これは「その場所に存在するか」なので there is。人が持っているものではない。" },
+      { situation: "渋谷で。「ここ人が多いね」", sentence: '___', options: ["There are so many people here.", "Here has many people.", "Here is many people."], answer: "There are so many people here.", full: "There are so many people here.", why: "その場所に人がたくさん存在する → there are。It's so crowded here. も自然。" },
+      { situation: "レストランで。「ベジタリアンのメニューありますか？」", sentence: '___', options: ["Do you have any vegetarian options?", "Is there vegetarian menu exist?", "Vegetarian menu is there?"], answer: "Do you have any vegetarian options?", full: "Do you have any vegetarian options?", why: "お店に聞くなら「あなたたちは持ってる？」で Do you have。" },
+      { situation: "「明日は授業がある？」", sentence: '___', options: ["Do you have class tomorrow?", "Is there your class tomorrow?", "Tomorrow is class?"], answer: "Do you have class tomorrow?", full: "Do you have class tomorrow?", why: "授業・仕事・テストなど「その人の予定」は have。" },
+      { situation: "「お金あんまりないんだ」", sentence: '___', options: ["I don't have much money.", "There isn't much money.", "Money is not much."], answer: "I don't have much money.", full: "I don't have much money.", why: "お金も「持っていない」で言う。" }
+    ]
+  }, {
+    id: "think-phrases",
+    title: "発想③ 直訳できないあいさつ・返事",
+    short: "発想③ あいさつ・返事",
+    intro: "「お疲れさま」「よろしく」「いただきます」のような言葉は、英語にぴったりの言い方がありません。言葉そのものではなく、「その場面で何を伝えたいか（ねぎらい・感謝・楽しみ）」を考えて言いかえます。否定の質問への Yes / No も日本語と逆になりやすいので注意。",
+    groups: [
+      {
+        name: "場面で言いかえる",
+        note: "決まり文句は「伝えたい気持ち」で英語を選ぶ。",
+        forms: [
+          { key: "How was your day?", kana: "ハウ ワズ ユア デイ", kanaNote: '', label: "おかえり／お疲れさま → How was your day?", ja: "今日どうだった？", nuance: "ねぎらいは「どうだった？」と聞く形が自然。",
+            ex: ["How was your day?", "おかえり、今日どうだった？"], tone: "You must be tired.（疲れたでしょ）も使える。" },
+          { key: "Nice to meet you.", kana: "ナイス トゥ ミーチュー", kanaNote: '', label: "よろしくお願いします（初対面）→ Nice to meet you.", ja: "はじめまして", nuance: "初対面の「よろしく」は Nice to meet you.",
+            ex: ["Nice to meet you.", "はじめまして、よろしくね。"], tone: "頼みごとの「よろしく」は Thanks in advance. など別の言い方。" },
+          { key: "This looks delicious!", kana: "ディス ルックス デリシャス", kanaNote: '', label: "いただきます → This looks delicious!", ja: "おいしそう！", nuance: "英語に「いただきます」はない。料理をほめるか Let's eat! で始める。",
+            ex: ["This looks delicious!", "いただきます！（おいしそう！）"], tone: "ごちそうさま → That was delicious, thank you!" }
+        ]
+      },
+      {
+        name: "否定の質問への返事",
+        note: "英語は「自分がする／しない」で Yes / No を決める。日本語の「うん」「いいえ」とは逆になることがある。",
+        forms: [
+          { key: "No, I don't.", kana: "ノウ アイ ドント", kanaNote: '', label: "「飲まないの？」「うん、飲まない」→ No, I don't.", ja: "うん、飲まない", nuance: "飲まないなら No。日本語の「うん」につられて Yes と言わない。",
+            ex: ["No, I don't drink coffee.", "うん、コーヒーは飲まないんだ。"], tone: "飲むなら Yes, I do.（いや、飲むよ）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "日本語の決まり文句 → 伝えたい気持ち",
+      rows: [["お疲れさま", "How was your day? / Good job today!"], ["いただきます", "This looks delicious! / Let's eat!"], ["ごちそうさま（作ってもらった）", "That was delicious, thank you!"], ["いってらっしゃい", "Have a good day!"]]
+    },
+    cautions: ["決まり文句は直訳せず、「ねぎらい・感謝・楽しみ」など伝えたい気持ちを英語にする。", "否定の質問（Don't you 〜?）には、自分がするなら Yes、しないなら No。", "お礼の「すみません」は Sorry ではなく Thank you。"],
+    quiz: [
+      { situation: "「コーヒー飲まないの？」と聞かれて。「うん、飲まない」", sentence: '___', options: ["No, I don't.", "Yes, I don't.", "Yes, I do."], answer: "No, I don't.", full: "No, I don't.", why: "英語は「飲まない」なら No。日本語の「うん」につられて Yes と言わない。" },
+      { situation: "仕事から帰ってきた相手に。「おかえり、お疲れさま」", sentence: '___', options: ["Welcome back! How was your day?", "Welcome back! You are tired person.", "Welcome back! Thank you for tired."], answer: "Welcome back! How was your day?", full: "Welcome back! How was your day?", why: "「お疲れさま」は直訳がないので、「今日どうだった？」とねぎらう。" },
+      { situation: "初めて会った相手の友達に。「よろしくお願いします」", sentence: '___', options: ["Nice to meet you.", "Please treat me well.", "Please regard me."], answer: "Nice to meet you.", full: "Nice to meet you.", why: "初対面の「よろしく」は Nice to meet you." },
+      { situation: "料理が出てきて。「いただきます！」", sentence: '___', options: ["This looks delicious!", "I will receive!", "I humbly receive it!"], answer: "This looks delicious!", full: "This looks delicious!", why: "英語に「いただきます」はない。料理をほめるのが自然。" },
+      { situation: "作ってもらった料理を食べ終えて。「ごちそうさま」", sentence: '___', options: ["That was delicious, thank you!", "It was a feast.", "I received a feast."], answer: "That was delicious, thank you!", full: "That was delicious, thank you!", why: "「おいしかった、ありがとう」と気持ちをそのまま言う。" },
+      { situation: "出かける相手に。「いってらっしゃい」", sentence: '___', options: ["Have a good day!", "Go and come back!", "Please go."], answer: "Have a good day!", full: "Have a good day!", why: "「いい一日を」と送り出す。夜なら Have a good night! / Have fun!" },
+      { situation: "電車で席をゆずってもらって。「すみません（ありがとう）」", sentence: '___', options: ["Thank you so much!", "I'm sorry!", "Excuse me for that!"], answer: "Thank you so much!", full: "Thank you so much!", why: "お礼の「すみません」は Thank you。Sorry だと謝っていることになる。" },
+      { situation: "来週の旅行が楽しみ。「楽しみ！」", sentence: '___', options: ["I can't wait!", "It is fun!", "I am enjoying!"], answer: "I can't wait!", full: "I can't wait!", why: "「待ちきれない」と言うのが自然。I'm looking forward to it. も OK。" },
+      { situation: "雨で予定が中止。「しょうがないね」", sentence: '___', options: ["Oh well, it happens.", "There is no way of doing.", "It is no ginger."], answer: "Oh well, it happens.", full: "Oh well, it happens.", why: "「まあいいか、よくあること」と考える。It can't be helped. も通じる。" },
+      { situation: "お店で「袋いりますか？」と聞かれて。「大丈夫です（いりません）」", sentence: '___', options: ["No, I'm good. Thanks.", "I'm OK.", "Yes, fine."], answer: "No, I'm good. Thanks.", full: "No, I'm good. Thanks.", why: "断るときは No を先に。I'm OK. だけだと「いる・いらない」が伝わりにくい。" }
+    ]
+  }, {
+    id: "think-simple",
+    title: "発想④ 日本語をかんたんにしてから訳す",
+    short: "発想④ かんたんにしてから訳す",
+    intro: "難しい日本語をそのまま英語にしようとすると止まってしまいます。いったん「子どもに説明するくらいかんたんな日本語」に言いかえてから訳すのがコツです。例：「料理が上手」→「いい料理人だ」、「人見知り」→「知らない人の前だと恥ずかしがる」。",
+    groups: [
+      {
+        name: "「〜が上手・苦手」を言いかえる",
+        note: "「〜が上手」は「いい〜する人」、「苦手」は「得意じゃない」。",
+        forms: [
+          { key: "a good cook", kana: "ア グッド クック", kanaNote: '', label: "料理が上手 → She's a good cook.", ja: "料理が上手", nuance: "「いい料理人だ」と考える。Her cooking is skillful.（△）。",
+            ex: ["She's a good cook.", "彼女は料理が上手。"], tone: "You're a good singer.（歌がうまいね）" },
+          { key: "not good at", kana: "ノット グッド アット", kanaNote: '', label: "〜が苦手 → I'm not good at 〜", ja: "〜は得意じゃない", nuance: "「苦手」は「得意じゃない」に言いかえる。",
+            ex: ["I'm not good at cooking.", "料理は苦手なんだ。"], tone: "食べ物の苦手は I don't really like 〜." }
+        ]
+      },
+      {
+        name: "言葉ではなく「動き」で言う",
+        note: "「迎えに行く」「間に合う」など、日本語の熟語は動きで考える。",
+        forms: [
+          { key: "pick you up", kana: "ピッキュー アップ", kanaNote: '', label: "迎えに行くよ → I'll pick you up.", ja: "迎えに行くよ", nuance: "車や駅で「拾う」と考える。",
+            ex: ["I'll pick you up at the station.", "駅まで迎えに行くよ。"], tone: "I'll come get you.（迎えに行くね）も会話的。" },
+          { key: "I made it", kana: "アイ メイド イット", kanaNote: '', label: "間に合った → I made it!", ja: "間に合った・やり遂げた", nuance: "「やり遂げた」と考えて made it。",
+            ex: ["I made it!", "間に合った！"], tone: "We made it to the top!（頂上に着いた！）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "むずかしい日本語 → かんたんな日本語 → 英語",
+      rows: [["人見知り → 知らない人の前だと恥ずかしい", "I'm shy around new people."], ["料理が上手 → いい料理人", "She's a good cook."], ["寝坊した → 寝すぎた", "I overslept."]]
+    },
+    cautions: ["訳せないときは、いったん日本語をかんたんにする（子どもに言うなら？）。", "熟語や四字熟語は、意味をふつうの言葉に直してから英語にする。", "完璧でなくても、意味が伝われば OK。"],
+    quiz: [
+      { situation: "マルちゃんの料理を食べて友達に。「彼女、料理上手なんだ」", sentence: '___', options: ["She's a good cook.", "Her cooking is skillful.", "She is cooking well person."], answer: "She's a good cook.", full: "She's a good cook.", why: "「いい料理人だ」と言いかえる。cook は名詞で「料理する人」。" },
+      { situation: "「人見知りなんだ」", sentence: '___', options: ["I'm shy around new people.", "I am a person seeing shyness.", "I know people shy."], answer: "I'm shy around new people.", full: "I'm shy around new people.", why: "「知らない人の前だと恥ずかしがる」と言いかえる。" },
+      { situation: "「駅まで迎えに行くよ」", sentence: '___', options: ["I'll pick you up at the station.", "I'll go to welcome you at the station.", "I'll greet-go you to the station."], answer: "I'll pick you up at the station.", full: "I'll pick you up at the station.", why: "車や駅で人を「拾う」と考えて pick up。" },
+      { situation: "走ってぎりぎり電車に乗れた。「間に合った！」", sentence: '___', options: ["I made it!", "I was in time to it!", "I matched!"], answer: "I made it!", full: "I made it!", why: "「やり遂げた」と考えて I made it!" },
+      { situation: "「寝坊しちゃった」", sentence: '___', options: ["I overslept.", "I did late sleeping.", "I slept a bad morning."], answer: "I overslept.", full: "I overslept.", why: "「寝すぎた」と考える。over＋slept。" },
+      { situation: "「ちょっと考えさせて」", sentence: '___', options: ["Let me think about it.", "Make me think a little.", "Please let thinking."], answer: "Let me think about it.", full: "Let me think about it.", why: "「考えるのを許して」と考えて Let me 〜。" },
+      { situation: "服を着た相手に。「似合ってるね」", sentence: '___', options: ["That looks great on you.", "It is suitable for you.", "You match the clothes."], answer: "That looks great on you.", full: "That looks great on you.", why: "「あなたの上でいい感じに見える」と考える。" },
+      { situation: "言葉が出てこないとき。「なんて言えばいいかな」", sentence: '___', options: ["How can I put it?", "What should I say it by word?", "How do I speak it name?"], answer: "How can I put it?", full: "How can I put it?", why: "put＝言葉にする。考える時間をかせぐ定番の言い方。" },
+      { situation: "出かける相手に。「気をつけてね」", sentence: '___', options: ["Be careful!", "Attention yourself!", "Please mind."], answer: "Be careful!", full: "Be careful!", why: "「注意深くいてね」と考える。別れぎわなら Take care! も。" },
+      { situation: "待ち合わせに遅れて。「遅れてごめん」", sentence: '___', options: ["Sorry I'm late.", "Sorry for being delay.", "Sorry I am delayed person."], answer: "Sorry I'm late.", full: "Sorry I'm late.", why: "「遅れていてごめん」と、今の状態（I'm late）で言う。" }
+    ]
+  }, {
+    id: "think-naru",
+    title: "発想⑤「なる」の日本語、「する」の英語",
+    short: "発想⑤「なる」→「する」",
+    intro: "日本語は「春になった」「引っ越すことになった」のように、自然にそうなった「なる」で言うのが好きです。英語は「誰（何）が何をする」で言う「する」の言語。become をそのまま使うより、「春が来た」「暗くなりつつある（get）」「引っ越す予定だ（進行形）」「今は〜できる（now）」のように言いかえると自然になります。",
+    groups: [
+      {
+        name: "「〜になった」→ 来た・now",
+        note: "季節や時間は「来た・ここにある」、できるようになったことは「今は〜」で言う。",
+        forms: [
+          { key: "Spring is here", kana: "スプリング イズ ヒア", kanaNote: '', label: "春になった → Spring is here!", ja: "春が来た", nuance: "季節が「来た・ここにいる」と考える。Spring has come. も OK。It became spring.（△）",
+            ex: ["Spring is here!", "春になったね！"], tone: "Winter is coming.（冬が来る＝寒くなってきた）" },
+          { key: "now", kana: "ナウ", kanaNote: '', label: "〜できるようになった → can 〜 now", ja: "今は〜できる", nuance: "「〜ようになった」は now を付けて「今は〜」で言う。became to 〜（×）。",
+            ex: ["You can speak Japanese now!", "日本語話せるようになったね！"], tone: "I've started to like natto.（納豆が好きになってきた）" }
+        ]
+      },
+      {
+        name: "「〜になってきた」→ get ＋ 形容詞",
+        note: "だんだん変わっていく途中は be getting ＋ 形容詞。",
+        forms: [
+          { key: "getting", kana: "ゲッティング", kanaNote: '', label: "暗くなってきた → It's getting dark.", ja: "〜になってきた", nuance: "変化の途中は getting。become より会話的。",
+            ex: ["It's getting dark.", "暗くなってきたね。"], tone: "I'm getting sleepy.（眠くなってきた）／ It's getting cold.（寒くなってきた）" }
+        ]
+      },
+      {
+        name: "「〜ことになった」→ 進行形の予定",
+        note: "決まった予定は「〜している最中」の形（be ＋ 〜ing）で言う。",
+        forms: [
+          { key: "I'm moving", kana: "アイム ムーヴィング", kanaNote: '', label: "引っ越すことになった → I'm moving 〜", ja: "〜することになった", nuance: "決まった予定は進行形。It became that 〜（×）。",
+            ex: ["I'm moving next month.", "来月引っ越すことになったんだ。"], tone: "We're getting married.（結婚することになった）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "「なる」の日本語 → 「する」の英語",
+      rows: [["春になった", "Spring is here!（春が来た）"], ["暗くなってきた", "It's getting dark.（get ＋ 形容詞）"], ["引っ越すことになった", "I'm moving next month.（進行形の予定）"], ["話せるようになった", "You can speak Japanese now!（now）"], ["付き合って1年になる", "We've been together for a year.（ずっと〜している）"]]
+    },
+    cautions: ["「なる」を見たら become で訳す前に、「何が何をする？」と考える。", "become to 〜 という形はない（became to like ×）。", "「〜になってきた」は getting、「〜ことになった」は進行形、「〜ようになった」は now / start to。"],
+    quiz: [
+      { situation: "暖かくなってきた3月。「春になったね！」", sentence: '___', options: ["Spring is here!", "It became spring!", "Spring became!"], answer: "Spring is here!", full: "Spring is here!", why: "季節は「来た・ここにいる」と考える。Spring has come. も OK。" },
+      { situation: "夕方、空を見て。「暗くなってきたね」", sentence: '___', options: ["It's getting dark.", "It is becoming to dark.", "Dark is coming now."], answer: "It's getting dark.", full: "It's getting dark.", why: "だんだん変わる途中は be getting ＋ 形容詞。" },
+      { situation: "夜、話していて。「眠くなってきた」", sentence: '___', options: ["I'm getting sleepy.", "I became to sleepy.", "Sleep is coming to me."], answer: "I'm getting sleepy.", full: "I'm getting sleepy.", why: "変化の途中は getting。I'm sleepy now. でも OK。" },
+      { situation: "報告。「来月引っ越すことになったんだ」", sentence: '___', options: ["I'm moving next month.", "It became that I move next month.", "I became moving next month."], answer: "I'm moving next month.", full: "I'm moving next month.", why: "決まった予定は進行形（be ＋ 〜ing）で言う。" },
+      { situation: "マルちゃんの日本語を聞いて。「日本語話せるようになったね！」", sentence: '___', options: ["You can speak Japanese now!", "You became to speak Japanese!", "Your Japanese became speaking!"], answer: "You can speak Japanese now!", full: "You can speak Japanese now!", why: "「〜ようになった」は now を付けて「今は〜できる」。became to は ×。" },
+      { situation: "「納豆、好きになってきた」", sentence: '___', options: ["I've started to like natto.", "I became to like natto.", "Natto became my like."], answer: "I've started to like natto.", full: "I've started to like natto.", why: "「好きになり始めた」と考えて start to。become to は ×。" },
+      { situation: "レジで店員さんが。「お会計は3000円になります」", sentence: '___', options: ["That'll be 3,000 yen.", "It becomes 3,000 yen.", "Your bill is becoming 3,000 yen."], answer: "That'll be 3,000 yen.", full: "That'll be 3,000 yen.", why: "「それは3000円でしょう」と will で言う。お店の決まり文句。" },
+      { situation: "「付き合って1年になるね」", sentence: '___', options: ["We've been together for a year.", "It becomes one year we are dating.", "Our dating became one year."], answer: "We've been together for a year.", full: "We've been together for a year.", why: "「1年間ずっと一緒にいる」と現在完了で言う。" },
+      { situation: "「最近、涼しくなったね」", sentence: '___', options: ["It's cooler now.", "It became cool weather now.", "Cool became today."], answer: "It's cooler now.", full: "It's cooler now.", why: "「今は涼しい」と now で言う。It's gotten cooler. も OK。" },
+      { situation: "「私たち、すぐ仲良くなったよね」", sentence: '___', options: ["We got close really fast.", "We became to good friends fast.", "We became good relation fast."], answer: "We got close really fast.", full: "We got close really fast.", why: "「仲良くなる」は get close。We became friends. でも通じる。" }
+    ]
   }];
 
 
@@ -2016,7 +2242,8 @@
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
     { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'else-other', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
-    { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] }
+    { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] },
+    { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple'] }
   ];
   var GR = { TOPICS: TOPICS, GROUPS: GROUPS };
   if (typeof module !== 'undefined' && module.exports) module.exports = GR; else root.GR = GR;

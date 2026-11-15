@@ -46,9 +46,9 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=47"></script>
-  <script src="usage-data.js?v=34"></script>
-  <script src="grammar-data.js?v=36"></script>
+  <script src="common.js?v=48"></script>
+  <script src="usage-data.js?v=35"></script>
+  <script src="grammar-data.js?v=37"></script>
   <script>
     const GR = window.GR;
     const $ = id => document.getElementById(id);
@@ -114,7 +114,7 @@
       box.innerHTML = '<div class="card"><div style="display:flex; justify-content:space-between; margin-bottom:0.5rem;"><span class="muted">文法クイズ</span><span style="font-weight:bold; color:var(--primary);">' + (quiz.i + 1) + ' / ' + quiz.qs.length + '</span></div>' +
         '<div class="progress-bar-container"><div class="progress-bar-fill" style="width:' + Math.round(quiz.i / quiz.qs.length * 100) + '%"></div></div>' +
         '<div class="muted" style="margin-top:0.9rem;">こんな場面：</div><div class="question" style="margin-bottom:0.6rem;">' + esc(q.situation) + '</div>' +
-        '<div class="gr-sentence">' + blankSentence(q.sentence) + '</div>' +
+        (q.sentence === '___' ? '<div class="muted" style="margin-bottom:0.4rem;">英語ではどう言う？（直訳しがちな言い方に注意）</div>' : '<div class="gr-sentence">' + blankSentence(q.sentence) + '</div>') +
         '<div class="options" id="grOptions">' + quiz.opts.map(o => '<button class="option-btn" data-opt="' + esc(o) + '">' + esc(o) + '</button>').join('') + '</div>' +
         '<div class="feedback" id="grFeedback" role="status"></div><button class="btn" id="grNext" data-act="next" style="display:none; margin-top:1rem;">次の問題へ</button></div>';
     }
