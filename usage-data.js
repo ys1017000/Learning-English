@@ -958,6 +958,24 @@
     "That'll be 3,000 yen.": "お店で金額を言われるとき。",
     "We've been together for a year.": "記念日に。",
     "It's cooler now.": "季節の話題で。",
-    "We got close really fast.": "二人の思い出話で。"
+    "We got close really fast.": "二人の思い出話で。",
+    "This photo makes me happy.": "思い出の写真を見せるとき。",
+    "This bus takes you to Shibuya.": "道や乗り物を案内するとき。",
+    "What made you want to come to Japan?": "相手のきっかけを聞くとき。",
+    "The rain kept us inside all day.": "雨で予定が流れた日の話。",
+    "This app helps me keep studying English.": "勉強の話をするとき。",
+    "Spicy food makes me sweat.": "辛い料理の話で。",
+    "Does this place remind you of Germany?": "ヨーロッパっぽい場所に行ったとき。",
+    "It's a five-minute walk to the station.": "道案内で。",
+    "That makes me feel better.": "相手の話を聞いてほっとしたとき。",
+    "Did something come up?": "予定が急に流れたとき。",
+    "Did you get my message?": "返事が来ないとき。",
+    "Is everything OK? I was a little worried.": "相手が遅れて来たとき。",
+    "What makes you say that?": "相手の考えを詳しく聞きたいとき。",
+    "I wish you'd told me.": "後から知って少し残念だったとき。",
+    "I feel a little lonely when we don't talk.": "寂しい気持ちを伝えたいとき。",
+    "Maybe we could try a different place next time.": "次の予定を相談するとき。",
+    "Would you mind not doing that?": "相手にやめてほしいことがあるとき。",
+    "Is something bothering you?": "相手の様子がいつもと違うとき。"
   };
 })();

@@ -2231,6 +2231,102 @@
       { situation: "「最近、涼しくなったね」", sentence: '___', options: ["It's cooler now.", "It became cool weather now.", "Cool became today."], answer: "It's cooler now.", full: "It's cooler now.", why: "「今は涼しい」と now で言う。It's gotten cooler. も OK。" },
       { situation: "「私たち、すぐ仲良くなったよね」", sentence: '___', options: ["We got close really fast.", "We became to good friends fast.", "We became good relation fast."], answer: "We got close really fast.", full: "We got close really fast.", why: "「仲良くなる」は get close。We became friends. でも通じる。" }
     ]
+  }, {
+    id: "think-thing",
+    title: "発想⑥ 無生物主語（物や出来事を主語にする）",
+    short: "発想⑥ 無生物主語",
+    intro: "「〜のおかげで」「〜のせいで」「〜すると」「なぜ〜したの？」のように、原因や理由がある文は、英語ではその「原因（物・出来事）」を主語にすると自然でスッキリします。make（〜させる）・take（連れていく）・remind（思い出させる）・keep（〜のままにする）・bring（連れてくる）・help（助ける）が定番の動詞です。発想①（人を主語に）とは逆向きに見えますが、「原因があるときは原因を主語に」と覚えると使い分けられます。",
+    groups: [
+      {
+        name: "「〜すると・〜のおかげで」→ 物 ＋ 動詞",
+        note: "原因を主語にして、make / take / help などでつなぐ。",
+        forms: [
+          { key: "makes me", kana: "メイクス ミー", kanaNote: '', label: "〜すると…な気持ちになる → 物 makes me 〜", ja: "〜が私を…にする", nuance: "「この写真を見ると幸せになる」→「この写真が私を幸せにする」。",
+            ex: ["This photo makes me happy.", "この写真を見ると幸せな気持ちになる。"], tone: "Spicy food makes me sweat.（辛いものを食べると汗が出る）" },
+          { key: "takes you to", kana: "テイクス ユー トゥ", kanaNote: '', label: "これに乗れば〜に行ける → 物 takes you to 〜", ja: "〜が…へ連れていく", nuance: "乗り物や道を主語にする。",
+            ex: ["This bus takes you to Shibuya.", "このバスに乗れば渋谷に行けるよ。"], tone: "This road takes you to the beach.（この道を行けば海に出るよ）" },
+          { key: "reminds me of", kana: "リマインズ ミー オヴ", kanaNote: '', label: "〜を見ると…を思い出す → 物 reminds me of 〜", ja: "〜が…を思い出させる", nuance: "思い出のきっかけを主語に。",
+            ex: ["This song reminds me of you.", "この曲を聞くと君を思い出す。"], tone: "This place reminds me of Germany.（ここドイツを思い出すね）" }
+        ]
+      },
+      {
+        name: "「なぜ〜したの？」→ What made you 〜? / What brings you 〜?",
+        note: "理由を「何があなたを〜させた？」と聞くと、やわらかく自然。",
+        forms: [
+          { key: "What made you", kana: "ワット メイド ユー", kanaNote: '', label: "なぜ〜したの？ → What made you 〜?", ja: "何がきっかけで〜したの？", nuance: "Why より責める感じが少なく、きっかけに興味がある聞き方。",
+            ex: ["What made you want to come to Japan?", "なんで日本に来たいと思ったの？"], tone: "What brings you here?（ここには何しに来たの？）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "日本語の「〜すると・〜のせいで」→ 原因が主語",
+      rows: [["雨のせいで出かけられなかった", "The rain kept us inside."], ["この曲を聞くと君を思い出す", "This song reminds me of you."], ["このアプリのおかげで勉強が続く", "This app helps me keep studying."], ["なんで日本に来たの？", "What brought you to Japan?"]]
+    },
+    cautions: ["「〜すると」「〜のおかげで」「〜のせいで」を見たら、原因を主語にできないか考える。", "定番の動詞：make（させる）／take（連れていく）／remind（思い出させる）／keep（〜のままにする）／help（助ける）／bring（連れてくる）。", "理由を聞くとき What made you 〜? は Why 〜? よりやわらかい。"],
+    quiz: [
+      { situation: "写真を見ながら。「この写真を見ると幸せな気持ちになる」", sentence: '___', options: ["This photo makes me happy.", "When I see this photo, I become happy.", "I am happy by this photo."], answer: "This photo makes me happy.", full: "This photo makes me happy.", why: "原因（写真）を主語にして「写真が私を幸せにする」。直訳でも通じるが、こちらがずっと自然。" },
+      { situation: "「このバスに乗れば渋谷に行けるよ」", sentence: '___', options: ["This bus takes you to Shibuya.", "If you ride this bus, you can go Shibuya.", "This bus goes you to Shibuya."], answer: "This bus takes you to Shibuya.", full: "This bus takes you to Shibuya.", why: "乗り物を主語にして take you to 〜（〜へ連れていく）。" },
+      { situation: "「この曲を聞くと君を思い出す」", sentence: '___', options: ["This song reminds me of you.", "When I hear this song, I remember you to think.", "This song remembers me you."], answer: "This song reminds me of you.", full: "This song reminds me of you.", why: "remind 人 of 〜＝人に〜を思い出させる。remember は「（自分が）覚えている」で別の語。" },
+      { situation: "「なんで日本に来たいと思ったの？」（興味があって）", sentence: '___', options: ["What made you want to come to Japan?", "Why you wanted to come Japan?", "For what reason did you come Japan?"], answer: "What made you want to come to Japan?", full: "What made you want to come to Japan?", why: "「何があなたにそうさせた？」と聞くと、きっかけに興味がある感じになる。" },
+      { situation: "雨の日。「雨のせいで一日中家にいたよ」", sentence: '___', options: ["The rain kept us inside all day.", "Because of the rain, we became to stay home.", "Rain made us stay house all day."], answer: "The rain kept us inside all day.", full: "The rain kept us inside all day.", why: "keep 人 inside＝人を中にとどめる。原因（雨）を主語に。" },
+      { situation: "「このアプリのおかげで英語の勉強が続いてる」", sentence: '___', options: ["This app helps me keep studying English.", "Thanks to this app, I can continue English study.", "This app makes me continuing English."], answer: "This app helps me keep studying English.", full: "This app helps me keep studying English.", why: "help 人 〜＝人が〜するのを助ける。直訳も通じるが、こちらが短く自然。" },
+      { situation: "「辛いものを食べると汗が出る」", sentence: '___', options: ["Spicy food makes me sweat.", "When I eat spicy food, sweat comes out.", "I sweat by spicy food eating."], answer: "Spicy food makes me sweat.", full: "Spicy food makes me sweat.", why: "原因（辛い食べ物）を主語にして make me 〜。" },
+      { situation: "駅前で。「ここ、ドイツを思い出す？」", sentence: '___', options: ["Does this place remind you of Germany?", "Do you remember Germany in this place?", "Is this place remembering Germany?"], answer: "Does this place remind you of Germany?", full: "Does this place remind you of Germany?", why: "場所を主語にして remind you of 〜。" },
+      { situation: "「5分歩けば駅に着くよ」", sentence: '___', options: ["It's a five-minute walk to the station.", "If you walk five minutes, you arrive station.", "Five minutes walking arrives the station."], answer: "It's a five-minute walk to the station.", full: "It's a five-minute walk to the station.", why: "「駅まで5分の歩き」と、距離を名詞にして言うのが定番。" },
+      { situation: "「その話を聞いて安心した」", sentence: '___', options: ["That makes me feel better.", "I heard that and became relief.", "I am relief to hear that story."], answer: "That makes me feel better.", full: "That makes me feel better.", why: "聞いた話（that）を主語にして make me feel better。I'm relieved to hear that. も OK。" }
+    ]
+  }, {
+    id: "think-soft",
+    title: "発想⑦ 責めない英語（Why を使わない・I で話す）",
+    short: "発想⑦ 責めない言い方",
+    intro: "英語の Why didn't you 〜?（なんで〜しなかったの？）や You never 〜（いつも〜しない）は、言い方しだいでかなり責めて聞こえます。①理由は Why ではなく「何かあった？」「何がきっかけ？」で聞く、②「あなたが〜」ではなく「私は〜と感じた」で話す（I メッセージ）、③お願いは提案の形にする。この3つで、同じことでもやわらかく伝わります。",
+    groups: [
+      {
+        name: "Why を使わずに聞く",
+        note: "Why didn't you 〜? → Did something come up? / Is everything OK? のように、相手を心配する形で聞く。",
+        forms: [
+          { key: "Did something come up?", kana: "ディド サムスィング カム アップ", kanaNote: '', label: "なんで来なかったの？ → Did something come up?", ja: "何か急用があったの？", nuance: "come up＝（急な用事が）できる。理由を責めずに聞ける。",
+            ex: ["Did something come up?", "何かあった？（急用でもできた？）"], tone: "Is everything OK?（大丈夫？）も便利。" },
+          { key: "What makes you say that?", kana: "ワット メイクス ユー セイ ザット", kanaNote: '', label: "なんでそう思うの？ → What makes you say that?", ja: "どうしてそう思うの？", nuance: "Why do you think so? より、相手の考えに興味がある感じ。",
+            ex: ["What makes you say that?", "どうしてそう思うの？"], tone: "I'm curious.（ちょっと気になって）を足すとさらにやわらかい。" }
+        ]
+      },
+      {
+        name: "「あなたが」ではなく「私は」で話す（I メッセージ）",
+        note: "You never 〜 / You always 〜 は責めて聞こえる。I feel 〜 when 〜 で自分の気持ちを伝える。",
+        forms: [
+          { key: "I feel", kana: "アイ フィール", kanaNote: '', label: "あなたはいつも〜 → I feel 〜 when 〜", ja: "〜のとき、私は…と感じる", nuance: "相手を評価せず、自分の気持ちを伝える。",
+            ex: ["I feel a little lonely when we don't talk.", "話せないと、ちょっと寂しいな。"], tone: "You never call me.（いつも電話くれないよね）は責める感じが強い。" },
+          { key: "I wish", kana: "アイ ウィッシュ", kanaNote: '', label: "なんで言ってくれなかったの？ → I wish you'd told me.", ja: "言ってくれたらよかったのに", nuance: "過去を責めず「そうだったらよかった」と気持ちで言う。",
+            ex: ["I wish you'd told me.", "言ってくれたらよかったのに。"], tone: "Next time, just let me know.（次は教えてね）と未来の話につなげると◎。" }
+        ]
+      },
+      {
+        name: "命令・反論を、提案・ひかえめな言い方に",
+        note: "You should 〜 / You're wrong → Maybe we could 〜 / I see it a little differently.",
+        forms: [
+          { key: "Maybe we could", kana: "メイビー ウィー クッド", kanaNote: '', label: "〜しなよ → Maybe we could 〜", ja: "〜してみるのはどう？", nuance: "we を主語にすると「一緒に考えよう」という感じになる。",
+            ex: ["Maybe we could try a different place next time.", "次は違うところにしてみようか。"], tone: "How about 〜? / What if we 〜? も提案の定番。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "責めて聞こえる → やわらかい",
+      rows: [["Why didn't you reply?", "Did you get my message?（メッセージ届いた？）"], ["Why are you late?", "Is everything OK? I was a little worried."], ["You never listen to me.", "I feel like I'm not being heard."], ["You're wrong.", "I see it a little differently."], ["Stop doing that.", "Would you mind not doing that?"]]
+    },
+    cautions: ["Why didn't you 〜? / Why are you 〜? は、口調しだいで責めて聞こえる。まず「大丈夫？」「何かあった？」と聞く。", "You never 〜 / You always 〜 は使わない。I feel 〜 で自分の気持ちを話す。", "How come 〜? も、never と一緒だと責める感じになる（How come you never call me?）。", "反論は I see it a little differently.（ちょっと違う見方をしてる）のように、ひかえめに。"],
+    quiz: [
+      { situation: "待ち合わせに相手が来なかった。理由を聞きたい", sentence: '___', options: ["Did something come up?", "Why didn't you come?", "Why you not came?"], answer: "Did something come up?", full: "Did something come up?", why: "Why didn't you come? は責めて聞こえやすい。「何か急用があった？」と心配する形で聞く。" },
+      { situation: "メッセージの返事が来ない。確認したい", sentence: '___', options: ["Did you get my message?", "Why didn't you reply?", "Why are you ignoring me?"], answer: "Did you get my message?", full: "Did you get my message?", why: "「返事しない理由」ではなく「届いた？」と聞くと、相手が返しやすい。" },
+      { situation: "相手が遅れて来た。最初のひと言", sentence: '___', options: ["Is everything OK? I was a little worried.", "Why are you late?", "You are late again."], answer: "Is everything OK? I was a little worried.", full: "Is everything OK? I was a little worried.", why: "まず相手を心配する言葉を。理由は相手から話してくれることが多い。" },
+      { situation: "相手の意見に興味があって。「なんでそう思うの？」", sentence: '___', options: ["What makes you say that?", "Why do you think such a thing?", "Why do you say that?"], answer: "What makes you say that?", full: "What makes you say that?", why: "Why より「何がそう言わせるの？」の方が、責める感じがなく興味が伝わる。" },
+      { situation: "大事なことを後から知った。「なんで言ってくれなかったの？」の気持ち", sentence: '___', options: ["I wish you'd told me.", "Why didn't you tell me?", "You should tell me before."], answer: "I wish you'd told me.", full: "I wish you'd told me.", why: "I wish＋過去完了で「言ってくれたらよかったのに」。責めずに気持ちを伝えられる。" },
+      { situation: "最近あまり話せていない。「いつも連絡くれないよね」と言いたくなったら", sentence: '___', options: ["I feel a little lonely when we don't talk.", "You never contact me.", "Why do you always not call me?"], answer: "I feel a little lonely when we don't talk.", full: "I feel a little lonely when we don't talk.", why: "You never 〜 は責める感じが強い。I feel 〜（私は〜と感じる）で気持ちだけ伝える。" },
+      { situation: "意見が違うとき。「それは違うと思う」", sentence: '___', options: ["I see it a little differently.", "You're wrong.", "Your idea is not correct."], answer: "I see it a little differently.", full: "I see it a little differently.", why: "「ちょっと違う見方をしてる」とひかえめに。I'm not sure I agree. も OK。" },
+      { situation: "レストラン選びで。「次は違うお店にしなよ」と言いたい", sentence: '___', options: ["Maybe we could try a different place next time.", "You should choose a different place.", "Change the place next time."], answer: "Maybe we could try a different place next time.", full: "Maybe we could try a different place next time.", why: "we を主語にして提案の形にすると、一緒に決める感じになる。" },
+      { situation: "相手のくせが少し気になる。「それやめて」", sentence: '___', options: ["Would you mind not doing that?", "Stop doing that.", "Don't do that, please stop."], answer: "Would you mind not doing that?", full: "Would you mind not doing that?", why: "Would you mind not 〜ing?＝〜しないでもらえる？ かなりていねい。" },
+      { situation: "相手が元気がなさそう。「怒ってる？」と聞く代わりに", sentence: '___', options: ["Is something bothering you?", "Are you angry at me?", "Why are you angry?"], answer: "Is something bothering you?", full: "Is something bothering you?", why: "「何か気になってることある？」と聞くと、相手が話しやすい。" }
+    ]
   }];
 
 
@@ -2243,7 +2339,7 @@
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
     { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'else-other', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] },
-    { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple'] }
+    { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple', 'think-thing', 'think-soft'] }
   ];
   var GR = { TOPICS: TOPICS, GROUPS: GROUPS };
   if (typeof module !== 'undefined' && module.exports) module.exports = GR; else root.GR = GR;
