@@ -159,16 +159,40 @@
     const ORDER_SIZE = 8;
     let ord = null;
     function orderItems(T) {
-      const out = [], seen = new Set();
-      const add = (en, ja) => {
+      const out = [], byKey = {};
+      // pts＝答えのあとに出す「💡 ポイント」（文の形・ニュアンスの補足）
+      const add = (en, ja, pts) => {
         en = String(en || '').trim(); const k = en.toLowerCase();
-        if (!en || !ja || seen.has(k)) return;
+        if (!en) return;
+        pts = (pts || []).map(x => String(x || '').trim()).filter(Boolean);
+        if (byKey[k]) { pts.forEach(x => { if (!byKey[k].pts.includes(x)) byKey[k].pts.push(x); }); return; }
+        if (!ja) return;
         const n = en.split(/\s+/).length;
         if (n < 3 || n > 12) return;
-        seen.add(k); out.push({ en, ja: EA.splitJa ? EA.splitJa(ja).main : ja });
+        const sj = EA.splitJa ? EA.splitJa(ja) : { main: ja, note: '' };
+        const item = { en, ja: sj.main, pts: [] };
+        if (sj.note) item.pts.push(sj.note);
+        pts.forEach(x => { if (!item.pts.includes(x)) item.pts.push(x); });
+        byKey[k] = item; out.push(item);
       };
-      T.groups.forEach(g => g.forms.forEach(f => { if (f.ex && f.ex[0]) add(f.ex[0], f.ex[1]); }));
-      T.quiz.forEach(q => { const p = itemFor(q.full); add(q.full, p[2]); });
+      T.groups.forEach(g => g.forms.forEach(f => {
+        if (f.ex && f.ex[0]) add(f.ex[0], f.ex[1], [(f.label ? f.label + '：' : '') + (f.nuance || ''), f.tone]);
+      }));
+      T.quiz.forEach(q => { const p = itemFor(q.full); add(q.full, p[2], [q.why]); });
+      // クイズの文で、ノートの説明（同じ語を含む形）があれば足す
+      out.forEach(it => {
+        if (it.pts.length > 1) return;
+        const low = ' ' + it.en.toLowerCase() + ' ';
+        T.groups.some(g => g.forms.some(f => {
+          const key = String(f.key || '').toLowerCase().split(/[\s／/（(]+/)[0];
+          if (key && key.length > 2 && low.includes(' ' + key) && f.nuance) {
+            const x = (f.label ? f.label + '：' : '') + f.nuance;
+            if (!it.pts.includes(x)) it.pts.push(x);
+            return true;
+          }
+          return false;
+        }));
+      });
       return out;
     }
     function startOrder(list) {
@@ -212,6 +236,8 @@
           '<div style="font-weight:bold; margin-bottom:0.25rem;">' + (ok ? '⭕ 正解！' : '❌ 正しい順番はこちら') + '</div>' +
           '<div class="en-text">' + esc(q.en) + '</div>' +
           '<div style="display:flex; gap:6px; margin-top:0.5rem;"><button class="tiny-btn" data-speak="' + esc(q.en) + '">🔊 聞く</button><button class="tiny-btn" data-speak="' + esc(q.en) + '" data-slow="1">🐢 ゆっくり</button></div>' +
+          ((q.pts && q.pts.length) ? '<div style="margin-top:0.6rem; padding-top:0.5rem; border-top:1px solid rgba(0,0,0,0.08); font-size:0.9rem;"><div style="font-weight:bold; margin-bottom:0.2rem;">💡 ポイント</div>' + q.pts.map(x => '<div style="margin-bottom:0.25rem;">・' + esc(x) + '</div>').join('') + '</div>' : '') +
+          (EA.usageFor(q.en) ? '<div class="usage-line" style="font-size:0.9rem; margin-top:0.3rem;">🎬 場面：' + esc(EA.usageFor(q.en)) + '</div>' : '') +
           '<p class="muted" style="font-size:0.85rem; margin-top:0.4rem;">聞いたあと、声に出して1回まねしてみよう。</p></div>' +
           '<button class="btn" data-ord="next" style="margin-top:0.75rem; width:100%;">' + (ord.i + 1 < ord.list.length ? '次へ ▶' : '結果を見る') + '</button>';
       }
