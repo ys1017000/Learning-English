@@ -716,7 +716,161 @@
       ["会う直前・会ったときの一言", "I'm right by the ticket gate.", "改札のすぐそばにいるよ。（ticket gate：改札）"],
       ["会う直前・会ったときの一言", "I'll be there in five minutes.", "あと5分で着くよ。（in ＋ 時間：〜後に）"],
       ["会う直前・会ったときの一言", "Sorry I'm late! Thanks for waiting.", "遅れてごめん！待っててくれてありがとう。"],
-      ["会う直前・会ったときの一言", "Shall we go?", "じゃあ行こうか？"]
+      ["会う直前・会ったときの一言", "Shall we go?", "じゃあ行こうか？"],
+      // ---- 会う前の練習・旧ロールプレイ・旧手紙の文（2026-11-16） ----
+      ["会う前：食事", "What are you in the mood for?", "何が食べたい気分？"],
+      ["会う前：食事", "Everything looks so good. What do you recommend?", "全部おいしそう。おすすめは何？"],
+      ["会う前：食事", "Can I try a bite of yours?", "一口もらってもいい？"],
+      ["会う前：食事", "Do you want to share a few dishes?", "いくつかシェアしない？"],
+      ["会う前：食事", "This is delicious! Try it.", "これおいしい！食べてみて。"],
+      ["会う前：食事", "I'm stuffed. I can't eat another bite.", "もうお腹いっぱい。一口も入らないよ。"],
+      ["会う前：食事", "Is there anything you can't eat?", "食べられないものはある？"],
+      ["会う前：食事", "I'll get this one. It's on me.", "ここは私が払うよ。ごちそうする。"],
+      ["会う前：食事", "Let's split the bill.", "割り勘にしよう。"],
+      ["会う前：食事", "Could we get the check, please?", "お会計をお願いします。"],
+      ["会う前：食事", "Could I have a glass of water, please?", "お水をいただけますか？"],
+      ["会う前：食事", "Is this spicy?", "これは辛いですか？"],
+      ["会う前：食事", "What should we order for dessert?", "デザートは何にしよう？"],
+      ["会う前：食事", "Thank you for the lovely dinner.", "素敵なディナーをありがとう。"],
+      ["会う前：食事", "Cheers! To us!", "乾杯！私たちに！"],
+      ["会う前：観光", "Where do you want to go first?", "まずどこに行きたい？"],
+      ["会う前：観光", "Let's take a photo together.", "一緒に写真を撮ろう。"],
+      ["会う前：観光", "Could you take a picture of us, please?", "私たちの写真を撮っていただけますか？"],
+      ["会う前：観光", "How far is it from here?", "ここからどのくらいですか？"],
+      ["会う前：観光", "Shall we walk or take the train?", "歩く？それとも電車にする？"],
+      ["会う前：観光", "This view is incredible.", "この景色、本当に素敵。"],
+      ["会う前：観光", "I've always wanted to come here.", "ずっとここに来たかったんだ。"],
+      ["会う前：観光", "Are you getting tired? Let's take a break.", "疲れてない？ちょっと休憩しよう。"],
+      ["会う前：観光", "What's that building over there?", "あそこの建物は何？"],
+      ["会う前：観光", "Let's pick up a souvenir.", "お土産を買おう。"],
+      ["会う前：観光", "Which way is the station?", "駅はどっちですか？"],
+      ["会う前：観光", "Hold my hand so we don't get lost.", "はぐれないように手をつないでおこう。"],
+      ["会う前：観光", "I'll show you my favorite spot.", "お気に入りの場所を案内するね。"],
+      ["会う前：観光", "Do you want to check that out?", "あれ、見に行ってみる？"],
+      ["会う前：家で過ごす", "Make yourself at home.", "くつろいでね。"],
+      ["会う前：家で過ごす", "Would you like something to drink?", "何か飲む？"],
+      ["会う前：家で過ごす", "What do you feel like watching?", "何を観たい気分？"],
+      ["会う前：家で過ごす", "Let's cook together tonight.", "今夜は一緒に料理しよう。"],
+      ["会う前：家で過ごす", "Can you pass me the salt?", "塩を取ってもらえる？"],
+      ["会う前：家で過ごす", "I love just relaxing with you like this.", "こうやってあなたとのんびりするの、大好き。"],
+      ["会う前：家で過ごす", "Do you want to play a game?", "ゲームする？"],
+      ["会う前：家で過ごす", "Are you comfortable? Do you need a blanket?", "快適？ブランケットいる？"],
+      ["会う前：家で過ごす", "Let's do nothing today.", "今日は何もしないで過ごそう。"],
+      ["会う前：家で過ごす", "I'll do the dishes.", "洗い物は私がやるね。"],
+      ["会う前：家で過ごす", "Stay a little longer.", "もう少しゆっくりしていって。"],
+      ["会う前：家で過ごす", "I had such a cozy time with you.", "あなたとすごく心地いい時間を過ごせたよ。"],
+      ["会う前：家で過ごす", "Shall we order takeout?", "出前（テイクアウト）を頼もうか？"],
+      ["会う前：再会・別れ際", "I missed you so much.", "すごく会いたかったよ。"],
+      ["会う前：再会・別れ際", "It's so good to see you.", "会えて本当にうれしい。"],
+      ["会う前：再会・別れ際", "How was your trip?", "道中はどうだった？"],
+      ["会う前：再会・別れ際", "I can't believe it's already time to go.", "もう帰る時間なんて信じられない。"],
+      ["会う前：再会・別れ際", "Text me when you get home.", "家に着いたら連絡してね。"],
+      ["会う前：再会・別れ際", "I'll miss you. See you soon!", "寂しくなるよ。また近いうちにね！"],
+      ["場面で言う（旧ロールプレイ）", "Not yet, could we have a few more minutes?", "【レストランで注文する】まだ決まっていないので、もう少し時間がほしいと伝える"],
+      ["場面で言う（旧ロールプレイ）", "Could we have some water, please?", "【レストランで注文する】お水をお願いする"],
+      ["場面で言う（旧ロールプレイ）", "I'll have the pasta. Is it spicy?", "【レストランで注文する】パスタを頼み、辛いかどうか聞く"],
+      ["場面で言う（旧ロールプレイ）", "That's all for now. We'll order dessert later.", "【レストランで注文する】それで全部。デザートはあとで頼むと伝える"],
+      ["場面で言う（旧ロールプレイ）", "I ordered the pasta. Do you want to try a bite?", "【食事しながらおしゃべり】パスタを頼んだと伝え、一口食べるか聞く"],
+      ["場面で言う（旧ロールプレイ）", "Yes, please! Wow, this is really good.", "【食事しながらおしゃべり】ぜひ食べたい、と答える"],
+      ["場面で言う（旧ロールプレイ）", "It was busy, but I was looking forward to seeing you today.", "【食事しながらおしゃべり】忙しかったけど、今日会えるのを楽しみにしていたと伝える"],
+      ["場面で言う（旧ロールプレイ）", "Let's make a toast. Cheers!", "【食事しながらおしゃべり】乾杯しよう、と言う"],
+      ["場面で言う（旧ロールプレイ）", "It was delicious, thank you.", "【お会計をする】とてもおいしかったと伝える"],
+      ["場面で言う（旧ロールプレイ）", "Could we have the check, please?", "【お会計をする】お会計をお願いする"],
+      ["場面で言う（旧ロールプレイ）", "Thank you too. I had a wonderful evening.", "【お会計をする】こちらこそ、素敵な夜だったと伝える"],
+      ["場面で言う（旧ロールプレイ）", "Thank you! Could you take one more?", "【写真をお願いする】お礼を言って、もう一枚お願いする"],
+      ["場面で言う（旧ロールプレイ）", "It's our first time here.", "【写真をお願いする】今日が初めてだと答える"],
+      ["場面で言う（旧ロールプレイ）", "Thank you, you too!", "【写真をお願いする】お礼を言って返す"],
+      ["場面で言う（旧ロールプレイ）", "Let's ask someone for directions.", "【道を尋ねる】誰かに道を聞こうと提案する"],
+      ["場面で言う（旧ロールプレイ）", "Excuse me, how do I get to the station?", "【道を尋ねる】駅への行き方を尋ねる"],
+      ["場面で言う（旧ロールプレイ）", "Straight two blocks, then left. Is it far?", "【道を尋ねる】確認して、遠いかどうか聞く"],
+      ["場面で言う（旧ロールプレイ）", "Thank you so much for your help!", "【道を尋ねる】お礼を言う"],
+      ["場面で言う（旧ロールプレイ）", "It's incredible. I'm so glad we came.", "【観光デート中の会話】本当に素晴らしいと同意し、来られてうれしいと伝える"],
+      ["場面で言う（旧ロールプレイ）", "A little. Let's take a break.", "【観光デート中の会話】少し疲れたので休みたいと答える"],
+      ["場面で言う（旧ロールプレイ）", "Sounds good! I'd love something warm to drink.", "【観光デート中の会話】いいね、温かい飲み物が飲みたいと答える"],
+      ["場面で言う（旧ロールプレイ）", "Okay! Let's pick out matching souvenirs.", "【観光デート中の会話】お揃いのお土産を買おうと提案する"],
+      ["場面で言う（旧ロールプレイ）", "Thank you! Your place is so nice.", "【家でくつろぐ】お礼を言って、素敵な部屋だと伝える"],
+      ["場面で言う（旧ロールプレイ）", "Coffee would be great, thank you.", "【家でくつろぐ】コーヒーをお願いする"],
+      ["場面で言う（旧ロールプレイ）", "I feel like watching a comedy.", "【家でくつろぐ】コメディ映画が観たいと答える"],
+      ["場面で言う（旧ロールプレイ）", "I'm fine. I just want to sit next to you.", "【家でくつろぐ】大丈夫、あなたの隣にいたいと伝える"],
+      ["場面で言う（旧ロールプレイ）", "How about pasta?", "【一緒に料理する】パスタを作ろうと提案する"],
+      ["場面で言う（旧ロールプレイ）", "Sure! Where's the knife?", "【一緒に料理する】快く引き受け、包丁はどこか聞く"],
+      ["場面で言う（旧ロールプレイ）", "I will. Can you pass me the salt?", "【一緒に料理する】気をつけると言い、塩を取ってもらうよう頼む"],
+      ["場面で言う（旧ロールプレイ）", "I can't wait to eat it.", "【一緒に料理する】食べるのが待ちきれないと伝える"],
+      ["場面で言う（旧ロールプレイ）", "I missed you too! It's so good to see you.", "【待ち合わせで再会】自分も会いたかったと返す"],
+      ["場面で言う（旧ロールプレイ）", "It was a little long, but seeing you made me feel better.", "【待ち合わせで再会】少し長かったけど、会えて元気が出たと答える"],
+      ["場面で言う（旧ロールプレイ）", "I'm starving. Let's eat!", "【待ち合わせで再会】お腹ぺこぺこだと答える"],
+      ["場面で言う（旧ロールプレイ）", "Me neither. Time went by so fast.", "【別れ際のあいさつ】あっという間だったと同意する"],
+      ["場面で言う（旧ロールプレイ）", "Me too. I was so happy to be with you.", "【別れ際のあいさつ】こちらこそ、一緒にいられて幸せだったと伝える"],
+      ["場面で言う（旧ロールプレイ）", "I will. I'll text you as soon as I get home.", "【別れ際のあいさつ】着いたらすぐ連絡すると約束する"],
+      ["場面で言う（旧ロールプレイ）", "I'll miss you too. See you soon!", "【別れ際のあいさつ】自分も寂しい、また近いうちに会おうと言う"],
+      ["メッセージの一言（旧・手紙）", "Happy birthday.", "お誕生日おめでとう。"],
+      ["メッセージの一言（旧・手紙）", "I'm so grateful that you were born.", "あなたが生まれてきてくれたことに、心から感謝しています。"],
+      ["メッセージの一言（旧・手紙）", "Every day with you is a treasure to me.", "あなたと過ごす毎日が、私の宝物です。"],
+      ["メッセージの一言（旧・手紙）", "Let's laugh a lot together this year, too.", "今年も一緒にたくさん笑いましょう。"],
+      ["メッセージの一言（旧・手紙）", "Meeting you is the best thing that has ever happened to me.", "あなたに出会えたことが、私の人生で一番うれしいことです。"],
+      ["メッセージの一言（旧・手紙）", "Please let me keep supporting you, always by your side.", "これからも、あなたの一番近くで支えさせてください。"],
+      ["メッセージの一言（旧・手紙）", "I love you with all my heart.", "心から愛しています。"],
+      ["メッセージの一言（旧・手紙）", "Today is our anniversary.", "今日は私たちの記念日ですね。"],
+      ["メッセージの一言（旧・手紙）", "Every day since I met you has been so much fun.", "あなたと出会ってから、毎日がとても楽しいです。"],
+      ["メッセージの一言（旧・手紙）", "I want to keep making memories with you, always.", "これからもずっと、一緒に思い出を作っていきたいです。"],
+      ["メッセージの一言（旧・手紙）", "Happy anniversary.", "記念日おめでとう。"],
+      ["メッセージの一言（旧・手紙）", "Your kindness has saved me more times than I can count.", "あなたの優しさに、何度も救われてきました。"],
+      ["メッセージの一言（旧・手紙）", "I want to walk into the future with you.", "この先の未来も、あなたと歩んでいきたいです。"],
+      ["メッセージの一言（旧・手紙）", "Thank you so much for everything.", "いつも本当にありがとう。"],
+      ["メッセージの一言（旧・手紙）", "Your kindness encourages me every day.", "あなたの優しさに、毎日励まされています。"],
+      ["メッセージの一言（旧・手紙）", "I can't put it into words, but my heart is full of gratitude.", "うまく言えないけれど、感謝の気持ちでいっぱいです。"],
+      ["メッセージの一言（旧・手紙）", "I'm truly grateful to have you by my side.", "あなたがそばにいてくれることに、心から感謝しています。"],
+      ["メッセージの一言（旧・手紙）", "Even in hard times, your words kept me going.", "つらいときも、あなたの言葉に支えられました。"],
+      ["メッセージの一言（旧・手紙）", "Thank you so much. I love you.", "本当にありがとう。大好きです。"],
+      ["メッセージの一言（旧・手紙）", "You seem so busy lately.", "最近、忙しそうですね。"],
+      ["メッセージの一言（旧・手紙）", "I'm a little worried you might be pushing yourself too hard.", "無理しすぎていないか、少し心配しています。"],
+      ["メッセージの一言（旧・手紙）", "I know you'll be fine. I'm always cheering for you.", "あなたならきっと大丈夫。いつでも応援しています。"],
+      ["メッセージの一言（旧・手紙）", "I know how hard you are working.", "あなたが頑張っているのを、ちゃんと知っています。"],
+      ["メッセージの一言（旧・手紙）", "Even on days when things don't go well, your worth doesn't change.", "うまくいかない日があっても、あなたの価値は変わりません。"],
+      ["メッセージの一言（旧・手紙）", "I'll always be on your side.", "私はずっとあなたの味方です。"],
+      ["メッセージの一言（旧・手紙）", "How are you doing?", "元気にしていますか？"],
+      ["メッセージの一言（旧・手紙）", "Today, I suddenly thought of you.", "今日はふとした瞬間に、あなたのことを思い出しました。"],
+      ["メッセージの一言（旧・手紙）", "I'm doing my best every day, looking forward to seeing you.", "会える日を楽しみに、毎日頑張っています。"],
+      ["メッセージの一言（旧・手紙）", "Being apart makes me realize how much you mean to me.", "離れていると、あなたの大切さがよく分かります。"],
+      ["メッセージの一言（旧・手紙）", "There are so many nights when I just want to hear your voice.", "声が聞きたくなる夜がたくさんあります。"],
+      ["メッセージの一言（旧・手紙）", "When we meet again, please let me hold you tight.", "次に会えたら、強く抱きしめさせてください。"],
+      ["メッセージの一言（旧・手紙）", "I'm sorry about the other day.", "このあいだは、ごめんなさい。"],
+      ["メッセージの一言（旧・手紙）", "I never meant to hurt you.", "あなたを傷つけるつもりはありませんでした。"],
+      ["メッセージの一言（旧・手紙）", "I'd be happy if we could talk again, slowly.", "もう一度、ゆっくり話せたらうれしいです。"],
+      ["メッセージの一言（旧・手紙）", "I regret that my words hurt you.", "自分の言葉があなたを傷つけたこと、反省しています。"],
+      ["メッセージの一言（旧・手紙）", "I will cherish your feelings more.", "あなたの気持ちを、もっと大切にします。"],
+      ["メッセージの一言（旧・手紙）", "If you can forgive me, I'd like to start again.", "許してもらえるなら、もう一度やり直したいです。"],
+      ["メッセージの一言（旧・手紙）", "Hey, long time no see! How've you been?", "久しぶり！元気？"],
+      ["メッセージの一言（旧・手紙）", "How's everything? I suddenly felt like reaching out.", "最近どう？ふと連絡したくなっちゃった。"],
+      ["メッセージの一言（旧・手紙）", "Let's talk again soon.", "またすぐ話そうね。"],
+      ["メッセージの一言（旧・手紙）", "Long time no see. How have you been?", "お久しぶりです。元気にしていましたか？"],
+      ["メッセージの一言（旧・手紙）", "I'm looking forward to a day when we can talk slowly.", "今度、ゆっくり話せる日を楽しみにしています。"],
+      ["メッセージの一言（旧・手紙）", "Good morning! Let's make today a great one.", "おはよう！今日もいい一日にしようね。"],
+      ["メッセージの一言（旧・手紙）", "What's on your schedule today?", "今日の予定は？"],
+      ["メッセージの一言（旧・手紙）", "Good morning. Did you sleep well?", "おはよう。よく眠れた？"],
+      ["メッセージの一言（旧・手紙）", "Don't push yourself today.", "今日も無理しないでね。"],
+      ["メッセージの一言（旧・手紙）", "Goodnight! Talk tomorrow.", "おやすみ！また明日ね。"],
+      ["メッセージの一言（旧・手紙）", "Sweet dreams!", "いい夢を！"],
+      ["メッセージの一言（旧・手紙）", "You worked hard today.", "今日もおつかれさま。"],
+      ["メッセージの一言（旧・手紙）", "Get some good rest. Goodnight.", "ゆっくり休んでね。おやすみ。"],
+      ["メッセージの一言（旧・手紙）", "Something funny happened today.", "今日ね、ちょっとおもしろいことがあったよ。"],
+      ["メッセージの一言（旧・手紙）", "I'll tell you about it later!", "あとで話すね！"],
+      ["メッセージの一言（旧・手紙）", "I've been thinking about you all day.", "今日は一日中あなたのことを考えていたよ。"],
+      ["メッセージの一言（旧・手紙）", "When can we meet next?", "次はいつ会えるかな？"],
+      ["メッセージの一言（旧・手紙）", "I suddenly wanted to see your face.", "今ふと、あなたの顔が見たくなった。"],
+      ["メッセージの一言（旧・手紙）", "It'd be nice just to hear your voice.", "声だけでも聞けたらうれしいな。"],
+      ["メッセージの一言（旧・手紙）", "Good luck today! You can do it!", "今日の本番、頑張って！"],
+      ["メッセージの一言（旧・手紙）", "Let me know how it went.", "終わったら教えてね。"],
+      ["メッセージの一言（旧・手紙）", "You'll be fine. I'm cheering for you all the way.", "あなたなら大丈夫。ずっと応援してるよ。"],
+      ["メッセージの一言（旧・手紙）", "Don't push yourself. Just show your usual strength.", "無理せず、いつもの力を出してね。"],
+      ["メッセージの一言（旧・手紙）", "Sorry for the late reply!", "返信が遅くなってごめんね！"],
+      ["メッセージの一言（旧・手紙）", "I was so swamped.", "バタバタしてたんだ。"],
+      ["メッセージの一言（旧・手紙）", "I'm sorry for taking so long to reply.", "返事が遅くなってごめんなさい。"],
+      ["メッセージの一言（旧・手紙）", "Thank you for waiting for me.", "待っていてくれてありがとう。"],
+      ["メッセージの一言（旧・手紙）", "Are you free this weekend?", "今度の週末、空いてる？"],
+      ["メッセージの一言（旧・手紙）", "Let's go get something to eat together!", "一緒にご飯に行こうよ！"],
+      ["メッセージの一言（旧・手紙）", "I can't wait for the next time we meet.", "次に会える日が待ち遠しいな。"],
+      ["メッセージの一言（旧・手紙）", "Could you tell me which days work for you?", "都合のいい日を教えてもらえる？"]
   ];
 
   const KEY_DATA = 'english_app_data';
@@ -898,6 +1052,8 @@
     const all = getAllPhrases();
     const rest = new Set(getStore().resting);
     if (selected === 'REST') return all.filter(p => rest.has(p[1]));
+    if (selected === 'PIN') return pinPhrases();
+    if (selected === 'PREMEET') return getPremeet();
     const act = all.filter(p => !rest.has(p[1]));
     if (selected === 'FAV') { const f = getStore().favorites; return act.filter(p => f.includes(p[1])); }
     if (selected === 'WEAK') return getWeakPhrases();
@@ -911,7 +1067,8 @@
      ここに無いカテゴリは「その他」に入る。 */
   const GENRE_GROUPS = [
     { id: 'base', label: '🎯 全体・復習・マイ単語', cats: [] },
-    { id: 'love', label: '💕 恋人・気持ちを伝える', cats: ['会う直前・会ったときの一言', '恋人・パートナーへの思いやり', '愛情・絆を深める表現', 'would / could 恋人同士の会話', '気持ち・関係を伝える', '謝る・誤解をとく', '自分の経験・自分らしさ'] },
+    { id: 'meet', label: '📅 会う前の練習', cats: ['会う直前・会ったときの一言', '会う前：再会・別れ際', '会う前：食事', '会う前：観光', '会う前：家で過ごす', '場面で言う（旧ロールプレイ）'] },
+    { id: 'love', label: '💕 恋人・気持ちを伝える', cats: ['メッセージの一言（旧・手紙）', '恋人・パートナーへの思いやり', '愛情・絆を深める表現', 'would / could 恋人同士の会話', '気持ち・関係を伝える', '謝る・誤解をとく', '自分の経験・自分らしさ'] },
     { id: 'care', label: '🤝 寄り添う・話し合う', cats: ['共感する・寄り添う', '励ます・応援する', '不安・悩みを受け止める', '話し合い・意見の違い', '差別・人権・文化を話す'] },
     { id: 'talk', label: '💬 会話・雑談', cats: ['会話フレーズ', '実践フレーズ', '友達・カジュアル雑談', '短く言える版', 'else / tell you what', '音のつながり（リンキング）'] },
     { id: 'gram', label: '📖 文法・単語', cats: ['文法・表現パターン', '文法・文型', '構文暗唱・中学レベル', '構文暗唱・高校基礎', '単語 (単体)', '熟語 (イディオム)', '単語・熟語 (形容詞＋名詞)', '単語・熟語 (副詞＋動詞)', '語彙・コロケーション'] },
@@ -933,6 +1090,20 @@
     saveStore(s);
     return s.resting.length;
   }
+  // 📌 ピン留め → 練習用の形 [カテゴリ, 英語, 日本語]
+  function pinPhrases() {
+    const all = getAllPhrases(), map = {};
+    all.forEach(p => { map[p[1].toLowerCase()] = p; });
+    return getPins().map(x => map[String(x.en).toLowerCase()] || ['📌 ピン留め', x.en, x.ja || '']);
+  }
+  // 📅 会う前セット：ピン留め ＋「会う直前・会ったときの一言」（お休み中は除く）
+  function getPremeet() {
+    const rest = new Set(getStore().resting), seen = new Set(), out = [];
+    pinPhrases().concat(getAllPhrases().filter(p => p[0] === '会う直前・会ったときの一言' && !rest.has(p[1]))).forEach(p => {
+      const k = p[1].toLowerCase(); if (!seen.has(k)) { seen.add(k); out.push(p); }
+    });
+    return out;
+  }
   function genreEntries() {
     const rest = new Set(getStore().resting), all = getAllPhrases().filter(p => !rest.has(p[1])), count = {};
     all.forEach(p => { count[p[0]] = (count[p[0]] || 0) + 1; });
@@ -941,7 +1112,9 @@
       { v: 'WEAK', t: '🎯 苦手フレーズのみ（' + getWeakPhrases().length + '件）', g: 'base' },
       { v: 'DUE', t: '⏰ 復習の時期が来たフレーズ（' + getDuePhrases().length + '件）', g: 'base' },
       { v: 'FAV', t: '⭐ お気に入りフレーズのみ', g: 'base' },
-      { v: 'REST', t: '💤 お休み中のフレーズ（' + getStore().resting.length + '件）', g: 'base' }
+      { v: 'REST', t: '💤 お休み中のフレーズ（' + getStore().resting.length + '件）', g: 'base' },
+      { v: 'PREMEET', t: '📅 会う前セット（ピン留め＋会う直前の一言）（' + getPremeet().length + '件）', g: 'meet' },
+      { v: 'PIN', t: '📌 ピン留めしたフレーズ（' + getPins().length + '件）', g: 'meet' }
     ];
     Object.keys(count).forEach(c => {
       let g = c === CUSTOM_CAT ? 'base' : 'other';
@@ -1011,6 +1184,8 @@
         ? '今日復習するフレーズはありません。練習したフレーズが、時間をおいてここに戻ってきます。'
       : select.value === 'FAV'
         ? 'お気に入りがまだありません。★を押して登録してください。'
+      : select.value === 'PIN'
+        ? 'ピン留めしたフレーズはまだありません。カード練習の 📍 を押すと、会う日に使いたいフレーズとしてここに集まります。'
       : select.value === 'REST'
         ? 'お休み中のフレーズはありません。練習中に💤を押すと、そのカードは練習に出なくなります。'
         : '該当するフレーズがありません。';

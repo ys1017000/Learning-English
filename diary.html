@@ -36,7 +36,6 @@
     <a href="diary.html" class="active" aria-current="page">📔 日記</a>
     <a href="dmnote.html">📩 DM</a>
     <a href="report.html">🏆 成果</a>
-    <a href="keepsake.html">💝 言葉</a>
   </div>
   <div class="container">
     <div class="card next-step">
@@ -92,12 +91,12 @@
   <nav>
     <a href="index.html">🏠 ホーム</a>
     <a href="translator.html">💬 会話</a>
-    <a href="plan.html">📅 予習</a>
+    <a href="quiz.html?format=drill&amp;genre=PREMEET">📅 会う前</a>
     <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=52"></script>
-  <script src="roadmap-data.js?v=10"></script>
+  <script src="common.js?v=53"></script>
+  <script src="roadmap-data.js?v=11"></script>
   <script>
     // お題: [日本語, 英語の書き出し, 思い出用か]
     const PROMPTS = [
@@ -129,7 +128,13 @@
       const by = RM.cardsByWeek(EA.getCustomPhrases());
       let cards = [];
       if (p.buffer) RM.monthWeeks(p.month).forEach(w => { cards = cards.concat(by[w] || []); });
-      else cards = (by[p.week] || []).slice();
+      else {
+        // 平日は「今日のカード」を先頭に（一言日記で使う）
+        const todays = p.dow <= 5 ? RM.dayCards(by, rd.start, p.week, p.dow) : [];
+        const rest = (by[p.week] || []).filter(c => !todays.includes(c));
+        cards = todays.concat(rest);
+        cards.todayN = todays.length;
+      }
       // 今週のカードがまだ無い（取り込み前）ときは、これまでの週のカードを使う
       if (!cards.length) Object.keys(by).forEach(w => { if (+w <= p.week) cards = cards.concat(by[w]); });
       const slot = RM.planFor(p, by, rd.start).find(s => (s.links || []).includes('diary')) || null;
@@ -166,8 +171,11 @@
       if (!ctx || !ctx.cards.length) { $('patBox').style.display = 'none'; return; }
       $('patBox').style.display = '';
       $('patTitle').textContent = '💡 第' + ctx.p.week + '週の型（タップで入る）';
-      const pool = ctx.cards.slice();
-      for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [pool[i], pool[j]] = [pool[j], pool[i]]; }
+      const tn = ctx.cards.todayN || 0;
+      const shuf = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+      // 今日のカードがあれば、そこから優先して出す
+      const pool = shuf(ctx.cards.slice(0, tn)).concat(shuf(ctx.cards.slice(tn)));
+      if (tn) $('patTitle').textContent = '💡 今日のカード（タップで入る）';
       const list = $('patList'); list.innerHTML = '';
       pool.slice(0, 6).forEach(c => {
         const b = document.createElement('button');

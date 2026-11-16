@@ -19,7 +19,6 @@
     <a href="diary.html">📔 日記</a>
     <a href="dmnote.html">📩 DM</a>
     <a href="report.html">🏆 成果</a>
-    <a href="keepsake.html">💝 言葉</a>
   </div>
   <div class="container">
     <div class="card">
@@ -40,7 +39,7 @@
       <h2>📌 準備したフレーズの結果</h2>
       <p class="muted" style="margin-bottom:0.75rem;">会う前にピン留めしたフレーズです。実際に使えたかを記録しましょう。使えなかったものは 🔁 で復習に回せます。</p>
       <div id="pinResults"></div>
-      <a href="plan.html" class="btn btn-secondary" style="margin-top:0.5rem;">📅 次に会う日の予習プランを作る</a>
+      <a href="quiz.html?format=drill&amp;genre=PREMEET" class="btn btn-secondary" style="margin-top:0.5rem;">📅 次に会う日に向けてカード練習</a>
     </div>
     <div id="days"></div>
     <div id="dangerZone" style="text-align:center; margin-top:1rem;"></div>
@@ -49,11 +48,11 @@
   <nav>
     <a href="index.html">🏠 ホーム</a>
     <a href="translator.html">💬 会話</a>
-    <a href="plan.html">📅 予習</a>
+    <a href="quiz.html?format=drill&amp;genre=PREMEET">📅 会う前</a>
     <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=52"></script>
+  <script src="common.js?v=53"></script>
   <script>
     let whoFilter = 'all';
     const WEEK = ['日', '月', '火', '水', '木', '金', '土'];

@@ -232,6 +232,12 @@
         detail: buffer ? '言えなかったものから優先して、日本語を見て3秒以内に英語で言う → 音読×3。' : '日本語を見て3秒以内に英語で言う → 音読×3。言えなかった分だけ、最大3回まで繰り返す。' + (dow > firstDow(startKey, week) ? '前日の分も軽く復習。' : ''),
         links: [], deck: 'lunch'
       });
+      // カードで一言日記（毎日5分）。木曜は夜のライティングがあるので出さない
+      if (dow !== 4) slots.push({
+        id: 'diary1', when: '夜（5分）', title: '✍ カードで一言日記',
+        detail: (buffer ? '今月のカード' : '今日のカード') + 'を1つ以上使って、今日のことを2〜3文。書いたら声に出して1回読む。（日記の画面に今日のカードが出ます）',
+        links: ['diary']
+      });
       var ev = (buffer ? BUFFER_EVENING : EVENING)[dow];
       var detail = ev.detail;
       var links = ev.links;
@@ -255,10 +261,10 @@
     } else {
       if (buffer) {
         slots.push({ id: 'p1', when: '①', title: '30秒の独り言を録音して聞き返す', detail: pos.week === 12 ? '3か月前の録音と聞き比べて、変わったところを書き留める。' : '今月の変化を聞いて、言い直したいところをメモ。', links: [] });
-        slots.push({ id: 'p2', when: '②', title: '彼女宛てメッセージの書き直し', detail: '送らなくてよい。型を使って、前より短く自然に。', links: ['letter'] });
+        slots.push({ id: 'p2', when: '②', title: '彼女宛てメッセージの書き直し', detail: '送らなくてよい。英語日記に、型を使って前より短く自然に書く。', links: ['diary'] });
       } else {
         slots.push({ id: 'p1', when: '①', title: '30秒の独り言を録音して聞き返す', detail: '今週のテーマで。聞き返して、詰まったところにメモ。', links: [] });
-        slots.push({ id: 'p2', when: '②', title: '彼女宛ての短いメッセージを書く', detail: '実際に送らなくてよい。', links: ['letter'] });
+        slots.push({ id: 'p2', when: '②', title: '彼女宛ての短いメッセージを書く', detail: '実際に送らなくてよい。英語日記に書く（「メッセージの一言」のカードも参考に）。', links: ['diary'] });
       }
     }
     return slots;

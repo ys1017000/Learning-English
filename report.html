@@ -19,7 +19,6 @@
     <a href="diary.html">📔 日記</a>
     <a href="dmnote.html">📩 DM</a>
     <a href="report.html" class="active" aria-current="page">🏆 成果</a>
-    <a href="keepsake.html">💝 言葉</a>
   </div>
   <div class="container">
     <div class="card next-step" id="heroCard"><h2>🏆 成果レポート</h2><div id="heroMsg"></div></div>
@@ -47,11 +46,11 @@
   <nav>
     <a href="index.html">🏠 ホーム</a>
     <a href="translator.html">💬 会話</a>
-    <a href="plan.html">📅 予習</a>
+    <a href="quiz.html?format=drill&amp;genre=PREMEET">📅 会う前</a>
     <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=52"></script>
+  <script src="common.js?v=53"></script>
   <script src="content.js?v=8"></script>
   <script>
     const C = CONTENT;
@@ -109,7 +108,7 @@
         const bar = document.createElement('div'); bar.className = 'progress-bar-container'; bar.style.margin = '0.4rem 0';
         const fill = document.createElement('div'); fill.className = 'progress-bar-fill'; fill.style.width = Math.min(100, Math.round(s.done / s.total * 100)) + '%'; bar.appendChild(fill);
         d.appendChild(top); d.appendChild(det); d.appendChild(bar);
-        if (!s.active || s.tag.includes('要強化')) { const a = document.createElement('a'); a.href = 'roleplay.html?scene=' + s.id; a.className = 'tiny-btn'; a.style.textDecoration = 'none'; a.textContent = '🎭 ロールプレイで練習'; d.appendChild(a); }
+        if (!s.active || s.tag.includes('要強化')) { const a = document.createElement('a'); a.href = 'quiz.html?format=drill&genre=' + encodeURIComponent('会う前：' + (s.m.label || '')); a.className = 'tiny-btn'; a.style.textDecoration = 'none'; a.textContent = '🗣 この場面をカードで練習'; d.appendChild(a); }
         sb.appendChild(d);
       });
 
