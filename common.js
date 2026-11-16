@@ -391,6 +391,14 @@
       ["文法・表現パターン", "Even if it rains, let's go.", "たとえ雨でも行こう。（even if＝たとえ〜でも）"],
       ["文法・表現パターン", "I would stay home.", "私なら家にいるかな。（would＝私なら〜する）"],
       ["文法・表現パターン", "We could go to a cafe.", "カフェに行くのもアリだね。（could＝〜できる・〜するのもアリ）"],
+      // ---- 提案の強さ must / should / would / could（2026-11-16） ----
+      ["文法・表現パターン", "You must take vitamin A.", "ビタミンA摂らなきゃだめだよ。（must：強い。命令に近い）"],
+      ["文法・表現パターン", "You should take vitamin A.", "ビタミンA摂った方がいいよ。（should：中くらいのアドバイス）"],
+      ["文法・表現パターン", "Some vitamin A would help.", "ビタミンAを少し摂ったら、役立つと思うよ。（would：やわらかい提案。結果を言う）"],
+      ["文法・表現パターン", "You could try vitamin A.", "ビタミンAを試すのもアリだよ。（could：やわらかい提案。選択肢を出す）"],
+      ["文法・表現パターン", "A hot bath would help.", "お風呂に入ったら楽になると思うよ。（would：やわらかい提案）"],
+      ["文法・表現パターン", "You should go to bed early.", "早く寝た方がいいよ。（should：ふつうのアドバイス）"],
+      ["文法・表現パターン", "Some sleep would be good for you.", "ちょっと寝たらいいと思うよ。（would：やわらかい提案）"],
       // ---- 無生物主語・責めない言い方（2026-11-16） ----
       ["文法・表現パターン", "This photo makes me happy.", "この写真を見ると幸せな気持ちになる。（原因を主語に make）"],
       ["文法・表現パターン", "This bus takes you to Shibuya.", "このバスに乗れば渋谷に行けるよ。（乗り物 takes you to ～）"],

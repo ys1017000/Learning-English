@@ -2376,6 +2376,20 @@
           { key: "even if", kana: "イーヴン イフ", kanaNote: '', label: "even if ＝ たとえ〜でも", ja: "たとえ〜でも", nuance: "if（もし〜なら）より強い気持ち。",
             ex: ["Even if it rains, let's go.", "たとえ雨でも行こう。"], tone: "Even if you're busy, I'll wait.（忙しくても待つよ）" }
         ]
+      },
+      {
+        name: "提案の強さ：must → should → would / could",
+        note: "同じ「すすめる」でも強さがちがう。気遣いの場面では would / could がやわらかい。",
+        forms: [
+          { key: "must", kana: "マスト", kanaNote: '', label: "must ＝（強い）〜しなきゃだめ", ja: "〜しなきゃだめ", nuance: "命令に近い強さ。体調や安全など、本当に必要なときだけ。",
+            ex: ["You must take vitamin A.", "ビタミンA摂らなきゃだめだよ。"], tone: "気遣いの場面では強すぎることが多い。" },
+          { key: "should", kana: "シュッド", kanaNote: '', label: "should ＝（中くらい）〜した方がいいよ", ja: "〜した方がいいよ", nuance: "ふつうのアドバイス。",
+            ex: ["You should take vitamin A.", "ビタミンA摂った方がいいよ。"], tone: "親しい相手ならよく使う。" },
+          { key: "would help", kana: "ウッド", kanaNote: '', label: "would ＝（やわらかい）〜したら…になると思うよ（結果を言う）", ja: "〜したらいいと思うよ", nuance: "「もし〜したら、こうなる」と結果を伝えて、結果的に提案になる。相手が選べる余地が残る。",
+            ex: ["Some vitamin A would help.", "ビタミンAを少し摂ったら、役立つと思うよ。"], tone: "主語に「もし〜したら」が隠れている：A hot bath would help.（お風呂に入ったら楽になると思うよ）" },
+          { key: "could", kana: "クッド", kanaNote: '', label: "could ＝（やわらかい）〜するのもアリだよ（選択肢を出す）", ja: "〜するのもアリだよ", nuance: "「こういう方法もある」と選択肢を出す。",
+            ex: ["You could try vitamin A.", "ビタミンAを試すのもアリだよ。"], tone: "would は「やったらこうなる」、could は「こういう手もある」。" }
+        ]
       }
     ],
     compare: {
@@ -2395,7 +2409,11 @@
       { situation: "今日会えたらなあ。（でも会えない）", sentence: "I ___ I could see you today.", options: ["wish", "hope", "would", "might"], answer: "wish", full: "I wish I could see you today.", why: "無理なことを願うのは I wish ＋過去形（could）。" },
       { situation: "オーディションうまくいくといいね。", sentence: "I ___ your audition goes well.", options: ["hope", "wish", "would", "must"], answer: "hope", full: "I hope your audition goes well.", why: "これから起こりうることを願うのは I hope。" },
       { situation: "今夜はどっちかというと家にいたいな。", sentence: "I'd ___ stay in tonight.", options: ["rather", "better", "like", "prefer"], answer: "rather", full: "I'd rather stay in tonight.", why: "I'd rather ＝どっちかというと〜したい。I'd better は「〜した方がいい（しないとまずい）」で別の意味。" },
-      { situation: "たとえ雨でも行こう。", sentence: "___ it rains, let's go.", options: ["Even if", "If only", "Even", "As if"], answer: "Even if", full: "Even if it rains, let's go.", why: "「たとえ〜でも」は even if。" }
+      { situation: "たとえ雨でも行こう。", sentence: "___ it rains, let's go.", options: ["Even if", "If only", "Even", "As if"], answer: "Even if", full: "Even if it rains, let's go.", why: "「たとえ〜でも」は even if。" },
+      { situation: "疲れてる相手に、やわらかく。「お風呂に入ったら楽になると思うよ」", sentence: "A hot bath ___ help.", options: ["would", "must", "should", "used to"], answer: "would", full: "A hot bath would help.", why: "「（入ったら）楽になると思う」と結果を言うやわらかい提案は would。" },
+      { situation: "「（方法の一つとして）ビタミンAを試すのもアリだよ」", sentence: "You ___ try vitamin A.", options: ["could", "must", "would", "used to"], answer: "could", full: "You could try vitamin A.", why: "選択肢を出すやわらかい提案は could。" },
+      { situation: "ふつうのアドバイス。「早く寝た方がいいよ」", sentence: "You ___ go to bed early.", options: ["should", "must", "would", "used to"], answer: "should", full: "You should go to bed early.", why: "中くらいの強さのアドバイスは should。" },
+      { situation: "「ちょっと寝たらいいと思うよ」（やわらかく）", sentence: "Some sleep ___ be good for you.", options: ["would", "must", "used to", "might"], answer: "would", full: "Some sleep would be good for you.", why: "主語に「もし少し寝たら」が隠れている would。" }
     ]
   }];
 
