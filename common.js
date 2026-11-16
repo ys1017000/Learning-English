@@ -1865,6 +1865,7 @@
     const usageLine = en => { const u = usageFor(en); return u ? '<div class="usage-line">🎬 場面：' + esc(u) + '</div>' : ''; };
     // ⭐ お気に入り（4択クイズ・表現集と同じ favorites。バックアップにも入る）
     const favBtn = (en, i) => { const on = isFavorite(en); return '<button class="tiny-btn dr-fav" data-dr="fav"' + (i != null ? ' data-i="' + i + '"' : '') + ' aria-pressed="' + on + '" aria-label="' + (on ? 'お気に入りから外す' : 'お気に入りに追加') + '" style="white-space:nowrap; flex-shrink:0; font-size:1.1rem; padding:2px 10px;' + (on ? ' color:var(--fav); border-color:var(--fav);' : '') + '">' + (on ? '★' : '☆') + '</button>'; };
+    const pinBtn = (en, i) => { const on = isPinned(en); return '<button class="tiny-btn dr-pin" data-dr="pin"' + (i != null ? ' data-i="' + i + '"' : '') + ' aria-pressed="' + on + '" aria-label="' + (on ? 'ピン留めを外す' : '会う日に使いたいフレーズとしてピン留め') + '" title="会うとき使う（ピン留め）" style="white-space:nowrap; flex-shrink:0; font-size:1rem; padding:2px 8px;' + (on ? ' border-color:var(--primary);' : ' opacity:.75;') + '">' + (on ? '📌' : '📍') + '</button>'; };
     const restBtn = (en, i) => { const on = isResting(en); return '<button class="tiny-btn dr-rest" data-dr="rest"' + (i != null ? ' data-i="' + i + '"' : '') + ' aria-pressed="' + on + '" aria-label="' + (on ? 'お休みをやめて練習に戻す' : 'お休みにする（練習に出さない）') + '" title="お休み（練習に出さない）" style="white-space:nowrap; flex-shrink:0; font-size:1rem; padding:2px 8px;' + (on ? ' background:var(--accent-soft, #eef); border-color:var(--accent, #88a);' : ' opacity:.75;') + '">' + (on ? '💤済' : '💤') + '</button>'; };
     let listed = [];
     function start() {
@@ -1887,7 +1888,7 @@
         }
         listed = still;
         if (still.length) html += '<div class="muted" style="margin-bottom:0.4rem;">' + (st.phase === 'review' ? 'まだ言えない文' : '言えなかった文') + '</div>' +
-          still.map((p, i) => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:flex-start;"><div class="en-text">' + esc(p[1]) + '</div><span style="display:flex; gap:4px; flex-shrink:0;">' + favBtn(p[1], i) + restBtn(p[1], i) + '</span></div><div class="ja-text muted">' + esc(ja(p).main) + '</div>' + usageLine(p[1]) + '</div>').join('');
+          still.map((p, i) => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:flex-start;"><div class="en-text">' + esc(p[1]) + '</div><span style="display:flex; gap:4px; flex-shrink:0;">' + favBtn(p[1], i) + pinBtn(p[1], i) + restBtn(p[1], i) + '</span></div><div class="ja-text muted">' + esc(ja(p).main) + '</div>' + usageLine(p[1]) + '</div>').join('');
         else if (st.phase === 'review') html += '<p style="color:var(--ok); font-weight:bold;">全部言えました！</p>';
         if (st.phase === 'roundEnd') {
           html += '<button class="btn" data-dr="next" style="margin-top:0.75rem;">▶ ' + (st.round + 1) + '回目：言えなかった' + miss.length + '文だけ</button>' +
@@ -1902,7 +1903,7 @@
       }
       const p = st.queue[st.i], j = ja(p);
       box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center; gap:6px;"><span class="muted">' + esc(opts.title || '') + ' ・ ' + st.round + '回目 ・ ' + (st.i + 1) + '/' + st.queue.length + '</span>' +
-        '<span style="display:flex; gap:6px; flex-shrink:0;">' + favBtn(p[1]) + restBtn(p[1]) + (opts.onClose ? '<button class="tiny-btn" data-dr="close">✕ やめる</button>' : '') + '</span></div>' +
+        '<span style="display:flex; gap:6px; flex-shrink:0;">' + favBtn(p[1]) + pinBtn(p[1]) + restBtn(p[1]) + (opts.onClose ? '<button class="tiny-btn" data-dr="close">✕ やめる</button>' : '') + '</span></div>' +
         '<div class="rm-ja">' + esc(j.main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、' + secs + '秒以内に声に出して言ってみよう</p>' +
         '<div class="dr-reveal" style="display:none;"><div class="rm-en">' + esc(p[1]) + '</div>' +
@@ -1952,6 +1953,13 @@
         t.style.color = on ? 'var(--fav)' : ''; t.style.borderColor = on ? 'var(--fav)' : '';
         t.setAttribute('aria-pressed', on); t.setAttribute('aria-label', on ? 'お気に入りから外す' : 'お気に入りに追加');
         toast(on ? '⭐ お気に入りに追加しました' : 'お気に入りから外しました');
+      }
+      else if (a === 'pin') {
+        const tp = t.dataset.i != null ? listed[+t.dataset.i] : p;
+        if (!tp) return;
+        const on = togglePin(tp[1], ja(tp).main);
+        t.outerHTML = pinBtn(tp[1], t.dataset.i != null ? +t.dataset.i : null);
+        toast(on ? '📌 ピン留めしました（会話画面の上に出ます。会ったあと「ふり返り」で使えたか記録）' : 'ピン留めを外しました');
       }
       else if (a === 'rest') {
         const tp = t.dataset.i != null ? listed[+t.dataset.i] : p;

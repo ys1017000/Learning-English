@@ -42,7 +42,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=51"></script>
+  <script src="common.js?v=52"></script>
   <script src="usage-data.js?v=36"></script>
   <script src="roadmap-data.js?v=10"></script>
   <script>
@@ -337,6 +337,11 @@
     function roundLine(hist) {
       return hist.map(h => CIRCLE[h.round] + ' ' + h.said + '/' + h.total).join(' → ');
     }
+    // 📍ピン留め：会う日に使いたいカードを選ぶ（会話画面の上に出て、ふり返りで「使えた」を記録）
+    function pinBtn(en, i) {
+      const on = EA.isPinned(en);
+      return '<button class="tiny-btn" data-act="pin"' + (i != null ? ' data-i="' + i + '"' : '') + ' aria-pressed="' + on + '" aria-label="' + (on ? 'ピン留めを外す' : '会う日に使いたいフレーズとしてピン留め') + '" style="white-space:nowrap;' + (on ? ' border-color:var(--primary);' : '') + '">' + (on ? '📌 ピン留め中' : '📍 会うとき使う') + '</button>';
+    }
     function reviewHtml() {
       const first = run.hist[0], stillN = run.all.filter(c => !run.said[c.en]).length;
       let html = '<h2>📋 ふり返り：' + esc(run.label || RUN_TITLE[run.kind]) + '</h2>' +
@@ -347,7 +352,7 @@
       html += run.all.map(c => {
         const r = run.said[c.en];
         return '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:8px; align-items:flex-start;"><div><div class="en-text">' + esc(c.en) + '</div><div class="ja-text muted">' + esc(c.ja) + '</div>' + usageHtml(c.en) + '</div>' +
-          '<span class="rm-badge' + (r ? ' ok' : ' ng') + '">' + (r ? CIRCLE[r] + (r === 1 ? ' 1回目で言えた' : ' ' + r + '回目で言えた') : '✕ まだ') + '</span></div></div>';
+          '<span style="display:flex; flex-direction:column; align-items:flex-end; gap:4px;">' + pinBtn(c.en, run.all.indexOf(c)) + '<span class="rm-badge' + (r ? ' ok' : ' ng') + '">' + (r ? CIRCLE[r] + (r === 1 ? ' 1回目で言えた' : ' ' + r + '回目で言えた') : '✕ まだ') + '</span></span></div></div>';
       }).join('');
       if (run.free) {
         html += '<p class="muted" style="margin:0.6rem 0;">いつでも練習の結果は、ロードマップの記録（言えた率・翌日の再登場）には入りません。</p>' +
@@ -377,10 +382,10 @@
       const cur = run.queue[run.i], c = cur.c;
       box.innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;"><span class="muted">' + esc(title) + (run.kind === 'check' ? '' : ' ・ ' + run.round + '回目') + ' ・ ' + (run.i + 1) + '/' + run.queue.length +
         ' <span class="rm-badge">' + esc(cur.t) + '</span></span><button class="tiny-btn" data-act="closeRun">✕ やめる</button></div>' +
-        '<div class="rm-ja">' + esc(c.ja) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill" id="timerFill"></div></div>' +
+        '<div class="rm-ja">' + esc(EA.splitJa(c.ja).main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill" id="timerFill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、' + EA.drillSecs() + '秒以内に声に出して言ってみよう</p>' +
-        '<div id="revealArea" style="display:none;"><div class="rm-en" id="enText">' + esc(c.en) + '</div>' + (c.tag ? '<div class="muted" style="text-align:center;">' + esc(c.tag) + '</div>' : '') + usageHtml(c.en) +
-        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button></div>' +
+        '<div id="revealArea" style="display:none;"><div class="rm-en" id="enText">' + esc(c.en) + '</div>' + (EA.splitJa(c.ja).note ? '<div class="muted" style="text-align:center; margin-top:0.2rem;">💡 ' + esc(EA.splitJa(c.ja).note) + '</div>' : '') + (c.tag ? '<div class="muted" style="text-align:center;">' + esc(c.tag) + '</div>' : '') + usageHtml(c.en) +
+        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button>' + pinBtn(c.en, null) + '</div>' +
         '<div class="word-chips" id="chips"></div><div class="mini-score" id="micScore" style="text-align:center;"></div>' +
         '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-act="ok" style="background:#16a34a; flex:1;">⭕ ' + EA.drillSecs() + '秒以内に言えた</button><button class="btn" data-act="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
         '<button class="btn" data-act="reveal" id="revealBtn">答えを見る</button>';
@@ -472,6 +477,14 @@
       if (a === 'dayToday') { viewDay = null; renderToday(); window.scrollTo(0, 0); return; }
       if (a === 'ok') { answer(true); return; }
       if (a === 'ng') { answer(false); return; }
+      if (a === 'pin') {
+        const c = t.dataset.i != null ? run.all[+t.dataset.i] : (run.queue[run.i] || {}).c;
+        if (!c) return;
+        const on = EA.togglePin(c.en, EA.splitJa(c.ja).main);
+        t.outerHTML = pinBtn(c.en, t.dataset.i != null ? +t.dataset.i : null);
+        EA.toast(on ? '📌 ピン留めしました（会話画面の上に出ます。会ったあと「ふり返り」で使えたか記録）' : 'ピン留めを外しました');
+        return;
+      }
       if (a === 'closeRun') { run = null; renderRun(); return; }
       if (a === 'nextRound') {
         const miss = run.res.filter(r => !r.ok).map(r => ({ c: r.c, t: (run.round + 1) + '回目' }));
