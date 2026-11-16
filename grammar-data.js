@@ -1673,7 +1673,7 @@
     id: 'would-could',
     title: 'would / could の使い分け（ていねい・意見・可能性・もしも）',
     short: 'would / could（意見・お願い・かもしれない）',
-    intro: 'would と could は、どちらも根っこに「もしも」（仮定）の気持ちがあります。「もし〜なら、…する（would）／できる（could）」。だから、はっきり言い切らない「やわらかさ」が出ます。ていねいなお願い、控えめな意見、「〜かもしれない」は、全部この「もしも」の気持ちから来ています。自分の意見に I would ～ を使うのは正しく、とても自然です。',
+    intro: '【頭につける日本語】would＝（もし〜なら）私なら〜する（選択）、could＝（その気になれば）〜できる・〜するのもアリ（可能・提案）。迷ったら「する」か「できる」かで選ぶ。（発想⑧にほかの型の早見表あり）　would と could は、どちらも根っこに「もしも」（仮定）の気持ちがあります。「もし〜なら、…する（would）／できる（could）」。だから、はっきり言い切らない「やわらかさ」が出ます。ていねいなお願い、控えめな意見、「〜かもしれない」は、全部この「もしも」の気持ちから来ています。自分の意見に I would ～ を使うのは正しく、とても自然です。',
     groups: [
       {
         name: '自分の意見をやわらかく言う（would）',
@@ -2327,6 +2327,76 @@
       { situation: "相手のくせが少し気になる。「それやめて」", sentence: '___', options: ["Would you mind not doing that?", "Stop doing that.", "Don't do that, please stop."], answer: "Would you mind not doing that?", full: "Would you mind not doing that?", why: "Would you mind not 〜ing?＝〜しないでもらえる？ かなりていねい。" },
       { situation: "相手が元気がなさそう。「怒ってる？」と聞く代わりに", sentence: '___', options: ["Is something bothering you?", "Are you angry at me?", "Why are you angry?"], answer: "Is something bothering you?", full: "Is something bothering you?", why: "「何か気になってることある？」と聞くと、相手が話しやすい。" }
     ]
+  }, {
+    id: "think-image",
+    title: "発想⑧ 頭に日本語をつけてイメージする（would / could / should / might など）",
+    short: "発想⑧ 頭につける日本語",
+    intro: "助動詞や時間の型は、文の頭に「決まった日本語」をつけてイメージすると、使う場面がすぐ浮かびます。例：would＝（もし〜なら）私なら〜する、could＝（その気になれば）〜できる、might＝もしかしたら、used to＝昔は。訳すときも話すときも、まず「頭の日本語」を思い浮かべて、合う型を選びます。",
+    groups: [
+      {
+        name: "助動詞：頭につける日本語",
+        note: "would と could の違いは「する（選択）」か「できる（可能）」か。",
+        forms: [
+          { key: "would", kana: "ウッド", kanaNote: '', label: "would ＝（もし〜なら）私なら〜する", ja: "私なら〜する", nuance: "自分の選択や意見。言い切りをやわらげる働きもある。",
+            ex: ["I would stay home.", "私なら家にいるかな。"], tone: "If I were you, I would ～.（私があなたなら〜する）" },
+          { key: "could", kana: "クッド", kanaNote: '', label: "could ＝（その気になれば）〜できる・〜するのもアリ", ja: "〜できる・〜するのもアリ", nuance: "選択肢や提案を出す。命令っぽくならない。",
+            ex: ["We could go to a cafe.", "カフェに行くのもアリだね。"], tone: "I could pick you up.（迎えに行けるよ）" },
+          { key: "should", kana: "シュッド", kanaNote: '', label: "should ＝（私の考えでは）〜した方がいい", ja: "〜した方がいい", nuance: "おすすめ・アドバイス。must より軽い。",
+            ex: ["You should try the ramen here.", "ここのラーメン、食べてみた方がいいよ。"], tone: "We should ～ ＝「〜しようよ」の誘いにもなる。" },
+          { key: "might", kana: "マイト", kanaNote: '', label: "might ＝ もしかしたら〜かも", ja: "もしかしたら〜かも", nuance: "自信がないとき。may より会話的。",
+            ex: ["I might be a little late.", "もしかしたら少し遅れるかも。"], tone: "It might rain.（雨降るかも）" },
+          { key: "must", kana: "マスト", kanaNote: '', label: "must ＝ きっと〜に違いない", ja: "きっと〜だ", nuance: "会話では「〜しなければ」より「きっと〜だ」の推測でよく使う。",
+            ex: ["You must be tired.", "きっと疲れてるよね。"], tone: "「〜しなきゃ」は have to が会話的。" }
+        ]
+      },
+      {
+        name: "時間の型：頭につける日本語",
+        note: "「いつの話か」を頭の日本語で決める。",
+        forms: [
+          { key: "used to", kana: "ユーストゥ", kanaNote: '', label: "used to ＝ 昔は〜していた（今はしていない）", ja: "昔は〜していた", nuance: "今とのちがいを言う。",
+            ex: ["I used to play soccer.", "昔はサッカーしてたんだ。"], tone: "be used to ～ing（〜に慣れている）とは別。" },
+          { key: "going to", kana: "ゴナ", kanaNote: '', label: "be going to ＝（もう決めてる）〜するつもり", ja: "〜するつもり", nuance: "前から決めていた予定。",
+            ex: ["I'm going to visit my parents this weekend.", "今週末は実家に帰るつもり。"], tone: "話すときは gonna と聞こえる。" },
+          { key: "I'll", kana: "アイル", kanaNote: '', label: "will（I'll）＝（今決めた）じゃあ〜するね", ja: "じゃあ〜するね", nuance: "その場で決めたこと・申し出。",
+            ex: ["I'll get the check.", "じゃあ、お会計は私が。"], tone: "「今決めた」なら I'll、「前から決めてた」なら I'm going to。" },
+          { key: "have been", kana: "ハヴ ビン", kanaNote: '', label: "have been ～ing ＝ （前から今まで）ずっと〜している", ja: "ずっと〜している", nuance: "今も続いていること。",
+            ex: ["I've been studying English for five years.", "英語を5年ずっと勉強してる。"], tone: "for ～（〜の間）/ since ～（〜から）と一緒に。" }
+        ]
+      },
+      {
+        name: "気持ちの型：頭につける日本語",
+        note: "「願い」「たとえ」「どっちかというと」を型で言う。",
+        forms: [
+          { key: "I wish", kana: "アイ ウィッシュ", kanaNote: '', label: "I wish ＋過去形 ＝（無理だけど）〜だったらなあ", ja: "〜だったらなあ", nuance: "現実とちがうことを願う。",
+            ex: ["I wish I could see you today.", "今日会えたらなあ。"], tone: "I hope ＝（ありえる）〜だといいな。" },
+          { key: "I hope", kana: "アイ ホウプ", kanaNote: '', label: "I hope ＝（ありえる）〜だといいな", ja: "〜だといいな", nuance: "これから起こりうることを願う。",
+            ex: ["I hope your audition goes well.", "オーディションうまくいくといいね。"], tone: "I wish your audition goes well.（×）" },
+          { key: "I'd rather", kana: "アイド ラザー", kanaNote: '', label: "I'd rather ＝ どっちかというと〜したい", ja: "どっちかというと〜したい", nuance: "好みをやわらかく言う。",
+            ex: ["I'd rather stay in tonight.", "今夜はどっちかというと家にいたいな。"], tone: "I'd rather not.（できれば遠慮したい）" },
+          { key: "even if", kana: "イーヴン イフ", kanaNote: '', label: "even if ＝ たとえ〜でも", ja: "たとえ〜でも", nuance: "if（もし〜なら）より強い気持ち。",
+            ex: ["Even if it rains, let's go.", "たとえ雨でも行こう。"], tone: "Even if you're busy, I'll wait.（忙しくても待つよ）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "頭につける日本語の早見表",
+      rows: [["would", "（もし〜なら）私なら〜する"], ["could", "（その気になれば）〜できる・〜するのもアリ"], ["should", "〜した方がいい"], ["might", "もしかしたら〜かも"], ["must", "きっと〜だ"], ["used to", "昔は〜していた"], ["be going to / I'll", "（決めてた）〜するつもり ／（今決めた）じゃあ〜するね"], ["I wish / I hope", "（無理だけど）〜だったらなあ ／（ありえる）〜だといいな"]]
+    },
+    cautions: ["迷ったら、まず頭の日本語を思い浮かべてから型を選ぶ。", "would は「する」、could は「できる」。提案するなら could。", "I wish は無理なこと、I hope はこれから起こりうること。", "「〜しなきゃ」は must より have to が会話的。"],
+    quiz: [
+      { situation: "（もし私があなたなら）私なら家で休むかな。", sentence: "If I were you, I ___ rest at home.", options: ["would", "could", "might", "used to"], answer: "would", full: "If I were you, I would rest at home.", why: "「私なら〜する」は would。自分の選択を言う。" },
+      { situation: "疲れてるなら、今日は早めに切り上げるのもアリだよ。", sentence: "We ___ call it an early night.", options: ["could", "would", "must", "used to"], answer: "could", full: "We could call it an early night.", why: "「〜するのもアリ」と選択肢を出すのは could。would だと提案に聞こえない。" },
+      { situation: "ここのラーメン、食べてみた方がいいよ。", sentence: "You ___ try the ramen here.", options: ["should", "would", "might", "used to"], answer: "should", full: "You should try the ramen here.", why: "「〜した方がいい」は should。" },
+      { situation: "もしかしたら少し遅れるかも。", sentence: "I ___ be a little late.", options: ["might", "must", "should", "would"], answer: "might", full: "I might be a little late.", why: "「もしかしたら」は might。" },
+      { situation: "（一日中働いて）きっと疲れてるよね。", sentence: "You ___ be tired.", options: ["must", "might", "should", "could"], answer: "must", full: "You must be tired.", why: "「きっと〜だ」と強く推測するのは must。" },
+      { situation: "昔はサッカーしてたんだ。", sentence: "I ___ play soccer.", options: ["used to", "would", "am used to", "should"], answer: "used to", full: "I used to play soccer.", why: "「昔は〜していた（今はしてない）」は used to。" },
+      { situation: "今週末は実家に帰るつもり。（前から決めてた）", sentence: "I'm ___ visit my parents this weekend.", options: ["going to", "will", "would", "used to"], answer: "going to", full: "I'm going to visit my parents this weekend.", why: "前から決めていた予定は be going to。" },
+      { situation: "（会計の紙を見て、その場で）じゃあ、お会計は私が。", sentence: "___ get the check.", options: ["I'll", "I'm going to", "I would", "I used to"], answer: "I'll", full: "I'll get the check.", why: "その場で決めたことは will（I'll）。" },
+      { situation: "今日会えたらなあ。（でも会えない）", sentence: "I ___ I could see you today.", options: ["wish", "hope", "would", "might"], answer: "wish", full: "I wish I could see you today.", why: "無理なことを願うのは I wish ＋過去形（could）。" },
+      { situation: "オーディションうまくいくといいね。", sentence: "I ___ your audition goes well.", options: ["hope", "wish", "would", "must"], answer: "hope", full: "I hope your audition goes well.", why: "これから起こりうることを願うのは I hope。" },
+      { situation: "今夜はどっちかというと家にいたいな。", sentence: "I'd ___ stay in tonight.", options: ["rather", "better", "like", "prefer"], answer: "rather", full: "I'd rather stay in tonight.", why: "I'd rather ＝どっちかというと〜したい。I'd better は「〜した方がいい（しないとまずい）」で別の意味。" },
+      { situation: "たとえ雨でも行こう。", sentence: "___ it rains, let's go.", options: ["Even if", "If only", "Even", "As if"], answer: "Even if", full: "Even if it rains, let's go.", why: "「たとえ〜でも」は even if。" }
+    ]
   }];
 
 
@@ -2339,7 +2409,7 @@
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
     { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'else-other', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] },
-    { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple', 'think-thing', 'think-soft'] }
+    { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple', 'think-thing', 'think-soft', 'think-image'] }
   ];
   var GR = { TOPICS: TOPICS, GROUPS: GROUPS };
   if (typeof module !== 'undefined' && module.exports) module.exports = GR; else root.GR = GR;
