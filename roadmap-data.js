@@ -106,7 +106,8 @@
       var w = +m[1], num = +m[2];
       if (w < 1 || w > 12) return;
       var list = by[w] = by[w] || [];
-      var i = -1; list.forEach(function (c, k) { if (c.en.toLowerCase() === String(p[1]).toLowerCase()) i = k; });
+      // 同じ英文、または同じ番号のカードがあれば、後から読み込んだ方で置き換える（カードの差し替え用）
+      var i = -1; list.forEach(function (c, k) { if (c.en.toLowerCase() === String(p[1]).toLowerCase() || c.num === num) i = k; });
       var card = { en: p[1], ja: p[2], tag: m[3] || '', w: w, num: num };
       if (i >= 0) list[i] = card; else list.push(card);
     });
