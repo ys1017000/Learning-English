@@ -51,10 +51,10 @@
       <h2>📔 今日の日記</h2>
 
       <div class="dy-step">① 日本語でメモ <span class="muted">（任意・考えの整理用）</span></div>
-      <textarea id="jaInput" style="height:72px;" placeholder="言いたいことを日本語で2〜3行。そのまま訳さず、知っている型で言える形を考えよう" aria-label="日本語のメモ"></textarea>
+      <textarea id="jaInput" style="height:120px; min-height:96px; resize:vertical; font-size:1rem; line-height:1.6;" placeholder="言いたいことを日本語で2〜3行。そのまま訳さず、知っている型で言える形を考えよう" aria-label="日本語のメモ"></textarea>
 
       <div class="dy-step">② 自分で英語を書く</div>
-      <textarea id="enInput" style="height:110px;" placeholder="簡単な英語でOK。下の型をタップすると入ります" aria-label="自分の英語" autocapitalize="sentences" spellcheck="false"></textarea>
+      <textarea id="enInput" style="height:200px; min-height:140px; resize:vertical; font-size:1rem; line-height:1.6;" placeholder="簡単な英語でOK。下の型をタップすると入ります" aria-label="自分の英語" autocapitalize="sentences" spellcheck="false"></textarea>
       <div class="dy-meta">
         <span class="dy-count" id="sentCount"></span>
         <span style="display:flex; gap:2px;">
@@ -95,7 +95,7 @@
     <a href="recap.html" class="active" aria-current="page">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=53"></script>
+  <script src="common.js?v=54"></script>
   <script src="roadmap-data.js?v=11"></script>
   <script>
     // お題: [日本語, 英語の書き出し, 思い出用か]
@@ -281,7 +281,12 @@
         const act = document.createElement('div'); act.style.cssText = 'display:flex; gap:2px; margin-top:0.3rem;';
         const mk = (label, aria, fn) => { const b = document.createElement('button'); b.className = 'icon-btn'; b.textContent = label; b.setAttribute('aria-label', aria); if (fn) b.addEventListener('click', fn); return b; };
         const mic = mk('🎙️', '音読してみる');
-        [mk('🔊', '再生', () => EA.speak(e.en, 'en-US', 1.0)), mk('🐢', 'ゆっくり再生', () => EA.speak(e.en, 'en-US', 0.7)), mic,
+        const copy = async (text, label) => {
+          try { await navigator.clipboard.writeText(text); }
+          catch (err) { const t = document.createElement('textarea'); t.value = text; t.style.position = 'fixed'; t.style.opacity = '0'; document.body.appendChild(t); t.select(); try { document.execCommand('copy'); } catch (e2) {} t.remove(); }
+          EA.toast('📋 ' + label + 'をコピーしました');
+        };
+        [mk('📋', '英文をコピー', () => copy(e.en, '英文')), mk('🔊', '再生', () => EA.speak(e.en, 'en-US', 1.0)), mk('🐢', 'ゆっくり再生', () => EA.speak(e.en, 'en-US', 0.7)), mic,
           mk(e.memory ? '💞' : '🤍', '思い出に切り替え', () => { const l = EA.getDiary(); const x = l.find(y => y.id === e.id); if (x) { x.memory = !x.memory; EA.saveDiary(l); render(); } }),
           mk('🗑', '削除', () => { if (!confirm('この日記を削除しますか？')) return; EA.saveDiary(EA.getDiary().filter(y => y.id !== e.id)); render(); })
         ].forEach(b => act.appendChild(b));
@@ -290,6 +295,34 @@
           onResult: r => { EA.renderChips(chips, r.words); score.textContent = 'スコア ' + r.score + ' 点' + (r.score >= EA.PASS_SCORE ? '  🎉' : ''); EA.countSpeak(); EA.updateStreakBadge(); },
           onError: m => { score.textContent = m; }
         });
+        // ✍ Claudeの添削：貼り付けて保存（あとで書き直し可）
+        const fixBox = document.createElement('div'); fixBox.className = 'dy-res'; fixBox.style.cssText = 'margin:0.5rem 0 0; border-color:#a78bfa;';
+        const saveFix = text => { const l = EA.getDiary(), x = l.find(y => y.id === e.id); if (x) { x.fix = text; EA.saveDiary(l); } render(); };
+        const editFix = () => {
+          fixBox.innerHTML = '<div class="t">✍ 添削（Claude）を貼り付け</div>';
+          const ta = document.createElement('textarea'); ta.value = e.fix || ''; ta.style.cssText = 'width:100%; height:180px; min-height:120px; resize:vertical; font-size:0.95rem; line-height:1.6; margin:0.3rem 0;';
+          ta.placeholder = '直した英文や説明をそのまま貼り付けてOK';
+          const r = document.createElement('div'); r.className = 'row'; r.style.gap = '6px';
+          const ok = document.createElement('button'); ok.className = 'btn'; ok.textContent = '保存'; ok.style.flex = '1';
+          ok.addEventListener('click', () => { saveFix(ta.value); EA.toast('✍ 添削を保存しました'); });
+          const cancel = document.createElement('button'); cancel.className = 'btn btn-secondary'; cancel.textContent = 'やめる'; cancel.style.flex = '1';
+          cancel.addEventListener('click', () => render());
+          r.appendChild(ok); r.appendChild(cancel);
+          fixBox.appendChild(ta); fixBox.appendChild(r); ta.focus();
+        };
+        if (e.fix) {
+          const t = document.createElement('div'); t.className = 't'; t.textContent = '✍ 添削（Claude）';
+          const v = document.createElement('div'); v.className = 'v'; v.style.cssText = 'font-size:0.92rem; font-weight:500; white-space:pre-wrap;'; v.textContent = e.fix;
+          const r = document.createElement('div'); r.className = 'row';
+          r.appendChild(mk('📋', '添削をコピー', () => copy(e.fix, '添削')));
+          r.appendChild(mk('🔊', '添削を再生', () => EA.speak(e.fix, 'en-US', 1.0)));
+          r.appendChild(mk('✏️', '添削を書き直す', editFix));
+          r.appendChild(mk('🗑', '添削を消す', () => { if (confirm('添削を消しますか？')) saveFix(''); }));
+          fixBox.appendChild(t); fixBox.appendChild(v); fixBox.appendChild(r);
+        } else {
+          fixBox.style.display = 'none';
+          act.appendChild(mk('✍', '添削を貼り付ける', () => { fixBox.style.display = ''; editFix(); }));
+        }
         // 翻訳の英語（参考）。無い日記は、日本語メモがあれば🌐であとから付けられる
         let refBox = null;
         if (e.ref) {
@@ -297,6 +330,7 @@
           const t = document.createElement('div'); t.className = 't'; t.textContent = '🌐 翻訳の英語（参考）';
           const v = document.createElement('div'); v.className = 'v'; v.style.cssText = 'font-size:0.92rem; font-weight:500;'; v.textContent = e.ref;
           const r = document.createElement('div'); r.className = 'row';
+          r.appendChild(mk('📋', '翻訳の英語をコピー', () => copy(e.ref, '翻訳の英語')));
           r.appendChild(mk('🔊', '翻訳の英語を再生', () => EA.speak(e.ref, 'en-US', 1.0)));
           r.appendChild(mk('🐢', '翻訳の英語をゆっくり再生', () => EA.speak(e.ref, 'en-US', 0.7)));
           refBox.appendChild(t); refBox.appendChild(v); refBox.appendChild(r);
@@ -310,7 +344,7 @@
             render(); EA.toast('翻訳の参考を付けました');
           }), act.children[3]);
         }
-        d.appendChild(head); d.appendChild(en); if (e.ja) d.appendChild(ja); if (refBox) d.appendChild(refBox); d.appendChild(chips); d.appendChild(score); d.appendChild(act); box.appendChild(d);
+        d.appendChild(head); d.appendChild(en); if (e.ja) d.appendChild(ja); if (refBox) d.appendChild(refBox); d.appendChild(fixBox); d.appendChild(chips); d.appendChild(score); d.appendChild(act); box.appendChild(d);
       });
     }
 

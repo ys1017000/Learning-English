@@ -1797,15 +1797,17 @@
       if (!e || typeof e !== 'object' || typeof e.en !== 'string') return;
       const id = String(e.id || ''), en = e.en.trim().slice(0, 1000);
       const ref = typeof e.ref === 'string' ? e.ref.trim().slice(0, 1000) : '';   // 翻訳の英語（参考）。v6で追加
+      const fix = typeof e.fix === 'string' ? e.fix.trim().slice(0, 3000) : '';   // Claudeの添削（2026-11-17追加。無くても可）
       if (!id || !en) return;
       if (seen.has(id)) {   // 同じ日記が重なったら、翻訳の参考がある方を残す（統合読み込み用）
         const x = out.find(y => y.id === id);
         if (x && !x.ref && ref) x.ref = ref;
+        if (x && !x.fix && fix) x.fix = fix;
         return;
       }
       seen.add(id);
       out.push({ id, t: Number(e.t) || Date.now(), ja: typeof e.ja === 'string' ? e.ja.trim().slice(0, 1000) : '', en,
-        mood: MOODS.includes(e.mood) ? e.mood : '', memory: !!e.memory, ref });
+        mood: MOODS.includes(e.mood) ? e.mood : '', memory: !!e.memory, ref, fix });
     });
     out.sort((a, b) => b.t - a.t);
     return out.slice(0, 500);

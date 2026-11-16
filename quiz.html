@@ -72,7 +72,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=53"></script>
+  <script src="common.js?v=54"></script>
   <script src="usage-data.js?v=36"></script>
   <script>
     const QUIZ_SIZE = 10;
@@ -123,13 +123,14 @@
     const SUBG_KEY = 'english_app_quiz_subgroup';
     let subGrp = '';
     try { subGrp = localStorage.getItem(SUBG_KEY) || ''; } catch (e) {}
-    const GROUP_ORDER = ['📩 DM', '📖 文法・言い方の型', '❓ 質問の言い方', '💬 気持ち・場面', '🗨️ 会話アプリの文', '🔤 単語'];
+    const GROUP_ORDER = ['🙋 自分の言葉（日記から）', '📩 DM', '📖 文法・言い方の型', '❓ 質問の言い方', '💬 気持ち・場面', '🗨️ 会話アプリの文', '🔤 単語'];
     function subGroupOf(p) {
       const ex = String(p[3] || ''), t = subTag(p);
       const w = /^第(\d+)週カード/.exec(ex);
       if (w) return '📅 第' + w[1] + '週のカード';
       if (t === 'DMの表現' || t === 'DMの返信') return '📩 DM';
       if (/^質問/.test(t)) return '❓ 質問の言い方';
+      if (/^自分の言葉/.test(t)) return '🙋 自分の言葉（日記から）';
       if (t === '会話アプリの文') return '🗨️ 会話アプリの文';
       if (t === '単語' || t === 'その他（単語など）') return '🔤 単語';
       if (/[a-zA-Z]|の位置|言い分け|慣れる/.test(t)) return '📖 文法・言い方の型';
