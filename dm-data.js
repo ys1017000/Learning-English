@@ -127,7 +127,21 @@
     { id: 'handy', k: 'de', re: '\\bhandy\\b',
       en: 'handy', ja: 'スマホ（＝phone）', note: 'ドイツ語でスマホは Handy。英語の handy は「便利な」なので文脈で判断。' },
     { id: 'eventually', k: 'de', re: '\\beventually\\b',
-      en: 'eventually', ja: 'もしかしたら？（文脈で判断）', note: 'ドイツ語の eventuell は「もしかしたら」。英語の eventually は「最終的に」。どちらの意味か文脈で確認。' }
+      en: 'eventually', ja: 'もしかしたら？（文脈で判断）', note: 'ドイツ語の eventuell は「もしかしたら」。英語の eventually は「最終的に」。どちらの意味か文脈で確認。' },
+    { id: 'anyways', k: 'word', re: '\\banyways\\b',
+      en: 'anyways', ja: 'どっちみち・とにかく（＝anyway）', note: 'anyway のくだけた言い方。アメリカの話し言葉に多い（アメリカ留学の影響かも）。自分で書くときは anyway でOK。' },
+    { id: 'should_together', k: 'form', scene: 'invite', re: "\\bwe should (eat|go|try|do|meet|get)",
+      en: 'We should eat it together!', ja: '一緒に食べようよ！（should＝〜しよう・提案）', note: 'should は「〜すべき」ではなく、ここでは軽い提案。乗り気のサイン。',
+      say: ['We should try it together!', '一緒に試してみようよ！（We should ～：〜しようよ）'] },
+    { id: 'told_myself', k: 'form', scene: 'tough', re: "\\btold myself\\b",
+      en: 'I told myself I need to do it.', ja: 'やらなきゃって自分に言い聞かせた', note: 'tell myself＝自分に言い聞かせる。迷ったけど決めた話で出てくる。',
+      say: ['I told myself I need to do it.', 'やらなきゃって自分に言い聞かせた。（tell myself：自分に言い聞かせる）'] },
+    { id: 'how_x_work', k: 'form', re: "\\bhow (\\w+ ){1,2}work\\b",
+      en: 'how auditions work', ja: 'オーディションがどういうものか（どう進むのか）', note: 'how ～ work＝〜の仕組み・どう進むのか。how it works（仕組み）もよく使う。' },
+    { id: 'didnt_take_me', k: 'form', scene: 'tough', re: "\\b(didn'?t|did not) (take|pick|choose|select) me\\b",
+      en: "They didn't take me.", ja: '選ばれなかった（落ちた）', note: 'take / pick / choose / select ＋ me で「選ばれる・受かる」。' },
+    { id: 'free_day_night', k: 'form', scene: 'invite', re: "\\bi'?m free (this |next )?" + DAY.slice(0, -1) + ")",
+      en: "I'm free this Thursday night!", ja: '今週の木曜の夜は空いてるよ！', note: '自分から空いている日を出してくれている＝会いたいサイン。' }
   ];
 
   var SCENES = [
@@ -169,6 +183,11 @@
       ['That works for me!', 'それで大丈夫だよ！（～ works for me：～で都合がいい。Thursday night works for me! のように日にちも入れられる）'],
       ["Sounds great! I'm looking forward to it.", 'いいね！楽しみにしてるね。'],
       ['Sure! What time is good for you?', 'もちろん！何時がいい？'] ] },
+    { id: 'tough', emoji: '💪', label: 'がんばった・うまくいかなかった話を聞いたとき', replies: [
+      ["I'm so proud of you for going even though you were really anxious.", 'すごく不安だったのに、行ったのを本当に誇りに思うよ。'],
+      ['That takes a lot of courage!', 'それって勇気がいることだよね！'],
+      ['Congrats on getting through your first audition!', '初オーディション、乗り切ってえらい！（get through：乗り切る）'],
+      ['I hope you keep trying! I\'ll be cheering you on.', '挑戦し続けてね！応援してるよ。'] ] },
     { id: 'missed', emoji: '💭', label: '「会いたかった」と言われたとき', replies: [
       ['Me too! I wanted to see you too.', '私も！私も会いたかったよ。'],
       ["It's okay. I'll see you soon!", '大丈夫。またすぐ会おうね！'] ] },
@@ -178,6 +197,13 @@
   ];
 
   var NOTES = [
+    { d: '2026-11-17', title: 'オーディションの結果と「木曜の夜は空いてる」（4通目）', points: [
+      '流れは「元気？誕生日楽しめた？→ おでんの誘いに乗る（We should eat it together! I\'m free this Thursday night!）→ オーディション前の不安 → 行ってよかった → 落ちたけど前向き」。',
+      '自分から空いている日を出してくれた。会う日を相手から出すのはこれまでと同じで、会いたいサイン。',
+      '弱い気持ち（really bad anxiety / considered not going）も正直に話してくれている。',
+      '型：We should ～（〜しようよ）／ I told myself ～（自分に言い聞かせた）／ how auditions work（どういうものか）／ They didn\'t take me（落ちた）／ anyways（＝anyway、アメリカの話し言葉）。',
+      '返信は「落ちた」に触れず、行ったこと・セリフを忘れなかったことをほめる形にした（That takes a lot of courage! / I\'m so proud of you ...）。'
+    ] },
     { d: '2026-11-11', title: 'プレゼン続きの近況と「木曜に会おう」（3通目）', points: [
       '流れは「連絡できなかったお詫び → 応援へのお礼 → 近況（プレゼン2つ終わった・あと3つ）→ 相手への質問（元気？土曜楽しめた？）→ 会う約束」。今回も自分の話のあとに相手のことを聞いてくれる。',
       'お詫びは I\'m sorry for not texting so much ...（sorry for not ～ing）、お礼は Thank you for wishing me the best for ...。',
