@@ -1304,6 +1304,62 @@
       { situation: '彼女すごく気さくだね。', sentence: "She's so ___.", options: ['friendly', 'friend', 'friendlily', 'friendship'], answer: 'friendly', full: "She's so friendly.", why: 'friendly は -ly だけど形容詞。' }
     ]
   }, {
+    id: 'svoc',
+    title: 'SVOC：make / find / keep / leave / call（人やものを〜の状態に）',
+    short: 'SVOC：make・find・keep・leave・call',
+    intro: '「動詞 ＋ 人・もの ＋ 状態」の形（第5文型）。動詞が変わると意味が変わります。make＝実際に働きかけて〜にさせる・変える／find＝何も変えずに「〜だと思う・感じる」／keep＝〜のままにしておく／leave＝〜のまま放っておく／call＝〜と呼ぶ。後ろの並びはいつも「人・もの → 状態」で同じです。',
+    groups: [
+      {
+        name: '変える・感じる・保つ・呼ぶ',
+        note: '「人・もの」のあとに「状態（形容詞・名前など）」を置く。',
+        forms: [
+          { key: "make", kana: "メイク", kanaNote: '', label: "make ＋ 人 ＋ 状態（〜にさせる）", ja: "人を〜にさせる・変える", nuance: "実際に働きかけて、相手の気持ちや状態を変える。",
+            ex: ["You make me happy.", "あなたといると幸せになる。"], tone: "I'm sorry if I made you feel that way.（そう思わせてごめん）。make ＋人＋動詞の原形 もOK。" },
+          { key: "find", kana: "ファインド", kanaNote: '', label: "find ＋ もの ＋ 状態（〜だと感じる）", ja: "〜だと思う・感じる", nuance: "何も変えない。自分が体験して「〜だと思った」。",
+            ex: ["I find Japanese really interesting.", "日本語ってすごく面白いと思う。"], tone: "I found the movie boring.（その映画、退屈だった）。find it ＋形容詞＋to ～ の形も多い：I find it hard to wake up early." },
+          { key: "keep", kana: "キープ", kanaNote: '', label: "keep ＋ もの・人 ＋ 状態（〜のままにする）", ja: "〜のままにしておく", nuance: "その状態を続ける・保つ。",
+            ex: ["This blanket keeps me warm.", "この毛布があると暖かい。"], tone: "Keep the door open.（ドア開けたままにしておいて）" },
+          { key: "leave", kana: "リーヴ", kanaNote: '', label: "leave ＋ もの・人 ＋ 状態（〜のままにして離れる）", ja: "〜のまま放っておく", nuance: "手を加えずにそのままにする。keep より「放っておく」感じ。",
+            ex: ["Leave the light on, please.", "電気、つけたままにしておいてね。"], tone: "Leave me alone.（ほっといて）は強い言い方なので注意。" },
+          { key: "call", kana: "コール", kanaNote: '', label: "call ＋ 人・もの ＋ 名前（〜と呼ぶ）", ja: "〜と呼ぶ", nuance: "呼び名・名前をつける。",
+            ex: ["You can call me Yoh.", "ようって呼んでいいよ。"], tone: "What do you call this in German?（これドイツ語で何て言うの？）" },
+          { key: "think", kana: "スィンク", kanaNote: '', label: "think ＋ もの・人 ＋ 状態（〜だと思う）", ja: "〜だと思う（意見）", nuance: "find より「考え・意見」寄り。会話では think (that) ～ の方が多い。",
+            ex: ["I think you're really talented.", "あなたは本当に才能があると思う。"], tone: "I think him kind. より I think he's kind. が会話的。" },
+          { key: "get", kana: "ゲット", kanaNote: '', label: "get ＋ もの ＋ 状態・過去分詞", ja: "〜にする（〜してもらう）", nuance: "「〜の状態にする」。過去分詞なら「〜してもらう」。",
+            ex: ["I need to get my hair cut.", "髪を切ってもらわなきゃ。"], tone: "Let's get everything ready.（全部準備しておこう）" }
+        ]
+      }
+    ],
+    compare: {
+      lead: '同じ「me ＋ happy」でも動詞で意味が変わる',
+      rows: [
+        ['You make me happy.', 'あなたが私を幸せにしてくれる。（make：変える）'],
+        ['I find it interesting.', 'それ、面白いと思う。（find：感じる）'],
+        ['This keeps me warm.', 'これのおかげで暖かいまま。（keep：保つ）'],
+        ['Leave it open.', '開けたままにしておいて。（leave：そのまま）'],
+        ['Call me Yoh.', 'ようって呼んで。（call：呼ぶ）']
+      ]
+    },
+    cautions: [
+      '並びは「動詞 → 人・もの → 状態」。make happy me（×）。',
+      'make は実際に変える、find は自分がそう感じるだけ。',
+      '「〜するのは…だと思う」は find it ＋形容詞＋to ～（I find it hard to ～）。',
+      'Leave me alone.（ほっといて）は強いので、相手に言うときは注意。',
+      '原因を主語にすると自然：The news made me sad.（発想⑥ 無生物主語とつながる）'
+    ],
+    quiz: [
+      { situation: "あなたといると、いつも笑顔になっちゃう。", sentence: "You always ___ me smile.", options: ["make", "find", "keep", "call"], answer: "make", full: "You always make me smile.", why: "気持ちを「変える」のは make。make ＋人＋動詞の原形 で「〜させる」。" },
+      { situation: "日本語ってすごく面白いと思う。（勉強してみて感じた）", sentence: "I ___ Japanese really interesting.", options: ["find", "make", "keep", "leave"], answer: "find", full: "I find Japanese really interesting.", why: "自分が体験して「〜だと感じる」のは find。" },
+      { situation: "この毛布があると暖かい。", sentence: "This blanket ___ me warm.", options: ["keeps", "finds", "calls", "thinks"], answer: "keeps", full: "This blanket keeps me warm.", why: "「暖かいままにしてくれる」で keep。" },
+      { situation: "電気、つけたままにしておいてね。", sentence: "___ the light on, please.", options: ["Leave", "Make", "Find", "Call"], answer: "Leave", full: "Leave the light on, please.", why: "「そのままにしておく」は leave。" },
+      { situation: "ようって呼んでいいよ。", sentence: "You can ___ me Yoh.", options: ["call", "make", "find", "keep"], answer: "call", full: "You can call me Yoh.", why: "呼び名は call ＋人＋名前。" },
+      { situation: "そう思わせてしまったならごめん。", sentence: "I'm sorry if I ___ you feel that way.", options: ["made", "found", "kept", "called"], answer: "made", full: "I'm sorry if I made you feel that way.", why: "相手の気持ちを変えてしまった → make（過去形 made）。" },
+      { situation: "朝早く起きるのって大変だと思う。", sentence: "I find ___ hard to wake up early.", options: ["it", "that", "this", "me"], answer: "it", full: "I find it hard to wake up early.", why: "find it ＋形容詞＋to ～：〜するのは…だと思う。it は後ろの to ～ の代わり。" },
+      { situation: "ここのコーヒー、ちょっと苦いと思った。", sentence: "I ___ the coffee here a little bitter.", options: ["found", "made", "kept", "left"], answer: "found", full: "I found the coffee here a little bitter.", why: "飲んでみて感じた → find の過去形 found。" },
+      { situation: "ドア、開けたままにしておいて。", sentence: "___ the door open.", options: ["Keep", "Find", "Call", "Think"], answer: "Keep", full: "Keep the door open.", why: "状態を保つ → keep。leave でもOK。" },
+      { situation: "その知らせで、すごく悲しくなった。", sentence: "The news ___ me really sad.", options: ["made", "found", "called", "kept"], answer: "made", full: "The news made me really sad.", why: "原因（the news）が気持ちを変えた → made（無生物主語）。" }
+    ]
+  }, {
     id: 'adverb-position',
     title: '副詞を置く場所：really は動詞の前、too much は文の最後',
     short: '副詞の置き場所（really／too much／yesterday）',
@@ -2420,7 +2476,7 @@
 
   // 項目のジャンル（文法ノートの2段階選択）。ここにない項目は「その他」に入る
   var GROUPS = [
-    { name: '🧱 基本の語順', ids: ['word-order', 'adverb-position', 'prepositions'] },
+    { name: '🧱 基本の語順', ids: ['word-order', 'svoc', 'adverb-position', 'prepositions'] },
     { name: '🕐 時制・いつのこと', ids: ['present-perfect', 'past-perfect', 'there-have-been', 'frequency', 'time-someday', 'lately-recently', 'long-time'] },
     { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
