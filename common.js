@@ -378,6 +378,12 @@
       ["文法・表現パターン", "I didn't sleep much last night.", "昨日はあまり寝なかった。（didn't ＋ 原形）"],
       ["文法・表現パターン", "Thank you for the lovely day.", "素敵な一日をありがとう。（Thank you for ＋ 名詞）"],
       ["文法・表現パターン", "I don't have anyone to talk to openly.", "本音で話せる人がいない。"],
+      // ---- as ～ as possible（2026-11-17） ----
+      ["文法・表現パターン", "I'll text you as soon as I can.", "できるだけ早く連絡するね。（as soon as I can：できるだけ早く）"],
+      ["文法・表現パターン", "Try to speak Japanese as much as possible.", "できるだけたくさん日本語を話してみて。（as much as possible：できるだけたくさん）"],
+      ["文法・表現パターン", "I'll be as quiet as possible.", "できるだけ静かにするね。（as ～ as possible の真ん中は形容詞もOK）"],
+      ["文法・表現パターン", "Let's walk as fast as we can.", "できるだけ速く歩こう。（as fast as we can：できるだけ速く）"],
+      ["文法・表現パターン", "I want to see you as often as I can.", "できるだけたくさん会いたいな。（as often as I can：できるだけ頻繁に）"],
       // ---- SVOC make / find / keep / leave / call（2026-11-17） ----
       ["文法・表現パターン", "You make me happy.", "あなたといると幸せになる。（make ＋ 人 ＋ 状態）"],
       ["文法・表現パターン", "I find Japanese really interesting.", "日本語ってすごく面白いと思う。（find ＋ もの ＋ 状態）"],
@@ -392,6 +398,8 @@
       ["文法・表現パターン", "Keep the door open.", "ドア、開けたままにしておいて。（keep ＋ もの ＋ 状態）"],
       ["文法・表現パターン", "The news made me really sad.", "その知らせで、すごく悲しくなった。（原因が主語の make）"],
       // ---- 頭につける日本語（2026-11-16） ----
+      ["文法・表現パターン", "I would say it's about 30 minutes.", "私としては、30分くらいかな。（I would say ～：私としては〜かな＝意見をやわらげる）"],
+      ["文法・表現パターン", "I'd say it's fine.", "私としては大丈夫だと思う。（I'd say ～：言い切りをやわらげる）"],
       ["文法・表現パターン", "If I were you, I would rest at home.", "私なら家で休むかな。（would＝私なら〜する）"],
       ["文法・表現パターン", "We could call it an early night.", "疲れてるなら、今日は早めに切り上げるのもアリだよ。（could＝〜するのもアリ）"],
       ["文法・表現パターン", "You should try the ramen here.", "ここのラーメン、食べてみた方がいいよ。（should＝〜した方がいい）"],

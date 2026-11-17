@@ -1729,7 +1729,7 @@
     id: 'would-could',
     title: 'would / could の使い分け（ていねい・意見・可能性・もしも）',
     short: 'would / could（意見・お願い・かもしれない）',
-    intro: '【頭につける日本語】would＝（もし〜なら）私なら〜する（選択）、could＝（その気になれば）〜できる・〜するのもアリ（可能・提案）。迷ったら「する」か「できる」かで選ぶ。（発想⑧にほかの型の早見表あり）　would と could は、どちらも根っこに「もしも」（仮定）の気持ちがあります。「もし〜なら、…する（would）／できる（could）」。だから、はっきり言い切らない「やわらかさ」が出ます。ていねいなお願い、控えめな意見、「〜かもしれない」は、全部この「もしも」の気持ちから来ています。自分の意見に I would ～ を使うのは正しく、とても自然です。',
+    intro: '【頭につける日本語】would＝（もし〜なら）私なら〜する（選択）／私としては〜かな（意見をやわらげる：I would say ～）、could＝（その気になれば）〜できる・〜するのもアリ（可能・提案）。迷ったら「する」か「できる」かで選ぶ。（発想⑧にほかの型の早見表あり）　would と could は、どちらも根っこに「もしも」（仮定）の気持ちがあります。「もし〜なら、…する（would）／できる（could）」。だから、はっきり言い切らない「やわらかさ」が出ます。ていねいなお願い、控えめな意見、「〜かもしれない」は、全部この「もしも」の気持ちから来ています。自分の意見に I would ～ を使うのは正しく、とても自然です。',
     groups: [
       {
         name: '自分の意見をやわらかく言う（would）',
@@ -1835,7 +1835,7 @@
         name: 'できるだけ・思ったとおり',
         note: 'as ～ as possible / as ～ as I can。後ろの as は「…できる限り」「…と思ったのと」。',
         forms: [
-          { key: 'as ～ as possible', kana: 'アズ スーン ナズ ポッシブル', kanaNote: '', label: 'as ～ as possible / as ～ as I can（できるだけ〜）', ja: 'できるだけ〜', nuance: 'possible（可能な限り）か I can（私ができる限り）。I can のほうが会話的。',
+          { key: 'as ～ as possible', kana: 'アズ スーン ナズ ポッシブル', kanaNote: '', label: 'as ～ as possible / as ～ as I can（できるだけ〜）', ja: 'できるだけ〜', nuance: 'しくみ：最初の as＝同じくらい／soon など＝真ん中の言葉／as possible＝可能なのと。直訳「可能なのと同じくらい早く」→「できるだけ早く」。真ん中を入れ替えれば何でも「できるだけ〜」：as fast / as much / as often / as quietly as possible。possible の代わりに I can（私ができる限り）でもよく、I can のほうが会話的。',
             ex: ["I'll reply as soon as I can.", 'できるだけ早く返事するね。'], tone: 'ASAP（エイサップ）＝as soon as possible。急かして聞こえることがあるので、恋人には as soon as I can がやさしい。' },
           { key: 'as ～ as I thought', kana: '', kanaNote: '', label: 'as ～ as I thought / expected（思ったとおり〜）', ja: '思ったとおり〜', nuance: '予想と比べる。否定にすると「思ったほど〜じゃない」。',
             ex: ['It was as beautiful as I imagined.', '想像してたとおりきれいだった。'], tone: "文法ノート2番「思っていたのと違った」とセットで。" },
@@ -1874,6 +1874,9 @@
       'ASAP は急かして聞こえることがある。やさしく言うなら as soon as I can。'
     ],
     quiz: [
+      { situation: "できるだけ早く連絡するね。", sentence: "I'll text you as soon as ___.", options: ["I can", "I could", "possibly", "can I"], answer: "I can", full: "I'll text you as soon as I can.", why: "as soon as I can＝私ができる限り早く。possible の代わりに I can。" },
+      { situation: "できるだけたくさん日本語を話してみて。", sentence: "Try to speak Japanese as much as ___.", options: ["possible", "possibly", "can", "you"], answer: "possible", full: "Try to speak Japanese as much as possible.", why: "as much as possible＝できるだけたくさん。真ん中を much に入れ替えた形。" },
+      { situation: "できるだけ静かにするね。", sentence: "I'll be as ___ as possible.", options: ["quiet", "quietly", "quieter", "more quiet"], answer: "quiet", full: "I'll be as quiet as possible.", why: "be のあとは形容詞（quiet）。as ～ as の真ん中は、文の形に合わせて形容詞か副詞。" },
       { situation: 'このラーメン、東京のと同じくらいおいしい。', sentence: 'This ramen is ___ good as the one in Tokyo.', options: ['as', 'so', 'more', 'than'], answer: 'as', full: 'This ramen is as good as the one in Tokyo.', why: 'as ～ as＝同じくらい〜。' },
       { situation: '思ったほど難しくなかった。', sentence: "It wasn't as ___ as I thought.", options: ['hard', 'harder', 'hardest', 'more hard'], answer: 'hard', full: "It wasn't as hard as I thought.", why: 'as と as の間は元の形。not as ～ as＝〜ほどじゃない。' },
       { situation: '日本の夏はドイツの夏ほど乾燥してない。', sentence: "Japanese summer isn't ___ dry as German summer.", options: ['as', 'more', 'than', 'very'], answer: 'as', full: "Japanese summer isn't as dry as German summer.", why: 'not as ～ as で「…ほど〜じゃない」。' },
@@ -2393,8 +2396,8 @@
         name: "助動詞：頭につける日本語",
         note: "would と could の違いは「する（選択）」か「できる（可能）」か。",
         forms: [
-          { key: "would", kana: "ウッド", kanaNote: '', label: "would ＝（もし〜なら）私なら〜する", ja: "私なら〜する", nuance: "自分の選択や意見。言い切りをやわらげる働きもある。",
-            ex: ["I would stay home.", "私なら家にいるかな。"], tone: "If I were you, I would ～.（私があなたなら〜する）" },
+          { key: "would", kana: "ウッド", kanaNote: '', label: "would ＝（もし〜なら）私なら〜する／私としては〜かな", ja: "私なら〜する・私としては〜かな", nuance: "①自分の選択：私なら〜する。②意見をやわらげる：私としては〜かな。I would say ～ / I would think ～ / I'd prefer ～ がこの形。",
+            ex: ["I would say it's about 30 minutes.", "私としては、30分くらいかな。"], tone: "If I were you, I would stay home.（私があなたなら家にいるかな）＝①。I'd say it's fine.（私としては大丈夫だと思う）＝②。" },
           { key: "could", kana: "クッド", kanaNote: '', label: "could ＝（その気になれば）〜できる・〜するのもアリ", ja: "〜できる・〜するのもアリ", nuance: "選択肢や提案を出す。命令っぽくならない。",
             ex: ["We could go to a cafe.", "カフェに行くのもアリだね。"], tone: "I could pick you up.（迎えに行けるよ）" },
           { key: "should", kana: "シュッド", kanaNote: '', label: "should ＝（私の考えでは）〜した方がいい", ja: "〜した方がいい", nuance: "おすすめ・アドバイス。must より軽い。",
@@ -2450,7 +2453,7 @@
     ],
     compare: {
       lead: "頭につける日本語の早見表",
-      rows: [["would", "（もし〜なら）私なら〜する"], ["could", "（その気になれば）〜できる・〜するのもアリ"], ["should", "〜した方がいい"], ["might", "もしかしたら〜かも"], ["must", "きっと〜だ"], ["used to", "昔は〜していた"], ["be going to / I'll", "（決めてた）〜するつもり ／（今決めた）じゃあ〜するね"], ["I wish / I hope", "（無理だけど）〜だったらなあ ／（ありえる）〜だといいな"]]
+      rows: [["would", "（もし〜なら）私なら〜する／私としては〜かな"], ["could", "（その気になれば）〜できる・〜するのもアリ"], ["should", "〜した方がいい"], ["might", "もしかしたら〜かも"], ["must", "きっと〜だ"], ["used to", "昔は〜していた"], ["be going to / I'll", "（決めてた）〜するつもり ／（今決めた）じゃあ〜するね"], ["I wish / I hope", "（無理だけど）〜だったらなあ ／（ありえる）〜だといいな"]]
     },
     cautions: ["迷ったら、まず頭の日本語を思い浮かべてから型を選ぶ。", "would は「する」、could は「できる」。提案するなら could。", "I wish は無理なこと、I hope はこれから起こりうること。", "「〜しなきゃ」は must より have to が会話的。"],
     quiz: [
