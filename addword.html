@@ -38,16 +38,19 @@
       <div class="status-msg" id="searchStatus" role="status"></div>
       <div style="margin:1rem 0;">
         <label for="inputMeaning" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">意味・日本語訳:</label>
-        <input type="text" id="inputMeaning" placeholder="例: 告白、自白、打ち明け話" style="margin-top:4px; margin-bottom:0;">
+        <textarea id="inputMeaning" rows="2" placeholder="例: 告白、自白、打ち明け話" style="margin-top:4px; margin-bottom:0; width:100%; font-size:16px;"></textarea>
+        <div class="muted" style="font-size:0.75rem; margin-top:2px;">最後の（ ）の中は、カードで答えのあとに「💡 補足」として出ます。例：あの日のことを思い出させてくれると思って。（remind 人 of ～）</div>
       </div>
       <div style="margin-bottom:1.25rem;">
         <label for="inputExample" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted);">例文・補足情報 (任意):</label>
         <input type="text" id="inputExample" placeholder="例: She made a full confession." style="margin-top:4px; margin-bottom:0;">
       </div>
       <button class="btn" id="saveCustomBtn" style="background:#d97706;">💾 マイ単語帳に保存して追加する</button>
+      <button class="btn btn-secondary" id="cancelEditBtn" style="display:none; margin-top:0.5rem;">編集をやめる</button>
     </div>
     <div class="card">
       <h2>📚 追加したマイ単語一覧</h2>
+      <input type="search" id="customFilter" placeholder="🔍 英語・日本語・カード番号で絞り込み（例：remind、第3週）" style="margin-bottom:0.6rem;">
       <div id="customListContainer"></div>
     </div>
   </div>
@@ -59,7 +62,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=57"></script>
+  <script src="common.js?v=58"></script>
   <script>
     const JP_CHAR = /[\u3040-\u30ff\u3400-\u9fff]/;
 
@@ -70,12 +73,28 @@
     }
     function hideStatus() { document.getElementById('searchStatus').className = 'status-msg'; }
 
+    let editingEn = null;   // 編集中の英文（null なら新規追加）
+    function setEditMode(item) {
+      editingEn = item ? item[1] : null;
+      const btn = document.getElementById('saveCustomBtn');
+      btn.textContent = item ? '💾 上書き保存する' : '💾 マイ単語帳に保存して追加する';
+      document.getElementById('cancelEditBtn').style.display = item ? '' : 'none';
+      document.getElementById('inputWord').value = item ? item[1] : '';
+      document.getElementById('inputMeaning').value = item ? item[2] : '';
+      document.getElementById('inputExample').value = item ? (item[3] || '') : '';
+      if (item) {
+        setStatus('info', '✏️ 編集中です。直したら「上書き保存」を押してください。「例文・補足情報」欄の「第N週カードM」はロードマップのカード番号なので、消さないでください。');
+        document.getElementById('inputMeaning').scrollIntoView({ block: 'center', behavior: 'smooth' });
+      } else hideStatus();
+    }
     function renderCustomList() {
       const container = document.getElementById('customListContainer');
-      const customs = EA.getCustomPhrases();
+      const all = EA.getCustomPhrases();
+      const q = (document.getElementById('customFilter').value || '').trim().toLowerCase();
+      const customs = q ? all.filter(p => (p[1] + ' ' + p[2] + ' ' + (p[3] || '')).toLowerCase().includes(q)) : all;
       container.innerHTML = '';
       if (customs.length === 0) {
-        container.innerHTML = '<div class="muted" style="text-align:center; padding:1rem;">まだ追加された単語はありません。</div>';
+        container.innerHTML = '<div class="muted" style="text-align:center; padding:1rem;">' + (all.length ? '見つかりませんでした。' : 'まだ追加された単語はありません。') + '</div>';
         return;
       }
       customs.forEach((item, index) => {
@@ -96,8 +115,15 @@
           if (i >= 0) { list.splice(i, 1); EA.saveCustomPhrases(list); }
           renderCustomList();
         });
+        const edit = document.createElement('button');
+        edit.textContent = '✏️ 編集';
+        edit.style.cssText = 'background:#eef2ff; color:var(--primary); border:none; padding:6px 10px; border-radius:6px; font-size:0.75rem; cursor:pointer; flex-shrink:0;';
+        edit.addEventListener('click', () => setEditMode(item));
+        const btns = document.createElement('div');
+        btns.style.cssText = 'display:flex; flex-direction:column; gap:4px; flex-shrink:0;';
+        btns.appendChild(edit); btns.appendChild(del);
         card.appendChild(info);
-        card.appendChild(del);
+        card.appendChild(btns);
         container.appendChild(card);
       });
     }
@@ -156,6 +182,8 @@
 
     document.addEventListener('DOMContentLoaded', () => {
       renderCustomList();
+      document.getElementById('customFilter').addEventListener('input', renderCustomList);
+      document.getElementById('cancelEditBtn').addEventListener('click', () => setEditMode(null));
       const wordInput = document.getElementById('inputWord');
       const search = () => {
         const word = wordInput.value.trim();
@@ -171,16 +199,25 @@
         const example = document.getElementById('inputExample').value.trim();
         if (!word || !meaning) { setStatus('error', '単語と意味を入力してください。'); return; }
         const list = EA.getCustomPhrases();
-        const dupIdx = list.findIndex(p => p[1].toLowerCase() === word.toLowerCase());
-        if (dupIdx >= 0 && !confirm('「' + word + '」はすでに登録されています。内容を上書きしますか？')) return;
-        if (dupIdx >= 0) list.splice(dupIdx, 1);
-        // 同じ英文が標準フレーズにある場合も重複扱いにならないよう、マイ単語側のカテゴリで保持
-        list.unshift([EA.CUSTOM_CAT, word, meaning, example]);
+        const wasEditing = editingEn;
+        if (editingEn) {
+          // 編集：同じ位置で上書き（英文を変えた場合、別の登録と重なるなら確認）
+          const i = list.findIndex(p => p[1] === editingEn);
+          const other = list.findIndex(p => p[1].toLowerCase() === word.toLowerCase() && p[1] !== editingEn);
+          if (other >= 0 && !confirm('「' + word + '」は別にも登録されています。そちらを消して、この内容にまとめますか？')) return;
+          if (other >= 0) list.splice(other, 1);
+          const j = list.findIndex(p => p[1] === editingEn);
+          if (j >= 0) list[j] = [EA.CUSTOM_CAT, word, meaning, example]; else list.unshift([EA.CUSTOM_CAT, word, meaning, example]);
+        } else {
+          const dupIdx = list.findIndex(p => p[1].toLowerCase() === word.toLowerCase());
+          if (dupIdx >= 0 && !confirm('「' + word + '」はすでに登録されています。内容を上書きしますか？')) return;
+          if (dupIdx >= 0) list.splice(dupIdx, 1);
+          // 同じ英文が標準フレーズにある場合も重複扱いにならないよう、マイ単語側のカテゴリで保持
+          list.unshift([EA.CUSTOM_CAT, word, meaning, example]);
+        }
         if (!EA.saveCustomPhrases(list)) { setStatus('error', '❌ 保存に失敗しました。ブラウザの保存領域を確認してください。'); return; }
-        wordInput.value = '';
-        document.getElementById('inputMeaning').value = '';
-        document.getElementById('inputExample').value = '';
-        setStatus('ok', '🎉 マイ単語帳に追加しました！');
+        setEditMode(null);
+        setStatus('ok', wasEditing ? '✏️ 上書き保存しました！' : '🎉 マイ単語帳に追加しました！');
         renderCustomList();
       });
     });

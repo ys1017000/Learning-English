@@ -1489,7 +1489,13 @@
         weakPhrases: maxMerge(cur.weakPhrases, inc.weakPhrases),
         srs: mergeSrs(cur.srs, inc.srs)
       };
-      custom = sanitizeCustom(getCustomPhrases().concat(incCustom));
+      const curCustom = getCustomPhrases();
+      // 補足の書き換え用ファイル（updateCustom: true）は、同じ英文の日本語・タグを新しい内容で上書きする
+      if (obj.partial && obj.updateCustom) incCustom.forEach(ic => {
+        const m = curCustom.find(c => c[1].toLowerCase() === ic[1].toLowerCase());
+        if (m) { m[2] = ic[2]; if (ic[3]) m[3] = ic[3]; }
+      });
+      custom = sanitizeCustom(curCustom.concat(incCustom));
       talk = sanitizeTalk(getTalkLog().concat(incTalk));
       // ピンは使えた記録(used)を統合
       const curPins = getPins();
@@ -1534,6 +1540,21 @@
     return getAllPhrases().some(p => p[1].toLowerCase() === k);
   }
   // マイ単語に追加。すでにある場合は added:false
+  // マイ単語の日本語（補足）を書き換える。無ければ追加（内蔵カードの補足を直すときは、同じ英文のマイ単語で上書きする）
+  function updateCustomPhrase(en, ja, example) {
+    en = String(en || '').trim(); ja = String(ja || '').trim();
+    if (!en || !ja) return false;
+    const list = getCustomPhrases();
+    const i = list.findIndex(p => p[1].toLowerCase() === en.toLowerCase());
+    if (i >= 0) { list[i][2] = ja; if (example != null) list[i][3] = String(example).trim(); }
+    else list.unshift([CUSTOM_CAT, en, ja, example ? String(example).trim() : '']);
+    return saveCustomPhrases(list);
+  }
+  // 日本語と補足を「日本語（補足）」の形にまとめる。補足の中のカッコは半角にして、表示が崩れないようにする
+  function joinJa(main, note) {
+    main = String(main || '').trim(); note = String(note || '').trim().replace(/（/g, '(').replace(/）/g, ')');
+    return note ? main + '（' + note + '）' : main;
+  }
   function addCustomPhrase(en, ja, example) {
     en = String(en || '').trim(); ja = String(ja || '').trim();
     if (!en || !ja) return { added: false, reason: 'empty' };
@@ -2190,7 +2211,7 @@
     splitJa, usageFor, renderUsage, autoSpeak, setGenre, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,
-    getPrefs, setPref, hasPhrase, addCustomPhrase, addToReview,
+    getPrefs, setPref, hasPhrase, addCustomPhrase, updateCustomPhrase, joinJa, addToReview,
     getTalkLog, saveTalkLog, addTalkEntry, kanaHints, renderKana,
     getDuePhrases, daysUntil, parseKey, toast, translate, decodeEntities, normJa,
     getPins, savePins, isPinned, togglePin, markPinUsed,

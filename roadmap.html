@@ -42,7 +42,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=57"></script>
+  <script src="common.js?v=58"></script>
   <script src="usage-data.js?v=36"></script>
   <script src="roadmap-data.js?v=11"></script>
   <script>
@@ -384,8 +384,8 @@
         ' <span class="rm-badge">' + esc(cur.t) + '</span></span><button class="tiny-btn" data-act="closeRun">✕ やめる</button></div>' +
         '<div class="rm-ja">' + esc(EA.splitJa(c.ja).main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill" id="timerFill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、' + EA.drillSecs() + '秒以内に声に出して言ってみよう</p>' +
-        '<div id="revealArea" style="display:none;"><div class="rm-en" id="enText">' + esc(c.en) + '</div>' + (EA.splitJa(c.ja).note ? '<div class="muted" style="text-align:center; margin-top:0.2rem;">💡 ' + esc(EA.splitJa(c.ja).note) + '</div>' : '') + (c.tag ? '<div class="muted" style="text-align:center;">' + esc(c.tag) + '</div>' : '') + usageHtml(c.en) +
-        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button>' + pinBtn(c.en, null) + '</div>' +
+        '<div id="revealArea" style="display:none;"><div class="rm-en" id="enText">' + esc(c.en) + '</div>' + '<div class="muted" id="noteLine" style="text-align:center; margin-top:0.2rem; white-space:pre-wrap;' + (EA.splitJa(c.ja).note ? '' : ' display:none;') + '">💡 ' + esc(EA.splitJa(c.ja).note) + '</div><div id="noteEdit"></div>' + (c.tag ? '<div class="muted" style="text-align:center;">' + esc(c.tag) + '</div>' : '') + usageHtml(c.en) +
+        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button>' + pinBtn(c.en, null) + '<button class="tiny-btn" data-act="editNote" aria-label="日本語と補足を編集" title="日本語と補足を編集" style="white-space:nowrap;">✏️ 補足</button></div>' +
         '<div class="word-chips" id="chips"></div><div class="mini-score" id="micScore" style="text-align:center;"></div>' +
         '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-act="ok" style="background:#16a34a; flex:1;">⭕ ' + EA.drillSecs() + '秒以内に言えた</button><button class="btn" data-act="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
         '<button class="btn" data-act="reveal" id="revealBtn">答えを見る</button>';
@@ -477,6 +477,35 @@
       if (a === 'dayToday') { viewDay = null; renderToday(); window.scrollTo(0, 0); return; }
       if (a === 'ok') { answer(true); return; }
       if (a === 'ng') { answer(false); return; }
+      // ✏️ 補足の編集：日本語と💡補足を自分で書き換える（マイ単語に保存。内蔵カードは同じ英文のマイ単語で上書き）
+      if (a === 'editNote') {
+        const c = run && (run.queue[run.i] || {}).c;
+        if (!c) return;
+        const sp = EA.splitJa(c.ja);
+        $('noteEdit').innerHTML = '<div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.6rem; margin-top:0.5rem; text-align:left;">' +
+          '<label class="muted" for="neMain" style="font-size:0.8rem;">日本語（カードの表に出る文）</label><input type="text" id="neMain" style="margin:2px 0 0.5rem;" value="' + esc(sp.main) + '">' +
+          '<label class="muted" for="neNote" style="font-size:0.8rem;">💡 補足（答えのあとに出るメモ）</label><textarea id="neNote" rows="4" style="width:100%; margin-top:2px; font-size:16px;">' + esc(sp.note) + '</textarea>' +
+          '<div style="display:flex; gap:6px; margin-top:0.4rem;"><button class="btn" data-act="saveNote" style="flex:1;">💾 保存</button><button class="btn btn-secondary" data-act="cancelNote" style="flex:1;">やめる</button></div></div>';
+        $('neNote').focus();
+        return;
+      }
+      if (a === 'cancelNote') { $('noteEdit').innerHTML = ''; return; }
+      if (a === 'saveNote') {
+        const c = run && (run.queue[run.i] || {}).c;
+        if (!c) return;
+        const main = $('neMain').value.trim();
+        if (!main) { EA.toast('日本語を入れてください'); return; }
+        const ja = EA.joinJa(main, $('neNote').value);
+        const exists = EA.getCustomPhrases().some(p => p[1].toLowerCase() === c.en.toLowerCase());
+        const tag = exists ? null : '第' + c.w + '週カード' + c.num + (c.tag ? '（' + c.tag + '）' : '');
+        if (!EA.updateCustomPhrase(c.en, ja, tag)) { EA.toast('保存できませんでした'); return; }
+        c.ja = ja;
+        const note = EA.splitJa(ja).note, nl = $('noteLine');
+        nl.textContent = '💡 ' + note; nl.style.display = note ? '' : 'none';
+        $('noteEdit').innerHTML = '';
+        EA.toast('✏️ 補足を保存しました（次からこの内容で出ます）');
+        return;
+      }
       if (a === 'pin') {
         const c = t.dataset.i != null ? run.all[+t.dataset.i] : (run.queue[run.i] || {}).c;
         if (!c) return;
