@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 型練習</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="stylesheet" href="common.css?v=23">
+  <style>
+    /* 🔁 型練習 */
+    .pt-tabs { display: flex; gap: 6px; overflow-x: auto; margin-bottom: 0.75rem; }
+    .pt-tabs .chip { white-space: nowrap; }
+    .pt-label { font-size: 0.8rem; font-weight: bold; color: var(--text-muted); margin: 0.6rem 0 0.3rem; }
+    .pt-frame { background: #eef2ff; border: 1px solid #c7d2fe; border-radius: 12px; padding: 0.7rem; text-align: center; font-size: 1.25rem; font-weight: 800; color: #3730a3; word-break: break-word; }
+    .pt-frame .slot { display: inline-block; min-width: 3.5em; border-bottom: 3px solid #6366f1; color: #6366f1; }
+    .pt-stage { min-height: 9.5rem; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0.6rem 0; }
+    .pt-ja { font-size: 1.7rem; font-weight: 800; color: #0f172a; line-height: 1.35; display: flex; flex-wrap: wrap; justify-content: center; align-items: baseline; gap: 0.3em; }
+    .pt-tail { color: #be185d; opacity: 0; transform: translateX(-10px); transition: opacity .2s, transform .2s; }
+    .pt-tail.on { opacity: 1; transform: none; }
+    .pt-en { font-size: 1.2rem; font-weight: 700; color: var(--primary); margin-top: 0.6rem; min-height: 1.6em; word-break: break-word; }
+    .pt-en b { color: #be185d; }
+    .pt-bar { height: 6px; background: #e2e8f0; border-radius: 999px; overflow: hidden; margin: 0.3rem 0 0.4rem; }
+    .pt-bar div { height: 100%; width: 100%; background: var(--primary); }
+    .pt-dots { display: flex; justify-content: center; gap: 6px; margin: 0.3rem 0; }
+    .pt-dots span { width: 10px; height: 10px; border-radius: 50%; background: #e2e8f0; }
+    .pt-dots span.done { background: var(--primary); }
+    .pt-dots span.now { background: #be185d; }
+    .pt-row { display: flex; gap: 8px; }
+    .pt-row .btn { flex: 1; }
+    .pt-note { font-size: 0.85rem; color: #334155; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.7rem; margin-top: 0.5rem; }
+    .pt-q { font-size: 1.3rem; font-weight: 800; text-align: center; margin: 0.6rem 0; word-break: break-word; }
+    .pt-q .blank { color: #be185d; }
+    .pt-icons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
+    .pt-icon { background: #fff; border: 2px solid var(--border); border-radius: 14px; padding: 0.55rem 0.3rem; cursor: pointer; text-align: center; color: var(--text); }
+    .pt-icon .i { font-size: 2rem; display: block; line-height: 1.1; }
+    .pt-icon .w { font-weight: 800; font-size: 1rem; }
+    .pt-icon .n { font-size: 0.72rem; color: var(--text-muted); }
+    .pt-icon.right { border-color: #16a34a; background: #f0fdf4; }
+    .pt-icon.wrong { border-color: #be123c; background: #fff1f2; }
+    .pt-icon:disabled { cursor: default; }
+    .pt-res { text-align: center; font-weight: 700; min-height: 1.4em; margin: 0.4rem 0; }
+    .pt-tbl { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+    .pt-tbl th, .pt-tbl td { border-bottom: 1px solid var(--border); padding: 0.4rem 0.25rem; text-align: left; vertical-align: top; }
+    .pt-tbl th { color: var(--text-muted); font-weight: normal; font-size: 0.75rem; }
+    .pt-tbl td.n { text-align: center; white-space: nowrap; }
+    .pt-weak { color: var(--bad); font-weight: bold; }
+    .pt-list { display: flex; flex-direction: column; gap: 6px; }
+    .pt-item { display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.45rem 0.6rem; cursor: pointer; text-align: left; font-size: 0.9rem; color: var(--text); width: 100%; }
+    .pt-item.sel { border-color: var(--primary); background: #eef2ff; }
+    .pt-item .c { font-weight: 700; color: #3730a3; }
+    .pt-item .j { font-size: 0.78rem; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="subnav">
+    <a href="roadmap.html">🗺 計画</a>
+    <a href="grammar.html">📖 文法</a>
+    <a href="pattern.html" class="active" aria-current="page">🔁 型</a>
+    <a href="quiz.html">❓ クイズ</a>
+    <a href="writing.html">✍️ 英作文</a>
+    <a href="speaking.html">🎙️ 発音</a>
+    <a href="talk.html">💭 お題</a>
+    <a href="addword.html">➕ 単語</a>
+    <a href="phrases.html">📚 表現集</a>
+  </div>
+  <div class="container">
+    <div class="pt-tabs" role="tablist">
+      <button class="chip active" data-tab="slot" role="tab">🔁 連続で言う</button>
+      <button class="chip" data-tab="quiz" role="tab">🎯 前置詞イメージ</button>
+      <button class="chip" data-tab="stats" role="tab">📊 型の記録</button>
+    </div>
+
+    <!-- 🔁 連続で言う -->
+    <section id="tab-slot">
+      <div class="card" id="slotSetup">
+        <h2>🔁 型を固定して、後ろだけ入れ替える</h2>
+        <p class="muted">型はそのまま、後ろの言葉だけが一定のテンポで切り替わります。日本語は「結論 → ＋ 後ろに足す言葉」の順に出るので、英語の語順のまま声に出し続けましょう。</p>
+        <div class="pt-label">間隔（1文あたり）</div>
+        <div class="chip-row" id="secsChips">
+          <button class="chip" data-secs="4">4秒（はじめ）</button>
+          <button class="chip" data-secs="3">3秒</button>
+          <button class="chip" data-secs="2">2秒（会話のテンポ）</button>
+        </div>
+        <div class="pt-label">1つの型で言う数</div>
+        <div class="chip-row" id="countChips">
+          <button class="chip" data-count="3">3つ（ミニ）</button>
+          <button class="chip" data-count="5">5つ（全部）</button>
+        </div>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; margin:0.3rem 0;"><input type="checkbox" id="optStep"> 日本語を「前半 → ＋後半」の2段階で出す</label>
+        <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; margin:0.3rem 0 0.6rem;"><input type="checkbox" id="optSpeak"> 答えの英語を読み上げる</label>
+        <div class="pt-label">型を選ぶ</div>
+        <div class="pt-row" style="margin-bottom:0.5rem;">
+          <button class="tiny-btn" id="pickWeak" style="flex:1; padding:6px;">🔥 苦手な型から</button>
+          <button class="tiny-btn" id="pickRandom" style="flex:1; padding:6px;">🎲 おまかせ3つ</button>
+        </div>
+        <div class="pt-list" id="patList"></div>
+      </div>
+      <div class="card" id="slotRun" style="display:none;"></div>
+    </section>
+
+    <!-- 🎯 前置詞イメージ -->
+    <section id="tab-quiz" style="display:none;">
+      <div class="card" id="quizBox"></div>
+    </section>
+
+    <!-- 📊 型の記録 -->
+    <section id="tab-stats" style="display:none;">
+      <div class="card" id="statsBox"></div>
+    </section>
+  </div>
+  <nav>
+    <a href="index.html">🏠 ホーム</a>
+    <a href="translator.html">💬 会話</a>
+    <a href="quiz.html?format=drill&amp;genre=PREMEET">📅 会う前</a>
+    <a href="recap.html">📝 ふり返り</a>
+    <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
+  </nav>
+  <script src="common.js?v=59"></script>
+  <script src="pattern-data.js?v=1"></script>
+  <script>
+  (function () {
+    const $ = id => document.getElementById(id);
+    const esc = EA.esc;
+    const P = PT.PATTERNS;
+    const QUIZ_SECS = 2;
+    let tab = 'slot';
+    let timers = [];
+    let slot = null;   // 連続で言うの実行状態
+    let quiz = null;   // クイズの実行状態
+    let selected = null;
+
+    function clearTimers() { timers.forEach(t => clearTimeout(t)); timers = []; }
+    function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+    function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
+    function prefs() { const p = EA.getPrefs(); return { secs: [2, 3, 4].includes(+p.patSecs) ? +p.patSecs : 4, count: +p.patCount === 3 ? 3 : 5, step: p.patStep !== false, speak: p.patSpeak !== false }; }
+
+    /* ---------- 苦手の判定 ---------- */
+    function weakness(id) {
+      const e = EA.getPatStats()[id];
+      if (!e) return null;
+      const said = e.ok + e.mid + e.ng;
+      const sayRate = said ? (e.ok + e.mid * 0.5) / said : null;
+      const fastRate = e.qt ? e.qf / e.qt : null;
+      const weak = e.l === 'ng' || e.l === 'mid' || (sayRate !== null && sayRate < 0.7) || (e.qt >= 3 && fastRate < 0.7);
+      return { e, said, sayRate, fastRate, weak };
+    }
+    function weakIds() { return P.filter(p => { const w = weakness(p.id); return w && w.weak; }).map(p => p.id); }
+
+    /* ---------- タブ ---------- */
+    function setTab(t) {
+      tab = t; stopAll();
+      document.querySelectorAll('[data-tab]').forEach(b => b.classList.toggle('active', b.dataset.tab === t));
+      ['slot', 'quiz', 'stats'].forEach(k => { $('tab-' + k).style.display = k === t ? '' : 'none'; });
+      if (t === 'slot') renderSetup();
+      if (t === 'quiz') renderQuizStart();
+      if (t === 'stats') renderStats();
+    }
+    function stopAll() {
+      clearTimers();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      slot = null; quiz = null;
+      $('slotRun').style.display = 'none'; $('slotSetup').style.display = '';
+    }
+
+    /* ---------- 🔁 連続で言う：設定 ---------- */
+    function renderSetup() {
+      const pr = prefs();
+      document.querySelectorAll('#secsChips .chip').forEach(b => b.classList.toggle('active', +b.dataset.secs === pr.secs));
+      document.querySelectorAll('#countChips .chip').forEach(b => b.classList.toggle('active', +b.dataset.count === pr.count));
+      $('optStep').checked = pr.step; $('optSpeak').checked = pr.speak;
+      const wk = weakIds();
+      $('pickWeak').textContent = '🔥 苦手な型から（' + wk.length + '）';
+      $('pickWeak').disabled = !wk.length;
+      let html = '', g = '';
+      P.forEach(p => {
+        if (p.group !== g) { g = p.group; html += '<div class="muted" style="font-size:0.75rem; margin-top:0.3rem;">' + esc(g) + '</div>'; }
+        const w = weakness(p.id);
+        const mark = w ? (w.weak ? '<span class="pt-weak">🔥</span>' : '<span style="color:var(--ok);">✔</span>') : '';
+        html += '<button class="pt-item' + (selected === p.id ? ' sel' : '') + '" data-pid="' + p.id + '"><span><span class="c">' + esc(PT.frame(p)) + '</span><br><span class="j">' + esc(p.head) + '</span></span>' + mark + '</button>';
+      });
+      $('patList').innerHTML = html;
+    }
+
+    /* ---------- 🔁 連続で言う：実行 ---------- */
+    function startSlot(ids) {
+      const pr = prefs();
+      const queue = ids.map(PT.byId).filter(Boolean);
+      if (!queue.length) return;
+      slot = { queue, qi: 0, i: 0, items: [], phase: 'run', paused: false, pr };
+      $('slotSetup').style.display = 'none'; $('slotRun').style.display = '';
+      beginPattern();
+      $('slotRun').scrollIntoView({ block: 'start', behavior: 'smooth' });
+    }
+    function beginPattern() {
+      const p = slot.queue[slot.qi];
+      slot.items = shuffle(p.slots).slice(0, slot.pr.count);
+      slot.i = 0; slot.phase = 'ready';
+      renderSlot();
+      // 「よーい」の1秒後に始める
+      later(() => { if (slot && slot.phase === 'ready') { slot.phase = 'run'; nextBeat(); } }, 1200);
+    }
+    function head(p) {
+      return '<div style="display:flex; justify-content:space-between; align-items:center;"><span class="muted">' +
+        (slot.queue.length > 1 ? '型 ' + (slot.qi + 1) + '/' + slot.queue.length + ' ・ ' : '') + esc(p.chunk) + ' ・ ' + slot.pr.secs + '秒</span>' +
+        '<button class="tiny-btn" data-act="stop">✕ やめる</button></div>' +
+        '<div class="pt-frame" style="margin-top:0.5rem;">' + esc(p.pre ? p.pre + ' ' : '') + '<span class="slot">　</span>' + esc(p.post) + '</div>';
+    }
+    function dots() {
+      return '<div class="pt-dots">' + slot.items.map((x, k) => '<span class="' + (k < slot.i ? 'done' : k === slot.i ? 'now' : '') + '"></span>').join('') + '</div>';
+    }
+    function renderSlot() {
+      const p = slot.queue[slot.qi];
+      if (slot.phase === 'ready') {
+        $('slotRun').innerHTML = head(p) + '<div class="pt-stage"><div class="pt-ja" style="color:var(--text-muted);">よーい…</div><div class="pt-en">' + esc(p.head) + '（' + esc(p.chunk) + '）</div></div>' + dots();
+        return;
+      }
+      if (slot.phase === 'check') {
+        $('slotRun').innerHTML = head(p) +
+          '<h2 style="margin-top:0.8rem;">どうだった？</h2>' +
+          '<div class="pt-list" style="margin-bottom:0.6rem;">' + slot.items.map(x => '<div class="pt-note" style="margin:0;"><b>' + esc(PT.sentence(p, x[1])) + '</b><br><span class="muted">' + esc(x[0] + p.head) + '</span></div>').join('') + '</div>' +
+          '<div class="pt-note">💡 ' + esc(p.note) + '</div>' +
+          '<div class="pt-row" style="margin-top:0.75rem;"><button class="btn" data-act="self" data-v="ok" style="background:#16a34a;">⭕ スラスラ</button><button class="btn" data-act="self" data-v="mid" style="background:#d97706;">△ 詰まった</button><button class="btn" data-act="self" data-v="ng" style="background:#be123c;">❌ 出なかった</button></div>';
+        return;
+      }
+      if (slot.phase === 'done') {
+        const last = slot.qi >= slot.queue.length - 1;
+        $('slotRun').innerHTML = head(p) + '<div class="pt-stage"><div class="pt-ja" style="font-size:1.3rem;">記録しました</div></div>' +
+          (last ? '' : '<button class="btn" data-act="nextPat">▶ 次の型：' + esc(PT.frame(slot.queue[slot.qi + 1])) + '</button>') +
+          '<button class="btn' + (last ? '' : ' btn-secondary') + '" data-act="again" style="margin-top:0.5rem;">🔁 この型をもう一回</button>' +
+          '<button class="btn btn-secondary" data-act="stop" style="margin-top:0.5rem;">おわる</button>';
+        return;
+      }
+      const x = slot.items[slot.i];
+      $('slotRun').innerHTML = head(p) +
+        '<div class="pt-stage"><div class="pt-ja"><span id="ptHead">' + esc(p.head) + '</span><span class="pt-tail" id="ptTail">＋ ' + esc(x[0]) + '</span></div>' +
+        '<div class="pt-en" id="ptEn"></div></div>' +
+        '<div class="pt-bar"><div id="ptBar"></div></div>' + dots() +
+        '<div class="pt-row" style="margin-top:0.5rem;"><button class="tiny-btn" data-act="pause" style="flex:1; padding:6px;">' + (slot.paused ? '▶ 再開' : '⏸ 一時停止') + '</button></div>';
+    }
+    function nextBeat() {
+      if (!slot || slot.paused) return;
+      const p = slot.queue[slot.qi], x = slot.items[slot.i], ms = slot.pr.secs * 1000;
+      renderSlot();
+      const bar = $('ptBar');
+      bar.style.transition = 'none'; bar.style.width = '100%'; void bar.offsetWidth;
+      bar.style.transition = 'width ' + slot.pr.secs + 's linear'; bar.style.width = '0%';
+      // 2段階：まず結論、少しあとに「＋ 後ろの言葉」
+      if (slot.pr.step) later(() => { const t = $('ptTail'); if (t) t.classList.add('on'); }, Math.min(1000, ms / 2.5));
+      else $('ptTail').classList.add('on');
+      later(() => {
+        if (!slot || slot.paused) return;
+        const en = PT.sentence(p, x[1]);
+        const pre = p.pre ? p.pre + ' ' : '';
+        $('ptEn').innerHTML = esc(en.slice(0, pre.length)) + '<b>' + esc(en.slice(pre.length, pre.length + x[1].length)) + '</b>' + esc(en.slice(pre.length + x[1].length));
+        if (slot.pr.speak) EA.speak(en, 'en-US', 1);
+        const wait = slot.pr.speak ? Math.max(1200, en.split(' ').length * 330) : 900;
+        later(() => {
+          if (!slot || slot.paused) return;
+          slot.i += 1;
+          if (slot.i >= slot.items.length) { slot.phase = 'check'; renderSlot(); return; }
+          nextBeat();
+        }, wait);
+      }, ms);
+    }
+
+    /* ---------- 🎯 前置詞イメージ ---------- */
+    function renderQuizStart() {
+      const wk = weakIds().filter(id => PT.byId(id).prep);
+      const prepRows = Object.keys(PT.PREPS).map(k => { const v = PT.PREPS[k]; return '<div style="display:flex; gap:8px; align-items:center; font-size:0.85rem; margin:2px 0;"><span style="font-size:1.3rem;">' + v.icon + '</span><b style="min-width:3em;">' + k + '</b><span class="muted">' + esc(v.name) + '：' + esc(v.image) + '</span></div>'; }).join('');
+      $('quizBox').innerHTML = '<h2>🎯 前置詞をイメージで選ぶ</h2>' +
+        '<p class="muted">英文を見たら、日本語に訳す前に「イメージ」をタップ。' + QUIZ_SECS + '秒以内に選べたら ⚡ です（時間が過ぎても答えられます）。</p>' +
+        '<div class="pt-note" style="margin-bottom:0.75rem;">' + prepRows + '</div>' +
+        '<button class="btn" data-act="quizStart" data-scope="all">▶ 10問（全部の型から）</button>' +
+        (wk.length ? '<button class="btn btn-secondary" data-act="quizStart" data-scope="weak" style="margin-top:0.5rem;">🔥 苦手な型だけ（' + wk.length + '）</button>' : '');
+    }
+    function startQuiz(ids) {
+      const items = shuffle(PT.quizItems(ids)).slice(0, 10);
+      if (!items.length) { EA.toast('出せる問題がありません'); return; }
+      quiz = { items, i: 0, res: [] };
+      showQuestion();
+    }
+    function showQuestion() {
+      clearTimers();
+      const q = quiz.items[quiz.i];
+      const others = shuffle(Object.keys(PT.PREPS).filter(k => k !== q.answer)).slice(0, 3);
+      q.opts = shuffle([q.answer].concat(others));
+      q.t0 = Date.now(); q.done = false;
+      const parts = q.blank.split('___');
+      $('quizBox').innerHTML = '<div style="display:flex; justify-content:space-between; align-items:center;"><span class="muted">' + (quiz.i + 1) + '/' + quiz.items.length + '</span><button class="tiny-btn" data-act="quizStop">✕ やめる</button></div>' +
+        '<div class="pt-q">' + esc(parts[0]) + '<span class="blank">［　］</span>' + esc(parts[1] || '') + '</div>' +
+        '<div class="pt-bar"><div id="qBar"></div></div>' +
+        '<div class="pt-icons">' + q.opts.map(k => { const v = PT.PREPS[k]; return '<button class="pt-icon" data-act="pick" data-k="' + k + '"><span class="i">' + v.icon + '</span><span class="w">' + k + '</span><br><span class="n">' + esc(v.name) + '</span></button>'; }).join('') + '</div>' +
+        '<div class="pt-res" id="qRes"></div><div id="qAfter"></div>';
+      const bar = $('qBar');
+      bar.style.transition = 'none'; bar.style.width = '100%'; void bar.offsetWidth;
+      bar.style.transition = 'width ' + QUIZ_SECS + 's linear'; bar.style.width = '0%';
+      later(() => { if (quiz && !q.done) { $('qRes').textContent = '⏱ 時間切れ（でも選んでOK）'; $('qRes').style.color = 'var(--warn)'; } }, QUIZ_SECS * 1000);
+    }
+    function pick(k) {
+      const q = quiz.items[quiz.i];
+      if (q.done) return;
+      q.done = true; clearTimers();
+      const ms = Date.now() - q.t0, ok = k === q.answer, fast = ok && ms <= QUIZ_SECS * 1000;
+      quiz.res.push({ q, ok, fast, ms });
+      EA.recordPattern(q.pid, 'quiz', ok, fast);
+      document.querySelectorAll('.pt-icon').forEach(b => { b.disabled = true; if (b.dataset.k === q.answer) b.classList.add('right'); else if (b.dataset.k === k) b.classList.add('wrong'); });
+      const v = PT.PREPS[q.answer], pat = PT.byId(q.pid);
+      $('qRes').textContent = ok ? (fast ? '⚡ 正解！（' + (ms / 1000).toFixed(1) + '秒）' : '⭕ 正解（' + (ms / 1000).toFixed(1) + '秒）') : '❌ 正解は ' + q.answer;
+      $('qRes').style.color = ok ? 'var(--ok)' : 'var(--bad)';
+      $('qAfter').innerHTML = '<div class="pt-note"><b>' + esc(q.full) + '</b> <button class="icon-btn" data-act="say" aria-label="読み上げ">🔊</button><br><span class="muted">' + esc(q.ja) + '</span><br>' + v.icon + ' ' + esc(q.answer) + '＝' + esc(v.image) + '<br>💡 ' + esc(pat.note) + '</div>' +
+        '<button class="btn" data-act="quizNext" style="margin-top:0.6rem;">' + (quiz.i + 1 >= quiz.items.length ? '結果を見る' : '次へ ▶') + '</button>';
+      EA.autoSpeak(q.full, 'en-US', 1);
+    }
+    function quizResult() {
+      const n = quiz.res.length, ok = quiz.res.filter(r => r.ok).length, fast = quiz.res.filter(r => r.fast).length;
+      const miss = quiz.res.filter(r => !r.fast);
+      $('quizBox').innerHTML = '<h2>🎯 結果</h2><div class="stats-grid" style="margin-bottom:0.6rem;"><div><div class="stat-number">' + ok + '/' + n + '</div><div class="stat-label">正解</div></div><div><div class="stat-number">' + fast + '</div><div class="stat-label">⚡ ' + QUIZ_SECS + '秒以内</div></div><div><div class="stat-number">' + Math.round(fast * 100 / n) + '%</div><div class="stat-label">反射の速さ</div></div></div>' +
+        (miss.length ? '<div class="muted" style="margin-bottom:0.3rem;">遅れた・まちがえた文</div>' + miss.map(r => '<div class="pt-note" style="margin-top:0.3rem;">' + PT.PREPS[r.q.answer].icon + ' <b>' + esc(r.q.full) + '</b><br><span class="muted">' + esc(r.q.ja) + '</span></div>').join('') : '<p>全部 ⚡ でした！</p>') +
+        (miss.length ? '<button class="btn" data-act="toSlot" data-ids="' + Array.from(new Set(miss.map(r => r.q.pid))).join(',') + '" style="margin-top:0.75rem;">🔁 この型を「連続で言う」で練習</button>' : '') +
+        '<button class="btn btn-secondary" data-act="quizAgain" style="margin-top:0.5rem;">もう10問</button>';
+    }
+
+    /* ---------- 📊 型の記録 ---------- */
+    function pct(x) { return x === null ? '—' : Math.round(x * 100) + '%'; }
+    function renderStats() {
+      const wk = weakIds();
+      let rows = '';
+      P.forEach(p => {
+        const w = weakness(p.id);
+        const e = w ? w.e : null;
+        rows += '<tr><td><b' + (w && w.weak ? ' class="pt-weak"' : '') + '>' + (w && w.weak ? '🔥 ' : '') + esc(p.chunk) + '</b><br><span class="muted">' + esc(p.head) + '</span></td>' +
+          '<td class="n">' + (e ? e.ok + '/' + e.mid + '/' + e.ng : '—') + '<br><span class="muted">' + (e && e.l ? { ok: '⭕', mid: '△', ng: '❌' }[e.l] : '') + '</span></td>' +
+          '<td class="n">' + (e && e.qt ? pct(w.fastRate) + '<br><span class="muted">' + e.qf + '/' + e.qt + '</span>' : '—') + '</td></tr>';
+      });
+      $('statsBox').innerHTML = '<h2>📊 型ごとの記録</h2>' +
+        '<p class="muted">🔥＝苦手（最後の自己チェックが △・❌、言えた割合が7割未満、または前置詞クイズで⚡が7割未満）。</p>' +
+        (wk.length ? '<button class="btn" data-act="toSlot" data-ids="' + wk.join(',') + '">🔥 苦手な型（' + wk.length + '）を連続で言う</button>' +
+          '<button class="btn btn-secondary" data-act="weakQuiz" style="margin-top:0.5rem;">🔥 苦手な型で前置詞クイズ</button>' : '<p class="muted">まだ苦手な型はありません。</p>') +
+        '<table class="pt-tbl" style="margin-top:0.75rem;"><tr><th>型</th><th>連続で言う<br>⭕/△/❌</th><th>クイズ⚡</th></tr>' + rows + '</table>';
+    }
+
+    /* ---------- クリック ---------- */
+    document.addEventListener('click', e => {
+      const t = e.target.closest('[data-tab], [data-act], [data-pid], [data-secs], [data-count]');
+      if (!t) return;
+      if (t.dataset.tab) { setTab(t.dataset.tab); return; }
+      if (t.dataset.secs) { EA.setPref('patSecs', +t.dataset.secs); renderSetup(); return; }
+      if (t.dataset.count) { EA.setPref('patCount', +t.dataset.count); renderSetup(); return; }
+      if (t.dataset.pid) { selected = t.dataset.pid; startSlot([t.dataset.pid]); return; }
+      const a = t.dataset.act;
+      if (a === 'stop') { stopAll(); renderSetup(); return; }
+      if (a === 'pause') {
+        if (!slot) return;
+        slot.paused = !slot.paused; clearTimers();
+        if (slot.paused) { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); renderSlot(); } else nextBeat();
+        return;
+      }
+      if (a === 'self') {
+        const p = slot.queue[slot.qi];
+        EA.recordPattern(p.id, t.dataset.v);
+        EA.updateStreakBadge();
+        slot.phase = 'done'; renderSlot(); return;
+      }
+      if (a === 'nextPat') { slot.qi += 1; beginPattern(); return; }
+      if (a === 'again') { beginPattern(); return; }
+      if (a === 'quizStart') { startQuiz(t.dataset.scope === 'weak' ? weakIds() : null); return; }
+      if (a === 'weakQuiz') { setTab('quiz'); startQuiz(weakIds()); return; }
+      if (a === 'pick') { pick(t.dataset.k); return; }
+      if (a === 'say') { EA.speak(quiz.items[quiz.i].full, 'en-US', 1); return; }
+      if (a === 'quizNext') { quiz.i += 1; if (quiz.i >= quiz.items.length) { EA.updateStreakBadge(); quizResult(); } else showQuestion(); return; }
+      if (a === 'quizAgain') { startQuiz(null); return; }
+      if (a === 'quizStop') { stopAll(); renderQuizStart(); return; }
+      if (a === 'toSlot') { const ids = t.dataset.ids.split(',').filter(Boolean); setTab('slot'); startSlot(ids); return; }
+    });
+    ['optStep', 'optSpeak'].forEach(id => $(id).addEventListener('change', () => EA.setPref(id === 'optStep' ? 'patStep' : 'patSpeak', $(id).checked)));
+    $('pickWeak').addEventListener('click', e => { e.stopPropagation(); const w = weakIds(); if (w.length) startSlot(w); });
+    $('pickRandom').addEventListener('click', e => { e.stopPropagation(); startSlot(shuffle(P.map(p => p.id)).slice(0, 3)); });
+    // 画面を離れたらタイマーを止める
+    document.addEventListener('visibilitychange', () => { if (document.hidden && slot && !slot.paused && slot.phase === 'run') { slot.paused = true; clearTimers(); renderSlot(); } });
+
+    const q = new URLSearchParams(location.search);
+    setTab(['slot', 'quiz', 'stats'].includes(q.get('tab')) ? q.get('tab') : 'slot');
+    EA.updateStreakBadge();
+  })();
+  </script>
+</body>
+</html>

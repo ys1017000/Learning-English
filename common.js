@@ -1389,7 +1389,7 @@
   function buildBackup() {
     return {
       app: BACKUP_APP_ID,
-      version: 8,   // v6: 英語日記に翻訳の参考(ref)を追加 / v7: DMノート(dmNotes)を追加 / v8: お題で話す(talks)を追加
+      version: 9,   // v6: 英語日記に翻訳の参考(ref)を追加 / v7: DMノート(dmNotes)を追加 / v8: お題で話す(talks)を追加 / v9: 型練習の記録(patterns)を追加
       exportedAt: new Date().toISOString(),
       data: getStore(),
       customPhrases: getCustomPhrases(),
@@ -1405,7 +1405,8 @@
       nihongo: getNihongo(),
       roadmap: getRoadmap(),
       dmNotes: getDmNotes(),
-      talks: getTalks()
+      talks: getTalks(),
+      patterns: getPatStats()
     };
   }
   function downloadBackup() {
@@ -1465,7 +1466,9 @@
     const incDm = sanitizeDmNotes(obj.dmNotes);
     const hasTalks = Array.isArray(obj.talks);   // v7以前には無いので、今の記録をそのまま残す
     const incTalks = sanitizeTalks(obj.talks);
-    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo, road, dm, talks;
+    const hasPat = obj.patterns && typeof obj.patterns === 'object';   // v8以前には無いので、今の記録をそのまま残す
+    const incPat = sanitizePatStats(obj.patterns);
+    let store, custom, talk, pins, keeps, lists, plan, profile, letters, diary, meetings, nihongo, road, dm, talks, patStats;
     if (mode === 'replace') {
       store = inc; custom = incCustom; talk = incTalk;
       pins = incPins; keeps = incKeeps; lists = incLists; plan = incPlan;
@@ -1473,6 +1476,7 @@
       road = hasRoad ? incRoad : getRoadmap();
       dm = hasDm ? incDm : getDmNotes();
       talks = hasTalks ? incTalks : getTalks();
+      patStats = hasPat ? incPat : getPatStats();
     } else {
       const cur = getStore();
       store = {
@@ -1517,8 +1521,9 @@
       road = mergeRoadmap(getRoadmap(), incRoad);
       dm = sanitizeDmNotes(getDmNotes().concat(incDm));
       talks = sanitizeTalks(getTalks().concat(incTalks));
+      patStats = mergePatStats(getPatStats(), incPat);
     }
-    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo) && saveRoadmap(road) && saveDmNotes(dm) && saveTalks(talks);
+    const okAll = saveStore(store) && saveCustomPhrases(custom) && saveTalkLog(talk) && savePins(pins) && saveKeepsakes(keeps) && saveLists(lists) && (plan ? savePlan(plan) : (clearPlan(), true)) && saveProfile(profile) && saveLetters(letters) && saveDiary(diary) && saveMeetings(meetings) && saveNihongo(nihongo) && saveRoadmap(road) && saveDmNotes(dm) && saveTalks(talks) && savePatStats(patStats);
     if (!okAll) throw new Error('保存に失敗しました。ブラウザの保存領域を確認してください。');
     return { custom: custom.length, studied: store.studied.length, favorites: store.favorites.length, talk: talk.length, pins: pins.length, keeps: keeps.length, diary: diary.length, letters: letters.length, dm: dm.length, talks: talks.length };
   }
@@ -2000,6 +2005,48 @@
   }
   /* ---------- お題で話す（自分の意見を話した記録） ----------
      { id, t: 時刻, u: 更新時刻, pid: お題ID, q: お題（英語）, text: 話した英語, words: 語数, used: [使えた型ID], self: [自己チェックID], tr: 日本語に戻した文, c: Claude用にコピー済み } */
+  /* ---------- 🔁 型練習の記録（v9で追加） ---------- */
+  // { 型のid: { ok, mid, ng（連続で言うの自己チェック回数）, l: 最後の自己チェック 'ok'|'mid'|'ng', d: 最後の日, qt, qc（クイズ回答数・正解数）, qf（2秒以内の正解数） } }
+  const KEY_PAT = 'english_app_patterns';
+  const PAT_NUM = ['ok', 'mid', 'ng', 'qt', 'qc', 'qf'];
+  function sanitizePatStats(o) {
+    const out = {};
+    if (!o || typeof o !== 'object' || Array.isArray(o)) return out;
+    Object.keys(o).slice(0, 500).forEach(k => {
+      const e = o[k]; if (!e || typeof e !== 'object' || !/^[a-z0-9-]{1,40}$/.test(k)) return;
+      const r = {};
+      PAT_NUM.forEach(f => { r[f] = Math.max(0, Math.min(100000, Math.floor(Number(e[f]) || 0))); });
+      r.l = ['ok', 'mid', 'ng'].includes(e.l) ? e.l : '';
+      r.d = /^\d{4}-\d{2}-\d{2}$/.test(String(e.d)) ? String(e.d) : '';
+      out[k] = r;
+    });
+    return out;
+  }
+  function getPatStats() { return sanitizePatStats(loadJSON(KEY_PAT, {})); }
+  function savePatStats(o) { return safeSet(KEY_PAT, JSON.stringify(sanitizePatStats(o))); }
+  function mergePatStats(a, b) {
+    const out = sanitizePatStats(a);
+    Object.keys(b || {}).forEach(k => {
+      const x = out[k], y = b[k];
+      if (!x) { out[k] = y; return; }
+      PAT_NUM.forEach(f => { x[f] = Math.max(x[f], y[f]); });
+      if (y.d && y.d >= x.d) { if (y.l) x.l = y.l; x.d = y.d; }
+    });
+    return out;
+  }
+  // 1件記録する。kind: 'ok'|'mid'|'ng'（連続で言う）／ 'quiz'（correct, fast）
+  function recordPattern(id, kind, correct, fast) {
+    const all = getPatStats();
+    const e = all[id] || { ok: 0, mid: 0, ng: 0, qt: 0, qc: 0, qf: 0, l: '', d: '' };
+    if (kind === 'quiz') { e.qt++; if (correct) e.qc++; if (correct && fast) e.qf++; }
+    else if (['ok', 'mid', 'ng'].includes(kind)) { e[kind]++; e.l = kind; }
+    e.d = dateKey();
+    all[id] = e;
+    savePatStats(all);
+    const s = getStore(); touchToday(s); saveStore(s);
+    return e;
+  }
+
   const KEY_TALKS = 'english_app_talks';
   function sanitizeTalks(list) {
     const map = new Map();
@@ -2211,7 +2258,7 @@
     splitJa, usageFor, renderUsage, autoSpeak, setGenre, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,
-    getPrefs, setPref, hasPhrase, addCustomPhrase, updateCustomPhrase, joinJa, addToReview,
+    getPrefs, setPref, hasPhrase, addCustomPhrase, updateCustomPhrase, joinJa, addToReview, getPatStats, recordPattern,
     getTalkLog, saveTalkLog, addTalkEntry, kanaHints, renderKana,
     getDuePhrases, daysUntil, parseKey, toast, translate, decodeEntities, normJa,
     getPins, savePins, isPinned, togglePin, markPinUsed,
