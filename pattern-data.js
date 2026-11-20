@@ -162,6 +162,23 @@
     { id: 'i-could-offer', chunk: 'I could ～ if you want（できなくはない）', group: '想像の would / could', pre: 'I could', post: ' if you want.', head: 'よかったら、', headFirst: true,
       note: 'could＝（その気になれば）〜できる。can より距離があって、押しつけない申し出になる。',
       slots: [['駅まで迎えに行けるよ', 'pick you up at the station'], ['手伝えるよ', 'help you'], ['予約しておけるよ', 'make a reservation'], ['駅まで送れるよ', 'walk you to the station'], ['もっと早く来られるよ', 'come earlier']] }
+,
+    // ===== 2026-11-21 追加：ask の型（ask のすぐ後ろは「人」） =====
+    { id: 'ask-person', chunk: "I'll ask ＋人", group: 'ask の型（頼む・聞く）', pre: "I'll ask", post: '.', head: 'に聞いてみるね',
+      note: 'ask のすぐ後ろは「人」。to も about もいらない（ask to him は ×）。誰に聞くかだけなら ask ＋人 で終わり。',
+      slots: [['お店の人', 'the staff'], ['友だち', 'my friend'], ['上司', 'my boss'], ['先生', 'my teacher'], ['駅員さん', 'someone at the station']] },
+    { id: 'ask-to', chunk: 'Can I ask you to ～?（頼む）', group: 'ask の型（頼む・聞く）', pre: 'Can I ask you to', post: '?', head: 'てもらってもいい？',
+      note: 'ask 人 to ～＝人に〜してと頼む（相手にしてほしい動作）。並びは ask → 人 → to ＋動詞。',
+      slots: [['写真を撮っ', 'take a photo'], ['ちょっと待っ', 'wait a minute'], ['もう一回言っ', 'say that again'], ['ゆっくり話し', 'speak a little slower'], ['これ持っ', 'hold this']] },
+    { id: 'ask-for', chunk: 'Can I ask you for ～?（もらう）', group: 'ask の型（頼む・聞く）', pre: 'Can I ask you for', post: '?', head: 'もらってもいい？', prep: 'for',
+      note: 'ask 人 for ＋もの＝人に〜をちょうだいと頼む（ほしい「もの」）。動作なら to、もの なら for。',
+      slots: [['ひとつ頼みごとを聞いて', 'a favor'], ['アドバイス', 'some advice'], ['ちょっと手伝って', 'some help'], ['おすすめを教えて', 'a recommendation'], ['連絡先を教えて', 'your number']] },
+    { id: 'ask-about', chunk: 'Can I ask you about ～?（聞く）', group: 'ask の型（頼む・聞く）', pre: 'Can I ask you about', post: '?', head: 'について聞いてもいい？', prep: 'about',
+      note: 'ask 人 about ～＝人に〜について聞く（話題）。ask 人 a question（質問する）も同じ並び。',
+      slots: [['ドイツ', 'Germany'], ['研究', 'your research'], ['家族', 'your family'], ['オーディション', 'the audition'], ['クリスマスの過ごし方', 'Christmas in Germany']] },
+    { id: 'ask-if', chunk: "I'll ask ＋人＋ if ～（確かめる）", group: 'ask の型（頼む・聞く）', pre: "I'll ask the staff if", post: '.', head: 'お店の人に', headFirst: true, tailJa: 'か聞いてみるね',
+      note: 'ask 人 if ～＝人に〜かどうか聞く。if のあとは普通の文の形（they have ～）。',
+      slots: [['英語のメニューがある', 'they have an English menu'], ['予約できる', 'we can make a reservation'], ['窓側の席が空いてる', 'the window seat is free'], ['カードが使える', 'we can pay by card'], ['何時まで開いてる', "they're open late"]] }
 
   ];
 
