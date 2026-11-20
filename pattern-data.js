@@ -179,6 +179,20 @@
     { id: 'ask-if', chunk: "I'll ask ＋人＋ if ～（確かめる）", group: 'ask の型（頼む・聞く）', pre: "I'll ask the staff if", post: '.', head: 'お店の人に', headFirst: true, tailJa: 'か聞いてみるね',
       note: 'ask 人 if ～＝人に〜かどうか聞く。if のあとは普通の文の形（they have ～）。',
       slots: [['英語のメニューがある', 'they have an English menu'], ['予約できる', 'we can make a reservation'], ['窓側の席が空いてる', 'the window seat is free'], ['カードが使える', 'we can pay by card'], ['何時まで開いてる', "they're open late"]] }
+,
+    // ===== 2026-11-21 追加：I hope to ～ / I hope you ～ / If you get ～ =====
+    { id: 'i-hope-to', chunk: 'I hope to ～（自分の希望）', group: '願い・予定', pre: 'I hope to', post: ' someday.', head: 'いつか', headFirst: true, tailJa: 'たいと思ってる',
+      note: 'I hope to ＋動詞＝（自分が）〜したいと思ってる。I want to より少し控えめで、夢や目標を話すとき。I hope ＋文（〜だといいな）とは形が違う。',
+      slots: [['ドイツに行き', 'visit Germany'], ['ドイツ語を話せるようになり', 'speak German'], ['英語がもっとうまくなり', 'get better at English'], ['ヨーロッパを旅し', 'travel around Europe'], ['ジャズバーで演奏し', 'play at a jazz bar']] },
+    { id: 'i-hope-you', chunk: 'I hope you ～（相手を気づかう）', group: '気遣う・ほめる', pre: 'I hope you', post: '!', head: 'ね',
+      note: 'I hope you ～.＝「〜してね／〜だといいね」。相手を気づかう決まり文句。メッセージの締めに。',
+      slots: [['早く良くなって', 'feel better soon'], ['いい週末を過ごして', 'have a great weekend'], ['ゆっくり休んで', 'get some rest'], ['楽しんで', 'have fun'], ['よく眠れるといい', 'sleep well']] },
+    { id: 'if-you-get', chunk: 'If you get ～, let me know', group: '気遣う・ほめる', pre: 'If you get', post: ', just let me know.', head: '', headFirst: true, tailJa: 'たら言ってね',
+      note: 'If you get ＋状態＝「もし〜になったら」。get は「その状態になる」。デート中の気づかいに。',
+      slots: [['疲れ', 'tired'], ['お腹すい', 'hungry'], ['寒くなっ', 'cold'], ['退屈になっ', 'bored'], ['眠くなっ', 'sleepy']] },
+    { id: 'if-you-get-chance', chunk: 'If you get a chance, ～', group: '気遣う・ほめる', pre: 'If you get a chance,', post: '.', head: '時間があったら、', headFirst: true, tailJa: 'てね',
+      note: 'If you get a chance, ～.＝「もし時間があったら〜してね」。押しつけないお願い。whenever you have time とほぼ同じ。',
+      slots: [['サイトを見', 'check out the websites'], ['写真を送っ', 'send me the photos'], ['その曲を聴いてみ', 'listen to the song'], ['連絡し', 'text me'], ['そのお店に行ってみ', 'try that place']] }
 
   ];
 
