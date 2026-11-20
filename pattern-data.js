@@ -207,6 +207,26 @@
     { id: 'while-contrast', chunk: 'While ～, ...（〜な一方で・説明の対比）', group: 'while / during', pre: 'While', post: ', it can be tiring too.', head: '', headFirst: true, tailJa: '一方で、疲れることもあるよ',
       note: 'While A, B.＝「Aな一方で、B」。説明・意見で2つを比べるときの while（時間の意味ではない）。but よりかしこまった、説明らしい言い方。',
       slots: [['東京は便利な', 'Tokyo is convenient'], ['仕事は面白い', 'my job is interesting'], ['英語の勉強は楽しい', 'studying English is fun'], ['東京の夜はにぎやかで楽しい', 'Tokyo nightlife is exciting'], ['バンド活動は楽しい', 'playing in a band is fun']] }
+,
+    // ===== 2026-11-21 追加：mean / means（意味・説明する） =====
+    { id: 'what-mean', chunk: 'What does ～ mean?', group: 'mean / means（説明する）', pre: 'What does', post: ' mean?', head: 'ってどういう意味？',
+      note: 'What does ～ mean?＝「〜ってどういう意味？」。does が入るので mean に s は付かない（What does it means は ×）。',
+      slots: [['その言葉', 'that word'], ['Kennenlernphase', '"Kennenlernphase"'], ['その絵文字', 'that emoji'], ['Prost', '"Prost"'], ['それ', 'that']] },
+    { id: 'it-means', chunk: '"～" means ...（日本語を教える）', group: 'mean / means（説明する）', pre: '', post: '.', head: '', headFirst: true, tailJa: 'って意味だよ',
+      note: '"～" means ...＝「〜は…って意味だよ」。日本語を教えるときの定番。主語が1つの言葉なので means と s が付く。聞き返されたら It means ～. だけでもOK。',
+      slots: [['「おいしい」は delicious', '"Oishii" means delicious'], ['「いただきます」は let\'s eat', '"Itadakimasu" means let\'s eat'], ['「かわいい」は cute', '"Kawaii" means cute'], ['「おつかれさま」は good job today', '"Otsukaresama" means good job today'], ['「また明日」は see you tomorrow', '"Mata ashita" means see you tomorrow']] },
+    { id: 'that-means', chunk: 'That means ～（つまり）', group: 'mean / means（説明する）', pre: 'So that means', post: ', right?', head: 'つまり、', headFirst: true, tailJa: 'ってことだよね？',
+      note: 'So that means ～, right?＝「つまり〜ってことだよね？」。相手の話をまとめて確認する。',
+      slots: [['木曜は空いてる', "you're free on Thursday"], ['もっと時間がある', 'we have more time'], ['ゆっくり寝られる', 'you can sleep in'], ['お店は閉まってる', 'the shop is closed'], ['初めてだ', "it's your first time"]] },
+    { id: 'means-a-lot', chunk: '～ means a lot to me', group: 'mean / means（説明する）', pre: '', post: ' means a lot to me.', head: '', headFirst: true, tailJa: '、本当にうれしい（すごく大事なんだ）',
+      note: '～ means a lot to me.＝「〜は自分にとってすごく大切・本当にうれしい」。感謝や気持ちを深く伝える。',
+      slots: [['メッセージくれて', 'Your message'], ['応援してくれて', 'Your support'], ['一緒に過ごす時間', 'Spending time with you'], ['そう言ってくれて', 'That'], ['来てくれて', 'You coming here']] },
+    { id: 'i-mean', chunk: 'I mean, ～（っていうか）', group: 'mean / means（説明する）', pre: 'I mean,', post: '.', head: 'っていうか、', headFirst: true,
+      note: 'I mean, ～＝「っていうか・つまり」。言い直し・補足のつなぎ言葉。会話でとてもよく使う。',
+      slots: [['楽しかったけど、ちょっと疲れた', 'it was fun, but I was a little tired'], ['まだ上手じゃないんだ', "I'm not good at it yet"], ['イヤじゃなくて、ちょっと緊張してるだけ', "I'm not upset, just a bit nervous"], ['どっちでもいいよ', "I'm fine with either"], ['また行きたいな', "I'd love to go again"]] },
+    { id: 'didnt-mean', chunk: "I didn't mean to ～", group: 'mean / means（説明する）', pre: "I didn't mean to", post: '.', head: 'つもりはなかったんだ',
+      note: "I didn't mean to ～.＝「〜するつもりはなかった」。誤解されたとき・謝るときに。mean to＝〜するつもり。",
+      slots: [['傷つける', 'hurt you'], ['心配させる', 'make you worry'], ['失礼なことを言う', 'be rude'], ['起こす', 'wake you up'], ['待たせる', 'keep you waiting']] }
 
   ];
 
