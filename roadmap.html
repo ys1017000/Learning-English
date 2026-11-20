@@ -122,6 +122,11 @@
         deckBtn = n ? '<button class="btn rm-deck" data-act="deck" data-deck="' + s.deck + '" data-slot="' + s.id + '">▶ ' + DECK_LABEL[s.deck] + '（' + n + '枚）</button>'
           : '<p class="muted rm-nodeck">' + (s.deck === 'weak' ? '言えなかったカードはまだありません。' : 'この枠で使うカードがまだありません。') + '</p>';
       }
+      // 🔁 終わった日・終わった枠でも、その日のカードをもう一回（記録なし）
+      if (s.deck === 'lunch' && (day !== today || done)) {
+        const n = dayCardsOf(day).length;
+        if (n) deckBtn += '<button class="btn btn-secondary rm-deck" data-act="freeDay" data-day="' + day + '" style="margin-top:0.4rem;">🔁 この日のカードをもう一回（' + n + '枚・記録なし）</button>';
+      }
       return '<div class="rm-slot' + (done ? ' done' : '') + '">' +
         '<button class="rm-check" data-act="toggle" data-id="' + s.id + '" data-day="' + day + '" aria-pressed="' + (done ? 'true' : 'false') + '" aria-label="' + esc(s.title) + 'を' + (done ? '未完了に戻す' : '完了にする') + '">' + (done ? '✔' : '') + '</button>' +
         '<div class="rm-slot-body"><div class="muted">' + (ICON[s.id] || '') + ' ' + esc(s.when) + '</div><div class="rm-title">' + esc(s.title) + '</div>' +
