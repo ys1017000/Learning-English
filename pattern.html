@@ -83,6 +83,7 @@
 
     <!-- 🔁 連続で言う -->
     <section id="tab-slot">
+      <div class="card next-step" id="fromBox" style="display:none;"></div>
       <div class="card" id="slotSetup">
         <h2>🔁 型を固定して、後ろだけ入れ替える</h2>
         <p class="muted">型はそのまま、後ろの言葉だけが一定のテンポで切り替わります。日本語は「結論 → ＋ 後ろに足す言葉」の順に出るので、英語の語順のまま声に出し続けましょう。</p>
@@ -133,7 +134,7 @@
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
   <script src="common.js?v=61"></script>
-  <script src="pattern-data.js?v=7"></script>
+  <script src="pattern-data.js?v=8"></script>
   <script>
   (function () {
     const $ = id => document.getElementById(id);
@@ -200,6 +201,13 @@
         html += '<button class="pt-item' + (selected === p.id ? ' sel' : '') + '" data-pid="' + p.id + '"><span><span class="c">' + esc(PT.frame(p)) + '</span><br><span class="j">' + esc(p.head) + '</span></span>' + mark + '</button>';
       });
       $('patList').innerHTML = html;
+      const fb = $('fromBox');
+      if (fromIds.length) {
+        fb.style.display = '';
+        fb.innerHTML = '<h2>🌙 昼のカードの型で応用</h2><p class="muted">今日の昼に練習したカードに出てきた型です。後ろの言葉を入れ替えて、続けて言ってみましょう。</p>' +
+          '<div class="pt-list" style="margin-bottom:0.6rem;">' + fromIds.map(p => '<div class="pt-note" style="margin:0;"><b>' + esc(PT.frame(p)) + '</b><br><span class="muted">' + esc(p.head || p.tailJa || '') + '</span></div>').join('') + '</div>' +
+          '<button class="btn" data-act="startFrom">▶ はじめる（' + fromIds.length + '型）</button>';
+      } else fb.style.display = 'none';
     }
 
     /* ---------- ジャンルの選択（端末に記憶） ---------- */
@@ -217,7 +225,7 @@
       const queue = ids.map(PT.byId).filter(Boolean);
       if (!queue.length) return;
       slot = { queue, qi: 0, i: 0, items: [], phase: 'run', paused: false, pr };
-      $('slotSetup').style.display = 'none'; $('slotRun').style.display = '';
+      $('slotSetup').style.display = 'none'; $('fromBox').style.display = 'none'; $('slotRun').style.display = '';
       beginPattern();
       $('slotRun').scrollIntoView({ block: 'start', behavior: 'smooth' });
     }
@@ -418,6 +426,7 @@
         slot.phase = 'done'; renderSlot(); return;
       }
       if (a === 'slotPick') { revealBeat(+t.dataset.k); return; }
+      if (a === 'startFrom') { startSlot(fromIds.map(p => p.id)); return; }
       if (a === 'compareWant') { startSlot(['i-want-to', 'id-love-but']); slot.compare = true; return; }
       if (a === 'nextPat') { slot.qi += 1; beginPattern(); return; }
       if (a === 'again') { beginPattern(); return; }
@@ -437,6 +446,8 @@
     document.addEventListener('visibilitychange', () => { if (document.hidden && slot && !slot.paused && slot.phase === 'run') { slot.paused = true; clearTimers(); renderSlot(); } });
 
     const q = new URLSearchParams(location.search);
+    // 🌙 ロードマップから：?ids=型,型 … 昼のカードに出てきた型をまとめて練習
+    const fromIds = (q.get('ids') || '').split(',').map(x => PT.byId(x)).filter(Boolean);
     setTab(['slot', 'quiz', 'stats'].includes(q.get('tab')) ? q.get('tab') : 'slot');
     EA.updateStreakBadge();
   })();

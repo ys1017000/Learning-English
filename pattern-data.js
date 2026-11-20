@@ -268,7 +268,42 @@
   function jaOf(p, sl) { return p.headFirst ? p.head + sl[0] + (p.tailJa || '') : sl[0] + p.head; }
   var GROUPS = [];
   PATTERNS.forEach(function (p) { if (GROUPS.indexOf(p.group) < 0) GROUPS.push(p.group); });
+  // 🌙 カードの英文 → 使われている型（ロードマップの「昼のカード → 夜に型で応用」用）
+  //   基本は型の前半（pre）か後半（post）が文に入っているか。ずれる型だけ MATCH で上書き（null＝自動で探さない）
+  var MATCH = {
+    'it-means': /\b(it|that) means\b|" means\b/i, 'okay-with-you': /\bokay with you\?/i, 'what-mean': /\bwhat do(es)? (you|it|that|this|that word)\b.*\bmean\b/i,
+    'while-contrast': /^While (?!I was)/, 'while-ing': /\bwhile (I|I'm|you|you're)\b/i, 'while-was': /\bwhile I was\b/i, 'during-noun': /\bduring\b/i,
+    'i-could-offer': /\bI could (?!be)\w/i, 'id-love-but': /\bI'd love to\b/i, 'id-like-to': /\bI'd like to\b/i, 'would-be-nice': /\b(it|that) would be (nice|fun|great)\b|\bit'd be (nice|fun|great)\b/i,
+    'if-i-were-you': /\bif I were you\b/i, 'i-want-to': /\bI want to\b/i, 'we-could': /\bwe could\b/i,
+    'if-you-get': /\bif you get (?!a chance)/i, 'if-you-get-chance': /\bif you get a chance\b/i, 'just-to-make-sure': /\bjust to make sure\b/i,
+    'ask-person': /\bI'll ask (?!you)/i, 'ask-to': /\bask (you|me|him|her|them) to\b/i, 'ask-for': /\bask (you|me|him|her|them) for\b/i, 'ask-about': /\bask (you |me )?about\b/i, 'ask-if': /\bask (you|me|him|her|them|the \w+) if\b/i,
+    'i-think-because': null, 'reasons': /\bI can think of\b/i, 'not-that': /\bit's not that\b/i, 'my-opinion': /\bjust my opinion\b/i,
+    'that-means': /\bthat means\b/i, 'i-mean': /\bI mean\b/i, 'didnt-mean': /\bdidn't mean to\b/i, 'means-a-lot': /\bmeans? a lot to me\b/i,
+    'is-it-normal': /\bis it normal\b/i, 'going-to': /\bI'm (going to|gonna)\b/i, 'i-hope': /\bI hope (?!to\b|you\b)/i, 'i-hope-you': /\bI hope you\b/i, 'i-hope-to': /\bI hope to\b/i,
+    'works-time': null, 'works-for': /\bworks? for me\b/i, 'looks-cute': /\blooks? (so )?(cute|great|good|nice) on you\b/i, 'go-see': /\bgo see\b/i,
+    'happy-got-to': /\bhappy I got to\b|\bglad I got to\b/i, 'you-must-be': /\byou must be\b/i, 'you-seem': /\byou seem\b/i, 'cheering': /\bcheering you on\b/i,
+    'i-wish-could': /\bI wish I could\b/i, 'cant-wait': /\bcan't wait to\b/i, 'have-you-ever': /\bhave you ever\b/i, 'used-to-do': /\bI used to\b/i,
+    'ended-up': /\bended up\b/i, 'was-gonna': /\bI was (gonna|going to)\b/i, 'sorry-i': /\bI'm sorry I\b/i, 'shouldnt-have': /\bshouldn't have\b/i,
+    'how-about': /\bhow about (?!you\b)/i, 'how-was': /\bhow was\b/i, 'what-do-you-usually': /\bwhat do you usually\b/i, 'what-think': /\bwhat do you think (about|of)\b/i,
+    'do-you-want': /\bdo you want to\b/i, 'let-me-know': /\blet me know if\b/i, 'used-to': /\b(I'm|I am|get|got) used to\b/i
+  };
+  function escRe(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
+  function matcher(p) {
+    if (Object.prototype.hasOwnProperty.call(MATCH, p.id)) return MATCH[p.id];
+    var core = (p.pre || p.post).replace(/^So /, '').replace(/[.!?,]+\s*$/, '').replace(/^[\s,]+/, '').trim();
+    if (core.split(' ').length < 2) return null;
+    return new RegExp('(^|[^\\w])' + escRe(core) + '([^\\w]|$)', 'i');
+  }
+  // 英文の配列 → [{ id, n（合った文の数）}]（多い順）
+  function patternsInCards(enList) {
+    var cnt = {};
+    (enList || []).forEach(function (en) {
+      var t = String(en || '').replace(/[’‘]/g, "'");
+      PATTERNS.forEach(function (p) { var re = matcher(p); if (re && re.test(t)) cnt[p.id] = (cnt[p.id] || 0) + 1; });
+    });
+    return Object.keys(cnt).map(function (id) { return { id: id, n: cnt[id] }; }).sort(function (a, b) { return b.n - a.n; });
+  }
   function byId(id) { for (var i = 0; i < PATTERNS.length; i++) if (PATTERNS[i].id === id) return PATTERNS[i]; return null; }
 
-  window.PT = { PATTERNS: PATTERNS, GROUPS: GROUPS, jaOf: jaOf, PREPS: PREPS, frame: frame, sentence: sentence, quizItems: quizItems, byId: byId };
+  window.PT = { patternsInCards: patternsInCards, PATTERNS: PATTERNS, GROUPS: GROUPS, jaOf: jaOf, PREPS: PREPS, frame: frame, sentence: sentence, quizItems: quizItems, byId: byId };
 })();
