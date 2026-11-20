@@ -142,6 +142,26 @@
     { id: 'what-think', chunk: 'What do you think about ～?', group: '聞く・質問', pre: 'What do you think about', post: '?', head: 'ってどう思う？', prep: 'about',
       note: 'What do you think about ～?＝「〜についてどう思う？」。How do you think は ×。',
       slots: [['日本の冬', 'Japanese winters'], ['この店', 'this place'], ['東京の電車', 'the trains in Tokyo'], ['このアイデア', 'this idea'], ['おでん', 'oden']] }
+,
+    // ===== 2026-11-20 追加：want（現実）と would / could（頭の中の想像） =====
+    { id: 'i-want-to', chunk: 'I want to ～!（現実）', group: '想像の would / could', pre: 'I want to', post: '!', head: 'たい！',
+      note: 'want＝今すぐ・本当に〜したい（現実）。続くのは Let\'s go!（行こう！）。次の I\'d love to ～, but と同じ言葉で言い比べてみよう。',
+      slots: [['会い', 'see you'], ['イルミネーション見', 'see the Christmas lights'], ['一緒に行き', 'go with you'], ['もっと一緒にい', 'stay longer'], ['もっと話し', 'talk more']] },
+    { id: 'id-love-but', chunk: "I'd love to ～, but ...（想像）", group: '想像の would / could', pre: "I'd love to", post: ', but I have work tomorrow.', head: 'たいんだけど、明日仕事なんだ',
+      note: "would＝現実から一歩引いた、頭の中の想像（気持ちはあるけど…）。誘いを大事にしながらやわらかく断れる。want と言い比べると距離感がわかる。",
+      slots: [['会い', 'see you'], ['イルミネーション見', 'see the Christmas lights'], ['一緒に行き', 'go with you'], ['もっと一緒にい', 'stay longer'], ['もっと話し', 'talk more']] },
+    { id: 'id-like-to', chunk: "I'd like to ～（ていねい）", group: '想像の would / could', pre: "I'd like to", post: '.', head: 'てみたいな',
+      note: "I'd like to ～＝（もしよければ）〜したい。一歩引いた分だけていねい。I want to は少し直接的。",
+      slots: [['あなたの話を聞い', 'hear your story'], ['いつかドイツに行っ', 'visit Germany someday'], ['ご家族に会っ', 'meet your family'], ['ドイツ料理を作っ', 'try making German food'], ['あなたのお気に入りの場所に行っ', 'go to your favorite place']] },
+    { id: 'would-be-nice', chunk: 'It would be nice to ～（想像・夢）', group: '想像の would / could', pre: 'It would be nice to', post: ' someday.', head: 'いつか', headFirst: true, tailJa: 'たら素敵だろうな',
+      note: 'It would be nice to ～.＝（想像すると）〜できたら素敵だろうな。まだ決まっていない夢を話す形。',
+      slots: [['一緒にドイツに行け', 'go to Germany together'], ['一緒に雪を見られ', 'see snow together'], ['二人で温泉に行け', 'go to an onsen together'], ['一緒に料理でき', 'cook together'], ['一緒に富士山に登れ', 'climb Mt. Fuji together']] },
+    { id: 'if-i-were-you', chunk: "If I were you, I'd ～（想像の中の自分）", group: '想像の would / could', pre: "If I were you, I'd", post: '.', head: '俺だったら、', headFirst: true, tailJa: 'かな',
+      note: "If I were you, I'd ～.＝相手の立場の自分を想像して言う。押しつけないアドバイス。",
+      slots: [['ちょっと休む', 'take a break'], ['もう一回受けてみる', 'try again'], ['先生に聞く', 'ask your professor'], ['早く寝る', 'go to bed early'], ['気にしない', 'not worry about it']] },
+    { id: 'i-could-offer', chunk: 'I could ～ if you want（できなくはない）', group: '想像の would / could', pre: 'I could', post: ' if you want.', head: 'よかったら、', headFirst: true,
+      note: 'could＝（その気になれば）〜できる。can より距離があって、押しつけない申し出になる。',
+      slots: [['駅まで迎えに行けるよ', 'pick you up at the station'], ['手伝えるよ', 'help you'], ['予約しておけるよ', 'make a reservation'], ['駅まで送れるよ', 'walk you to the station'], ['もっと早く来られるよ', 'come earlier']] }
 
   ];
 

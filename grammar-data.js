@@ -2474,6 +2474,46 @@
       { situation: "ふつうのアドバイス。「早く寝た方がいいよ」", sentence: "You ___ go to bed early.", options: ["should", "must", "would", "used to"], answer: "should", full: "You should go to bed early.", why: "中くらいの強さのアドバイスは should。" },
       { situation: "「ちょっと寝たらいいと思うよ」（やわらかく）", sentence: "Some sleep ___ be good for you.", options: ["would", "must", "used to", "might"], answer: "would", full: "Some sleep would be good for you.", why: "主語に「もし少し寝たら」が隠れている would。" }
     ]
+  }, {
+    id: "would-distance",
+    title: "would は「現実から一歩引いた、頭の中の想像」（want との違い）",
+    short: "would＝頭の中の想像（want との違い）",
+    intro: "want は「今すぐ・本当に〜したい」という現実の気持ち。would は「現実から一歩引いて、頭の中で想像している」気持ち（もし状況が許せば〜するんだけどね）。この「一歩引く」距離感があるから、would like to はていねいになり、I'd love to ～, but ... はやわらかい断りになり、It would be nice to ～ は夢や想像を話す形になる。could も同じで、「その気になればできる」という距離のある「できる」。迷ったら「本当に今やる？（want / will）」「頭の中で思い描いてる？（would / could）」で選ぶ。",
+    groups: [
+      {
+        name: "want（現実）と would / could（頭の中の想像）",
+        note: "would / could は「もし状況が許せば」「頭の中で思い描くと」という、現実との距離をふくむ。",
+        forms: [
+          { key: "want to", kana: "ウォントゥ", kanaNote: '', label: "I want to ～! ＝ （今すぐ・本当に）〜したい！", ja: "〜したい！（現実）", nuance: "まっすぐな気持ち。「よし、やろう」とそのまま行動につながる。",
+            ex: ["I want to see the Christmas lights!", "イルミネーション見たい！（見に行こう！）"], tone: "続く言葉のイメージ：Let's go!（行こう！）" },
+          { key: "I'd love to", kana: "アイド ラヴ トゥ", kanaNote: '', label: "I'd love to ～, but ... ＝ （気持ちはあるけど）〜したいんだけどね", ja: "〜したいんだけど…（一歩引く）", nuance: "would＝頭の中の想像。「もし状況が許せば」の距離感があるので、断るときもやわらかい。",
+            ex: ["I'd love to go, but I have work tomorrow.", "行きたいんだけど、明日仕事なんだ。"], tone: "I want to go, but ... より、相手の誘いを大事にしている感じが出る。" },
+          { key: "I'd like to", kana: "アイド ライク トゥ", kanaNote: '', label: "I'd like to ～ ＝ （もしよければ）〜したいです", ja: "〜したいです（ていねい）", nuance: "一歩引いた分だけ、大人のていねいさになる。I want to だと少し子どもっぽく直接的。",
+            ex: ["I'd like to hear your story.", "あなたの話を聞いてみたいな。"], tone: "お店：I'd like the oden set.（おでんセットをください）" },
+          { key: "It would be nice", kana: "イットゥッド ビー ナイス", kanaNote: '', label: "It would be nice to ～ ＝ （想像すると）〜できたら素敵だろうな", ja: "〜できたら素敵だろうな（想像）", nuance: "まだ決まっていない未来を、頭の中で思い描いて言う。誘いの前ふりにもなる。",
+            ex: ["It would be nice to go to Germany together someday.", "いつか一緒にドイツに行けたら素敵だろうな。"], tone: "It'd be fun to ～.（〜したら楽しそう）も同じ形。" },
+          { key: "If I were you", kana: "イフ アイ ワー ユー", kanaNote: '', label: "If I were you, I'd ～ ＝ （想像の中で）俺だったら〜するかな", ja: "俺だったら〜かな（想像の中の自分）", nuance: "「あなたの立場の自分」を頭の中で想像してから言う。if がなくても I would ～ だけで同じ気持ちが出る。",
+            ex: ["If I were you, I'd take a break.", "俺だったら、ちょっと休むかな。"], tone: "I'd say ～.（俺としては〜かな）も同じ「一歩引いた意見」。" },
+          { key: "could", kana: "クッド", kanaNote: '', label: "I could ～ ＝ （その気になれば）〜できるよ", ja: "〜できるよ（できなくはない）", nuance: "can は「できる」と言い切り。could は「もし必要なら」の距離があるので、押しつけない申し出になる。",
+            ex: ["I could pick you up at the station.", "よかったら駅まで迎えに行けるよ。"], tone: "We could ～.（〜するのもアリだね）も同じ。" }
+        ]
+      }
+    ],
+    compare: {
+      lead: "友だちに「一緒に走ろうよ！」と誘われたら",
+      rows: [["I want to run!", "走る気満々！ → Let's go!（行こう！）"], ["I would run, but ...", "気持ちはあるけど… → but I don't have my shoes.（でも靴がないんだよね）"], ["I'd like to run.", "（もしよければ）走りたいです。ていねい"], ["I could run.", "（その気になれば）走れるよ。できなくはない"]]
+    },
+    cautions: ["本当に今すぐやる気なら want to / will、頭の中で思い描いているなら would / could。", "I'd love to ～, but ... は、誘いを大事にしながら断れる便利な型。", "I want to は子どもっぽく直接的に聞こえることがある。お願い・注文は I'd like ～。", "could は「その気になればできる」。can より押しつけない申し出・提案になる。", "would / could の短縮形は 'd（I'd）。I'd は I had のこともあるので、すぐ後ろの語で見分ける（動詞の原形なら would）。"],
+    quiz: [
+      { situation: "一緒に走ろうよ！と誘われて、走る気満々で。", sentence: "I ___ run! Let's go!", options: ["want to", "would", "could", "'d like to"], answer: "want to", full: "I want to run! Let's go!", why: "やる気満々で今すぐ行動するなら want to（現実）。" },
+      { situation: "走る気持ちはあるけど、靴を持ってない…。", sentence: "I ___ run, but I don't have my shoes.", options: ["would", "want to", "must", "will"], answer: "would", full: "I would run, but I don't have my shoes.", why: "「気持ちはあるけど…」と一歩引くのは would。but のあとに理由が続く。" },
+      { situation: "行きたいんだけど、明日仕事なんだ。（やわらかく断る）", sentence: "I ___ love to go, but I have work tomorrow.", options: ["would", "will", "want to", "can"], answer: "would", full: "I would love to go, but I have work tomorrow.", why: "I'd love to ～, but ...（＝I would love to）で「気持ちはあるけど…」。会話では I'd と短く言う。" },
+      { situation: "あなたの話を聞いてみたいな。（ていねいに）", sentence: "I ___ to hear your story.", options: ["'d like", "want", "like", "'ll like"], answer: "'d like", full: "I'd like to hear your story.", why: "I'd like to は一歩引いたていねいな「〜したい」。I want to だと直接的すぎる。" },
+      { situation: "いつか一緒にドイツに行けたら素敵だろうな。", sentence: "It ___ be nice to go to Germany together someday.", options: ["would", "will", "must", "should"], answer: "would", full: "It would be nice to go to Germany together someday.", why: "まだ決まっていない未来を想像して言うのは would。" },
+      { situation: "俺だったら、ちょっと休むかな。", sentence: "If I were you, I ___ take a break.", options: ["'d", "'ll", "want to", "can"], answer: "'d", full: "If I were you, I'd take a break.", why: "想像の中の自分（If I were you）なので would（'d）。" },
+      { situation: "よかったら駅まで迎えに行けるよ。（押しつけずに）", sentence: "I ___ pick you up at the station.", options: ["could", "can't", "would", "must"], answer: "could", full: "I could pick you up at the station.", why: "「もし必要なら、できるよ」と距離を置いた申し出は could。" },
+      { situation: "今すぐイルミネーション見たい！見に行こう！", sentence: "I ___ see the Christmas lights! Let's go!", options: ["want to", "would", "'d like to", "could"], answer: "want to", full: "I want to see the Christmas lights! Let's go!", why: "「今すぐ・本当に」のまっすぐな気持ちは want to。Let's go! につながる。" }
+    ]
   }];
 
 
@@ -2481,12 +2521,12 @@
   var GROUPS = [
     { name: '🧱 基本の語順', ids: ['word-order', 'svoc', 'adverb-position', 'prepositions'] },
     { name: '🕐 時制・いつのこと', ids: ['present-perfect', 'past-perfect', 'there-have-been', 'frequency', 'time-someday', 'lately-recently', 'long-time'] },
-    { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
+    { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'would-distance', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
     { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'else-other', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] },
-    { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple', 'think-thing', 'think-soft', 'think-image'] }
+    { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple', 'think-thing', 'think-soft', 'think-image', 'would-distance'] }
   ];
   var GR = { TOPICS: TOPICS, GROUPS: GROUPS };
   if (typeof module !== 'undefined' && module.exports) module.exports = GR; else root.GR = GR;

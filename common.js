@@ -397,6 +397,16 @@
       ["文法・表現パターン", "I found the coffee here a little bitter.", "ここのコーヒー、ちょっと苦いと思った。（find の過去形 found：飲んでみて感じた）"],
       ["文法・表現パターン", "Keep the door open.", "ドア、開けたままにしておいて。（keep ＋ もの ＋ 状態）"],
       ["文法・表現パターン", "The news made me really sad.", "その知らせで、すごく悲しくなった。（原因が主語の make）"],
+      // ---- would＝頭の中の想像（2026-11-20） ----
+      ["文法・表現パターン", "I want to see the Christmas lights!", "イルミネーション見たい！（見に行こう！）（I want to ～!＝〜したい！（現実））"],
+      ["文法・表現パターン", "I'd love to go, but I have work tomorrow.", "行きたいんだけど、明日仕事なんだ。（I'd love to ～, but ...＝〜したいんだけど…（一歩引く））"],
+      ["文法・表現パターン", "I'd like to hear your story.", "あなたの話を聞いてみたいな。（I'd like to ～＝〜したいです（ていねい））"],
+      ["文法・表現パターン", "It would be nice to go to Germany together someday.", "いつか一緒にドイツに行けたら素敵だろうな。（It would be nice to ～＝〜できたら素敵だろうな（想像））"],
+      ["文法・表現パターン", "If I were you, I'd take a break.", "俺だったら、ちょっと休むかな。（If I were you, I'd ～＝俺だったら〜かな（想像の中の自分））"],
+      ["文法・表現パターン", "I could pick you up at the station.", "よかったら駅まで迎えに行けるよ。（I could ～＝〜できるよ（できなくはない））"],
+      ["文法・表現パターン", "I want to run! Let's go!", "走りたい！行こう！（want to＝今すぐ・本当に〜したい）"],
+      ["文法・表現パターン", "I would run, but I don't have my shoes.", "走りたいんだけど、靴を持ってないんだよね。（would＝気持ちはあるけど…）"],
+      ["文法・表現パターン", "I want to see the Christmas lights! Let's go!", "今すぐイルミネーション見たい！見に行こう！（want to＝今すぐ・本当に）"],
       // ---- 頭につける日本語（2026-11-16） ----
       ["文法・表現パターン", "I would say it's about 30 minutes.", "私としては、30分くらいかな。（I would say ～：私としては〜かな＝意見をやわらげる）"],
       ["文法・表現パターン", "I'd say it's fine.", "私としては大丈夫だと思う。（I'd say ～：言い切りをやわらげる）"],

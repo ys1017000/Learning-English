@@ -127,8 +127,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=60"></script>
-  <script src="pattern-data.js?v=2"></script>
+  <script src="common.js?v=61"></script>
+  <script src="pattern-data.js?v=3"></script>
   <script>
   (function () {
     const $ = id => document.getElementById(id);
@@ -184,7 +184,9 @@
       $('pickWeak').textContent = '🔥 苦手な型から（' + wk.length + '）';
       $('pickWeak').disabled = !wk.length;
       renderGroupChips('groupChips');
-      let html = '', g = '';
+      let html = curGroup() === '想像の would / could'
+        ? '<button class="btn" data-act="compareWant" style="margin-bottom:0.5rem;">🆚 want と would を言い比べる（同じ言葉で2周）</button>' : '';
+      let g = '';
       inGroup().forEach(p => {
         if (p.group !== g) { g = p.group; html += '<div class="muted" style="font-size:0.75rem; margin-top:0.3rem;">' + esc(g) + '</div>'; }
         const w = weakness(p.id);
@@ -215,7 +217,9 @@
     }
     function beginPattern() {
       const p = slot.queue[slot.qi];
-      slot.items = shuffle(p.slots).slice(0, slot.pr.count);
+      // 言い比べ（compare）のときは、2つ目の型も同じ順番の言葉で出す
+      if (!(slot.compare && slot.idx && slot.qi > 0)) slot.idx = shuffle(p.slots.map((x, k) => k)).slice(0, slot.pr.count);
+      slot.items = slot.idx.map(k => p.slots[k]).filter(Boolean);
       slot.i = 0; slot.phase = 'ready';
       renderSlot();
       // 「よーい」の1秒後に始める
@@ -388,6 +392,7 @@
         EA.updateStreakBadge();
         slot.phase = 'done'; renderSlot(); return;
       }
+      if (a === 'compareWant') { startSlot(['i-want-to', 'id-love-but']); slot.compare = true; return; }
       if (a === 'nextPat') { slot.qi += 1; beginPattern(); return; }
       if (a === 'again') { beginPattern(); return; }
       if (a === 'quizStart') { startQuiz(t.dataset.scope === 'weak' ? weakIds() : inGroup().map(p => p.id)); return; }

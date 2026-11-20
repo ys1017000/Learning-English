@@ -976,6 +976,15 @@
     "I feel a little lonely when we don't talk.": "寂しい気持ちを伝えたいとき。",
     "Maybe we could try a different place next time.": "次の予定を相談するとき。",
     "Would you mind not doing that?": "相手にやめてほしいことがあるとき。",
-    "Is something bothering you?": "相手の様子がいつもと違うとき。"
+    "Is something bothering you?": "相手の様子がいつもと違うとき。",
+    "I want to see the Christmas lights!": "今すぐやりたい気持ちをそのまま言うとき。",
+    "I'd love to go, but I have work tomorrow.": "誘いを大事にしながら、やわらかく断るとき。",
+    "I'd like to hear your story.": "ていねいに「〜したい」と言うとき。I want to より大人っぽい。",
+    "It would be nice to go to Germany together someday.": "まだ決まっていない夢や想像を話すとき。",
+    "If I were you, I'd take a break.": "相手の立場になって、やわらかくアドバイスするとき。",
+    "I could pick you up at the station.": "押しつけずに手伝いを申し出るとき。",
+    "I want to run! Let's go!": "誘われて、やる気満々で乗るとき。",
+    "I would run, but I don't have my shoes.": "気持ちはあるけど、できない理由があるとき。",
+    "I want to see the Christmas lights! Let's go!": "誘いにすぐ乗って、行動につなげるとき。"
   };
 })();
