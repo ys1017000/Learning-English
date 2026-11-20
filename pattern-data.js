@@ -193,6 +193,20 @@
     { id: 'if-you-get-chance', chunk: 'If you get a chance, ～', group: '気遣う・ほめる', pre: 'If you get a chance,', post: '.', head: '時間があったら、', headFirst: true, tailJa: 'てね',
       note: 'If you get a chance, ～.＝「もし時間があったら〜してね」。押しつけないお願い。whenever you have time とほぼ同じ。',
       slots: [['サイトを見', 'check out the websites'], ['写真を送っ', 'send me the photos'], ['その曲を聴いてみ', 'listen to the song'], ['連絡し', 'text me'], ['そのお店に行ってみ', 'try that place']] }
+,
+    // ===== 2026-11-21 追加：during（＋名詞）と while（＋文） =====
+    { id: 'during-noun', chunk: 'during ＋名詞（〜の間に）', group: 'while / during', pre: 'I fell asleep during', post: '.', head: '', headFirst: true, tailJa: '中に寝ちゃった', prep: 'during',
+      note: 'during のあとは名詞だけ（the movie / the meeting）。「いつ」起きたかを言う。長さを言うなら for（for two hours）。',
+      slots: [['映画', 'the movie'], ['会議', 'the meeting'], ['授業', 'class'], ['移動', 'the trip'], ['プレゼン', 'the presentation']] },
+    { id: 'while-ing', chunk: 'while ＋文（〜している間に）', group: 'while / during', pre: 'I listen to music while', post: '.', head: '', headFirst: true, tailJa: '間、音楽を聴いてるよ',
+      note: 'while のあとは文（主語＋動詞）。主語が同じなら while cooking のように ～ing だけでもOK。during cooking は ×。',
+      slots: [['料理してる', "I'm cooking"], ['電車に乗ってる', "I'm on the train"], ['走ってる', "I'm running"], ['かぎ編みしてる', "I'm crocheting"], ['掃除してる', "I'm cleaning"]] },
+    { id: 'while-was', chunk: 'while I was ～ing（〜していたら）', group: 'while / during', pre: 'While I was', post: ', I thought of you.', head: '', headFirst: true, tailJa: 'とき、あなたのこと思い出したよ',
+      note: 'While I was ～ing, ...＝「〜していたとき（その最中に）…」。過去の出来事を話すときの定番。',
+      slots: [['歩いて帰ってる', 'walking home'], ['料理してる', 'cooking'], ['イルミネーションの写真を見てる', 'looking at the photos'], ['ピアノを練習してる', 'practicing piano'], ['電車に乗ってる', 'on the train']] },
+    { id: 'while-contrast', chunk: 'While ～, ...（〜な一方で・説明の対比）', group: 'while / during', pre: 'While', post: ', it can be tiring too.', head: '', headFirst: true, tailJa: '一方で、疲れることもあるよ',
+      note: 'While A, B.＝「Aな一方で、B」。説明・意見で2つを比べるときの while（時間の意味ではない）。but よりかしこまった、説明らしい言い方。',
+      slots: [['東京は便利な', 'Tokyo is convenient'], ['仕事は面白い', 'my job is interesting'], ['英語の勉強は楽しい', 'studying English is fun'], ['東京の夜はにぎやかで楽しい', 'Tokyo nightlife is exciting'], ['バンド活動は楽しい', 'playing in a band is fun']] }
 
   ];
 
@@ -204,7 +218,8 @@
     at:    { icon: '📍', name: '一点', image: 'その一点で（〜で・〜に）' },
     in:    { icon: '📦', name: '中', image: '中に入っている（〜の中で・〜に）' },
     about: { icon: '🌀', name: 'まわり', image: '〜のまわり・あれこれ（〜について）' },
-    of:    { icon: '🧩', name: 'つながり', image: '〜から出てくる・〜の一部（〜の）' }
+    of:    { icon: '🧩', name: 'つながり', image: '〜から出てくる・〜の一部（〜の）' },
+    during: { icon: '⏳', name: '期間の中', image: 'ある期間の中のどこかで（〜の間に）' }
   };
 
   function frame(p) { return (p.pre ? p.pre + ' ' : '') + '［　　］' + p.post; }
