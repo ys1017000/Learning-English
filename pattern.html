@@ -39,7 +39,12 @@
     .pt-icon .n { font-size: 0.72rem; color: var(--text-muted); }
     .pt-icon.right { border-color: #16a34a; background: #f0fdf4; }
     .pt-icon.wrong { border-color: #be123c; background: #fff1f2; }
-    .pt-icon:disabled { cursor: default; }
+    .pt-icon.done { cursor: default; pointer-events: none; }
+    /* iPhone の Safari は無効(disabled)のボタンの文字をほぼ透明にするので、色を固定する */
+    .pt-icon, .pt-item, .pt-icon:disabled, .tiny-btn:disabled { opacity: 1; -webkit-text-fill-color: currentColor; }
+    .tiny-btn:disabled { color: var(--text-muted); }
+    .pt-groups { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.6rem; }
+    .pt-groups .chip { font-size: 0.8rem; padding: 4px 10px; }
     .pt-res { text-align: center; font-weight: 700; min-height: 1.4em; margin: 0.4rem 0; }
     .pt-tbl { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
     .pt-tbl th, .pt-tbl td { border-bottom: 1px solid var(--border); padding: 0.4rem 0.25rem; text-align: left; vertical-align: top; }
@@ -94,7 +99,8 @@
         </div>
         <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; margin:0.3rem 0;"><input type="checkbox" id="optStep"> 日本語を「前半 → ＋後半」の2段階で出す</label>
         <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; margin:0.3rem 0 0.6rem;"><input type="checkbox" id="optSpeak"> 答えの英語を読み上げる</label>
-        <div class="pt-label">型を選ぶ</div>
+        <div class="pt-label">型を選ぶ（ジャンル）</div>
+        <div class="pt-groups" id="groupChips"></div>
         <div class="pt-row" style="margin-bottom:0.5rem;">
           <button class="tiny-btn" id="pickWeak" style="flex:1; padding:6px;">🔥 苦手な型から</button>
           <button class="tiny-btn" id="pickRandom" style="flex:1; padding:6px;">🎲 おまかせ3つ</button>
@@ -121,8 +127,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=59"></script>
-  <script src="pattern-data.js?v=1"></script>
+  <script src="common.js?v=60"></script>
+  <script src="pattern-data.js?v=2"></script>
   <script>
   (function () {
     const $ = id => document.getElementById(id);
@@ -177,14 +183,24 @@
       const wk = weakIds();
       $('pickWeak').textContent = '🔥 苦手な型から（' + wk.length + '）';
       $('pickWeak').disabled = !wk.length;
+      renderGroupChips('groupChips');
       let html = '', g = '';
-      P.forEach(p => {
+      inGroup().forEach(p => {
         if (p.group !== g) { g = p.group; html += '<div class="muted" style="font-size:0.75rem; margin-top:0.3rem;">' + esc(g) + '</div>'; }
         const w = weakness(p.id);
         const mark = w ? (w.weak ? '<span class="pt-weak">🔥</span>' : '<span style="color:var(--ok);">✔</span>') : '';
         html += '<button class="pt-item' + (selected === p.id ? ' sel' : '') + '" data-pid="' + p.id + '"><span><span class="c">' + esc(PT.frame(p)) + '</span><br><span class="j">' + esc(p.head) + '</span></span>' + mark + '</button>';
       });
       $('patList').innerHTML = html;
+    }
+
+    /* ---------- ジャンルの選択（端末に記憶） ---------- */
+    function curGroup() { const g = EA.getPrefs().patGroup; return PT.GROUPS.includes(g) ? g : ''; }
+    function inGroup() { const g = curGroup(); return g ? P.filter(p => p.group === g) : P; }
+    function renderGroupChips(id) {
+      const g = curGroup();
+      $(id).innerHTML = '<button class="chip' + (g ? '' : ' active') + '" data-group="">すべて（' + P.length + '）</button>' +
+        PT.GROUPS.map(x => '<button class="chip' + (g === x ? ' active' : '') + '" data-group="' + esc(x) + '">' + esc(x) + '（' + P.filter(p => p.group === x).length + '）</button>').join('');
     }
 
     /* ---------- 🔁 連続で言う：実行 ---------- */
@@ -223,7 +239,7 @@
       if (slot.phase === 'check') {
         $('slotRun').innerHTML = head(p) +
           '<h2 style="margin-top:0.8rem;">どうだった？</h2>' +
-          '<div class="pt-list" style="margin-bottom:0.6rem;">' + slot.items.map(x => '<div class="pt-note" style="margin:0;"><b>' + esc(PT.sentence(p, x[1])) + '</b><br><span class="muted">' + esc(x[0] + p.head) + '</span></div>').join('') + '</div>' +
+          '<div class="pt-list" style="margin-bottom:0.6rem;">' + slot.items.map(x => '<div class="pt-note" style="margin:0;"><b>' + esc(PT.sentence(p, x[1])) + '</b><br><span class="muted">' + esc(PT.jaOf(p, x)) + '</span></div>').join('') + '</div>' +
           '<div class="pt-note">💡 ' + esc(p.note) + '</div>' +
           '<div class="pt-row" style="margin-top:0.75rem;"><button class="btn" data-act="self" data-v="ok" style="background:#16a34a;">⭕ スラスラ</button><button class="btn" data-act="self" data-v="mid" style="background:#d97706;">△ 詰まった</button><button class="btn" data-act="self" data-v="ng" style="background:#be123c;">❌ 出なかった</button></div>';
         return;
@@ -272,12 +288,16 @@
     /* ---------- 🎯 前置詞イメージ ---------- */
     function renderQuizStart() {
       const wk = weakIds().filter(id => PT.byId(id).prep);
+      const gIds = inGroup().filter(p => p.prep).map(p => p.id);
       const prepRows = Object.keys(PT.PREPS).map(k => { const v = PT.PREPS[k]; return '<div style="display:flex; gap:8px; align-items:center; font-size:0.85rem; margin:2px 0;"><span style="font-size:1.3rem;">' + v.icon + '</span><b style="min-width:3em;">' + k + '</b><span class="muted">' + esc(v.name) + '：' + esc(v.image) + '</span></div>'; }).join('');
       $('quizBox').innerHTML = '<h2>🎯 前置詞をイメージで選ぶ</h2>' +
         '<p class="muted">英文を見たら、日本語に訳す前に「イメージ」をタップ。' + QUIZ_SECS + '秒以内に選べたら ⚡ です（時間が過ぎても答えられます）。</p>' +
         '<div class="pt-note" style="margin-bottom:0.75rem;">' + prepRows + '</div>' +
-        '<button class="btn" data-act="quizStart" data-scope="all">▶ 10問（全部の型から）</button>' +
+        '<div class="pt-label">ジャンル（前置詞が入る型だけ出ます）</div><div class="pt-groups" id="quizGroups"></div>' +
+        (gIds.length ? '<button class="btn" data-act="quizStart" data-scope="group">▶ 10問（' + esc(curGroup() || '全部の型') + 'から）</button>'
+          : '<p class="muted">このジャンルには前置詞の型がありません。ほかのジャンルを選んでください。</p>') +
         (wk.length ? '<button class="btn btn-secondary" data-act="quizStart" data-scope="weak" style="margin-top:0.5rem;">🔥 苦手な型だけ（' + wk.length + '）</button>' : '');
+      renderGroupChips('quizGroups');
     }
     function startQuiz(ids) {
       const items = shuffle(PT.quizItems(ids)).slice(0, 10);
@@ -309,7 +329,7 @@
       const ms = Date.now() - q.t0, ok = k === q.answer, fast = ok && ms <= QUIZ_SECS * 1000;
       quiz.res.push({ q, ok, fast, ms });
       EA.recordPattern(q.pid, 'quiz', ok, fast);
-      document.querySelectorAll('.pt-icon').forEach(b => { b.disabled = true; if (b.dataset.k === q.answer) b.classList.add('right'); else if (b.dataset.k === k) b.classList.add('wrong'); });
+      document.querySelectorAll('.pt-icon').forEach(b => { b.classList.add('done'); if (b.dataset.k === q.answer) b.classList.add('right'); else if (b.dataset.k === k) b.classList.add('wrong'); });
       const v = PT.PREPS[q.answer], pat = PT.byId(q.pid);
       $('qRes').textContent = ok ? (fast ? '⚡ 正解！（' + (ms / 1000).toFixed(1) + '秒）' : '⭕ 正解（' + (ms / 1000).toFixed(1) + '秒）') : '❌ 正解は ' + q.answer;
       $('qRes').style.color = ok ? 'var(--ok)' : 'var(--bad)';
@@ -347,9 +367,10 @@
 
     /* ---------- クリック ---------- */
     document.addEventListener('click', e => {
-      const t = e.target.closest('[data-tab], [data-act], [data-pid], [data-secs], [data-count]');
+      const t = e.target.closest('[data-tab], [data-act], [data-pid], [data-secs], [data-count], [data-group]');
       if (!t) return;
       if (t.dataset.tab) { setTab(t.dataset.tab); return; }
+      if (t.dataset.group != null) { EA.setPref('patGroup', t.dataset.group); if (tab === 'quiz') renderQuizStart(); else renderSetup(); return; }
       if (t.dataset.secs) { EA.setPref('patSecs', +t.dataset.secs); renderSetup(); return; }
       if (t.dataset.count) { EA.setPref('patCount', +t.dataset.count); renderSetup(); return; }
       if (t.dataset.pid) { selected = t.dataset.pid; startSlot([t.dataset.pid]); return; }
@@ -369,7 +390,7 @@
       }
       if (a === 'nextPat') { slot.qi += 1; beginPattern(); return; }
       if (a === 'again') { beginPattern(); return; }
-      if (a === 'quizStart') { startQuiz(t.dataset.scope === 'weak' ? weakIds() : null); return; }
+      if (a === 'quizStart') { startQuiz(t.dataset.scope === 'weak' ? weakIds() : inGroup().map(p => p.id)); return; }
       if (a === 'weakQuiz') { setTab('quiz'); startQuiz(weakIds()); return; }
       if (a === 'pick') { pick(t.dataset.k); return; }
       if (a === 'say') { EA.speak(quiz.items[quiz.i].full, 'en-US', 1); return; }
@@ -380,7 +401,7 @@
     });
     ['optStep', 'optSpeak'].forEach(id => $(id).addEventListener('change', () => EA.setPref(id === 'optStep' ? 'patStep' : 'patSpeak', $(id).checked)));
     $('pickWeak').addEventListener('click', e => { e.stopPropagation(); const w = weakIds(); if (w.length) startSlot(w); });
-    $('pickRandom').addEventListener('click', e => { e.stopPropagation(); startSlot(shuffle(P.map(p => p.id)).slice(0, 3)); });
+    $('pickRandom').addEventListener('click', e => { e.stopPropagation(); startSlot(shuffle(inGroup().map(p => p.id)).slice(0, 3)); });
     // 画面を離れたらタイマーを止める
     document.addEventListener('visibilitychange', () => { if (document.hidden && slot && !slot.paused && slot.phase === 'run') { slot.paused = true; clearTimers(); renderSlot(); } });
 

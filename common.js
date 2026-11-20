@@ -917,7 +917,7 @@
 
   /* ---------- 学習データ ---------- */
   function defaultStore() {
-    return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, weakPhrases: {}, favorites: [], resting: [], srs: {} };
+    return { studied: [], quizStats: { correct: 0, total: 0 }, speakCount: 0, history: {}, weaknesses: {}, weakPhrases: {}, favorites: [], resting: [], srs: {}, jaEdits: {} };
   }
   function normalizeStore(s) {
     const d = defaultStore();
@@ -926,6 +926,12 @@
     d.favorites = Array.isArray(s.favorites) ? s.favorites.filter(x => typeof x === 'string') : [];
     d.resting = Array.isArray(s.resting) ? s.resting.filter(x => typeof x === 'string') : [];
     const qs = s.quizStats || {};
+    // ✏️ 内蔵フレーズの日本語（補足）を自分で直したもの { 英文: 日本語 }（2026-11-19 追加。無くても可）
+    d.jaEdits = {};
+    if (s.jaEdits && typeof s.jaEdits === 'object' && !Array.isArray(s.jaEdits)) Object.keys(s.jaEdits).slice(0, 3000).forEach(k => {
+      const v = s.jaEdits[k];
+      if (typeof k === 'string' && k.length <= 500 && typeof v === 'string' && v.trim()) d.jaEdits[k] = v.slice(0, 3000);
+    });
     d.quizStats = { correct: Number(qs.correct) || 0, total: Number(qs.total) || 0 };
     d.speakCount = Number(s.speakCount) || 0;
     d.history = (s.history && typeof s.history === 'object') ? s.history : {};
@@ -952,7 +958,18 @@
     } catch (e) { return []; }
   }
   function saveCustomPhrases(list) { return safeSet(KEY_CUSTOM, JSON.stringify(list)); }
-  function getAllPhrases() { return getCustomPhrases().concat(BASE_PHRASES); }
+  function getAllPhrases() {
+    const ed = getStore().jaEdits;
+    const base = Object.keys(ed).length ? BASE_PHRASES.map(p => ed[p[1]] ? [p[0], p[1], ed[p[1]], p[3]] : p) : BASE_PHRASES;
+    return getCustomPhrases().concat(base);
+  }
+  // 日本語（補足）を書き換える：マイ単語にあればそちらを、内蔵フレーズなら store.jaEdits に保存
+  function setJaEdit(en, ja) {
+    en = String(en || '').trim(); ja = String(ja || '').trim();
+    if (!en || !ja) return false;
+    if (getCustomPhrases().some(p => p[1].toLowerCase() === en.toLowerCase())) return updateCustomPhrase(en, ja, null);
+    const s = getStore(); s.jaEdits[en] = ja; return saveStore(s);
+  }
 
   function isFavorite(en) { return getStore().favorites.includes(en); }
   function toggleFavorite(en) {
@@ -1230,14 +1247,32 @@
   function speak(text, lang, rate) {
     if (!('speechSynthesis' in window) || !text) return;
     const synth = window.speechSynthesis;
-    synth.cancel();
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang || 'en-US';
-    u.rate = rate || 1.0;
-    const v = pickVoice(u.lang);
-    if (v) u.voice = v;
-    synth.speak(u);
+    if (!cachedVoices.length) loadVoices();
+    const go = () => {
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = lang || 'en-US';
+      u.rate = rate || 1.0;
+      const v = pickVoice(u.lang);
+      if (v) u.voice = v;
+      try { synth.resume(); } catch (e) {}
+      synth.speak(u);
+    };
+    // 再生中に cancel → すぐ speak すると、Chrome / Safari で新しい音声が捨てられることがあるので少し待つ
+    if (synth.speaking || synth.pending) { synth.cancel(); setTimeout(go, 120); }
+    else go();
   }
+  // iPhone の Safari は「最初の読み上げ」が画面タップの中で起きないと、その後のタイマーからの読み上げを出さない。
+  // 最初のタップで無音の読み上げを1回して、読み上げを使える状態にしておく
+  (function unlockSpeech() {
+    if (!('speechSynthesis' in window)) return;
+    let done = false;
+    const unlock = () => {
+      if (done) return; done = true;
+      try { const u = new SpeechSynthesisUtterance(' '); u.volume = 0; window.speechSynthesis.speak(u); } catch (e) {}
+      ['touchend', 'click', 'keydown'].forEach(ev => document.removeEventListener(ev, unlock, true));
+    };
+    ['touchend', 'click', 'keydown'].forEach(ev => document.addEventListener(ev, unlock, true));
+  })();
 
   /* ---------- 音声認識 ---------- */
   const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -1491,7 +1526,8 @@
         speakCount: Math.max(cur.speakCount, inc.speakCount),
         weaknesses: maxMerge(cur.weaknesses, inc.weaknesses),
         weakPhrases: maxMerge(cur.weakPhrases, inc.weakPhrases),
-        srs: mergeSrs(cur.srs, inc.srs)
+        srs: mergeSrs(cur.srs, inc.srs),
+        jaEdits: Object.assign({}, inc.jaEdits, cur.jaEdits)
       };
       const curCustom = getCustomPhrases();
       // 補足の書き換え用ファイル（updateCustom: true）は、同じ英文の日本語・タグを新しい内容で上書きする
@@ -2173,8 +2209,8 @@
         '<div class="rm-ja">' + esc(j.main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、' + secs + '秒以内に声に出して言ってみよう</p>' +
         '<div class="dr-reveal" style="display:none;"><div class="rm-en">' + esc(p[1]) + '</div>' +
-        (j.note ? '<div class="muted" style="text-align:center;">' + esc(j.note) + '</div>' : '') + usageLine(p[1]) +
-        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" data-dr="play" aria-label="英語を再生">🔊</button><button class="icon-btn" data-dr="slow" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record dr-mic" aria-label="発音をチェック">🎙️</button></div>' +
+        '<div class="muted dr-note" style="text-align:center; white-space:pre-wrap;' + (j.note ? '' : ' display:none;') + '">💡 ' + esc(j.note) + '</div><div class="dr-noteedit"></div>' + usageLine(p[1]) +
+        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" data-dr="play" aria-label="英語を再生">🔊</button><button class="icon-btn" data-dr="slow" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record dr-mic" aria-label="発音をチェック">🎙️</button><button class="tiny-btn" data-dr="note" aria-label="日本語と補足を編集" style="white-space:nowrap;">✏️ 補足</button></div>' +
         '<div class="word-chips dr-chips"></div><div class="mini-score dr-score" style="text-align:center;"></div>' +
         '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-dr="ok" style="background:#16a34a; flex:1;">⭕ ' + secs + '秒以内に言えた</button><button class="btn" data-dr="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
         '<button class="btn dr-revealbtn" data-dr="reveal">答えを見る</button>';
@@ -2234,6 +2270,26 @@
         t.outerHTML = restBtn(tp[1], t.dataset.i != null ? +t.dataset.i : null);
         toast(on ? '💤 お休みにしました（次から練習に出ません。「💤 お休み中」から戻せます）' : '練習に戻しました');
       }
+      else if (a === 'note' && p) {
+        const sp = ja(p);
+        box.querySelector('.dr-noteedit').innerHTML = '<div style="background:#f8fafc; border:1px solid var(--border); border-radius:8px; padding:0.6rem; margin-top:0.5rem; text-align:left;">' +
+          '<label class="muted" style="font-size:0.8rem;">日本語（カードの表に出る文）</label><input type="text" class="dr-nemain" style="margin:2px 0 0.5rem;" value="' + esc(sp.main) + '">' +
+          '<label class="muted" style="font-size:0.8rem;">💡 補足（答えのあとに出るメモ）</label><textarea class="dr-nenote" rows="4" style="width:100%; margin-top:2px; font-size:16px;">' + esc(sp.note) + '</textarea>' +
+          '<div style="display:flex; gap:6px; margin-top:0.4rem;"><button class="btn" data-dr="noteSave" style="flex:1;">💾 保存</button><button class="btn btn-secondary" data-dr="noteCancel" style="flex:1;">やめる</button></div></div>';
+        box.querySelector('.dr-nenote').focus();
+      }
+      else if (a === 'noteCancel') box.querySelector('.dr-noteedit').innerHTML = '';
+      else if (a === 'noteSave' && p) {
+        const main = box.querySelector('.dr-nemain').value.trim();
+        if (!main) { toast('日本語を入れてください'); return; }
+        const nja = joinJa(main, box.querySelector('.dr-nenote').value);
+        if (!setJaEdit(p[1], nja)) { toast('保存できませんでした'); return; }
+        p[2] = nja;
+        const note = splitJa(nja).note, nl = box.querySelector('.dr-note');
+        nl.textContent = '💡 ' + note; nl.style.display = note ? '' : 'none';
+        box.querySelector('.dr-noteedit').innerHTML = '';
+        toast('✏️ 補足を保存しました（次からこの内容で出ます）');
+      }
       else if (a === 'play' && p) speak(p[1], 'en-US', 1);
       else if (a === 'slow' && p) speak(p[1], 'en-US', 0.7);
       else if (a === 'next') { const miss = st.res.filter(r => !r.ok).map(r => r.p); st.round++; st.queue = shuf(miss); st.i = 0; st.res = []; st.phase = 'card'; render(); scrollToCard(box, true); }
@@ -2258,7 +2314,7 @@
     splitJa, usageFor, renderUsage, autoSpeak, setGenre, getPhrasesFor, populateGenreSelect, ensureNonEmpty,
     speak, createRecognizer, compareText, bestMatch,
     downloadBackup, importBackup,
-    getPrefs, setPref, hasPhrase, addCustomPhrase, updateCustomPhrase, joinJa, addToReview, getPatStats, recordPattern,
+    getPrefs, setPref, hasPhrase, addCustomPhrase, updateCustomPhrase, joinJa, setJaEdit, addToReview, getPatStats, recordPattern,
     getTalkLog, saveTalkLog, addTalkEntry, kanaHints, renderKana,
     getDuePhrases, daysUntil, parseKey, toast, translate, decodeEntities, normJa,
     getPins, savePins, isPinned, togglePin, markPinUsed,
