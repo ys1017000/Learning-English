@@ -314,7 +314,18 @@
     { id: "can-i", chunk: "Can I ～?", group: "提案・誘う", pre: "Can I", post: "?", head: "", headFirst: true, tailJa: "てもいい？", note: "Can I ～?＝「〜してもいい？」。気軽な許可・申し出。",
       slots: [["家まで送っ", "walk you home"], ["隣に座っ", "sit next to you"], ["ちょっともらっ", "try some"], ["今夜電話し", "call you tonight"], ["手をつない", "hold your hand"]] },
     { id: "how-say", chunk: "How do you say ～ in English?", group: "聞き返す・つなぐ", pre: "How do you say", post: " in English?", head: "", headFirst: true, tailJa: "って英語で何て言うの？", note: "How do you say ～ in English?＝「〜って英語で何て言うの？」。in German にすればドイツ語。",
-      slots: [["これ", "this"], ["「いただきます」", "\"itadakimasu\""], ["「おつかれさま」", "\"otsukaresama\""], ["「よろしく」", "\"yoroshiku\""], ["「もったいない」", "\"mottainai\""]] }
+      slots: [["これ", "this"], ["「いただきます」", "\"itadakimasu\""], ["「おつかれさま」", "\"otsukaresama\""], ["「よろしく」", "\"yoroshiku\""], ["「もったいない」", "\"mottainai\""]] },
+    // ===== 2026-11-21 追加：out of の型 =====
+    { id: "were-out-of", chunk: "We're out of ～（切れてる）", group: "out of の型（なくなる・中から）", pre: "We're out of", post: ".", head: "", headFirst: true, tailJa: "が切れてる（もうない）", note: "We're out of ～.＝「〜が切れてる・もうない」。out of＝中身が外に出て、なくなったイメージ。",
+      slots: [["牛乳", "milk"], ["コーヒー", "coffee"], ["卵", "eggs"], ["トイレットペーパー", "toilet paper"], ["時間", "time"]] },
+    { id: "ran-out-of", chunk: "I ran out of ～（なくなっちゃった）", group: "out of の型（なくなる・中から）", pre: "I ran out of", post: ".", head: "", headFirst: true, tailJa: "がなくなっちゃった", note: "run out of ～＝「〜を使い切る・なくなる」。だんだん減って最後になくなる感じ。",
+      slots: [["時間", "time"], ["お金", "money"], ["話すこと", "things to say"], ["スマホの充電", "battery"], ["体力", "energy"]] },
+    { id: "out-of-curiosity", chunk: "Just out of curiosity, ～?", group: "out of の型（なくなる・中から）", pre: "Just out of curiosity,", post: "?", head: "ちょっと気になったんだけど、", headFirst: true, tailJa: "？", note: "Just out of curiosity, ～?＝「ちょっと気になったんだけど〜？」。out of＝〜から（気持ちが出どころ）。質問の前のクッション。",
+      slots: [["どこで英語を覚えたの", "where did you learn English"], ["ドイツのどこ出身なの", "where in Germany are you from"], ["なんで日本に来たの", "why did you come to Japan"], ["兄弟はいるの", "do you have any siblings"], ["好きな日本食は何", "what's your favorite Japanese food"]] },
+    { id: "out-of-10", chunk: "I'd give it ～ out of 10", group: "out of の型（なくなる・中から）", pre: "I'd give it", post: " out of 10.", head: "10点中", headFirst: true, tailJa: "点かな", note: "～ out of 10＝「10点中〜点」。I'd give it（つけるなら）の would もいっしょに。",
+      slots: [["8", "an 8"], ["10", "a 10"], ["9", "a 9"], ["7", "a 7"], ["100", "a 100"]] },
+    { id: "get-out-of", chunk: "Let's get out of ～（〜から出よう）", group: "out of の型（なくなる・中から）", pre: "Let's get out of", post: ".", head: "", headFirst: true, tailJa: "から出よう", note: "get out of ～＝「〜から出る」。out of の基本＝中から外へ。",
+      slots: [["ここ", "here"], ["人混み", "the crowd"], ["雨", "the rain"], ["寒いところ", "the cold"], ["電車", "the train"]] }
   ];
 
   var PREPS = {
@@ -415,7 +426,12 @@
     "if-you-want": /\bif (you want|it's okay with you)\b/i,
     "dont-know-what": /\bI don't know (what|how|where|the word)\b/i,
     "can-i": /^can I\b/i,
-    "how-say": /\bhow do you say\b|\bit's like\b|\bit's a kind of\b|\bit's called\b/i
+    "how-say": /\bhow do you say\b|\bit's like\b|\bit's a kind of\b|\bit's called\b/i,
+    "were-out-of": /\b(we're|I'm|they're) out of\b/i,
+    "ran-out-of": /\b(run|ran|running) out of\b/i,
+    "out-of-curiosity": /\bout of curiosity\b/i,
+    "out-of-10": /\bout of (10|ten|5|five|100)\b/i,
+    "get-out-of": /\bget out of\b/i
   };
   function escRe(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function matcher(p) {
