@@ -2312,12 +2312,25 @@
   }
 
   /* ---------- オフライン対応（Service Worker） ---------- */
+  // 新しい版の SW に切り替わったら、自動で1回だけ読み直す（無限リロードにならないようフラグで止める）
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) {
-    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+    const hadController = !!navigator.serviceWorker.controller;   // 初めて入れるときは読み直し不要
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hadController || reloaded) return;
+      reloaded = true;
+      location.reload();
+    });
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js').then(reg => { try { reg.update(); } catch (e) {} }).catch(() => {});
+    });
   }
 
   /* ---------- 公開 ---------- */
+  // アップデートのたびに sw.js の CACHE 名と一緒に上げる
+  const APP_VERSION = 'v87';
   window.EA = {
+    APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
     esc, dateKey, getStore, saveStore, getCustomPhrases, saveCustomPhrases, getAllPhrases,
     isFavorite, toggleFavorite, touchToday, isResting, toggleResting, setResting, markStudied, recordResult, countSpeak, getWeakPhrases, calcStreak, updateStreakBadge,

@@ -125,6 +125,7 @@
       <input type="file" id="importFile" accept="application/json,.json" style="display:none;">
       <div class="status-msg" id="backupStatus" role="status"></div>
     </div>
+    <p class="muted" id="appVersion" style="text-align:center; font-size:0.75rem; margin-top:-0.5rem;"></p>
 
   </div>
 
@@ -135,7 +136,7 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=61"></script>
+  <script src="common.js?v=62"></script>
   <script src="roadmap-data.js?v=11"></script>
   <script>
     let viewDate = new Date(new Date().getFullYear(), new Date().getMonth(), 1); // 月初固定（31日からの月送りで飛ぶのを防ぐ）
@@ -320,5 +321,6 @@
     });
 
   </script>
+  <script>try { document.getElementById('appVersion').textContent = 'version ' + EA.APP_VERSION; } catch (e) {}</script>
 </body>
 </html>
