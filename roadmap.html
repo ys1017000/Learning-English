@@ -46,7 +46,7 @@
   <script src="common.js?v=61"></script>
   <script src="usage-data.js?v=37"></script>
   <script src="roadmap-data.js?v=11"></script>
-  <script src="pattern-data.js?v=8"></script>
+  <script src="pattern-data.js?v=9"></script>
   <script>
     const RM = window.RM;
     const $ = id => document.getElementById(id);
@@ -124,7 +124,7 @@
           : '<p class="muted rm-nodeck">' + (s.deck === 'weak' ? '言えなかったカードはまだありません。' : 'この枠で使うカードがまだありません。') + '</p>';
       }
       // 🌙 夜：その日の昼のカードに出てきた型を、型練習（連続で言う）で応用
-      if (s.id === 'diary1' && window.PT) {
+      if ((s.id === 'diary1' || (s.links || []).includes('diary')) && window.PT) {
         const pats = PT.patternsInCards(dayCardsOf(day).map(c => c.en)).slice(0, 5);
         if (pats.length) deckBtn += '<a class="btn btn-secondary rm-deck" href="pattern.html?ids=' + pats.map(x => x.id).join(',') + '" style="margin-top:0.4rem; display:block; text-align:center;">🔁 昼のカードの型で応用（' + pats.length + '型・連続で言う）</a>';
       }

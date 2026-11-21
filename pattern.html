@@ -134,7 +134,7 @@
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
   <script src="common.js?v=61"></script>
-  <script src="pattern-data.js?v=8"></script>
+  <script src="pattern-data.js?v=9"></script>
   <script>
   (function () {
     const $ = id => document.getElementById(id);
@@ -272,7 +272,7 @@
       }
       const x = slot.items[slot.i];
       $('slotRun').innerHTML = head(p) +
-        '<div class="pt-stage"><div class="pt-ja"><span id="ptHead">' + esc(p.head) + '</span><span class="pt-tail" id="ptTail">＋ ' + esc(x[0]) + '</span></div>' +
+        '<div class="pt-stage"><div class="pt-ja">' + (p.head ? '<span id="ptHead">' + esc(p.head) + '</span>' : '') + '<span class="pt-tail" id="ptTail">' + (p.head ? '＋ ' : '') + esc(x[0] + (p.headFirst ? (p.tailJa || '') : '')) + '</span></div>' +
         '<div class="pt-en" id="ptEn"></div></div>' +
         (slot.pr.choice ? '<div class="pt-icons" id="ptChoices" style="margin-bottom:0.5rem;"></div>' : '') +
         '<div class="pt-bar"><div id="ptBar"></div></div>' + dots() +
