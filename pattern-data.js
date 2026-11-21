@@ -325,7 +325,16 @@
     { id: "out-of-10", chunk: "I'd give it ～ out of 10", group: "out of の型（なくなる・中から）", pre: "I'd give it", post: " out of 10.", head: "10点中", headFirst: true, tailJa: "点かな", note: "～ out of 10＝「10点中〜点」。I'd give it（つけるなら）の would もいっしょに。",
       slots: [["8", "an 8"], ["10", "a 10"], ["9", "a 9"], ["7", "a 7"], ["100", "a 100"]] },
     { id: "get-out-of", chunk: "Let's get out of ～（〜から出よう）", group: "out of の型（なくなる・中から）", pre: "Let's get out of", post: ".", head: "", headFirst: true, tailJa: "から出よう", note: "get out of ～＝「〜から出る」。out of の基本＝中から外へ。",
-      slots: [["ここ", "here"], ["人混み", "the crowd"], ["雨", "the rain"], ["寒いところ", "the cold"], ["電車", "the train"]] }
+      slots: [["ここ", "here"], ["人混み", "the crowd"], ["雨", "the rain"], ["寒いところ", "the cold"], ["電車", "the train"]] },
+    // ===== 2026-11-22 追加：DM（11/22）から =====
+    { id: "sorry-for", chunk: "Sorry for ～ing!", group: "謝る・気持ち", pre: "Sorry for", post: "!", head: "", headFirst: true, tailJa: "てごめんね！", note: "Sorry for ～ing!＝「〜してごめんね」。軽く謝る定番。I'm sorry I ～ より短くカジュアル。",
+      slots: [["たくさん送っ", "sending so many"], ["返信が遅くなっ", "the late reply"], ["待たせ", "keeping you waiting"], ["長文になっ", "the long message"], ["急に連絡し", "the sudden message"]] },
+    { id: "good-luck-with", chunk: "Good luck with ～!", group: "気遣う・ほめる", pre: "Good luck with", post: "!", head: "", headFirst: true, tailJa: "がんばってね！", note: "Good luck with ～!＝「〜がんばってね」。相手の予定や作業を応援する。",
+      slots: [["プレゼン資料作り", "your presentation slides"], ["テスト", "your exam"], ["オーディション", "the audition"], ["論文", "your thesis"], ["お仕事", "work"]] },
+    { id: "spent-all-day", chunk: "I spent all day ～ing", group: "経験・過去", pre: "I spent all day", post: ".", head: "今日は一日", headFirst: true, tailJa: "てたよ", note: "I spent all day ～ing.＝「一日中〜してた」。spend 時間 ～ing の形。",
+      slots: [["アプリを作っ", "working on an app"], ["掃除し", "cleaning"], ["ギターを練習し", "practicing guitar"], ["英語を勉強し", "studying English"], ["かぎ編みし", "crocheting"]] },
+    { id: "thinking-where", chunk: "Let's think about where and when ～", group: "提案・誘う", pre: "Let's think about where and when we can", post: "!", head: "いつどこで", headFirst: true, tailJa: "か考えよう！", note: "think about where / when ～＝「どこで・いつ〜か考える」。マルちゃんが使った言い方。",
+      slots: [["イルミネーションを見に行ける", "go see the illuminations"], ["会える", "meet"], ["紅葉を見に行ける", "see the autumn leaves"], ["ごはんに行ける", "go out to eat"], ["旅行に行ける", "take a trip"]] }
   ];
 
   var PREPS = {
@@ -431,7 +440,11 @@
     "ran-out-of": /\b(run|ran|running) out of\b/i,
     "out-of-curiosity": /\bout of curiosity\b/i,
     "out-of-10": /\bout of (10|ten|5|five|100)\b/i,
-    "get-out-of": /\bget out of\b/i
+    "get-out-of": /\bget out of\b/i,
+    "sorry-for": /\bsorry for\b/i,
+    "good-luck-with": /\bgood luck (with|on)\b/i,
+    "spent-all-day": /\bspent (all day|the (whole )?(day|weekend))\b/i,
+    "thinking-where": /\bthink about (where|when)\b/i
   };
   function escRe(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function matcher(p) {
