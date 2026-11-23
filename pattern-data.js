@@ -383,7 +383,14 @@
     { id: "keep-an-eye", chunk: "Can you keep an eye on ～?", group: "聞く・質問", pre: "Can you keep an eye on", post: " for a sec?", head: "ちょっと", headFirst: true, tailJa: "を見ててくれる？", note: "keep an eye on ～＝「〜から目を離さないで見てる」。荷物・時間などに。",
       slots: [["荷物", "my bag"], ["時間", "the time"], ["鍋", "the pot"], ["席", "our seats"], ["スマホ", "my phone"]] },
     { id: "due-to", chunk: "～ because of / due to ～", group: "意見・理由", pre: "The train was late because of", post: ".", head: "", headFirst: true, tailJa: "のせいで電車が遅れた", note: "because of ～＝「〜のせいで」。due to はかたい言い方（アナウンス・ニュース）。会話は because of で十分。",
-      slots: [["雪", "the snow"], ["事故", "an accident"], ["大雨", "the heavy rain"], ["人身事故", "an accident on the line"], ["強風", "strong winds"]] }
+      slots: [["雪", "the snow"], ["事故", "an accident"], ["大雨", "the heavy rain"], ["人身事故", "an accident on the line"], ["強風", "strong winds"]] },
+    // ===== 2026-11-23 追加：単語アプリ（11/23）から =====
+    { id: "kept-ing", chunk: "I kept ～ing all day", group: "経験・過去", pre: "I kept", post: " all day.", head: "一日中ずっと", headFirst: true, tailJa: "", note: "keep ～ing＝「〜し続ける」。It kept raining.（雨が降り続いた）のように物でも使える。",
+      slots: [["あなたのこと考えてた", "thinking about you"], ["にやにやしてた", "smiling"], ["スマホを見てた", "checking my phone"], ["あの曲が頭から離れなかった（口ずさんでた）", "humming that song"], ["あくびしてた", "yawning"]] },
+    { id: "appreciate", chunk: "I really appreciate ～", group: "お礼・効果", pre: "I really appreciate", post: ".", head: "", headFirst: true, tailJa: "、本当にありがとう", note: "I really appreciate ～.＝「〜に本当に感謝してる」。Thank you より気持ちが深い。I appreciate you.（いつもありがとう）も言える。",
+      slots: [["手伝ってくれて", "your help"], ["いろいろしてくれて", "everything you do"], ["メッセージくれて", "the message"], ["話を聞いてくれて", "you listening to me"], ["いつもそばにいてくれて", "you being there for me"]] },
+    { id: "can-we-get", chunk: "Can we get any ～?", group: "提案・誘う", pre: "Can we get any", post: "?", head: "もっと", headFirst: true, tailJa: "かな？", note: "Can we get any ～?＝「もっと〜できるかな？」。get closer（近づく）のように get ＋比較級で「その状態になる」。",
+      slots: [["近くに行ける", "closer"], ["安くなる", "cheaper"], ["早く着ける", "earlier"], ["いい席になる", "better seats"], ["静かな席に移れる", "quieter"]] }
   ];
 
   var PREPS = {
@@ -517,7 +524,10 @@
     "ever-since": /\bever since\b/i,
     "was-that-too-far": /\bwas that too\b|\btoo far\b/i,
     "keep-an-eye": /\bkeep an eye on\b/i,
-    "due-to": /\bdue to\b|\bbecause of\b/i
+    "due-to": /\bdue to\b|\bbecause of\b/i,
+    "kept-ing": /\b(kept|keep|keeps) \w+ing\b/i,
+    "appreciate": /\bappreciate\b/i,
+    "can-we-get": /\bget (any )?(closer|cheaper|earlier|better|quieter)\b/i
   };
   function escRe(t) { return t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
   function matcher(p) {
