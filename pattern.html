@@ -106,8 +106,8 @@
         <label style="display:flex; align-items:center; gap:8px; font-size:0.88rem; margin:0.3rem 0;"><input type="checkbox" id="optSpeak"> 答えの英語を読み上げる</label>
         <div class="pt-label">答え方</div>
         <div class="chip-row" id="modeChips" style="margin-bottom:0.6rem;">
-          <button class="chip" data-mode="say">🗣 声だけ（選択肢なし）</button>
-          <button class="chip" data-mode="choice">👆 選択肢あり</button>
+          <button class="chip" data-mode="card">🃏 カード（日本語→英語で言う）</button>
+          <button class="chip" data-mode="say">⏱ テンポで連続</button>
         </div>
         <div class="pt-label">型を選ぶ（ジャンル）</div>
         <div class="pt-groups" id="groupChips"></div>
@@ -154,7 +154,7 @@
     function clearTimers() { timers.forEach(t => clearTimeout(t)); timers = []; }
     function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
     function shuffle(a) { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
-    function prefs() { const p = EA.getPrefs(); return { secs: [2, 3, 4].includes(+p.patSecs) ? +p.patSecs : 4, count: +p.patCount === 3 ? 3 : 5, step: p.patStep !== false, speak: p.patSpeak !== false, choice: p.patMode === 'choice' }; }
+    function prefs() { const p = EA.getPrefs(); return { secs: [2, 3, 4].includes(+p.patSecs) ? +p.patSecs : 4, count: +p.patCount === 3 ? 3 : 5, step: p.patStep !== false, speak: p.patSpeak !== false, card: p.patMode !== 'say' }; }
 
     /* ---------- 苦手の判定 ---------- */
     function weakness(id) {
@@ -190,7 +190,7 @@
       document.querySelectorAll('#secsChips .chip').forEach(b => b.classList.toggle('active', +b.dataset.secs === pr.secs));
       document.querySelectorAll('#countChips .chip').forEach(b => b.classList.toggle('active', +b.dataset.count === pr.count));
       $('optStep').checked = pr.step; $('optSpeak').checked = pr.speak;
-      document.querySelectorAll('#modeChips .chip').forEach(b => b.classList.toggle('active', (b.dataset.mode === 'choice') === pr.choice));
+      document.querySelectorAll('#modeChips .chip').forEach(b => b.classList.toggle('active', (b.dataset.mode === 'card') === pr.card));
       const wk = weakIds();
       $('pickWeak').textContent = '🔥 苦手な型から（' + wk.length + '）';
       $('pickWeak').disabled = !wk.length;
@@ -238,7 +238,7 @@
       // 言い比べ（compare）のときは、2つ目の型も同じ順番の言葉で出す
       if (!(slot.compare && slot.idx && slot.qi > 0)) slot.idx = shuffle(p.slots.map((x, k) => k)).slice(0, slot.pr.count);
       slot.items = slot.idx.map(k => p.slots[k]).filter(Boolean);
-      slot.i = 0; slot.phase = 'ready'; slot.hits = 0;
+      slot.i = 0; slot.phase = 'ready'; slot.res = []; slot.first = null;
       renderSlot();
       // 「よーい」の1秒後に始める
       later(() => { if (slot && slot.phase === 'ready') { slot.phase = 'run'; nextBeat(); } }, 1200);
@@ -259,11 +259,15 @@
         return;
       }
       if (slot.phase === 'check') {
+        const okN = slot.pr.card ? slot.res.filter(Boolean).length : null;
         $('slotRun').innerHTML = head(p) +
-          '<h2 style="margin-top:0.8rem;">どうだった？' + (slot.pr.choice ? '<span class="muted" style="font-size:0.9rem; font-weight:normal;">（選択肢 ' + (slot.hits || 0) + '/' + slot.items.length + ' 正解）</span>' : '') + '</h2>' +
-          '<div class="pt-list" style="margin-bottom:0.6rem;">' + slot.items.map(x => '<div class="pt-note" style="margin:0;"><b>' + esc(PT.sentence(p, x[1])) + '</b><br><span class="muted">' + esc(PT.jaOf(p, x)) + '</span></div>').join('') + '</div>' +
+          '<h2 style="margin-top:0.8rem;">' + (slot.pr.card ? '結果：' + okN + '/' + slot.items.length + ' 言えた' : 'どうだった？') + '</h2>' +
+          '<div class="pt-list" style="margin-bottom:0.6rem;">' + slot.items.map((x, k) => '<div class="pt-note" style="margin:0;">' + (slot.pr.card ? (slot.res[k] ? '⭕ ' : '❌ ') : '') + '<b>' + esc(PT.sentence(p, x[1])) + '</b><br><span class="muted">' + esc(PT.jaOf(p, x)) + '</span></div>').join('') + '</div>' +
           '<div class="pt-note">💡 ' + esc(p.note) + '</div>' +
-          '<div class="pt-row" style="margin-top:0.75rem;"><button class="btn" data-act="self" data-v="ok" style="background:#16a34a;">⭕ スラスラ</button><button class="btn" data-act="self" data-v="mid" style="background:#d97706;">△ 詰まった</button><button class="btn" data-act="self" data-v="ng" style="background:#be123c;">❌ 出なかった</button></div>';
+          (slot.pr.card
+            ? ((okN < slot.items.length ? '<button class="btn" data-act="retryMiss" style="margin-top:0.75rem;">🔁 言えなかった文だけもう一回</button>' : '') +
+               '<button class="btn' + (okN < slot.items.length ? ' btn-secondary' : '') + '" data-act="cardDone" style="margin-top:0.5rem;">記録して次へ</button>')
+            : '<div class="pt-row" style="margin-top:0.75rem;"><button class="btn" data-act="self" data-v="ok" style="background:#16a34a;">⭕ スラスラ</button><button class="btn" data-act="self" data-v="mid" style="background:#d97706;">△ 詰まった</button><button class="btn" data-act="self" data-v="ng" style="background:#be123c;">❌ 出なかった</button></div>');
         return;
       }
       if (slot.phase === 'done') {
@@ -275,54 +279,74 @@
         return;
       }
       const x = slot.items[slot.i];
+      if (slot.pr.card) {
+        $('slotRun').innerHTML = head(p) +
+          '<div class="pt-stage"><div class="muted" style="font-size:0.85rem;">日本語を見て、英語で言ってみよう</div><div class="pt-ja" style="margin-top:0.4rem;">' + esc(PT.jaOf(p, x)) + '</div>' +
+          '<div class="pt-en" id="ptEn"></div></div>' +
+          '<div class="pt-bar"><div id="ptBar"></div></div>' + dots() +
+          '<div id="ptBtns" style="margin-top:0.5rem;"><button class="btn btn-secondary" data-act="cardReveal">答えを見る</button></div>';
+        return;
+      }
       $('slotRun').innerHTML = head(p) +
         '<div class="pt-stage"><div class="pt-ja">' + (p.head ? '<span id="ptHead">' + esc(p.head) + '</span>' : '') + '<span class="pt-tail" id="ptTail">' + (p.head ? '＋ ' : '') + esc(x[0] + (p.headFirst ? (p.tailJa || '') : '')) + '</span></div>' +
         '<div class="pt-en" id="ptEn"></div></div>' +
-        (slot.pr.choice ? '<div class="pt-icons" id="ptChoices" style="margin-bottom:0.5rem;"></div>' : '') +
         '<div class="pt-bar"><div id="ptBar"></div></div>' + dots() +
         '<div class="pt-row" style="margin-top:0.5rem;"><button class="tiny-btn" data-act="pause" style="flex:1; padding:6px;">' + (slot.paused ? '▶ 再開' : '⏸ 一時停止') + '</button></div>';
     }
+    function startBar(ms) {
+      const bar = $('ptBar'); if (!bar) return;
+      bar.style.transition = 'none'; bar.style.width = '100%'; void bar.offsetWidth;
+      bar.style.transition = 'width ' + (ms / 1000) + 's linear'; bar.style.width = '0%';
+    }
     function nextBeat() {
       if (!slot || slot.paused) return;
-      const p = slot.queue[slot.qi], x = slot.items[slot.i], ms = slot.pr.secs * 1000;
+      const x = slot.items[slot.i], ms = slot.pr.secs * 1000;
       renderSlot();
-      const bar = $('ptBar');
-      bar.style.transition = 'none'; bar.style.width = '100%'; void bar.offsetWidth;
-      bar.style.transition = 'width ' + slot.pr.secs + 's linear'; bar.style.width = '0%';
-      // 2段階：まず結論、少しあとに「＋ 後ろの言葉」
-      if (slot.pr.step) later(() => { const t = $('ptTail'); if (t) t.classList.add('on'); }, Math.min(1000, ms / 2.5));
-      else $('ptTail').classList.add('on');
       slot.cur = { x, done: false };
-      // 👆 選択肢あり：同じ型のほかの言葉から3つまぜて4択
-      if (slot.pr.choice) {
-        const opts = shuffle([x].concat(shuffle(p.slots.filter(o => o !== x)).slice(0, 3)));
-        slot.cur.opts = opts;
-        $('ptChoices').innerHTML = opts.map((o, k) => '<button class="pt-icon" data-act="slotPick" data-k="' + k + '" style="font-weight:700; font-size:0.95rem; padding:0.6rem 0.4rem;">' + esc(o[1]) + '</button>').join('');
+      if (slot.pr.card) {
+        // 🃏 カード：日本語の文が全部出てから時間を数える
+        startBar(ms);
+        later(() => revealBeat(), ms);
+        return;
       }
-      later(() => revealBeat(null), ms);
+      // ⏱ テンポ：まず結論 → 少しあとに「＋ 後ろの言葉」。後ろの言葉が出てから時間を数える
+      const delay = slot.pr.step ? 900 : 0;
+      later(() => {
+        if (!slot || slot.paused) return;
+        const t = $('ptTail'); if (t) t.classList.add('on');
+        startBar(ms);
+        later(() => revealBeat(), ms);
+      }, delay);
     }
-    // 答えを出す（picked：選んだ選択肢の番号。時間切れ・選択肢なしは null）
-    function revealBeat(picked) {
+    // 答えを出す
+    function revealBeat() {
       if (!slot || slot.paused || !slot.cur || slot.cur.done) return;
       slot.cur.done = true; clearTimers();
       const p = slot.queue[slot.qi], x = slot.cur.x;
       const en = PT.sentence(p, x[1]);
       const pre = p.pre ? p.pre + ' ' : '';
       $('ptEn').innerHTML = esc(en.slice(0, pre.length)) + '<b>' + esc(en.slice(pre.length, pre.length + x[1].length)) + '</b>' + esc(en.slice(pre.length + x[1].length));
-      if (slot.pr.choice) {
-        const ok = picked != null && slot.cur.opts[picked] === x;
-        slot.hits = (slot.hits || 0) + (ok ? 1 : 0);
-        document.querySelectorAll('#ptChoices .pt-icon').forEach((b, k) => { b.classList.add('done'); if (slot.cur.opts[k] === x) b.classList.add('right'); else if (k === picked) b.classList.add('wrong'); });
-        const bar = $('ptBar'); bar.style.transition = 'none';
-      }
+      const bar = $('ptBar'); if (bar) { bar.style.transition = 'none'; bar.style.width = '0%'; }
       if (slot.pr.speak) EA.speak(en, 'en-US', 1);
-      const wait = slot.pr.speak ? Math.max(1200, en.split(' ').length * 330) : (slot.pr.choice ? 1300 : 900);
+      if (slot.pr.card) {
+        // 自分で判定して次へ
+        $('ptBtns').innerHTML = '<div class="pt-row"><button class="btn" data-act="cardOk" style="background:#16a34a;">⭕ 言えた</button><button class="btn" data-act="cardNg" style="background:#be123c;">❌ 出なかった</button></div>' +
+          '<button class="tiny-btn" data-act="sayAgain" style="width:100%; margin-top:0.4rem; padding:6px;">🔊 もう一回聞く</button>';
+        return;
+      }
+      const wait = slot.pr.speak ? Math.max(1200, en.split(' ').length * 330) : 900;
       later(() => {
         if (!slot || slot.paused) return;
         slot.i += 1;
         if (slot.i >= slot.items.length) { slot.phase = 'check'; renderSlot(); return; }
         nextBeat();
       }, wait);
+    }
+    function cardAnswer(ok) {
+      slot.res[slot.i] = ok;
+      slot.i += 1;
+      if (slot.i >= slot.items.length) { if (!slot.first) slot.first = { n: slot.items.length, ok: slot.res.filter(Boolean).length }; slot.phase = 'check'; renderSlot(); return; }
+      nextBeat();
     }
 
     /* ---------- 🎯 前置詞イメージ ---------- */
@@ -429,7 +453,20 @@
         EA.updateStreakBadge();
         slot.phase = 'done'; renderSlot(); return;
       }
-      if (a === 'slotPick') { revealBeat(+t.dataset.k); return; }
+      if (a === 'cardReveal') { revealBeat(); return; }
+      if (a === 'cardOk' || a === 'cardNg') { cardAnswer(a === 'cardOk'); return; }
+      if (a === 'sayAgain') { const p = slot.queue[slot.qi]; EA.speak(PT.sentence(p, slot.cur.x[1]), 'en-US', 1); return; }
+      if (a === 'cardDone') {
+        const p = slot.queue[slot.qi], n = slot.first.n, ok = slot.first.ok;   // 記録は1回目の結果で
+        EA.recordPattern(p.id, ok === n ? 'ok' : ok * 2 >= n ? 'mid' : 'ng');
+        EA.updateStreakBadge();
+        if (slot.qi < slot.queue.length - 1) { slot.qi += 1; beginPattern(); } else { slot.phase = 'done'; renderSlot(); }
+        return;
+      }
+      if (a === 'retryMiss') {
+        const miss = slot.items.filter((x, k) => !slot.res[k]);
+        slot.items = miss; slot.i = 0; slot.res = []; slot.phase = 'run'; nextBeat(); return;
+      }
       if (a === 'startFrom') { startSlot(fromIds.map(p => p.id)); return; }
       if (a === 'compareWant') { startSlot(['i-want-to', 'id-love-but']); slot.compare = true; return; }
       if (a === 'nextPat') { slot.qi += 1; beginPattern(); return; }
@@ -447,7 +484,7 @@
     $('pickWeak').addEventListener('click', e => { e.stopPropagation(); const w = weakIds(); if (w.length) startSlot(w); });
     $('pickRandom').addEventListener('click', e => { e.stopPropagation(); startSlot(shuffle(inGroup().map(p => p.id)).slice(0, 3)); });
     // 画面を離れたらタイマーを止める
-    document.addEventListener('visibilitychange', () => { if (document.hidden && slot && !slot.paused && slot.phase === 'run') { slot.paused = true; clearTimers(); renderSlot(); } });
+    document.addEventListener('visibilitychange', () => { if (document.hidden && slot && !slot.pr.card && !slot.paused && slot.phase === 'run') { slot.paused = true; clearTimers(); renderSlot(); } });
 
     const q = new URLSearchParams(location.search);
     // 🌙 ロードマップから：?ids=型,型 … 昼のカードに出てきた型をまとめて練習
