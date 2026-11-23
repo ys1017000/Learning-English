@@ -1287,6 +1287,9 @@
   /* ---------- 音声認識 ---------- */
   const SpeechRecognitionCtor = window.SpeechRecognition || window.webkitSpeechRecognition;
   const recognitionSupported = !!SpeechRecognitionCtor;
+  // ホーム画面から開いたアプリ表示（standalone）かどうか。iPhone はこの表示だと音声認識が使えないことがある
+  const isStandalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || window.navigator.standalone === true;
+  const isIOS = /iPhone|iPad|iPod/.test(navigator.userAgent);
 
   const RECOG_ERRORS = {
     'not-allowed': 'マイクの使用が許可されていません。ブラウザの設定でマイクを許可してください。',
@@ -2123,7 +2126,7 @@
   // btn にマイク機能を結びつける。getRef() は照合する英文。handlers: { onResult(result), onInterim(text), onError(msg), onState(on) }
   function attachPronunciation(btn, getRef, handlers, labels) {
     labels = labels || { idle: '🎙️', on: '⏹' };
-    if (!recognitionSupported) { btn.disabled = true; btn.title = 'このブラウザは音声認識に対応していません'; return null; }
+    if (!recognitionSupported) { btn.disabled = true; btn.title = (isStandalone && isIOS) ? 'ホーム画面のアプリでは音声認識が使えません。Safariで開くと使えます' : 'このブラウザは音声認識に対応していません'; return null; }
     const rec = createRecognizer({
       lang: 'en-US',
       onState: on => { btn.classList.toggle('recording', on); btn.textContent = on ? labels.on : labels.idle; handlers.onState && handlers.onState(on); },
@@ -2328,7 +2331,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v91';
+  const APP_VERSION = 'v92';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
