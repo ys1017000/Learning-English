@@ -3,7 +3,7 @@
    3秒以内に返ってこない・オフラインのときだけ、保存済み（キャッシュ）を使う。
    取れたファイルはキャッシュにも保存して、オフラインでも動くようにしておく。
    ※ アップデートのたびに CACHE 名と common.js の APP_VERSION を必ず一緒に上げる */
-const CACHE = 'english-app-v94';
+const CACHE = 'english-app-v95';
 const ASSETS = ['./', 'index.html', 'quiz.html', 'writing.html', 'speaking.html', 'translator.html', 'recap.html',
   'scenes.html', 'plan.html', 'roleplay.html', 'mylist.html', 'topics.html', 'keepsake.html', 'dmnote.html', 'dm-data.js', 'usage-data.js', 'talk.html', 'talk-data.js', 'letter.html', 'nihongo.html', 'diary.html', 'report.html', 'roadmap.html', 'roadmap-data.js', 'grammar.html', 'grammar-data.js', 'pattern.html', 'pattern-data.js', 'content.js', 'addword.html', 'phrases.html', 'common.js', 'common.css', 'manifest.webmanifest',
   'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
