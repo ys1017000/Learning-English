@@ -47,10 +47,10 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=63"></script>
+  <script src="common.js?v=64"></script>
   <script src="usage-data.js?v=37"></script>
   <script src="roadmap-data.js?v=11"></script>
-  <script src="pattern-data.js?v=10"></script>
+  <script src="pattern-data.js?v=11"></script>
   <script>
     const RM = window.RM;
     const $ = id => document.getElementById(id);
@@ -401,29 +401,40 @@
         '<div class="rm-ja">' + esc(EA.splitJa(c.ja).main) + '</div><div class="rm-timer" aria-hidden="true"><div class="rm-timer-fill" id="timerFill"></div></div>' +
         '<p class="muted" style="text-align:center;">日本語を見て、' + EA.drillSecs() + '秒以内に声に出して言ってみよう</p>' +
         '<div id="revealArea" style="display:none;"><div class="rm-en" id="enText">' + esc(c.en) + '</div>' + '<div class="muted" id="noteLine" style="text-align:center; margin-top:0.2rem; white-space:pre-wrap;' + (EA.splitJa(c.ja).note ? '' : ' display:none;') + '">💡 ' + esc(EA.splitJa(c.ja).note) + '</div><div id="noteEdit"></div>' + (c.tag ? '<div class="muted" style="text-align:center;">' + esc(c.tag) + '</div>' : '') + usageHtml(c.en) +
-        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button>' + pinBtn(c.en, null) + '<button class="tiny-btn" data-act="editNote" aria-label="日本語と補足を編集" title="日本語と補足を編集" style="white-space:nowrap;">✏️ 補足</button></div>' +
+        '<div style="display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:0.6rem 0;"><button class="icon-btn" id="playEn" aria-label="英語を再生">🔊</button><button class="icon-btn" id="slowEn" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record" id="micBtn" aria-label="声に出して発音チェック">🎙️</button>' + EA.recordBtnsHtml() + pinBtn(c.en, null) + '<button class="tiny-btn" data-act="editNote" aria-label="日本語と補足を編集" title="日本語と補足を編集" style="white-space:nowrap;">✏️ 補足</button></div>' +
         '<div class="word-chips" id="chips"></div><div class="mini-score" id="micScore" style="text-align:center;"></div>' +
         '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-act="ok" style="background:#16a34a; flex:1;">⭕ ' + EA.drillSecs() + '秒以内に言えた</button><button class="btn" data-act="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
+        '<div id="preArea" style="text-align:center;">' + (EA.recognitionSupported ? EA.answerMicHtml() : '') + '<div class="mini-score" id="preMsg"></div></div>' +
         '<button class="btn" data-act="reveal" id="revealBtn">答えを見る</button>';
       const f = $('timerFill');
       f.style.transition = 'none'; f.style.width = '100%'; void f.offsetWidth;
       f.style.transition = 'width ' + EA.drillSecs() + 's linear'; f.style.width = '0%';
+      // 🎙️ 声で答える → 聞き取れたら答えを出して判定を表示
+      EA.attachAnswerMic(box.querySelector('.vt-ans'), {
+        getRef: () => c.en, bar: f,
+        onHeard: r => { revealCard(); EA.showHeard($('chips'), $('micScore'), r); },
+        onError: m => { $('preMsg').textContent = m; }
+      });
     }
     function usageHtml(en) { const u = EA.usageFor(en); return u ? '<div class="usage-line">🎬 場面：' + esc(u) + '</div>' : ''; }
     function revealCard() {
       if (!run || run.phase !== 'card' || run.i >= run.queue.length) return;
       const c = run.queue[run.i].c;
       $('revealArea').style.display = ''; $('revealBtn').style.display = 'none';
+      if ($('preArea')) $('preArea').style.display = 'none';
+      EA.freezeBar($('timerFill'));
       $('playEn').onclick = () => EA.speak(c.en, 'en-US', 1);
       $('slowEn').onclick = () => EA.speak(c.en, 'en-US', 0.7);
       EA.attachPronunciation($('micBtn'), () => c.en, {
-        onResult: r => { EA.renderChips($('chips'), r.words); $('micScore').textContent = r.score + '点（' + (r.score >= EA.PASS_SCORE ? '合格！' : 'もう一度') + '）'; EA.countSpeak(); },
+        onResult: r => EA.showHeard($('chips'), $('micScore'), r),
         onError: m => { $('micScore').textContent = m; }
       });
+      EA.attachRecorder($('runBox').querySelector('.vt-rec'), $('runBox').querySelector('.vt-play'), { onError: m => { $('micScore').textContent = m; } });
     }
     function answer(ok) {
       if (!run || run.phase !== 'card' || run.i >= run.queue.length) return;
       const c = run.queue[run.i].c, round = run.round;
+      EA.stopRecorder();
       run.res.push({ c, ok });
       if (ok && !run.said[c.en]) run.said[c.en] = round;
       if (!run.free) update(r => {

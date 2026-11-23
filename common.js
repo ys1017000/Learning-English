@@ -2141,11 +2141,94 @@
     });
     btn.addEventListener('click', () => {
       if (rec.listening) { rec.stop(); return; }
+      if (handlers.beforeStart && handlers.beforeStart() === false) return;
+      stopRecorder();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       if (activeRec && activeRec !== rec && activeRec.listening) activeRec.abort();
       activeRec = rec;
       rec.start();
     });
     return rec;
+  }
+  /* ---------- 録音（自分の声を録って聞き返す） ----------
+     録音は端末のメモリの中だけ（保存・バックアップはしない）。ページを移ると消える */
+  const recordSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+  let activeRecorder = null;
+  function stopRecorder() { if (activeRecorder) activeRecorder.stop(); }
+  // recBtn: ⏺ 録音／⏹ 止める、playBtn: 👂 自分の声を聞く。handlers: { onState(on), onDone(), onError(msg) }
+  function attachRecorder(recBtn, playBtn, handlers) {
+    handlers = handlers || {};
+    if (!recBtn) return null;
+    if (!recordSupported) {
+      recBtn.disabled = true; recBtn.title = 'このブラウザは録音に対応していません';
+      if (playBtn) playBtn.style.display = 'none';
+      return null;
+    }
+    let mr = null, chunks = [], url = null, stream = null, timer = null, audio = null;
+    if (playBtn) playBtn.disabled = true;
+    const api = {
+      stop() { if (mr && mr.state === 'recording') mr.stop(); },
+      get recording() { return !!(mr && mr.state === 'recording'); }
+    };
+    const setOn = on => { recBtn.classList.toggle('recording', on); recBtn.textContent = on ? '⏹' : '🔴'; recBtn.setAttribute('aria-label', on ? '録音を止める' : '自分の声を録音'); handlers.onState && handlers.onState(on); };
+    recBtn.addEventListener('click', async () => {
+      if (api.recording) { api.stop(); return; }
+      if (activeRec && activeRec.listening) activeRec.abort();
+      if (activeRecorder && activeRecorder !== api) activeRecorder.stop();
+      if ('speechSynthesis' in window) window.speechSynthesis.cancel();
+      if (audio) audio.pause();
+      try { stream = await navigator.mediaDevices.getUserMedia({ audio: true }); }
+      catch (e) { handlers.onError && handlers.onError(e && e.name === 'NotAllowedError' ? 'マイクの使用が許可されていません。ブラウザの設定でマイクを許可してください。' : '録音を始められませんでした。'); return; }
+      const type = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/aac'].find(t => MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t));
+      try { mr = new MediaRecorder(stream, type ? { mimeType: type } : undefined); }
+      catch (e) { stream.getTracks().forEach(t => t.stop()); handlers.onError && handlers.onError('録音を始められませんでした。'); return; }
+      chunks = [];
+      mr.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+      mr.onstop = () => {
+        clearTimeout(timer);
+        stream.getTracks().forEach(t => t.stop());
+        if (activeRecorder === api) activeRecorder = null;
+        setOn(false);
+        if (url) URL.revokeObjectURL(url);
+        url = chunks.length ? URL.createObjectURL(new Blob(chunks, { type: mr.mimeType || type || 'audio/webm' })) : null;
+        if (playBtn) playBtn.disabled = !url;
+        if (url) { handlers.onDone && handlers.onDone(); play(); }
+      };
+      activeRecorder = api;
+      mr.start();
+      setOn(true);
+      timer = setTimeout(() => api.stop(), 15000);   // 止め忘れ防止（15秒）
+    });
+    function play() { if (!url) return; if (audio) audio.pause(); audio = new Audio(url); audio.play().catch(() => {}); }
+    if (playBtn) playBtn.addEventListener('click', play);
+    return api;
+  }
+  // 答えのあとに出す「🔴 録音 ／ 👂 自分の声」ボタン（icon-btn の並びに入れる）
+  function recordBtnsHtml() {
+    return '<button class="icon-btn btn-record vt-rec" aria-label="自分の声を録音" title="録音して自分の声を聞く">🔴</button>' +
+      '<button class="icon-btn vt-play" aria-label="録音した自分の声を聞く" title="録音した自分の声を聞く" disabled>👂</button>';
+  }
+  // 答える前の「🎙️ 声で答える」ボタン
+  function answerMicHtml() {
+    return '<button class="btn btn-record vt-ans" style="margin-bottom:0.5rem;">🎙️ 声で答える（英語を言うと判定）</button>';
+  }
+  // 聞き取り結果を表示（単語の色分け＋点数＋聞き取った文）
+  function showHeard(chipsEl, scoreEl, r) {
+    if (chipsEl) renderChips(chipsEl, r.words);
+    if (scoreEl) scoreEl.innerHTML = '🎙️ <b>' + r.score + '点</b>（' + (r.score >= PASS_SCORE ? '合格！' : 'もう一度') + '）' +
+      (r.text ? '<div class="muted" style="font-size:0.8rem; font-weight:normal;">聞き取り：“' + esc(r.text) + '”</div>' : '');
+    countSpeak();
+  }
+  // タイマーのバーをその場で止める
+  function freezeBar(el) { if (!el) return; const w = getComputedStyle(el).width; el.style.transition = 'none'; el.style.width = w; }
+  // 答える前の 🎙️：押したらタイマーを止め、聞き取れたら onHeard(result)。opts: { getRef, bar, onStart, onHeard, onError }
+  function attachAnswerMic(btn, opts) {
+    if (!btn) return null;
+    return attachPronunciation(btn, opts.getRef, {
+      beforeStart: () => { freezeBar(opts.bar); opts.onStart && opts.onStart(); },
+      onResult: r => opts.onHeard(r),
+      onError: m => opts.onError && opts.onError(m)
+    }, { idle: '🎙️ もう一回言う', on: '⏹ 聞き取り中…（言い終わったらタップ）' });
   }
   function renderChips(container, words) {
     container.innerHTML = '';
@@ -2223,26 +2306,37 @@
         '<p class="muted" style="text-align:center;">日本語を見て、' + secs + '秒以内に声に出して言ってみよう</p>' +
         '<div class="dr-reveal" style="display:none;"><div class="rm-en">' + esc(p[1]) + '</div>' +
         '<div class="muted dr-note" style="text-align:center; white-space:pre-wrap;' + (j.note ? '' : ' display:none;') + '">💡 ' + esc(j.note) + '</div><div class="dr-noteedit"></div>' + usageLine(p[1]) +
-        '<div style="display:flex; justify-content:center; gap:6px; margin:0.6rem 0;"><button class="icon-btn" data-dr="play" aria-label="英語を再生">🔊</button><button class="icon-btn" data-dr="slow" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record dr-mic" aria-label="発音をチェック">🎙️</button><button class="tiny-btn" data-dr="note" aria-label="日本語と補足を編集" style="white-space:nowrap;">✏️ 補足</button></div>' +
+        '<div style="display:flex; justify-content:center; gap:6px; flex-wrap:wrap; margin:0.6rem 0;"><button class="icon-btn" data-dr="play" aria-label="英語を再生">🔊</button><button class="icon-btn" data-dr="slow" aria-label="ゆっくり再生">🐢</button><button class="icon-btn btn-record dr-mic" aria-label="発音をチェック">🎙️</button>' + recordBtnsHtml() + '<button class="tiny-btn" data-dr="note" aria-label="日本語と補足を編集" style="white-space:nowrap;">✏️ 補足</button></div>' +
         '<div class="word-chips dr-chips"></div><div class="mini-score dr-score" style="text-align:center;"></div>' +
         '<div style="display:flex; gap:8px; margin-top:0.75rem;"><button class="btn" data-dr="ok" style="background:#16a34a; flex:1;">⭕ ' + secs + '秒以内に言えた</button><button class="btn" data-dr="ng" style="background:#be123c; flex:1;">❌ 出なかった</button></div></div>' +
+        '<div class="dr-pre" style="text-align:center;">' + (recognitionSupported ? answerMicHtml() : '') + '<div class="mini-score dr-premsg"></div></div>' +
         '<button class="btn dr-revealbtn" data-dr="reveal">答えを見る</button>';
       const f = box.querySelector('.rm-timer-fill');
       f.style.transition = 'none'; f.style.width = '100%'; void f.offsetWidth;
       f.style.transition = 'width ' + secs + 's linear'; f.style.width = '0%';
+      // 🎙️ 声で答える → 聞き取れたら答えを出して判定を表示
+      attachAnswerMic(box.querySelector('.vt-ans'), {
+        getRef: () => p[1], bar: f,
+        onHeard: r => { reveal(); showHeard(box.querySelector('.dr-chips'), box.querySelector('.dr-score'), r); },
+        onError: m => { box.querySelector('.dr-premsg').textContent = m; }
+      });
     }
     function reveal() {
       if (!st || st.phase !== 'card') return;
       const p = st.queue[st.i];
       box.querySelector('.dr-reveal').style.display = ''; box.querySelector('.dr-revealbtn').style.display = 'none';
+      const pre = box.querySelector('.dr-pre'); if (pre) pre.style.display = 'none';
+      freezeBar(box.querySelector('.rm-timer-fill'));
       autoSpeak(p[1], 'en-US', 1);
       attachPronunciation(box.querySelector('.dr-mic'), () => p[1], {
-        onResult: r => { renderChips(box.querySelector('.dr-chips'), r.words); box.querySelector('.dr-score').textContent = r.score + '点（' + (r.score >= PASS_SCORE ? '合格！' : 'もう一度') + '）'; countSpeak(); },
+        onResult: r => showHeard(box.querySelector('.dr-chips'), box.querySelector('.dr-score'), r),
         onError: m => { box.querySelector('.dr-score').textContent = m; }
       });
+      attachRecorder(box.querySelector('.vt-rec'), box.querySelector('.vt-play'), { onError: m => { box.querySelector('.dr-score').textContent = m; } });
     }
     function answer(ok) {
       const p = st.queue[st.i];
+      stopRecorder(); if (activeRec && activeRec.listening) activeRec.abort();
       st.res.push({ p, ok });
       if (st.round === 1 && opts.record) recordResult(p, ok, 'recall');
       st.i++;
@@ -2331,7 +2425,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v93';
+  const APP_VERSION = 'v94';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
@@ -2346,7 +2440,7 @@
     getPins, savePins, isPinned, togglePin, markPinUsed,
     getKeepsakes, saveKeepsakes, addKeepsake, hasKeepsake,
     getLists, saveLists, getPlan, savePlan, clearPlan,
-    attachPronunciation, renderChips, PASS_SCORE, cardDrill, drillSecs, scrollToCard,
+    attachPronunciation, renderChips, PASS_SCORE, cardDrill, attachRecorder, stopRecorder, recordBtnsHtml, answerMicHtml, showHeard, attachAnswerMic, freezeBar, recordSupported, drillSecs, scrollToCard,
     getProfile, saveProfile, getLetters, saveLetters, getDiary, saveDiary, addDiaryEntry, MOODS,
     getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId,
     getDmNotes, saveDmNotes, getTalks, saveTalks

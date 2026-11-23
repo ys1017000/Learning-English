@@ -34,6 +34,9 @@
     .pt-row { display: flex; gap: 8px; }
     .pt-row .btn { flex: 1; }
     .pt-note { font-size: 0.85rem; color: #334155; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.5rem 0.7rem; margin-top: 0.5rem; }
+    .pt-scene { font-size: 0.85rem; color: #92400e; background: #fffbeb; border: 1px solid #fde68a; border-radius: 999px; padding: 2px 10px; margin-bottom: 0.3rem; }
+    .pt-tip { font-size: 0.85rem; color: #334155; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.45rem 0.6rem; margin-top: 0.5rem; text-align: left; }
+    .pt-tools { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin: 0.5rem 0 0.2rem; }
     .pt-q { font-size: 1.3rem; font-weight: 800; text-align: center; margin: 0.6rem 0; word-break: break-word; }
     .pt-q .blank { color: #be185d; }
     .pt-icons { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
@@ -137,8 +140,8 @@
     <a href="recap.html">📝 ふり返り</a>
     <a href="quiz.html" class="active" aria-current="page">✍️ 練習</a>
   </nav>
-  <script src="common.js?v=63"></script>
-  <script src="pattern-data.js?v=10"></script>
+  <script src="common.js?v=64"></script>
+  <script src="pattern-data.js?v=11"></script>
   <script>
   (function () {
     const $ = id => document.getElementById(id);
@@ -178,7 +181,7 @@
       if (t === 'stats') renderStats();
     }
     function stopAll() {
-      clearTimers();
+      clearTimers(); EA.stopRecorder();
       if ('speechSynthesis' in window) window.speechSynthesis.cancel();
       slot = null; quiz = null;
       $('slotRun').style.display = 'none'; $('slotSetup').style.display = '';
@@ -238,7 +241,7 @@
       // 言い比べ（compare）のときは、2つ目の型も同じ順番の言葉で出す
       if (!(slot.compare && slot.idx && slot.qi > 0)) slot.idx = shuffle(p.slots.map((x, k) => k)).slice(0, slot.pr.count);
       slot.items = slot.idx.map(k => p.slots[k]).filter(Boolean);
-      slot.i = 0; slot.phase = 'ready'; slot.res = []; slot.first = null;
+      slot.i = 0; slot.phase = 'ready'; slot.res = []; slot.heard = []; slot.first = null;
       renderSlot();
       // 「よーい」の1秒後に始める
       later(() => { if (slot && slot.phase === 'ready') { slot.phase = 'run'; nextBeat(); } }, 1200);
@@ -249,6 +252,8 @@
         '<button class="tiny-btn" data-act="stop">✕ やめる</button></div>' +
         '<div class="pt-frame" style="margin-top:0.5rem;">' + esc(p.pre ? p.pre + ' ' : '') + '<span class="slot">　</span>' + esc(p.post) + '</div>';
     }
+    function sceneHtml(p, x) { const n = PT.noteOf(p, x); return n && n.scene ? '<div class="pt-scene">🎬 ' + esc(n.scene) + '</div>' : ''; }
+    function tipText(p, x) { const n = PT.noteOf(p, x); return n && n.tip ? n.tip : ''; }
     function dots() {
       return '<div class="pt-dots">' + slot.items.map((x, k) => '<span class="' + (k < slot.i ? 'done' : k === slot.i ? 'now' : '') + '"></span>').join('') + '</div>';
     }
@@ -262,8 +267,8 @@
         const okN = slot.pr.card ? slot.res.filter(Boolean).length : null;
         $('slotRun').innerHTML = head(p) +
           '<h2 style="margin-top:0.8rem;">' + (slot.pr.card ? '結果：' + okN + '/' + slot.items.length + ' 言えた' : 'どうだった？') + '</h2>' +
-          '<div class="pt-list" style="margin-bottom:0.6rem;">' + slot.items.map((x, k) => '<div class="pt-note" style="margin:0;">' + (slot.pr.card ? (slot.res[k] ? '⭕ ' : '❌ ') : '') + '<b>' + esc(PT.sentence(p, x[1])) + '</b><br><span class="muted">' + esc(PT.jaOf(p, x)) + '</span></div>').join('') + '</div>' +
-          '<div class="pt-note">💡 ' + esc(p.note) + '</div>' +
+          '<div class="pt-list" style="margin-bottom:0.6rem;">' + slot.items.map((x, k) => '<div class="pt-note" style="margin:0;">' + (slot.pr.card ? (slot.res[k] ? '⭕ ' : '❌ ') : '') + '<b>' + esc(PT.sentence(p, x[1])) + '</b>' + (slot.heard && slot.heard[k] != null ? ' <span class="muted" style="font-size:0.75rem;">🎙️' + slot.heard[k] + '点</span>' : '') + '<br><span class="muted">' + esc(PT.jaOf(p, x)) + '</span>' + (tipText(p, x) ? '<div style="font-size:0.78rem; margin-top:0.2rem;">💡 ' + esc(tipText(p, x)) + '</div>' : '') + '</div>').join('') + '</div>' +
+          '<div class="pt-note">📝 型のポイント：' + esc(p.note) + '</div>' +
           (slot.pr.card
             ? ((okN < slot.items.length ? '<button class="btn" data-act="retryMiss" style="margin-top:0.75rem;">🔁 言えなかった文だけもう一回</button>' : '') +
                '<button class="btn' + (okN < slot.items.length ? ' btn-secondary' : '') + '" data-act="cardDone" style="margin-top:0.5rem;">記録して次へ</button>')
@@ -281,14 +286,23 @@
       const x = slot.items[slot.i];
       if (slot.pr.card) {
         $('slotRun').innerHTML = head(p) +
-          '<div class="pt-stage"><div class="muted" style="font-size:0.85rem;">日本語を見て、英語で言ってみよう</div><div class="pt-ja" style="margin-top:0.4rem;">' + esc(PT.jaOf(p, x)) + '</div>' +
-          '<div class="pt-en" id="ptEn"></div></div>' +
+          '<div class="pt-stage">' + sceneHtml(p, x) + '<div class="muted" style="font-size:0.85rem;">日本語を見て、英語で言ってみよう</div><div class="pt-ja" style="margin-top:0.4rem;">' + esc(PT.jaOf(p, x)) + '</div>' +
+          '<div class="pt-en" id="ptEn"></div><div id="ptTip"></div></div>' +
           '<div class="pt-bar"><div id="ptBar"></div></div>' + dots() +
-          '<div id="ptBtns" style="margin-top:0.5rem;"><button class="btn btn-secondary" data-act="cardReveal">答えを見る</button></div>';
+          '<div class="word-chips" id="ptChips"></div><div class="mini-score" id="ptScore" style="text-align:center;"></div>' +
+          '<div id="ptBtns" style="margin-top:0.5rem;">' + (EA.recognitionSupported ? EA.answerMicHtml().replace('margin-bottom:0.5rem;', 'margin-bottom:0.5rem; width:100%;') : '') +
+          '<button class="btn btn-secondary" data-act="cardReveal">答えを見る</button></div>';
+        const ans = $('ptBtns').querySelector('.vt-ans');
+        EA.attachAnswerMic(ans, {
+          getRef: () => PT.sentence(p, x[1]), bar: $('ptBar'),
+          onStart: () => clearTimers(),   // 話している間は時間切れにしない
+          onHeard: r => { revealBeat(); heard(r); },
+          onError: m => { $('ptScore').textContent = m; }
+        });
         return;
       }
       $('slotRun').innerHTML = head(p) +
-        '<div class="pt-stage"><div class="pt-ja">' + (p.head ? '<span id="ptHead">' + esc(p.head) + '</span>' : '') + '<span class="pt-tail" id="ptTail">' + (p.head ? '＋ ' : '') + esc(x[0] + (p.headFirst ? (p.tailJa || '') : '')) + '</span></div>' +
+        '<div class="pt-stage">' + sceneHtml(p, x) + '<div class="pt-ja">' + (p.head ? '<span id="ptHead">' + esc(p.head) + '</span>' : '') + '<span class="pt-tail" id="ptTail">' + (p.head ? '＋ ' : '') + esc(x[0] + (p.headFirst ? (p.tailJa || '') : '')) + '</span></div>' +
         '<div class="pt-en" id="ptEn"></div></div>' +
         '<div class="pt-bar"><div id="ptBar"></div></div>' + dots() +
         '<div class="pt-row" style="margin-top:0.5rem;"><button class="tiny-btn" data-act="pause" style="flex:1; padding:6px;">' + (slot.paused ? '▶ 再開' : '⏸ 一時停止') + '</button></div>';
@@ -329,9 +343,15 @@
       const bar = $('ptBar'); if (bar) { bar.style.transition = 'none'; bar.style.width = '0%'; }
       if (slot.pr.speak) EA.speak(en, 'en-US', 1);
       if (slot.pr.card) {
-        // 自分で判定して次へ
-        $('ptBtns').innerHTML = '<div class="pt-row"><button class="btn" data-act="cardOk" style="background:#16a34a;">⭕ 言えた</button><button class="btn" data-act="cardNg" style="background:#be123c;">❌ 出なかった</button></div>' +
-          '<button class="tiny-btn" data-act="sayAgain" style="width:100%; margin-top:0.4rem; padding:6px;">🔊 もう一回聞く</button>';
+        const tip = tipText(p, x);
+        if (tip) $('ptTip').innerHTML = '<div class="pt-tip">💡 ' + esc(tip) + '</div>';
+        // 🔊 お手本 ／ 🎙️ 発音チェック ／ 🔴 録音 ／ 👂 自分の声 → 自分で判定して次へ
+        $('ptBtns').innerHTML = '<div class="pt-tools"><button class="icon-btn" data-act="sayAgain" aria-label="お手本をもう一回聞く">🔊</button><button class="icon-btn" data-act="saySlow" aria-label="ゆっくり聞く">🐢</button>' +
+          (EA.recognitionSupported ? '<button class="icon-btn btn-record" id="ptMic" aria-label="発音をチェック">🎙️</button>' : '') + EA.recordBtnsHtml() + '</div>' +
+          '<div class="muted" style="font-size:0.75rem; text-align:center; margin-bottom:0.4rem;">🎙️ 発音チェック ・ 🔴 録音 → 👂 自分の声で聞き比べ</div>' +
+          '<div class="pt-row"><button class="btn" data-act="cardOk" style="background:#16a34a;">⭕ 言えた</button><button class="btn" data-act="cardNg" style="background:#be123c;">❌ 出なかった</button></div>';
+        if ($('ptMic')) EA.attachPronunciation($('ptMic'), () => en, { onResult: r => heard(r), onError: m => { $('ptScore').textContent = m; } });
+        EA.attachRecorder($('ptBtns').querySelector('.vt-rec'), $('ptBtns').querySelector('.vt-play'), { onError: m => { $('ptScore').textContent = m; } });
         return;
       }
       const wait = slot.pr.speak ? Math.max(1200, en.split(' ').length * 330) : 900;
@@ -342,7 +362,14 @@
         nextBeat();
       }, wait);
     }
+    // 聞き取り結果を表示して、その文の点数を覚えておく（まとめに出す）
+    function heard(r) {
+      EA.showHeard($('ptChips'), $('ptScore'), r);
+      if (!slot.heard) slot.heard = [];
+      slot.heard[slot.i] = Math.max(slot.heard[slot.i] || 0, r.score);
+    }
     function cardAnswer(ok) {
+      EA.stopRecorder();
       slot.res[slot.i] = ok;
       slot.i += 1;
       if (slot.i >= slot.items.length) { if (!slot.first) slot.first = { n: slot.items.length, ok: slot.res.filter(Boolean).length }; slot.phase = 'check'; renderSlot(); return; }
@@ -456,6 +483,7 @@
       if (a === 'cardReveal') { revealBeat(); return; }
       if (a === 'cardOk' || a === 'cardNg') { cardAnswer(a === 'cardOk'); return; }
       if (a === 'sayAgain') { const p = slot.queue[slot.qi]; EA.speak(PT.sentence(p, slot.cur.x[1]), 'en-US', 1); return; }
+      if (a === 'saySlow') { const p = slot.queue[slot.qi]; EA.speak(PT.sentence(p, slot.cur.x[1]), 'en-US', 0.7); return; }
       if (a === 'cardDone') {
         const p = slot.queue[slot.qi], n = slot.first.n, ok = slot.first.ok;   // 記録は1回目の結果で
         EA.recordPattern(p.id, ok === n ? 'ok' : ok * 2 >= n ? 'mid' : 'ng');
@@ -465,7 +493,7 @@
       }
       if (a === 'retryMiss') {
         const miss = slot.items.filter((x, k) => !slot.res[k]);
-        slot.items = miss; slot.i = 0; slot.res = []; slot.phase = 'run'; nextBeat(); return;
+        slot.items = miss; slot.i = 0; slot.res = []; slot.heard = []; slot.phase = 'run'; nextBeat(); return;
       }
       if (a === 'startFrom') { startSlot(fromIds.map(p => p.id)); return; }
       if (a === 'compareWant') { startSlot(['i-want-to', 'id-love-but']); slot.compare = true; return; }
