@@ -395,8 +395,32 @@
       slots: [["あなたのこと考えてた", "thinking about you"], ["にやにやしてた", "smiling"], ["スマホを見てた", "checking my phone"], ["あの曲が頭から離れなかった（口ずさんでた）", "humming that song"], ["あくびしてた", "yawning"]] },
     { id: "appreciate", chunk: "I really appreciate ～", group: "お礼・効果", pre: "I really appreciate", post: ".", head: "", headFirst: true, tailJa: "、本当にありがとう", note: "I really appreciate ～.＝「〜に本当に感謝してる」。Thank you より気持ちが深い。I appreciate you.（いつもありがとう）も言える。",
       slots: [["手伝ってくれて", "your help"], ["いろいろしてくれて", "everything you do"], ["メッセージくれて", "the message"], ["話を聞いてくれて", "you listening to me"], ["いつもそばにいてくれて", "you being there for me"]] },
-    { id: "can-we-get", chunk: "Can we get ～?", group: "提案・誘う", pre: "Can we get", post: "?", head: "もっと", headFirst: true, tailJa: "かな？", note: "Can we get any ～?＝「もっと〜できるかな？」。get closer（近づく）のように get ＋比較級で「その状態になる」。",
-      slots: [["近くに行ける", "closer"], ["ステージの近くに行ける", "closer to the stage"], ["ツリーの近くに行ける", "closer to the tree"], ["窓の近くに行ける", "closer to the window"], ["人混みから離れられる", "away from the crowd"]] }
+    { id: "can-we-get", chunk: "Can we get ～?", group: "提案・誘う", pre: "Can we get", post: "?", head: "もっと", headFirst: true, tailJa: "かな？", note: "Can we get closer?＝「もっと近くに行けるかな？」。get closer（近づく）・get away from（離れる）のように get ＋場所の言葉で「そこへ移る」。",
+      slots: [["近くに行ける", "closer"], ["ステージの近くに行ける", "closer to the stage"], ["ツリーの近くに行ける", "closer to the tree"], ["窓の近くに行ける", "closer to the window"], ["人混みから離れられる", "away from the crowd"]] },
+    { id: "the-more", chunk: "The more ～, the more ～", group: "気持ちを言う", pre: "The more", post: ".", head: "", note: "The more A, the more B＝AすればするほどB。前半も後半も the ＋比較級（more / better / easier）で始める。",
+      slots: [["知れば知るほど、好きになる", "I get to know you, the more I like you"], ["会えば会うほど、もっと会いたくなる", "I see you, the more I miss you"], ["練習すればするほど、楽になる", "I practice, the easier it gets"], ["日本にいればいるほど、日本が好きになる", "I stay in Japan, the more I love it"], ["話せば話すほど、自信がつく", "I talk, the more confident I get"]] },
+    { id: "you-deserve", chunk: "You deserve ～", group: "気遣う・ほめる", pre: "You deserve", post: ".", head: "", note: "You deserve ～＝あなたは〜に値する→「〜して当然だよ・〜されていいんだよ」。がんばった相手へのねぎらいに。deserve は「ディザーヴ」。",
+      slots: [["休んで当然だよ", "a break"], ["ゆっくり休んでいいんだよ", "some rest"], ["おいしいごはん食べていいんだよ", "a nice dinner"], ["当然だよ（よくがんばったね）", "it"], ["最高のものがふさわしいよ", "the best"]] },
+    { id: "in-a-row", chunk: "That's ～ in a row!", group: "経験・過去", pre: "That's", post: " in a row!", head: "連続だね！", note: "in a row＝連続で（一列に並ぶイメージ）。数＋日・回・週などの後ろにつける。",
+      slots: [["2日", "two days"], ["3回", "three times"], ["2週末", "two weekends"], ["2晩", "two nights"], ["3日", "three days"]] },
+    { id: "check-with", chunk: "I need to check with ～ first.", group: "受け入れる・都合", pre: "I need to check with", post: " first.", head: "にまず確認しないと", note: "check with ＋人＝人に確認する（相談して OK をもらう）。予定をすぐ決められないときの返事に。",
+      slots: [["上司", "my boss"], ["チーム", "my team"], ["家族", "my family"], ["友だち", "my friend"], ["バンドのメンバー", "my bandmates"]] },
+    { id: "thing-for", chunk: "I have a thing for ～", group: "気持ちを言う", pre: "I have a thing for", post: ".", head: "に弱いんだ", note: "have a thing for ～＝〜に目がない・〜が気になってる。人に使うと「〜に気がある」。",
+      slots: [["かわいいカフェ", "cute cafés"], ["古着屋", "thrift stores"], ["甘いもの", "sweets"], ["昔の曲", "old songs"], ["君", "you"]] },
+    { id: "i-get-that", chunk: "I get that ～", group: "気遣う・ほめる", pre: "I get that", post: ".", head: "のはわかるよ", note: "I get that ～＝〜なのはわかるよ（get＝理解する）。I understand より軽く、相手の気持ちを受け止める一言。",
+      slots: [["忙しい", "you're busy"], ["疲れてる", "you're tired"], ["大変な", "it's hard"], ["少し時間が必要な", "you need some time"], ["緊張してる", "you're nervous"]] },
+    { id: "take-you-out", chunk: "Let me take you out ～", group: "提案・誘う", pre: "Let me take you out", post: ".", head: "連れて行かせて（ごちそうさせて）", note: "take 人 out (for / to ～)＝人を〜に連れ出す（たいていごちそうする意味も入る）。Let me ～＝〜させて。",
+      slots: [["夜ごはんに", "for dinner"], ["ランチに", "for lunch"], ["飲みに", "for drinks"], ["誕生日のお祝いに", "for your birthday"], ["素敵なカフェに", "to a nice café"]] },
+    { id: "favorite-thing", chunk: "What's your favorite thing to do ～?", group: "聞く・質問", pre: "What's your favorite thing to do", post: "?", head: "で一番好きなことって何？", note: "favorite thing to do＝一番好きな「すること」。後ろに場所・時をつけて質問を広げる。",
+      slots: [["ビーチ", "at the beach"], ["週末", "on weekends"], ["ドイツ", "in Germany"], ["東京", "in Tokyo"], ["寒い日", "on cold days"]] },
+    { id: "pick-up-on-way", chunk: "Can you pick up ～ on your way?", group: "ask の型（頼む・聞く）", pre: "Can you pick up", post: " on your way?", head: "来るついでに", headFirst: true, tailJa: "買ってきてくれる？", note: "pick up＝（ついでに）買ってくる・受け取る。on your way＝来る途中で。",
+      slots: [["牛乳", "some milk"], ["お菓子", "some snacks"], ["氷", "some ice"], ["パン", "some bread"], ["デザート", "something for dessert"]] },
+    { id: "best-ever", chunk: "That was the best ～ I've ever had!", group: "気持ちを言う", pre: "That was the best", post: " I've ever had!", head: "今まで食べた中で一番おいしい", headFirst: true, tailJa: "だった！", note: "the best ～ I've ever had＝今まで食べた（経験した）中で最高の〜。have は「食べる・飲む」にも使える。worst にすると「最悪の」。",
+      slots: [["ラーメン", "ramen"], ["お寿司", "sushi"], ["チーズケーキ", "cheesecake"], ["餃子", "gyoza"], ["カレー", "curry"]] },
+    { id: "i-wonder", chunk: "I wonder ～", group: "聞く・質問", pre: "I wonder", post: ".", head: "かな", note: "I wonder ＋ if / what / how ～＝〜かなあ（ひとりごと）。相手に答えを強く求めないやわらかい疑問。後ろは普通の文の語順。",
+      slots: [["明日雪降る", "if it'll snow tomorrow"], ["何時に開く", "what time it opens"], ["これどうやって作ってる", "how they make this"], ["英語のメニューある", "if they have an English menu"], ["ご家族元気にしてる", "how your family is doing"]] },
+    { id: "great-except", chunk: "It's great, except ～", group: "意見・理由", pre: "It's great, except", post: ".", head: "ってこと以外は最高", note: "except ＋文＝〜という点を除けば。ほめつつ小さな不満を言うやわらかい形。",
+      slots: [["ちょっと高い", "it's a little pricey"], ["人が多すぎる", "it's too crowded"], ["駅から遠い", "it's far from the station"], ["ちょっと甘すぎる", "it's a bit too sweet"], ["大きすぎる", "it's too big"]] }
   ];
 
   var PREPS = {
@@ -555,6 +579,18 @@
 
   // 各スロットの「場面」と「補足（言い換え・ポイント）」 [場面, 補足]（slotsと同じ順番）
   var NOTES = {
+    "great-except": [["お店の感想", "pricey＝値段が高め。expensive よりやわらかい"], ["観光地で", "crowded＝混んでいる"], ["家やお店の場所の話", "far from ～＝〜から遠い"], ["デザートの感想", "a bit too ～＝ちょっと〜すぎる"], ["服や家具を見て", "except for ＋名詞 でもOK（except for the size）"]],
+    "best-ever": [["ラーメン屋を出たとき", "the best ～ I've ever had で「人生で一番」の大げさな褒め方"], ["お寿司を食べたとき", "That was amazing! だけでも気持ちは伝わる"], ["カフェで", "I've ever had は I've ever tried（試した中で）にしてもOK"], ["餃子を食べたとき", "the worst にすると「今までで最悪」。冗談で使うことも"], ["家でカレーを作ってもらったとき", "That was the best date I've ever had.（最高のデートだった）にも使える"]],
+    "i-wonder": [["天気の話", "I wonder if ～＝〜かなあ（Yes/No の疑問）"], ["お店に行く前", "I wonder what ～＝何〜かなあ"], ["料理を食べながら", "I wonder how ～＝どうやって〜かなあ"], ["お店の前で", "Let's ask.（聞いてみよう）とつなげられる"], ["相手の家族の話", "I wonder how she's doing.（彼女元気かな）と人を変えても"]],
+    "i-get-that": [["相手の返信が遅いとき", "I get that you're busy. Take your time.（ゆっくりでいいよ）と続けると優しい"], ["疲れている相手に", "No worries, get some rest.（気にしないで休んで）とつなげられる"], ["悩みを聞いたとき", "I get it.（わかるよ）だけでも使える"], ["返事を待つとき", "Take all the time you need.（必要なだけ時間かけてね）とも"], ["プレゼンやオーディションの前", "It's normal to be nervous.（緊張して当然だよ）とも"]],
+    "take-you-out": [["お祝いやお礼をしたいとき", "Let me treat you.（ごちそうさせて）も同じ気持ち"], ["昼のデートの誘い", "I'd love to take you out for lunch. とやわらかくも"], ["夜の誘い", "for drinks＝飲みに。for a drink（1杯）でも"], ["誕生日の前", "for your birthday＝誕生日のお祝いに"], ["カフェの誘い", "場所なら to ＋場所、目的なら for ＋名詞"]],
+    "favorite-thing": [["夏や旅行の話", "What do you like to do at the beach? とも言える"], ["休みの話", "How do you usually spend your weekends? も定番"], ["ドイツの話", "in your hometown（地元で）にも入れ替えられる"], ["東京観光の話", "Where's your favorite place in Tokyo?（好きな場所は？）とも"], ["冬の話", "on cold days＝寒い日に。on rainy days＝雨の日に"]],
+    "pick-up-on-way": [["家で過ごす日に", "Could you ～? にするとさらにやわらかい"], ["映画を見る前", "snacks＝お菓子・おつまみ"], ["飲み物を冷やしたいとき", "some ice＝氷（数えない）"], ["朝ごはんの準備", "Want me to pick up some bread?（パン買っていこうか？）と自分から申し出ても"], ["ごはんのあと用に", "something for dessert＝デザートになるもの"]],
+    "the-more": [["気持ちを伝えるとき", "The more ～, the more ～ の形をそのまま覚えると、後半を入れ替えるだけ"], ["会えない日のメッセージ", "miss は「会えなくてさみしい」。I miss you more and more. とも"], ["英語の練習の話", "the easier it gets＝楽になっていく。better / more fun にも"], ["日本の暮らしの話", "the more I love it は the more I like it でもOK"], ["英語で話すことについて", "the more confident I get＝自信がついていく"]],
+    "you-deserve": [["プレゼンや試験が終わった相手に", "Take a break. You deserve it. と組み合わせると自然"], ["疲れている相手に", "some rest＝休息。Get some rest! とも"], ["がんばったお祝いに", "Let's celebrate!（お祝いしよう）と続けられる"], ["結果を出した相手に", "You deserve it! は「当然の結果だよ」"], ["相手を大事に思うとき", "You deserve better.（もっといい扱いを受けていい）は慰めの一言"]],
+    "in-a-row": [["2日続けて会ったとき", "That's two days in a row! のあとに I love it! と続けられる"], ["同じ店に何度も来たとき", "the third time in a row（3回連続）と the ＋序数でも"], ["週末続けて会ったとき", "weekends＝週末（複数）"], ["夜ふかしが続いたとき", "two nights in a row＝2晩続けて"], ["雨が続いたとき", "It's been raining three days in a row.（3日連続で雨）"]],
+    "check-with": [["仕事の予定を聞かれたとき", "Let me check with my boss.（確認させて）とも"], ["チームで決めることのとき", "check with ～ and get back to you（確認して返事する）"], ["家族の予定", "I'll ask my family. でもほぼ同じ"], ["友だちとの約束", "check my schedule＝自分の予定を確認する（with なし）"], ["ライブの予定", "bandmates＝バンド仲間"]],
+    "thing-for": [["好きなものの話", "have a thing for は「目がない」の軽い言い方。I love ～ でもOK"], ["買い物デートで", "thrift store＝古着屋・リサイクルショップ。secondhand clothes＝古着"], ["デザートを見て", "I have a sweet tooth.（甘党なんだ）とも"], ["音楽の話", "old songs → jazz / 80s music と入れ替えられる"], ["冗談っぽく好きと言うとき", "You have a thing for me? は「俺のこと気になってる？」とからかう形"]],
     "okay-with": [["何を食べたいか聞かれて", "Anything is fine. / I'm easy.（何でもいいよ）も同じ気持ち"], ["相手の提案に乗るとき", "I'm fine with that. / That works for me. でもOK"], ["「待たせてごめん」と言われて", "I don't mind waiting.（待つのは気にしないよ）も自然"], ["辛い料理のお店を提案されて", "spicy food の所を raw fish（生魚）/ natto などに変えられる"], ["2つの案のどちらがいいか聞かれて", "Either is fine. / Either way works. も同じ"]],
     "okay-with-you": [["待ち合わせの時間を決めるとき", "Is 7 okay? / Does 7 work for you? も同じ"], ["会う日を決めるとき", "Thursday の代わりに this weekend / tomorrow night も入る"], ["待ち合わせ場所を決めるとき", "Is meeting in Shibuya okay? と動作でも言える"], ["ごはんのお店を決めるとき", "Are you okay with oden? も同じ意味"], ["お店に入る前に確認するとき", "Is this place okay with you? は「このお店でいい？」"]],
     "works-for": [["時間の提案に返すとき", "7pm works for me. / 7 is good for me. も同じ"], ["日にちの提案に返すとき", "Thursday's perfect! だとうれしさが出る"], ["相手の案に賛成するとき", "That works! だけでも通じる"], ["「明日どう？」と聞かれて", "Tomorrow's fine. もOK"], ["時間の幅を伝えるとき", "anytime after 6 → any day this week / anytime on Saturday"]],
