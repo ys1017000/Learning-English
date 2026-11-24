@@ -420,7 +420,15 @@
     { id: "i-wonder", chunk: "I wonder ～", group: "聞く・質問", pre: "I wonder", post: ".", head: "かな", note: "I wonder ＋ if / what / how ～＝〜かなあ（ひとりごと）。相手に答えを強く求めないやわらかい疑問。後ろは普通の文の語順。",
       slots: [["明日雪降る", "if it'll snow tomorrow"], ["何時に開く", "what time it opens"], ["これどうやって作ってる", "how they make this"], ["英語のメニューある", "if they have an English menu"], ["ご家族元気にしてる", "how your family is doing"]] },
     { id: "great-except", chunk: "It's great, except ～", group: "意見・理由", pre: "It's great, except", post: ".", head: "ってこと以外は最高", note: "except ＋文＝〜という点を除けば。ほめつつ小さな不満を言うやわらかい形。",
-      slots: [["ちょっと高い", "it's a little pricey"], ["人が多すぎる", "it's too crowded"], ["駅から遠い", "it's far from the station"], ["ちょっと甘すぎる", "it's a bit too sweet"], ["大きすぎる", "it's too big"]] }
+      slots: [["ちょっと高い", "it's a little pricey"], ["人が多すぎる", "it's too crowded"], ["駅から遠い", "it's far from the station"], ["ちょっと甘すぎる", "it's a bit too sweet"], ["大きすぎる", "it's too big"]] },
+    { id: "stand-for", chunk: "We stand for ～", group: "政治・社会の話", pre: "We stand for", post: ".", head: "を求めてるんだ（支持してる）", note: "stand for ～＝〜を支持する・〜のために立ち上がる。運動やデモの目的を言う定番。",
+      slots: [["平等な権利", "equal rights"], ["気候の正義", "climate justice"], ["女性の権利", "women's rights"], ["難民の権利", "refugee rights"], ["平和", "peace"]] },
+    { id: "i-support", chunk: "I support ～", group: "政治・社会の話", pre: "I support", post: ".", head: "を応援してる（賛成）", note: "I support ～＝〜を支持する・賛成する。人・考え・運動どれにも使える。反対なら I'm against ～。",
+      slots: [["君のやってること", "what you're doing"], ["その考え", "that idea"], ["その運動", "the movement"], ["同性婚", "same-sex marriage"], ["君の決めたこと", "your decision"]] },
+    { id: "im-against", chunk: "I'm against ～", group: "政治・社会の話", pre: "I'm against", post: ".", head: "には反対", note: "I'm against ～＝〜に反対。I'm not a fan of ～ よりはっきりした意見。",
+      slots: [["戦争", "war"], ["差別", "discrimination"], ["その法律", "that law"], ["増税", "raising taxes"], ["原発", "nuclear power"]] },
+    { id: "going-to-protest", chunk: "Are you going to the ～?", group: "政治・社会の話", pre: "Are you going to the", post: "?", head: "に行くの？", note: "protest / demo / rally＝デモ・集会。ドイツでは Demo（デモ）とよく言うので demo も通じる。",
+      slots: [["デモ", "protest"], ["気候のデモ", "climate demo"], ["集会", "rally"], ["行進", "march"], ["週末のデモ", "protest this weekend"]] }
   ];
 
   var PREPS = {
@@ -579,6 +587,10 @@
 
   // 各スロットの「場面」と「補足（言い換え・ポイント）」 [場面, 補足]（slotsと同じ順番）
   var NOTES = {
+    "stand-for": [["デモの目的を聞いたとき", "What are you protesting for?（何を訴えてるの？）と聞ける"], ["環境の話", "climate justice＝気候正義（Fridays for Future などのテーマ）"], ["女性の権利の話", "women's rights は ' の位置に注意（women の所有）"], ["難民支援の話", "refugee＝難民（レフュジー）"], ["平和の話", "We stand with Ukraine.（〜と共にある・連帯する）と with にも"]],
+    "i-support": [["彼女の活動を聞いたとき", "I'm proud of you for doing this. と続けると気持ちが伝わる"], ["意見を聞かれたとき", "I'm all for it.（大賛成）とも言える"], ["社会運動の話", "the movement＝その運動"], ["ニュースの話", "same-sex marriage＝同性婚"], ["相手が何か決めたとき", "I support you no matter what.（何があっても応援する）"]],
+    "im-against": [["ニュースを見て", "I'm totally against ～ で強く反対"], ["差別の話", "racism（人種差別）/ sexism（性差別）にも入れ替えられる"], ["政策の話", "that law＝その法律。policy（政策）にも"], ["税金の話", "～ing で行為も入れられる"], ["エネルギーの話", "I'm not sure about ～（〜はよくわからない）とやわらかくも"]],
+    "going-to-protest": [["予定を聞くとき", "Be careful!（気をつけてね）と続けると優しい"], ["環境デモの話", "climate strike＝気候ストライキ（学生などのデモ）"], ["集会の話", "rally＝集会（ラリー）"], ["行進の話", "march＝デモ行進"], ["週末の予定", "Can I come with you?（一緒に行っていい？）とも"]],
     "great-except": [["お店の感想", "pricey＝値段が高め。expensive よりやわらかい"], ["観光地で", "crowded＝混んでいる"], ["家やお店の場所の話", "far from ～＝〜から遠い"], ["デザートの感想", "a bit too ～＝ちょっと〜すぎる"], ["服や家具を見て", "except for ＋名詞 でもOK（except for the size）"]],
     "best-ever": [["ラーメン屋を出たとき", "the best ～ I've ever had で「人生で一番」の大げさな褒め方"], ["お寿司を食べたとき", "That was amazing! だけでも気持ちは伝わる"], ["カフェで", "I've ever had は I've ever tried（試した中で）にしてもOK"], ["餃子を食べたとき", "the worst にすると「今までで最悪」。冗談で使うことも"], ["家でカレーを作ってもらったとき", "That was the best date I've ever had.（最高のデートだった）にも使える"]],
     "i-wonder": [["天気の話", "I wonder if ～＝〜かなあ（Yes/No の疑問）"], ["お店に行く前", "I wonder what ～＝何〜かなあ"], ["料理を食べながら", "I wonder how ～＝どうやって〜かなあ"], ["お店の前で", "Let's ask.（聞いてみよう）とつなげられる"], ["相手の家族の話", "I wonder how she's doing.（彼女元気かな）と人を変えても"]],
