@@ -1058,7 +1058,10 @@
   }
   function updateStreakBadge() {
     const el = document.getElementById('streakBadge');
-    if (el) el.textContent = '🔥 ' + calcStreak(getStore().history) + '日連続学習';
+    const t = '🔥 ' + calcStreak(getStore().history) + '日連続学習';
+    if (el) el.textContent = t;
+    const line = document.getElementById('streakLine');
+    if (line) line.textContent = t;
   }
 
   /* ---------- ジャンル選択・出題 ---------- */
@@ -2425,7 +2428,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v100';
+  const APP_VERSION = 'v101';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
@@ -2453,14 +2456,16 @@
     { title: '✏️ れんしゅう', items: [['pattern.html', '🔁 型練習'], ['quiz.html', '❓ クイズ・声に出すカード'], ['quiz.html?format=drill&genre=PREMEET', '📅 会う前のカード'], ['writing.html', '✍️ 英作文'], ['speaking.html', '🎙️ 発音チェック'], ['talk.html', '💭 お題で話す'], ['addword.html', '➕ 単語追加']] },
     { title: '💬 会うとき', items: [['translator.html', '💬 会話（翻訳）'], ['topics.html', '🎲 話題カード'], ['nihongo.html', '🇯🇵 日本語を教える']] },
     { title: '📝 ふり返り', items: [['recap.html', '📝 会話ふり返り'], ['diary.html', '📔 英語日記'], ['dmnote.html', '📩 DMノート'], ['report.html', '🏆 成果レポート']] },
-    { sep: true, items: [['index.html#settingsCard', '⚙️ 設定']] }
+    { sep: true, items: [['index.html#settings', '⚙️ 設定・バックアップ']] }
   ];
   // 今いるページ（quiz.html は「会う前」かどうかで分ける）
   function menuActive(href) {
     const page = (location.pathname.split('/').pop() || 'index.html');
     const [hp, hq] = href.split('#')[0].split('?');
-    if (href.indexOf('#') >= 0) return false;
+    const onSettings = page === 'index.html' && /^#settings/.test(location.hash);
+    if (href.indexOf('#') >= 0) return hp === page && onSettings;
     if (hp !== page) return false;
+    if (hp === 'index.html') return !onSettings;
     const premeet = new URLSearchParams(location.search).get('genre') === 'PREMEET';
     if (hp === 'quiz.html') return hq ? premeet : !premeet;
     return true;
@@ -2498,6 +2503,11 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('open')) close(); });
     // 同じページ内（設定へ移動など）のリンクは、閉じてから移動
     drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+    // ホーム ⇔ 設定（#settings）の切り替えで色付きを付け直す
+    window.addEventListener('hashchange', () => drawer.querySelectorAll('a').forEach(a => {
+      const on = menuActive(a.getAttribute('href'));
+      a.classList.toggle('active', on); if (on) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current');
+    }));
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildMenu); else buildMenu();
 

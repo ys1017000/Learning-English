@@ -19,6 +19,7 @@
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
   <div class="container">
+    <div id="homeView">
     <div class="card" id="quoteCard" style="border-color:#fde68a; background:#fffbeb;">
       <div class="muted" style="font-size:0.8rem; font-weight:700; color:#92400e;">💬 今日の名言</div>
       <div id="quoteEn" class="en-text" style="font-size:1.05rem; font-weight:600; margin-top:0.35rem;"></div>
@@ -28,10 +29,71 @@
         <span style="display:flex; gap:6px;"><button class="icon-btn" id="quoteSay" aria-label="名言を読み上げる">🔊</button><button class="icon-btn" id="quoteSlow" aria-label="ゆっくり読み上げる">🐢</button></span>
       </div>
     </div>
+    <div class="card">
+      <h2>📊 学習進捗サマリー</h2>
+      <p id="streakLine" style="font-weight:700; color:#c2410c; margin-bottom:0.6rem;">🔥 0日連続学習</p>
+      <div class="stats-grid" style="margin-bottom: 1rem;">
+        <div><div class="stat-number" id="totalStudied">0</div><div class="stat-label">学習済み</div></div>
+        <div><div class="stat-number" id="quizAccuracy">0%</div><div class="stat-label">正答率</div></div>
+        <div><div class="stat-number" id="speakCount">0</div><div class="stat-label">話した回数</div></div>
+      </div>
+      <div class="stats-grid" style="border-top: 1px solid var(--border); padding-top: 0.75rem;">
+        <div><div class="stat-number" id="favCount" style="color:var(--fav);">0</div><div class="stat-label">⭐ お気に入り</div></div>
+        <div><div class="stat-number" id="customCount" style="color:#d97706;">0</div><div class="stat-label">➕ 追加単語</div></div>
+        <div><div class="stat-number" id="totalPhrasesCount">0</div><div class="stat-label">総収録数</div></div>
+      </div>
+    </div>
+
     <div class="card" id="roadCard" style="border-color:#a5b4fc;">
       <h2>🗺 今日の学習メニュー</h2>
       <div id="roadBody"></div>
     </div>
+    <div class="card">
+      <h2>🔁 復習</h2>
+      <p class="muted" id="dueSummary" style="margin-bottom:0.75rem;"></p>
+      <a href="quiz.html?mode=due" class="btn" id="dueQuizBtn" style="margin-bottom:0.75rem;">⏰ 今日の復習クイズ</a>
+      <p class="muted" id="weakSummary">間違えたフレーズを自動で集めて、そこだけを復習できます。</p>
+      <a href="quiz.html?mode=weak" class="btn weak-cta" id="weakQuizBtn">🎯 苦手だけの復習クイズを始める</a>
+      <div style="display:flex; gap:8px; margin-top:0.5rem;">
+        <a href="writing.html?mode=weak" class="btn btn-secondary" id="weakWritingBtn" style="flex:1; font-size:0.85rem;">✍️ 英作文で復習</a>
+        <a href="speaking.html?mode=weak" class="btn btn-secondary" id="weakSpeakingBtn" style="flex:1; font-size:0.85rem;">🎙️ 発音で復習</a>
+      </div>
+    </div>
+
+    </div>
+    <div id="settingsView" hidden>
+      <a href="index.html" class="btn btn-secondary" style="margin-bottom:1rem;">← ホームに戻る</a>
+    <div class="card" id="settingsCard">
+      <h2>⚙️ 設定（この端末だけ）</h2>
+      <div class="radio-row" style="flex-direction:column; align-items:flex-start; gap:0.5rem;">
+        <label><input type="checkbox" id="optAutoSpeak"> 🔊 答えを自動で読み上げる（クイズ・英作文・発音・ロールプレイ）</label>
+        <label><input type="checkbox" id="optKanaHome"> カタカナ発音ヒントを表示する</label>
+        <label>🗣 声に出すカードの秒数
+          <select id="optDrillSecs" style="margin-left:0.4rem; padding:0.3rem 0.5rem; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; background:#fff;">
+            <option value="3">3秒</option><option value="4">4秒</option><option value="5">5秒</option>
+          </select>
+        </label>
+      </div>
+      <p class="muted" style="margin-top:0.4rem; font-size:0.8rem;">オフにしても、🔊ボタンを押せばいつでも聞けます。会話ページの読み上げは、会話ページの ⚙️ で切り替えます。</p>
+    </div>
+
+    <div class="card">
+      <h2>💾 データのバックアップ</h2>
+      <p class="muted" style="margin-bottom:0.75rem;">マイ単語・お気に入り・学習履歴・会話の記録・ピン留め・もらった言葉・予習プラン・手紙の下書き・英語日記・DMノート・お題で話した記録をファイルに保存できます。機種変更やブラウザのデータ削除の前に書き出しておくと安心です。</p>
+      <div class="backup-row">
+        <button class="btn" id="exportBtn">⬇️ 書き出し</button>
+        <button class="btn btn-secondary" id="importBtn">⬆️ 読み込み</button>
+      </div>
+      <div class="radio-row" role="radiogroup" aria-label="読み込み方法">
+        <label><input type="radio" name="importMode" value="merge" checked> 今のデータに統合する（おすすめ）</label>
+        <label><input type="radio" name="importMode" value="replace"> バックアップの内容で置き換える</label>
+      </div>
+      <input type="file" id="importFile" accept="application/json,.json" style="display:none;">
+      <div class="status-msg" id="backupStatus" role="status"></div>
+    </div>
+    </div>
+    <!-- ホームに出さないもの（中の処理は残す） -->
+    <div id="homeExtra" hidden>
     <div class="card next-step" id="nextCard">
       <h2>📅 次に会う日</h2>
       <div id="nextBody"></div>
@@ -70,32 +132,6 @@
     </div>
 
     <div class="card">
-      <h2>🔁 復習</h2>
-      <p class="muted" id="dueSummary" style="margin-bottom:0.75rem;"></p>
-      <a href="quiz.html?mode=due" class="btn" id="dueQuizBtn" style="margin-bottom:0.75rem;">⏰ 今日の復習クイズ</a>
-      <p class="muted" id="weakSummary">間違えたフレーズを自動で集めて、そこだけを復習できます。</p>
-      <a href="quiz.html?mode=weak" class="btn weak-cta" id="weakQuizBtn">🎯 苦手だけの復習クイズを始める</a>
-      <div style="display:flex; gap:8px; margin-top:0.5rem;">
-        <a href="writing.html?mode=weak" class="btn btn-secondary" id="weakWritingBtn" style="flex:1; font-size:0.85rem;">✍️ 英作文で復習</a>
-        <a href="speaking.html?mode=weak" class="btn btn-secondary" id="weakSpeakingBtn" style="flex:1; font-size:0.85rem;">🎙️ 発音で復習</a>
-      </div>
-    </div>
-
-    <div class="card">
-      <h2>📊 学習進捗サマリー</h2>
-      <div class="stats-grid" style="margin-bottom: 1rem;">
-        <div><div class="stat-number" id="totalStudied">0</div><div class="stat-label">学習済み</div></div>
-        <div><div class="stat-number" id="quizAccuracy">0%</div><div class="stat-label">正答率</div></div>
-        <div><div class="stat-number" id="speakCount">0</div><div class="stat-label">話した回数</div></div>
-      </div>
-      <div class="stats-grid" style="border-top: 1px solid var(--border); padding-top: 0.75rem;">
-        <div><div class="stat-number" id="favCount" style="color:var(--fav);">0</div><div class="stat-label">⭐ お気に入り</div></div>
-        <div><div class="stat-number" id="customCount" style="color:#d97706;">0</div><div class="stat-label">➕ 追加単語</div></div>
-        <div><div class="stat-number" id="totalPhrasesCount">0</div><div class="stat-label">総収録数</div></div>
-      </div>
-    </div>
-
-    <div class="card">
       <h2>📅 学習カレンダー</h2>
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <button class="cal-nav-btn" id="prevMonthBtn" aria-label="前の月">◀</button>
@@ -110,33 +146,6 @@
       <ul class="weakness-list" id="weaknessList"></ul>
     </div>
 
-    <div class="card" id="settingsCard">
-      <h2>⚙️ 設定（この端末だけ）</h2>
-      <div class="radio-row" style="flex-direction:column; align-items:flex-start; gap:0.5rem;">
-        <label><input type="checkbox" id="optAutoSpeak"> 🔊 答えを自動で読み上げる（クイズ・英作文・発音・ロールプレイ）</label>
-        <label><input type="checkbox" id="optKanaHome"> カタカナ発音ヒントを表示する</label>
-        <label>🗣 声に出すカードの秒数
-          <select id="optDrillSecs" style="margin-left:0.4rem; padding:0.3rem 0.5rem; border:1px solid var(--border); border-radius:8px; font-size:0.95rem; background:#fff;">
-            <option value="3">3秒</option><option value="4">4秒</option><option value="5">5秒</option>
-          </select>
-        </label>
-      </div>
-      <p class="muted" style="margin-top:0.4rem; font-size:0.8rem;">オフにしても、🔊ボタンを押せばいつでも聞けます。会話ページの読み上げは、会話ページの ⚙️ で切り替えます。</p>
-    </div>
-
-    <div class="card">
-      <h2>💾 データのバックアップ</h2>
-      <p class="muted" style="margin-bottom:0.75rem;">マイ単語・お気に入り・学習履歴・会話の記録・ピン留め・もらった言葉・予習プラン・手紙の下書き・英語日記・DMノート・お題で話した記録をファイルに保存できます。機種変更やブラウザのデータ削除の前に書き出しておくと安心です。</p>
-      <div class="backup-row">
-        <button class="btn" id="exportBtn">⬇️ 書き出し</button>
-        <button class="btn btn-secondary" id="importBtn">⬆️ 読み込み</button>
-      </div>
-      <div class="radio-row" role="radiogroup" aria-label="読み込み方法">
-        <label><input type="radio" name="importMode" value="merge" checked> 今のデータに統合する（おすすめ）</label>
-        <label><input type="radio" name="importMode" value="replace"> バックアップの内容で置き換える</label>
-      </div>
-      <input type="file" id="importFile" accept="application/json,.json" style="display:none;">
-      <div class="status-msg" id="backupStatus" role="status"></div>
     </div>
     <p class="muted" id="appVersion" style="text-align:center; font-size:0.75rem; margin-top:-0.5rem;"></p>
 
@@ -339,6 +348,20 @@
       document.getElementById('quoteWho').textContent = '— ' + q[2];
       document.getElementById('quoteSay').onclick = () => EA.speak(q[0], 'en-US', 1);
       document.getElementById('quoteSlow').onclick = () => EA.speak(q[0], 'en-US', 0.7);
+    })();
+  </script>
+  <script>
+    // ⚙️ 設定（index.html#settings）のときは設定とバックアップだけを出す
+    (function () {
+      function show() {
+        const set = /^#settings/.test(location.hash);
+        document.getElementById('homeView').hidden = set;
+        document.getElementById('settingsView').hidden = !set;
+        if (set) window.scrollTo(0, 0);
+        try { const b = document.getElementById('streakBadge'), l = document.getElementById('streakLine'); if (b && l) l.textContent = b.textContent; } catch (e) {}
+      }
+      window.addEventListener('hashchange', show); show();
+      setTimeout(show, 300);
     })();
   </script>
   <script>try { document.getElementById('appVersion').textContent = 'version ' + EA.APP_VERSION; } catch (e) {}</script>
