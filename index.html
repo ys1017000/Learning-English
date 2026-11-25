@@ -19,6 +19,15 @@
     <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
   </header>
   <div class="container">
+    <div class="card" id="quoteCard" style="border-color:#fde68a; background:#fffbeb;">
+      <div class="muted" style="font-size:0.8rem; font-weight:700; color:#92400e;">💬 今日の名言</div>
+      <div id="quoteEn" class="en-text" style="font-size:1.05rem; font-weight:600; margin-top:0.35rem;"></div>
+      <div id="quoteJa" class="ja-text muted" style="margin-top:0.25rem;"></div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:0.35rem; gap:8px;">
+        <span id="quoteWho" class="muted" style="font-size:0.8rem;"></span>
+        <span style="display:flex; gap:6px;"><button class="icon-btn" id="quoteSay" aria-label="名言を読み上げる">🔊</button><button class="icon-btn" id="quoteSlow" aria-label="ゆっくり読み上げる">🐢</button></span>
+      </div>
+    </div>
     <div class="card" id="roadCard" style="border-color:#a5b4fc;">
       <h2>🗺 今日の学習メニュー</h2>
       <div id="roadBody"></div>
@@ -317,6 +326,20 @@
       });
     });
 
+  </script>
+  <script>
+    // 💬 今日の名言（日付で日替わり。同じ日は何回開いても同じ）
+    (function () {
+      const QUOTES = [["The journey of a thousand miles begins with one step.", "千里の道も一歩から。", "老子"], ["Practice makes perfect.", "習うより慣れろ（練習すれば上手になる）。", "ことわざ"], ["Rome wasn't built in a day.", "ローマは一日にして成らず。", "ことわざ"], ["Where there's a will, there's a way.", "意志あるところに道は開ける。", "ことわざ"], ["Actions speak louder than words.", "言葉より行動が大事。", "ことわざ"], ["Better late than never.", "遅くてもやらないよりはまし。", "ことわざ"], ["Fall seven times, stand up eight.", "七転び八起き。", "日本のことわざ"], ["Persistence is power.", "継続は力なり。", "日本のことわざ"], ["Treasure every meeting, for it will never come again.", "一期一会。", "日本の言葉"], ["Fortune comes to those who smile.", "笑う門には福来る。", "日本のことわざ"], ["Doing is easier than worrying.", "案ずるより産むが易し。", "日本のことわざ"], ["Slow and steady wins the race.", "ゆっくりでも着実な者が勝つ。", "イソップ物語"], ["No act of kindness, no matter how small, is ever wasted.", "どんなに小さな親切も、むだにはならない。", "イソップ物語"], ["Little by little, one travels far.", "少しずつでも、遠くまで行ける。", "スペインのことわざ"], ["Practice is the best of all instructors.", "練習こそ最高の先生。", "プブリリウス・シルス"], ["Love all, trust a few, do wrong to none.", "すべての人を愛し、わずかな人を信じ、誰にも悪いことをするな。", "シェイクスピア"], ["The course of true love never did run smooth.", "真実の恋が平らな道だったためしはない。", "シェイクスピア"], ["Love looks not with the eyes, but with the mind.", "恋は目ではなく、心で見るもの。", "シェイクスピア"], ["Whatever our souls are made of, his and mine are the same.", "私たちの魂が何でできていても、彼と私の魂は同じもの。", "エミリー・ブロンテ"], ["The heart wants what it wants.", "心は、望むものを望む。", "エミリー・ディキンソン"], ["Hope is the thing with feathers.", "希望は羽をもつもの。", "エミリー・ディキンソン"], ["To love and be loved is to feel the sun from both sides.", "愛し愛されることは、両側から太陽を感じること。", "デヴィッド・ヴィスコット"], ["Love is friendship set on fire.", "恋とは、火がついた友情。", "ジェレミー・テイラー"], ["Happiness is only real when shared.", "幸せは、分かち合ってはじめて本物になる。", "クリス・マッカンドレス"], ["We accept the love we think we deserve.", "人は、自分にふさわしいと思う愛を受け入れる。", "スティーブン・チョボスキー"], ["Those who know nothing of foreign languages know nothing of their own.", "外国語を知らない者は、自分の言葉についても何も知らない。", "ゲーテ"], ["Knowing is not enough; we must apply.", "知るだけでは足りない。使わなければ。", "ゲーテ"], ["The limits of my language mean the limits of my world.", "私の言葉の限界が、私の世界の限界。", "ヴィトゲンシュタイン"], ["One language sets you in a corridor for life. Two languages open every door along the way.", "1つの言語は人生の廊下に立たせる。2つの言語は、その途中のすべての扉を開く。", "フランク・スミス"], ["If you talk to a man in a language he understands, that goes to his head. If you talk to him in his language, that goes to his heart.", "相手が分かる言葉で話せば頭に届く。相手の言葉で話せば心に届く。", "ネルソン・マンデラ（とされる）"], ["Without music, life would be a mistake.", "音楽がなければ、人生はまちがいだろう。", "ニーチェ"], ["Where words fail, music speaks.", "言葉が尽きたところで、音楽が語る。", "アンデルセン"], ["He who has a why to live can bear almost any how.", "生きる理由をもつ人は、ほとんどどんな状況にも耐えられる。", "ニーチェ"], ["Be patient toward all that is unsolved in your heart.", "心の中のまだ解けないものすべてに、辛抱強くあれ。", "リルケ"], ["Life is like riding a bicycle. To keep your balance, you must keep moving.", "人生は自転車に乗るようなもの。バランスを保つには、走り続けなければ。", "アインシュタイン"], ["The only way to do great work is to love what you do.", "すばらしい仕事をする唯一の方法は、自分のやることを好きになること。", "スティーブ・ジョブズ"], ["You miss 100% of the shots you don't take.", "打たないシュートは100％外れる。", "ウェイン・グレツキー"], ["Tomorrow is another day.", "明日は明日の風が吹く。", "マーガレット・ミッチェル『風と共に去りぬ』"], ["Not all those who wander are lost.", "さまよう者がみな迷っているわけではない。", "トールキン"], ["A smile is the universal welcome.", "笑顔は世界共通の「ようこそ」。", "マックス・イーストマン"], ["Home is where the heart is.", "心のあるところが我が家。", "ことわざ"], ["Two heads are better than one.", "三人寄れば文殊の知恵（2人なら1人よりいい知恵が出る）。", "ことわざ"]];
+      const d = new Date();
+      const day = Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate())) / 86400000);
+      const q = QUOTES[day % QUOTES.length];
+      document.getElementById('quoteEn').textContent = q[0];
+      document.getElementById('quoteJa').textContent = q[1];
+      document.getElementById('quoteWho').textContent = '— ' + q[2];
+      document.getElementById('quoteSay').onclick = () => EA.speak(q[0], 'en-US', 1);
+      document.getElementById('quoteSlow').onclick = () => EA.speak(q[0], 'en-US', 0.7);
+    })();
   </script>
   <script>try { document.getElementById('appVersion').textContent = 'version ' + EA.APP_VERSION; } catch (e) {}</script>
 </body>
