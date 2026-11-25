@@ -71,7 +71,7 @@
         T.compare.rows.map(r => '<div class="item-row"><div style="display:flex; justify-content:space-between; gap:6px; align-items:center;"><div><div class="en-text">' + esc(r[0]) + '</div><div class="ja-text muted">' + esc(r[1]) + '</div></div><div>' + speakBtns(r[0]).split('</button>')[0] + '</button></div></div></div>').join('') + '</div>';
       html += '<div class="card"><h2>⚠️ 注意しておきたいこと</h2><ul style="padding-left:1.1rem;" class="muted">' + T.cautions.map(c => '<li style="margin-bottom:0.5rem;">' + esc(c) + '</li>').join('') + '</ul></div>';
       html += '<button class="btn" data-act="toQuiz">🎯 判定クイズに挑戦する</button>' +
-        '<div style="display:flex; gap:8px; margin-top:0.5rem;"><a href="phrases.html" class="btn btn-secondary" style="flex:1; font-size:0.85rem;">📚 表現集で例文を見る</a><a href="writing.html" class="btn btn-secondary" style="flex:1; font-size:0.85rem;">✍️ 英作文で練習</a></div>';
+        '<div style="display:flex; gap:8px; margin-top:0.5rem;"><a href="writing.html" class="btn btn-secondary" style="flex:1; font-size:0.85rem;">✍️ 英作文で練習</a></div>';
       $('viewNote').innerHTML = html;
     }
 
@@ -139,7 +139,7 @@
     }
     function renderDrill() {
       const T = GR.TOPICS[topicIdx];
-      EA.cardDrill($('viewDrill'), { title: T.short, items: drillItems(T), record: true });
+      EA.cardDrill($('viewDrill'), { title: T.short, items: drillItems(T), record: true, autoSpeak: false });
     }
 
     /* ---------- 🧩 並べ替え（日本語を見て、単語カードを正しい順に並べる＝文の「形」を体で覚える） ---------- */
@@ -266,7 +266,6 @@
         const ok = ord.picked.map(k => norm(ord.words[k])).join(' ') === ord.words.map(norm).join(' ');
         const q = ord.list[ord.i];
         if (ok && !ord.hint) ord.ok++; else ord.missed.push(q);
-        if (ok) EA.speak(q.en, 'en-US', 1);
       }
       else if (a === 'next') { ord.i++; newOrderQ(); renderOrder(); EA.scrollToCard && EA.scrollToCard($('viewOrder'), false); return; }
       renderOrder();
@@ -303,7 +302,7 @@
       if (!g) g = gs.find(x => x.key !== 'all' && x.idx.includes(topicIdx)) || gs[0];
       groupKey = g.key;
       gbox.style.display = gs.length > 1 ? '' : 'none';
-      gbox.innerHTML = gs.map(x => '<option value="' + x.key + '">' + esc(x.name) + '（' + x.idx.length + '）</option>').join('');
+      gbox.innerHTML = gs.map(x => '<option value="' + x.key + '">' + esc(x.name) + '</option>').join('');
       gbox.value = g.key;
       box.style.display = '';
       box.innerHTML = g.idx.map(i => '<option value="' + i + '">📖 ' + (i + 1) + '. ' + esc(GR.TOPICS[i].short) + '</option>').join('');

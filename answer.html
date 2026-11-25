@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - 質問への答え方</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="英語表現">
+  <link rel="stylesheet" href="common.css?v=23">
+  
+  <style>
+    .aq-q { font-size: 1.3rem; font-weight: 800; line-height: 1.4; color: #0f172a; margin: 0.3rem 0; word-break: break-word; }
+    .aq-step { font-size: 0.8rem; font-weight: bold; color: #4338ca; margin: 0.9rem 0 0.35rem; }
+    .aq-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 0.75rem; }
+    .aq-chip { border: 1px solid var(--border); background: #fff; border-radius: 999px; padding: 4px 12px; font-size: 0.85rem; cursor: pointer; }
+    .aq-chip.on { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .aq-form { background: #eef2ff; border-radius: 10px; padding: 0.6rem 0.75rem; font-weight: 700; color: #3730a3; word-break: break-word; }
+    .aq-tip { font-size: 0.88rem; margin-top: 0.45rem; }
+    .aq-ex { display: flex; justify-content: space-between; align-items: center; gap: 6px; padding: 0.45rem 0; border-bottom: 1px solid var(--border); }
+    .aq-ex:last-child { border-bottom: none; }
+    .aq-heard { margin-top: 0.4rem; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="container">
+    <div class="card">
+      <h2>💬 質問への答え方</h2>
+      <p class="muted" style="font-size:0.88rem;">よく聞かれる質問に、どの形（文法・型）で返すといいかを練習します。①質問を聞く → ②答える形を選ぶ → ③自分の答えを声に出す。</p>
+      <div class="aq-chips" id="aqCats" style="margin-top:0.6rem;"></div>
+      <button class="btn" id="aqStart">▶ はじめる（10問）</button>
+    </div>
+    <div id="aqBox"></div>
+  </div>
+  <script src="common.js?v=64"></script>
+  <script>
+  (function () {
+    const QS = [["近況", "What did you do last weekend?", "先週末なにしてた？", "過去形＋感想", "I went to ～. ／ I ～ed. ＋ It was ～.", "聞かれた did（過去）に合わせて過去形で。事実のあとに It was fun. など感想を1つ足すと会話が続く。", [["I went cycling. It was tiring, but fun.", "サイクリングに行ったよ。疲れたけど楽しかった。"], ["I stayed home and played guitar.", "家でギター弾いてた。"]], "\\b(went|did|was|were|had|watched|played|stayed|ate|saw|spent|got|made|tried|met)\\b", ["i-went", "spent-all-day", "it-was-but"]], ["近況", "How was your day?", "今日どうだった？", "It was ＋形容詞＋理由", "It was ～. ＋ I ～ed / because ～.", "How was ～? には It was ～ で返すのが基本。good / busy / long のあとに、何があったかを過去形で1つ。", [["It was busy, but good. I finished a big project.", "忙しかったけどいい日だったよ。大きい仕事が終わったんだ。"], ["It was a long day. I'm so tired.", "長い一日だった。すごく疲れたよ。"]], "\\bit was\\b|\\bit's been\\b", ["it-was-degree", "it-was-but"]], ["近況", "How are you doing?", "元気？", "I'm ～＋ひとこと", "I'm good. ＋ A little ～, but ～.", "今の状態なので現在形 I'm ～。Good だけで終わらず、理由や今の様子を一言足す。", [["I'm good! A little tired, but good.", "元気だよ！ちょっと疲れてるけど。"], ["Pretty good. I'm excited about this weekend.", "まあまあいいよ。週末が楽しみなんだ。"]], "\\b(i'm|i am|pretty good|not bad)\\b", ["im-a-little", "i-feel"]], ["近況", "Did you sleep well?", "よく眠れた？", "Yes, I did. ＋ひとこと", "Yes, I did. ／ Not really. ＋ I ～ed.", "Did you ～? には did で答えるのが自然。Not really. でやわらかく否定して、理由を過去形で。", [["Yes, I did. I slept like a baby.", "うん、ぐっすり眠れたよ。"], ["Not really. I stayed up late again.", "あんまり。また夜ふかししちゃった。"]], "\\b(i did|i didn't|not really|yeah|yes|slept|stayed)\\b", []], ["経験", "Have you ever been to Germany?", "ドイツに行ったことある？", "現在完了で返す", "Yes, I have. ／ No, I haven't, but I'd love to.", "Have you ever ～? には have で答える。行ったことがなければ but I'd love to.（行ってみたい）を足すと前向き。", [["No, I haven't, but I'd love to go someday.", "ないけど、いつか行ってみたい。"], ["Yes, I have. I went to Berlin once.", "あるよ。一度ベルリンに行った。"]], "\\b(i have|i've|i haven't|haven't|have never|never)\\b", ["have-you-ever", "id-love-but"]], ["経験", "Is this your first time here?", "ここ来るの初めて？", "回数で答える", "Yes, it's my first time. ／ No, I've been here ～ times.", "「初めて？」は it's my first time。何回か来たことがあるなら I've been here ＋回数（現在完了）。", [["Yes, it's my first time!", "うん、初めて！"], ["No, I've been here a few times.", "ううん、何回か来たことある。"]], "\\b(first time|i've been|before|times?|twice|once)\\b", ["have-you-ever"]], ["経験", "How long have you been playing guitar?", "ギターどのくらい弾いてるの？", "have been ～ing＋期間", "I've been ～ing for ～ ／ since ～.", "How long have you been ～? は「ずっと続いていること」。同じ形 I've been ～ing に、for ＋期間 か since ＋始まり。", [["I've been playing for about ten years.", "10年くらい弾いてるよ。"], ["I've been playing since high school.", "高校のときから弾いてる。"]], "\\b(i've been|i have been|for|since)\\b", ["ive-been", "ever-since"]], ["経験", "What did you do when you were a kid?", "子どものころ何してた？", "used to ～（昔の習慣）", "I used to ～.", "今はもうしない昔の習慣は used to。過去形 I played でも言えるが、used to だと「よく〜してた」感が出る。", [["I used to play soccer every day.", "毎日サッカーしてたよ。"], ["I used to read a lot of manga.", "マンガをたくさん読んでた。"]], "\\bused to\\b", ["used-to-do"]], ["予定・誘い", "What are you doing this weekend?", "今週末なにするの？", "予定：going to / ～ing", "I'm going to ～. ／ I'm ～ing. ／ I'm thinking of ～ing.", "決まっている予定は I'm going to ～ か I'm ～ing。まだ迷っているなら I'm thinking of ～ing。", [["I'm going to see a movie with my friend.", "友だちと映画を見に行くよ。"], ["I'm thinking of going to see the autumn leaves.", "紅葉を見に行こうかなと思ってる。"]], "\\b(going to|gonna|i'm \\w+ing|thinking of|planning to|plan to)\\b", ["going-to", "thinking-of", "what-up-to"]], ["予定・誘い", "Would you like to grab a coffee?", "コーヒーでもどう？", "I'd love to! ／ I'd love to, but ～", "I'd love to! ／ I'd love to, but ～. How about ～?", "Would you like to ～? には I'd（would）で返すとそろう。断るときも I'd love to, but ～ ＋ 別の案。", [["I'd love to! Where should we go?", "ぜひ！どこ行く？"], ["I'd love to, but I'm busy today. How about tomorrow?", "行きたいけど今日は忙しくて。明日はどう？"]], "\\b(i'd love|i would love|i'd like|sure|sounds good|how about)\\b", ["id-love-but", "sounds", "how-about"]], ["予定・誘い", "Are you free on Saturday?", "土曜日空いてる？", "都合を言う＋提案", "Yes, I'm free! ／ Sorry, I have plans. How about ～?", "Are you ～? には I'm ～ で返す。空いていないときは、理由より先に別の日を出すとやわらかい。", [["Yes, I'm free! What do you want to do?", "空いてるよ！何したい？"], ["Sorry, I already have plans. How about Sunday?", "ごめん、もう予定がある。日曜はどう？"]], "\\b(free|plans|how about|busy|works)\\b", ["are-you-free", "how-about", "works-for"]], ["予定・誘い", "Can you help me with this?", "これ手伝ってくれる？", "Sure! ＋ 一言", "Sure! ／ Of course. What do you need? ／ Sorry, I can't right now, but ～.", "Can you ～? の依頼には Sure! / Of course! がまず一言。できないときは Sorry, I can't ～, but ～ と代わりを出す。", [["Of course! What do you need?", "もちろん！何すればいい？"], ["Sorry, I can't right now, but I can help later.", "今は無理だけど、あとで手伝えるよ。"]], "\\b(sure|of course|no problem|sorry|i can)\\b", []], ["好み・意見", "Do you like spicy food?", "辛いもの好き？", "好きの強さで答える", "I love ～! ／ I like ～. ／ It's okay. ／ I'm not a fan of ～.", "Yes / No だけでなく、好きの強さを選ぶ。苦手なら I don't like より I'm not a fan of ～ がやわらかい。", [["I love it! The spicier, the better.", "大好き！辛いほどいい。"], ["I'm not really a fan of spicy food.", "辛いものはあんまり得意じゃないんだ。"]], "\\b(love|like|not a fan|okay|i do|i don't)\\b", ["not-a-fan"]], ["好み・意見", "Which do you prefer, coffee or tea?", "コーヒーと紅茶どっちが好き？", "prefer で選ぶ＋理由", "I prefer ～. ／ I'd rather ～. ＋ because ～.", "Which do you prefer? には prefer をそのまま使って I prefer ～。理由を because で足す。", [["I prefer coffee because it wakes me up.", "コーヒーかな。目が覚めるから。"], ["I'd rather have tea in the evening.", "夜は紅茶の方がいいかな。"]], "\\b(prefer|rather|better)\\b", ["i-prefer"]], ["好み・意見", "What do you think about Japanese trains?", "日本の電車どう思う？", "I think ～ because ～", "I think ～. ＋ because ～ ／ but ～.", "意見を聞かれたら I think ～ で始めて、because で理由を1つ。良い面と悪い面なら but でつなぐ。", [["I think they're really convenient, but they're too crowded.", "すごく便利だと思うけど、混みすぎだね。"], ["I think they're great because they're always on time.", "時間通りだからいいと思う。"]], "\\bi think\\b|\\bbecause\\b|\\bin my opinion\\b", ["i-think-because", "my-opinion"]], ["好み・意見", "What kind of music do you like?", "どんな音楽が好き？", "種類＋especially", "I like ～, especially ～.", "What kind of ～? は種類を聞いている。ジャンルを言って、especially（特に）で具体的な名前を1つ。", [["I like jazz, especially old songs from the 50s.", "ジャズが好き。特に50年代の古い曲。"], ["I'm into rock music these days.", "最近はロックにハマってる。"]], "\\b(like|love|especially|into)\\b", ["what-kind"]], ["好み・意見", "What's your favorite Japanese food?", "一番好きな日本食は？", "My favorite is ～", "My favorite is ～. ／ I love ～ the most.", "favorite を聞かれたら My favorite is ～ で答えるのが一番かんたん。理由やお店を足すと話が広がる。", [["My favorite is ramen. I know a great place near my house.", "ラーメンかな。家の近くにいいお店があるんだ。"], ["I love sushi the most.", "お寿司が一番好き。"]], "\\b(favorite|the most|best)\\b", ["the-most", "favorite-thing"]], ["好み・意見", "What do you usually do on weekends?", "週末はいつも何してる？", "現在形＋頻度", "I usually ～. ／ I often ～. ／ Sometimes I ～.", "usually / often は「いつもの習慣」なので現在形。頻度の言葉を動詞の前に置く。", [["I usually practice guitar with my band.", "いつもバンドでギターの練習してる。"], ["I often go to cafés and relax.", "よくカフェに行ってのんびりする。"]], "\\b(usually|often|always|sometimes|normally)\\b", ["i-usually"]], ["想像・気持ち", "What would you do if you won the lottery?", "宝くじが当たったらどうする？", "I'd ～（想像）", "I'd ～. ／ I would ～.", "would で聞かれた想像の質問には would で返す。I will にすると「本当にそうする」感じになる。", [["I'd travel around Europe with you.", "君とヨーロッパを旅行するかな。"], ["I'd quit my job and play music.", "仕事をやめて音楽をやるかな。"]], "\\b(i'd|i would)\\b", ["id-like-to", "would-be-nice"]], ["想像・気持ち", "What do you want to do in the future?", "将来なにしたい？", "want to / hope to", "I want to ～. ／ I hope to ～ someday. ／ I'd love to ～.", "やりたいことは want to。少し夢っぽいなら I hope to ～ someday / I'd love to ～。", [["I want to live abroad someday.", "いつか海外に住みたい。"], ["I'd love to speak English without thinking.", "考えずに英語を話せるようになりたいな。"]], "\\b(want to|hope to|i'd love to|would like to|wanna)\\b", ["i-want-to", "i-hope-to"]], ["想像・気持ち", "How do you feel about living alone?", "一人暮らしってどう？", "気持ち＋but", "It's ～, but ～. ／ I feel ～.", "How do you feel ～? は気持ち。It's ～ で感想を言い、but で反対の面を足すとバランスがいい。", [["It's free and comfortable, but sometimes I feel lonely.", "自由で楽だけど、ときどきさみしい。"], ["I like it. I can do whatever I want.", "好きだよ。好きなことできるから。"]], "\\b(i feel|it's|it is|i like|i love)\\b", ["i-feel", "it-was-but"]], ["想像・気持ち", "Why did you start learning English?", "なんで英語の勉強始めたの？", "理由：because / I wanted to", "Because ～. ／ I wanted to ～. ／ That's why ～.", "Why did ～? は過去の理由。Because ～ か I wanted to ～（〜したかったから）で。", [["Because I wanted to talk with people from other countries.", "いろんな国の人と話したかったから。"], ["I wanted to understand you better.", "君のことをもっと分かりたかったから。"]], "\\b(because|wanted to|so that|that's why)\\b", ["reasons", "thats-why"]]];
+    const $ = id => document.getElementById(id), esc = EA.esc;
+    const CATS = ['すべて'].concat(QS.map(q => q[0]).filter((c, i, a) => a.indexOf(c) === i));
+    let cat = 'すべて'; try { cat = localStorage.getItem('english_app_answer_cat') || 'すべて'; } catch (e) {}
+    if (CATS.indexOf(cat) < 0) cat = 'すべて';
+    let run = null;
+    const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+    function drawCats() {
+      $('aqCats').innerHTML = CATS.map(c => '<button class="aq-chip' + (c === cat ? ' on' : '') + '" data-cat="' + esc(c) + '">' + esc(c) + '</button>').join('');
+    }
+    function start() {
+      const pool = QS.filter(q => cat === 'すべて' || q[0] === cat);
+      run = { list: shuffle(pool).slice(0, 10), i: 0, ok: 0 };
+      next();
+    }
+    function next() {
+      EA.stopRecorder();
+      const q = run.list[run.i];
+      const others = shuffle(QS.filter(x => x[3] !== q[3]).map(x => x[3]).filter((v, i, a) => a.indexOf(v) === i)).slice(0, 2);
+      run.cur = { q, opts: shuffle([q[3]].concat(others)), picked: null };
+      draw();
+      $('aqBox').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    function draw() {
+      const { q, opts, picked } = run.cur;
+      let h = '<div class="card"><div style="display:flex; justify-content:space-between;"><span class="muted">' + esc(q[0]) + '</span><span style="font-weight:bold; color:var(--primary);">' + (run.i + 1) + ' / ' + run.list.length + '</span></div>' +
+        '<div class="aq-step">① 質問</div><div class="aq-q">' + esc(q[1]) + '</div>' +
+        '<div style="display:flex; gap:6px; align-items:center;"><button class="icon-btn" data-say="' + esc(q[1]) + '" aria-label="質問を聞く">🔊</button><button class="icon-btn" data-say="' + esc(q[1]) + '" data-slow="1" aria-label="ゆっくり聞く">🐢</button>' +
+        '<button class="tiny-btn" id="aqJaBtn">🇯🇵 訳</button><span class="muted" id="aqJa" style="display:none;">' + esc(q[2]) + '</span></div>' +
+        '<div class="aq-step">② どの形で答える？</div><div class="options">' + opts.map(o => {
+          let cls = 'option-btn';
+          if (picked) cls += o === q[3] ? ' correct' : (o === picked ? ' wrong' : '');
+          return '<button class="' + cls + '" data-pick="' + esc(o) + '"' + (picked ? ' disabled' : '') + '>' + esc(o) + '</button>';
+        }).join('') + '</div>';
+      if (picked) {
+        h += '<div class="feedback ' + (picked === q[3] ? 'correct' : 'wrong') + '" style="display:block;">' + (picked === q[3] ? '⭕ そう！' : '❌ この質問には「' + esc(q[3]) + '」') + '</div>' +
+          '<div class="aq-form" style="margin-top:0.6rem;">' + esc(q[4]) + '</div><div class="aq-tip">💡 ' + esc(q[5]) + '</div>' +
+          '<div style="margin-top:0.5rem;">' + q[6].map(e => '<div class="aq-ex"><div><div class="en-text">' + esc(e[0]) + '</div><div class="ja-text muted">' + esc(e[1]) + '</div></div><div style="display:flex; gap:4px;"><button class="icon-btn" data-say="' + esc(e[0]) + '" aria-label="再生">🔊</button></div></div>').join('') + '</div>' +
+          (q[8].length ? '<a class="btn btn-secondary" style="margin-top:0.6rem; font-size:0.85rem;" href="pattern.html?ids=' + q[8].join(',') + '">🔁 この形を型練習で</a>' : '') +
+          '<div class="aq-step">③ 自分の答えを英語で言ってみよう</div>' +
+          '<div style="display:flex; gap:6px; justify-content:center; flex-wrap:wrap;">' + (EA.recognitionSupported ? '<button class="btn btn-record" id="aqMic" style="flex:1; min-width:150px;">🎙️ 答えを言う</button>' : '') + EA.recordBtnsHtml() + '</div>' +
+          '<div class="aq-heard" id="aqHeard" role="status"></div>' +
+          '<button class="btn" data-act="next" style="margin-top:0.9rem;">' + (run.i + 1 >= run.list.length ? '結果を見る' : '次の質問へ') + '</button>';
+      }
+      h += '</div>';
+      $('aqBox').innerHTML = h;
+      if (picked) attachTools(q);
+    }
+    function attachTools(q) {
+      const heard = $('aqHeard');
+      const re = new RegExp(q[7], 'i');
+      const mic = $('aqMic');
+      if (mic) {
+        const rec = EA.createRecognizer({
+          lang: 'en-US',
+          onState: on => { mic.textContent = on ? '⏹ 聞き取り中…（言い終わったらタップ）' : '🎙️ もう一回言う'; mic.classList.toggle('recording', on); },
+          onInterim: t => { heard.textContent = '… ' + t; },
+          onFinal: alts => {
+            const t = alts[0];
+            const hit = alts.some(a => re.test(a.replace(/[’]/g, "'")));
+            heard.innerHTML = '聞き取り：“' + esc(t) + '”<br>' + (hit ? '<b style="color:var(--ok);">✅ 「' + esc(q[3]) + '」の形が使えてる！</b>' : '<b style="color:var(--warn);">💡 「' + esc(q[4]) + '」の形を入れてみよう</b>');
+            EA.countSpeak(); EA.updateStreakBadge();
+          },
+          onError: m => { heard.textContent = m; }
+        });
+        mic.addEventListener('click', () => { if (!rec) return; if (rec.listening) rec.stop(); else { EA.stopRecorder(); try { speechSynthesis.cancel(); } catch (e) {} rec.start(); } });
+      }
+      EA.attachRecorder($('aqBox').querySelector('.vt-rec'), $('aqBox').querySelector('.vt-play'), { onError: m => { heard.textContent = m; } });
+    }
+    function result() {
+      EA.stopRecorder();
+      const miss = run.list.filter(q => q.missed);
+      $('aqBox').innerHTML = '<div class="card" style="text-align:center;"><h2>おつかれさま！</h2><div style="font-size:1.4rem; font-weight:bold; color:var(--primary); margin:0.5rem 0;">形を選べた：' + run.ok + ' / ' + run.list.length + '</div>' +
+        (miss.length ? '<div style="text-align:left;"><div class="muted" style="margin:0.5rem 0;">まちがえた質問と答え方</div>' + miss.map(q => '<div class="item-row"><div class="en-text">' + esc(q[1]) + '</div><div class="ja-text muted">→ ' + esc(q[4]) + '</div></div>').join('') + '</div>' : '') +
+        '<button class="btn" data-act="again" style="margin-top:1rem;">🔀 別の質問でもう一回</button></div>';
+      run.list.forEach(q => { delete q.missed; });
+    }
+    document.addEventListener('click', e => {
+      const s = e.target.closest('[data-say]');
+      if (s) { EA.speak(s.dataset.say, 'en-US', s.dataset.slow ? 0.7 : 1); return; }
+      const c = e.target.closest('[data-cat]');
+      if (c) { cat = c.dataset.cat; try { localStorage.setItem('english_app_answer_cat', cat); } catch (er) {} drawCats(); return; }
+      if (e.target.id === 'aqStart') { start(); return; }
+      if (e.target.id === 'aqJaBtn') { const j = $('aqJa'); j.style.display = j.style.display === 'none' ? '' : 'none'; return; }
+      const p = e.target.closest('[data-pick]');
+      if (p && run && !run.cur.picked) {
+        run.cur.picked = p.dataset.pick;
+        if (run.cur.picked === run.cur.q[3]) run.ok++; else run.cur.q.missed = true;
+        draw(); return;
+      }
+      const a = e.target.closest('[data-act]');
+      if (!a) return;
+      if (a.dataset.act === 'next') { run.i++; if (run.i >= run.list.length) result(); else next(); }
+      else if (a.dataset.act === 'again') start();
+    });
+    drawCats();
+  })();
+  </script>
+</body>
+</html>

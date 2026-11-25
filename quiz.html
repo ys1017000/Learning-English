@@ -135,14 +135,14 @@
       const weeks = Object.keys(gcount).filter(g => /^📅 第\d+週/.test(g)).sort((a, b) => parseInt(a.replace(/\D/g, '')) - parseInt(b.replace(/\D/g, '')));
       const groups = weeks.concat(GROUP_ORDER.filter(g => gcount[g]));
       if (subGrp && !gcount[subGrp]) { subGrp = ''; subCat = ''; }
-      gbox.innerHTML = '<option value="">📂 すべて（' + pool.length + '）</option>' +
-        groups.map(g => '<option value="' + EA.esc(g) + '">' + EA.esc(g) + '（' + gcount[g] + '）</option>').join('');
+      gbox.innerHTML = '<option value="">📂 すべて</option>' +
+        groups.map(g => '<option value="' + EA.esc(g) + '">' + EA.esc(g) + '</option>').join('');
       gbox.value = subGrp;
       gbox.style.display = groups.length > 1 ? '' : 'none';
       const tags = subGrp ? Object.keys(tagsBy[subGrp]).sort((a, b) => tagsBy[subGrp][b] - tagsBy[subGrp][a]) : [];
       if (subCat && !tags.includes(subCat)) subCat = '';
-      box.innerHTML = '<option value="">　すべての分類（' + (subGrp ? gcount[subGrp] : pool.length) + '）</option>' +
-        tags.map(t => '<option value="' + EA.esc(t) + '">　' + EA.esc(t) + '（' + tagsBy[subGrp][t] + '）</option>').join('');
+      box.innerHTML = '<option value="">　すべての分類</option>' +
+        tags.map(t => '<option value="' + EA.esc(t) + '">　' + EA.esc(t) + '</option>').join('');
       box.value = subCat;
       box.style.display = tags.length > 1 ? '' : 'none';
     }

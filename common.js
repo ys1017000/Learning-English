@@ -1160,17 +1160,17 @@
     all.forEach(p => { count[p[0]] = (count[p[0]] || 0) + 1; });
     const list = [
       { v: 'ALL', t: '✨ 全ジャンル（ランダム出題）', g: 'base' },
-      { v: 'WEAK', t: '🎯 苦手フレーズのみ（' + getWeakPhrases().length + '件）', g: 'base' },
-      { v: 'DUE', t: '⏰ 復習の時期が来たフレーズ（' + getDuePhrases().length + '件）', g: 'base' },
+      { v: 'WEAK', t: '🎯 苦手フレーズのみ', g: 'base' },
+      { v: 'DUE', t: '⏰ 復習の時期が来たフレーズ', g: 'base' },
       { v: 'FAV', t: '⭐ お気に入りフレーズのみ', g: 'base' },
-      { v: 'REST', t: '💤 お休み中のフレーズ（' + getStore().resting.length + '件）', g: 'base' },
-      { v: 'PREMEET', t: '📅 会う前セット（ピン留め＋会う直前の一言）（' + getPremeet().length + '件）', g: 'meet' },
-      { v: 'PIN', t: '📌 ピン留めしたフレーズ（' + getPins().length + '件）', g: 'meet' }
+      { v: 'REST', t: '💤 お休み中のフレーズ', g: 'base' },
+      { v: 'PREMEET', t: '📅 会う前セット（ピン留め＋会う直前の一言）', g: 'meet' },
+      { v: 'PIN', t: '📌 ピン留めしたフレーズ', g: 'meet' }
     ];
     Object.keys(count).forEach(c => {
       let g = c === CUSTOM_CAT ? 'base' : 'other';
       GENRE_GROUPS.forEach(gr => { if (gr.cats.includes(c)) g = gr.id; });
-      list.push({ v: c, t: (c === CUSTOM_CAT ? '⭐ ' : '📁 ') + c + '（' + count[c] + '）', g });
+      list.push({ v: c, t: (c === CUSTOM_CAT ? '⭐ ' : '📁 ') + c, g });
     });
     // 分類の中は GENRE_GROUPS に書いた順に並べる
     const order = c => { for (const gr of GENRE_GROUPS) { const i = gr.cats.indexOf(c); if (i >= 0) return i; } return 999; };
@@ -1217,7 +1217,7 @@
       const n = select._genres.filter(e => e.g === gr.id).length;
       if (!n) return;
       const o = document.createElement('option'); o.value = gr.id;
-      o.textContent = gr.label + (gr.id === 'base' ? '' : '（' + n + 'ジャンル）');
+      o.textContent = gr.label;
       gs.appendChild(o);
     });
     // ?mode=weak / ?mode=due / ?genre=カテゴリ名 で開いたときの初期選択。再表示のときは今の選択を保つ
@@ -2330,7 +2330,7 @@
       box.querySelector('.dr-reveal').style.display = ''; box.querySelector('.dr-revealbtn').style.display = 'none';
       const pre = box.querySelector('.dr-pre'); if (pre) pre.style.display = 'none';
       freezeBar(box.querySelector('.rm-timer-fill'));
-      autoSpeak(p[1], 'en-US', 1);
+      if (opts.autoSpeak !== false) autoSpeak(p[1], 'en-US', 1);
       attachPronunciation(box.querySelector('.dr-mic'), () => p[1], {
         onResult: r => showHeard(box.querySelector('.dr-chips'), box.querySelector('.dr-score'), r),
         onError: m => { box.querySelector('.dr-score').textContent = m; }
@@ -2428,7 +2428,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v101';
+  const APP_VERSION = 'v102';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
@@ -2452,8 +2452,8 @@
   /* ---------- ☰ メニュー（全ページ共通。画面下のナビとページ内のリンク列の代わり） ---------- */
   const MENU = [
     { items: [['index.html', '🏠 ホーム'], ['roadmap.html', '🔥 今日の練習']] },
-    { title: '📖 まなぶ', items: [['grammar.html', '📖 文法ノート'], ['phrases.html', '📚 表現集'], ['scenes.html', '💞 気持ちから探す']] },
-    { title: '✏️ れんしゅう', items: [['pattern.html', '🔁 型練習'], ['quiz.html', '❓ クイズ・声に出すカード'], ['quiz.html?format=drill&genre=PREMEET', '📅 会う前のカード'], ['writing.html', '✍️ 英作文'], ['speaking.html', '🎙️ 発音チェック'], ['talk.html', '💭 お題で話す'], ['addword.html', '➕ 単語追加']] },
+    { title: '📖 まなぶ', items: [['grammar.html', '📖 文法ノート']] },
+    { title: '✏️ れんしゅう', items: [['pattern.html', '🔁 型練習'], ['quiz.html', '❓ クイズ・声に出すカード'], ['quiz.html?format=drill&genre=PREMEET', '📅 会う前のカード'], ['writing.html', '✍️ 英作文'], ['answer.html', '💬 質問への答え方']] },
     { title: '💬 会うとき', items: [['translator.html', '💬 会話（翻訳）'], ['topics.html', '🎲 話題カード'], ['nihongo.html', '🇯🇵 日本語を教える']] },
     { title: '📝 ふり返り', items: [['recap.html', '📝 会話ふり返り'], ['diary.html', '📔 英語日記'], ['dmnote.html', '📩 DMノート'], ['report.html', '🏆 成果レポート']] },
     { sep: true, items: [['index.html#settings', '⚙️ 設定・バックアップ']] }

@@ -56,7 +56,6 @@
       <a href="quiz.html?mode=weak" class="btn weak-cta" id="weakQuizBtn">🎯 苦手だけの復習クイズを始める</a>
       <div style="display:flex; gap:8px; margin-top:0.5rem;">
         <a href="writing.html?mode=weak" class="btn btn-secondary" id="weakWritingBtn" style="flex:1; font-size:0.85rem;">✍️ 英作文で復習</a>
-        <a href="speaking.html?mode=weak" class="btn btn-secondary" id="weakSpeakingBtn" style="flex:1; font-size:0.85rem;">🎙️ 発音で復習</a>
       </div>
     </div>
 
@@ -207,8 +206,9 @@
 
       // 弱点復習ボタンの状態
       const summary = document.getElementById('weakSummary');
-      ['weakQuizBtn', 'weakWritingBtn', 'weakSpeakingBtn'].forEach(id => {
+      ['weakQuizBtn', 'weakWritingBtn'].forEach(id => {
         const el = document.getElementById(id);
+        if (!el) return;
         el.style.opacity = weak.length ? '1' : '0.45';
         el.style.pointerEvents = weak.length ? 'auto' : 'none';
         el.setAttribute('aria-disabled', weak.length ? 'false' : 'true');

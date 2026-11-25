@@ -204,8 +204,8 @@
     function inGroup() { const g = curGroup(); return g ? P.filter(p => p.group === g) : P; }
     function renderGroupChips(id) {
       const g = curGroup();
-      $(id).innerHTML = '<button class="chip' + (g ? '' : ' active') + '" data-group="">すべて（' + P.length + '）</button>' +
-        PT.GROUPS.map(x => '<button class="chip' + (g === x ? ' active' : '') + '" data-group="' + esc(x) + '">' + esc(x) + '（' + P.filter(p => p.group === x).length + '）</button>').join('');
+      $(id).innerHTML = '<button class="chip' + (g ? '' : ' active') + '" data-group="">すべて</button>' +
+        PT.GROUPS.map(x => '<button class="chip' + (g === x ? ' active' : '') + '" data-group="' + esc(x) + '">' + esc(x) + '</button>').join('');
     }
 
     /* ---------- 🔁 連続で言う：実行 ---------- */
