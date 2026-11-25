@@ -1,6 +1,6 @@
-:root { --nav-h: 52px; --primary: #4f46e5; --primary-hover: #4338ca; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --radius: 12px; --fav: #f59e0b; --ok: #15803d; --warn: #b45309; --bad: #b91c1c; }
+:root { --nav-h: 0px; --primary: #4f46e5; --primary-hover: #4338ca; --bg: #f8fafc; --card-bg: #ffffff; --text: #1e293b; --text-muted: #64748b; --border: #e2e8f0; --radius: 12px; --fav: #f59e0b; --ok: #15803d; --warn: #b45309; --bad: #b91c1c; }
 * { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: calc(var(--nav-h) + 40px + env(safe-area-inset-bottom, 0px)); }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Hiragino Kaku Gothic ProN", Meiryo, sans-serif; background-color: var(--bg); color: var(--text); line-height: 1.6; padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px)); }
 header { background: var(--card-bg); padding: 1rem 1.5rem; padding-top: calc(1rem + env(safe-area-inset-top, 0px)); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
 .logo { font-weight: 700; font-size: 1.1rem; color: var(--primary); text-decoration: none; }
 nav { position: fixed; bottom: 0; left: 0; right: 0; background: var(--card-bg); display: flex; justify-content: space-around; align-items: center; height: calc(var(--nav-h) + env(safe-area-inset-bottom, 0px)); padding-bottom: env(safe-area-inset-bottom, 0px); border-top: 1px solid var(--border); z-index: 100; }
@@ -262,3 +262,19 @@ button.rm-day:active { transform: scale(0.96); }
 .rm-daynav .tiny-btn { flex: 1; font-size: 0.85rem; padding: 7px 6px; }
 .rm-day.viewing { outline: 2px solid #4f46e5; outline-offset: 1px; }
 .chip-legend { flex-basis: 100%; font-size: 0.75rem; color: var(--text-muted); text-align: center; font-weight: normal; line-height: 1.5; margin-top: 2px; }
+
+/* ☰ メニュー（左からスライド。中身は common.js の buildMenu で差し込む） */
+.menu-btn { background: none; border: none; font-size: 1.5rem; line-height: 1; padding: 4px 8px 4px 0; margin-right: 6px; color: var(--text); cursor: pointer; }
+header .menu-left { display: flex; align-items: center; min-width: 0; }
+.menu-overlay { position: fixed; inset: 0; background: rgba(15,23,42,0.45); opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 400; }
+.menu-overlay.open { opacity: 1; pointer-events: auto; }
+.menu-drawer { position: fixed; top: 0; bottom: 0; left: 0; width: 80vw; max-width: 300px; background: var(--card-bg); transform: translateX(-100%); transition: transform 0.22s ease; z-index: 401; overflow-y: auto; -webkit-overflow-scrolling: touch; padding: calc(0.8rem + env(safe-area-inset-top, 0px)) 0 calc(1rem + env(safe-area-inset-bottom, 0px)); box-shadow: 2px 0 16px rgba(0,0,0,0.15); }
+.menu-drawer.open { transform: translateX(0); }
+.menu-head { display: flex; justify-content: space-between; align-items: center; padding: 0 1rem 0.5rem; }
+.menu-head b { color: var(--primary); font-size: 1rem; }
+.menu-close { background: none; border: none; font-size: 1.3rem; color: var(--text-muted); cursor: pointer; padding: 4px 6px; }
+.menu-sec { font-size: 0.78rem; font-weight: 700; color: var(--text-muted); padding: 0.8rem 1rem 0.25rem; }
+.menu-drawer a { display: block; padding: 0.6rem 1rem; color: var(--text); text-decoration: none; font-size: 0.95rem; border-left: 4px solid transparent; }
+.menu-drawer a.active { background: #eef2ff; color: var(--primary); font-weight: 700; border-left-color: var(--primary); }
+.menu-sep { border: none; border-top: 1px solid var(--border); margin: 0.7rem 0; }
+body.menu-open { overflow: hidden; }

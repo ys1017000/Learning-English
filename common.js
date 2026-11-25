@@ -2425,7 +2425,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v98';
+  const APP_VERSION = 'v99';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
@@ -2445,6 +2445,61 @@
     getNihongo, saveNihongo, getRoadmap, saveRoadmap, getMeetings, saveMeetings, summarizePlan, archivePlan, newId,
     getDmNotes, saveDmNotes, getTalks, saveTalks
   };
+
+  /* ---------- ☰ メニュー（全ページ共通。画面下のナビとページ内のリンク列の代わり） ---------- */
+  const MENU = [
+    { items: [['index.html', '🏠 ホーム'], ['roadmap.html', '🔥 今日の練習']] },
+    { title: '📖 まなぶ', items: [['grammar.html', '📖 文法ノート'], ['phrases.html', '📚 表現集'], ['scenes.html', '💞 気持ちから探す']] },
+    { title: '✏️ れんしゅう', items: [['pattern.html', '🔁 型練習'], ['quiz.html', '❓ クイズ・声に出すカード'], ['quiz.html?format=drill&genre=PREMEET', '📅 会う前のカード'], ['writing.html', '✍️ 英作文'], ['speaking.html', '🎙️ 発音チェック'], ['talk.html', '💭 お題で話す'], ['addword.html', '➕ 単語追加']] },
+    { title: '💬 会うとき', items: [['translator.html', '💬 会話（翻訳）'], ['topics.html', '🎲 話題カード'], ['nihongo.html', '🇯🇵 日本語を教える']] },
+    { title: '📝 ふり返り', items: [['recap.html', '📝 会話ふり返り'], ['diary.html', '📔 英語日記'], ['dmnote.html', '📩 DMノート'], ['report.html', '🏆 成果レポート']] },
+    { sep: true, items: [['index.html#settingsCard', '⚙️ 設定']] }
+  ];
+  // 今いるページ（quiz.html は「会う前」かどうかで分ける）
+  function menuActive(href) {
+    const page = (location.pathname.split('/').pop() || 'index.html');
+    const [hp, hq] = href.split('#')[0].split('?');
+    if (href.indexOf('#') >= 0) return false;
+    if (hp !== page) return false;
+    const premeet = new URLSearchParams(location.search).get('genre') === 'PREMEET';
+    if (hp === 'quiz.html') return hq ? premeet : !premeet;
+    return true;
+  }
+  function buildMenu() {
+    const header = document.querySelector('header');
+    if (!header || document.getElementById('menuDrawer')) return;
+    document.querySelectorAll('body > nav, .subnav').forEach(el => el.remove());
+    const btn = document.createElement('button');
+    btn.className = 'menu-btn'; btn.type = 'button'; btn.textContent = '☰';
+    btn.setAttribute('aria-label', 'メニューを開く'); btn.setAttribute('aria-controls', 'menuDrawer'); btn.setAttribute('aria-expanded', 'false');
+    const logo = header.querySelector('.logo');
+    const left = document.createElement('div'); left.className = 'menu-left';
+    header.insertBefore(left, header.firstChild);
+    left.appendChild(btn); if (logo) left.appendChild(logo);
+    const overlay = document.createElement('div'); overlay.className = 'menu-overlay';
+    const drawer = document.createElement('div'); drawer.className = 'menu-drawer'; drawer.id = 'menuDrawer';
+    drawer.setAttribute('role', 'dialog'); drawer.setAttribute('aria-label', 'メニュー'); drawer.setAttribute('aria-hidden', 'true');
+    let html = '<div class="menu-head"><b>心をつなぐ英語表現</b><button class="menu-close" type="button" aria-label="メニューを閉じる">✕</button></div>';
+    MENU.forEach(sec => {
+      if (sec.sep) html += '<hr class="menu-sep">';
+      if (sec.title) html += '<div class="menu-sec">' + sec.title + '</div>';
+      sec.items.forEach(([href, label]) => {
+        const on = menuActive(href);
+        html += '<a href="' + href.replace(/&/g, '&amp;') + '"' + (on ? ' class="active" aria-current="page"' : '') + '>' + label + '</a>';
+      });
+    });
+    drawer.innerHTML = html;
+    document.body.appendChild(overlay); document.body.appendChild(drawer);
+    const open = () => { drawer.classList.add('open'); overlay.classList.add('open'); document.body.classList.add('menu-open'); btn.setAttribute('aria-expanded', 'true'); drawer.setAttribute('aria-hidden', 'false'); };
+    const close = () => { drawer.classList.remove('open'); overlay.classList.remove('open'); document.body.classList.remove('menu-open'); btn.setAttribute('aria-expanded', 'false'); drawer.setAttribute('aria-hidden', 'true'); };
+    btn.addEventListener('click', open);
+    overlay.addEventListener('click', close);
+    drawer.querySelector('.menu-close').addEventListener('click', close);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && drawer.classList.contains('open')) close(); });
+    // 同じページ内（設定へ移動など）のリンクは、閉じてから移動
+    drawer.querySelectorAll('a').forEach(a => a.addEventListener('click', close));
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', buildMenu); else buildMenu();
 
   document.addEventListener('DOMContentLoaded', updateStreakBadge);
 })();
