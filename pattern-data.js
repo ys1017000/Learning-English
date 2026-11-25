@@ -387,7 +387,7 @@
     { id: "was-that-too-far", chunk: "Sorry, was that too ～?", group: "謝る・気持ち", pre: "Sorry, was that too", post: "?", head: "ごめん、", headFirst: true, tailJa: "？", note: "Was that too ～?＝「〜すぎた？」。冗談が行き過ぎたかもと思ったときに。too far（言い過ぎ）が定番。",
       slots: [["言い過ぎ（too far）", "far"], ["しつこかった（too much）", "much"], ["きつかった（too harsh）", "harsh"], ["ストレートすぎた（too direct）", "direct"], ["急すぎた（too sudden）", "sudden"]] },
     { id: "keep-an-eye", chunk: "Can you keep an eye on ～?", group: "聞く・質問", pre: "Can you keep an eye on", post: " for a sec?", head: "ちょっと", headFirst: true, tailJa: "を見ててくれる？", note: "keep an eye on ～＝「〜から目を離さないで見てる」。荷物・時間などに。",
-      slots: [["荷物", "my bag"], ["時間", "the time"], ["鍋", "the pot"], ["席", "our seats"], ["スマホ", "my phone"]] },
+      slots: [["荷物", "my bag"], ["時間を", "the time"], ["鍋", "the pot"], ["席", "our seats"], ["スマホ", "my phone"]] },
     { id: "due-to", chunk: "～ because of / due to ～", group: "意見・理由", pre: "The train was late because of", post: ".", head: "", headFirst: true, tailJa: "のせいで電車が遅れた", note: "because of ～＝「〜のせいで」。due to はかたい言い方（アナウンス・ニュース）。会話は because of で十分。",
       slots: [["雪", "the snow"], ["事故", "an accident"], ["大雨", "the heavy rain"], ["人身事故", "an accident on the line"], ["強風", "strong winds"]] },
     // ===== 2026-11-23 追加：単語アプリ（11/23）から =====
@@ -428,7 +428,13 @@
     { id: "im-against", chunk: "I'm against ～", group: "政治・社会の話", pre: "I'm against", post: ".", head: "には反対", note: "I'm against ～＝〜に反対。I'm not a fan of ～ よりはっきりした意見。",
       slots: [["戦争", "war"], ["差別", "discrimination"], ["その法律", "that law"], ["増税", "raising taxes"], ["原発", "nuclear power"]] },
     { id: "going-to-protest", chunk: "Are you going to the ～?", group: "政治・社会の話", pre: "Are you going to the", post: "?", head: "に行くの？", note: "protest / demo / rally＝デモ・集会。ドイツでは Demo（デモ）とよく言うので demo も通じる。",
-      slots: [["デモ", "protest"], ["気候のデモ", "climate demo"], ["集会", "rally"], ["行進", "march"], ["週末のデモ", "protest this weekend"]] }
+      slots: [["デモ", "protest"], ["気候のデモ", "climate demo"], ["集会", "rally"], ["行進", "march"], ["週末のデモ", "protest this weekend"]] },
+    { id: "come-see-my", chunk: "Come see my ～ if you want!", group: "提案・誘う", pre: "Come see my", post: " if you want!", head: "よかったら", headFirst: true, tailJa: "見に来てね！", note: "Come see ～＝見に来て。if you want / No pressure を付けると、断りやすいやわらかい誘いになる。",
+      slots: [["ライブ", "show"], ["バンド", "band"], ["発表", "presentation"], ["練習", "rehearsal"], ["新しい部屋", "new room"]] },
+    { id: "figure-out-dates", chunk: "Let's figure out ～ together!", group: "提案・誘う", pre: "Let's figure out", post: " together!", head: "一緒に決めよう！", note: "figure out＝（考えて）決める・解決する。adjust（調整する）より会話で自然。",
+      slots: [["日にちを", "the dates"], ["時間を", "the time"], ["待ち合わせ場所を", "where to meet"], ["どこに行くかを", "where to go"], ["何を食べるかを", "what to eat"]] },
+    { id: "havent-yet", chunk: "I haven't ～ yet.", group: "経験・過去", pre: "I haven't", post: " yet.", head: "まだ", headFirst: true, tailJa: "ないんだ", note: "I haven't ＋過去分詞＋ yet＝まだ〜していない。don't ～ yet は ×。",
+      slots: [["ハリーポッター全部見て", "watched all the Harry Potter movies"], ["そこに行って", "been there"], ["それ試して", "tried it"], ["決めて", "decided"], ["返事して", "replied"]] }
   ];
 
   var PREPS = {
@@ -587,6 +593,9 @@
 
   // 各スロットの「場面」と「補足（言い換え・ポイント）」 [場面, 補足]（slotsと同じ順番）
   var NOTES = {
+    "come-see-my": [["ライブの予定を伝えたとき", "No pressure though 😊 を付けると気をつかわせない"], ["バンドの話のあと", "come see my band play（演奏を見に来て）とも"], ["相手の発表と逆の立場で", "Can I come see your presentation?（見に行っていい？）と聞く形にも"], ["練習を見たいと言われたら", "rehearsal＝リハーサル"], ["引っ越したとき", "Come over!（うちに来て）が家ならいちばん自然"]],
+    "figure-out-dates": [["会う日を相談するとき", "let's adjust dates は不自然。figure out を使う"], ["時間を決めるとき", "Let's figure out a time that works for both of us. とも"], ["待ち合わせを決めるとき", "where to meet＝どこで会うか"], ["デートの行き先", "where to go＝どこへ行くか"], ["ごはんの相談", "what to eat＝何を食べるか"]],
+    "havent-yet": [["映画の話", "haven't watched ～ yet。don't watch ～ yet は ×"], ["行ったことのない場所", "I've never been there. は「一度もない」でもっと強い"], ["食べ物の話", "Not yet!（まだ！）と短くも答えられる"], ["迷っているとき", "I haven't decided yet.＝まだ決めてない"], ["返信の話", "Sorry, I haven't replied yet!＝まだ返信してなくてごめん"]],
     "stand-for": [["デモの目的を聞いたとき", "What are you protesting for?（何を訴えてるの？）と聞ける"], ["環境の話", "climate justice＝気候正義（Fridays for Future などのテーマ）"], ["女性の権利の話", "women's rights は ' の位置に注意（women の所有）"], ["難民支援の話", "refugee＝難民（レフュジー）"], ["平和の話", "We stand with Ukraine.（〜と共にある・連帯する）と with にも"]],
     "i-support": [["彼女の活動を聞いたとき", "I'm proud of you for doing this. と続けると気持ちが伝わる"], ["意見を聞かれたとき", "I'm all for it.（大賛成）とも言える"], ["社会運動の話", "the movement＝その運動"], ["ニュースの話", "same-sex marriage＝同性婚"], ["相手が何か決めたとき", "I support you no matter what.（何があっても応援する）"]],
     "im-against": [["ニュースを見て", "I'm totally against ～ で強く反対"], ["差別の話", "racism（人種差別）/ sexism（性差別）にも入れ替えられる"], ["政策の話", "that law＝その法律。policy（政策）にも"], ["税金の話", "～ing で行為も入れられる"], ["エネルギーの話", "I'm not sure about ～（〜はよくわからない）とやわらかくも"]],
