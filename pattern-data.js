@@ -434,7 +434,13 @@
     { id: "figure-out-dates", chunk: "Let's figure out ～ together!", group: "提案・誘う", pre: "Let's figure out", post: " together!", head: "一緒に決めよう！", note: "figure out＝（考えて）決める・解決する。adjust（調整する）より会話で自然。",
       slots: [["日にちを", "the dates"], ["時間を", "the time"], ["待ち合わせ場所を", "where to meet"], ["どこに行くかを", "where to go"], ["何を食べるかを", "what to eat"]] },
     { id: "havent-yet", chunk: "I haven't ～ yet.", group: "経験・過去", pre: "I haven't", post: " yet.", head: "まだ", headFirst: true, tailJa: "ないんだ", note: "I haven't ＋過去分詞＋ yet＝まだ〜していない。don't ～ yet は ×。",
-      slots: [["ハリーポッター全部見て", "watched all the Harry Potter movies"], ["そこに行って", "been there"], ["それ試して", "tried it"], ["決めて", "decided"], ["返事して", "replied"]] }
+      slots: [["ハリーポッター全部見て", "watched all the Harry Potter movies"], ["そこに行って", "been there"], ["それ試して", "tried it"], ["決めて", "decided"], ["返事して", "replied"]] },
+    { id: "didnt-even", chunk: "I didn't even ～.", group: "経験・過去", pre: "I didn't even", post: ".", head: "", note: "I didn't even ＋動詞＝〜すらしなかった。even は didn't の後ろ、動詞の前。",
+      slots: [["それすら知らなかった", "know that"], ["気づきもしなかった", "notice"], ["朝ごはんすら食べなかった", "eat breakfast"], ["メッセージすら見てなかった", "see your message"], ["寝てすらいない", "sleep"]] },
+    { id: "even-better", chunk: "It was even ～er than I expected!", group: "気持ちを言う", pre: "It was even", post: " than I expected!", head: "思ってたよりさらに", headFirst: true, tailJa: "！", note: "even ＋比較級＝（もともと良いけど）さらに〜。very better は ×。",
+      slots: [["よかった", "better"], ["きれいだった", "more beautiful"], ["おいしかった", "more delicious"], ["楽しかった", "more fun"], ["寒かった", "colder"]] },
+    { id: "even-if", chunk: "Even if ～, let's ～!", group: "願い・予定", pre: "Even if", post: ", let's go!", head: "行こう！", note: "Even if ＋現在形＝たとえ〜でも。まだ起きていない仮の話に。",
+      slots: [["たとえ雨でも", "it rains"], ["たとえ寒くても", "it's cold"], ["たとえ混んでても", "it's crowded"], ["たとえ遅くても", "it's late"], ["たとえ疲れてても", "we're tired"]] }
   ];
 
   var PREPS = {
@@ -593,6 +599,9 @@
 
   // 各スロットの「場面」と「補足（言い換え・ポイント）」 [場面, 補足]（slotsと同じ順番）
   var NOTES = {
+    "didnt-even": [["知らなかった話を聞いたとき", "I had no idea!（全然知らなかった！）とも"], ["相手の変化に気づかなかったとき", "Sorry, I didn't even notice!（ごめん、気づきもしなかった）"], ["忙しかった一日の話", "I didn't even have time to eat.（食べる時間すらなかった）"], ["返信が遅れたとき", "Sorry, I didn't even see your message!"], ["寝不足の日", "I didn't get any sleep.（全然寝てない）とも"]],
+    "even-better": [["デートの帰りに", "than I expected＝思っていたより"], ["イルミネーションを見て", "more ＋長い形容詞（beautiful）"], ["ごはんのあと", "more delicious より even tastier も自然"], ["イベントの感想", "fun の比較級は more fun"], ["寒い日に", "even colder は寒さに驚いたとき"]],
+    "even-if": [["天気が心配なとき", "中は現在形：Even if it will rain は ×"], ["冬の予定", "it's cold＝寒い"], ["人気の場所", "crowded＝混んでいる"], ["夜の予定", "Even if it's late, call me.（遅くても電話して）にも"], ["疲れていても会いたいとき", "Even if you're tired, I want to see you.（疲れててもいいから会いたい）"]],
     "come-see-my": [["ライブの予定を伝えたとき", "No pressure though 😊 を付けると気をつかわせない"], ["バンドの話のあと", "come see my band play（演奏を見に来て）とも"], ["相手の発表と逆の立場で", "Can I come see your presentation?（見に行っていい？）と聞く形にも"], ["練習を見たいと言われたら", "rehearsal＝リハーサル"], ["引っ越したとき", "Come over!（うちに来て）が家ならいちばん自然"]],
     "figure-out-dates": [["会う日を相談するとき", "let's adjust dates は不自然。figure out を使う"], ["時間を決めるとき", "Let's figure out a time that works for both of us. とも"], ["待ち合わせを決めるとき", "where to meet＝どこで会うか"], ["デートの行き先", "where to go＝どこへ行くか"], ["ごはんの相談", "what to eat＝何を食べるか"]],
     "havent-yet": [["映画の話", "haven't watched ～ yet。don't watch ～ yet は ×"], ["行ったことのない場所", "I've never been there. は「一度もない」でもっと強い"], ["食べ物の話", "Not yet!（まだ！）と短くも答えられる"], ["迷っているとき", "I haven't decided yet.＝まだ決めてない"], ["返信の話", "Sorry, I haven't replied yet!＝まだ返信してなくてごめん"]],

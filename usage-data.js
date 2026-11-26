@@ -1063,6 +1063,16 @@
     "I want to stay with you until we get near your place.": "別れ際、相手の家の近くまで一緒にいたいとき。",
     "I got home a little while ago.": "帰宅の連絡が少し遅れたとき。a little while ago＝少し前に。",
     "Don't forget to take breaks while you're working on your presentations!": "発表の準備を頑張っている相手を気づかうメッセージに。",
-    "For me, trust means being honest with each other. What about you?": "自分の価値観を言って、相手の考えも聞くとき。"
+    "For me, trust means being honest with each other. What about you?": "自分の価値観を言って、相手の考えも聞くとき。",
+    "Even my mom knows that song.": "家族や身近な人の話で「そこまで有名」と言うとき。",
+    "She studies even on weekends.": "がんばっている人のことを、驚きを込めて話すとき。",
+    "Should I even tell her?": "伝えるかどうか自体を迷っていると話すとき。",
+    "I didn't even know that.": "初めて聞いて驚いたとき。",
+    "I'm so tired, I can't even think.": "ものすごく疲れているのを伝えるとき。",
+    "It was even better than I expected.": "デートやお店が期待以上だったとき。",
+    "It's even colder in Sendai.": "寒い場所へ行く相手に、服装を気づかうとき。",
+    "Even if it rains, let's go.": "天気が心配でも予定を楽しみにしているとき。",
+    "Even though I was tired, I went running.": "一日の出来事を話すとき。",
+    "Thank you for coming, even though you were busy.": "忙しい相手が時間を作ってくれたときのお礼。"
   };
 })();

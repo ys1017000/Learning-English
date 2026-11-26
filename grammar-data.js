@@ -2514,6 +2514,80 @@
       { situation: "よかったら駅まで迎えに行けるよ。（押しつけずに）", sentence: "I ___ pick you up at the station.", options: ["could", "can't", "would", "must"], answer: "could", full: "I could pick you up at the station.", why: "「もし必要なら、できるよ」と距離を置いた申し出は could。" },
       { situation: "今すぐイルミネーション見たい！見に行こう！", sentence: "I ___ see the Christmas lights! Let's go!", options: ["want to", "would", "'d like to", "could"], answer: "want to", full: "I want to see the Christmas lights! Let's go!", why: "「今すぐ・本当に」のまっすぐな気持ちは want to。Let's go! につながる。" }
     ]
+  }, {
+    id: 'even',
+    title: 'even の使い方：〜でさえ・そもそも・さらに・たとえ〜でも',
+    short: 'even（でさえ・そもそも・さらに）',
+    intro: 'even のイメージは「予想を超えたところを指す」。「まさかそこまで」という気持ちで、すぐ後ろの言葉を強めます。強めたい言葉のすぐ前に置くのが基本。使い方は大きく4つ：①〜でさえ・〜まで、②疑問・否定で「そもそも」「〜すら」、③比較級の前で「さらに」、④even if / even though（たとえ〜でも／〜なのに）。',
+    groups: [
+      {
+        name: '① 〜でさえ・〜まで',
+        note: '「普通はそうじゃなさそうなものまで」。強めたい言葉（人・もの・時）のすぐ前に置く。',
+        forms: [
+          { key: 'even my', kana: 'イーヴン', kanaNote: '', label: 'even ＋ 人・もの（〜でさえ）', ja: '〜でさえ・〜まで', nuance: '予想外の人やものを指して「そこまで」と驚きを足す。',
+            ex: ['Even my mom knows that song.', '母でさえその曲知ってるよ。'], tone: 'even は強めたい言葉の前：my even mom（×）。' },
+          { key: 'even on', kana: 'イーヴン オン', kanaNote: '', label: 'even ＋ 時・場所（〜でさえ）', ja: '〜でも・〜でさえ', nuance: 'even on weekends / even in winter のように、時や場所の言葉の前にも置ける。',
+            ex: ['She studies even on weekends.', '彼女は週末でさえ勉強してる。'], tone: '「〜なのに」の驚きが入る。' }
+        ]
+      },
+      {
+        name: '② 疑問・否定で「そもそも」「〜すら」',
+        note: '一段手前まで戻って問い直す・「それすら」と強める。動詞の前に置く。',
+        forms: [
+          { key: 'should i even', kana: 'シュド アイ イーヴン', kanaNote: '', label: '疑問文の even（そもそも〜？）', ja: 'そもそも〜なの？', nuance: '話の前提そのものを問い直す。in the first place と一緒に使うと「そもそも」がさらに強まる。',
+            ex: ['Should I even tell her?', 'そもそも彼女に言うべきなのかな？'], tone: '言い方しだいで「〜なんてするの？」と責める感じにもなるので、相手に聞くときはやわらかい声で。' },
+          { key: "didn't even", kana: 'ディドゥント イーヴン', kanaNote: '', label: "否定文の even（〜すらしなかった）", ja: '〜すらない・〜さえしなかった', nuance: "don't / didn't / can't のすぐ後ろ、動詞の前に置く。",
+            ex: ["I didn't even know that.", 'それすら知らなかった。'], tone: "I can't even ～.（〜すらできない）は感情が高ぶったときの決まり文句にも。" }
+        ]
+      },
+      {
+        name: '③ 比較級の前で「さらに・もっと」',
+        note: 'even ＋ 比較級＝「（もともと〜だけど）さらに〜」。much ＋ 比較級に近いが、「すでに〜なのに」の気持ちが入る。',
+        forms: [
+          { key: 'even better', kana: 'イーヴン ベター', kanaNote: '', label: 'even ＋ 比較級（さらに〜）', ja: 'さらに〜・もっと〜', nuance: '前のものもすでに良い（寒い）ことを前提に「それ以上」。',
+            ex: ['It was even better than I expected.', '思ってたよりさらによかった。'], tone: 'even more ＋ 形容詞 も OK（even more beautiful）。' }
+        ]
+      },
+      {
+        name: '④ even if / even though',
+        note: 'even if＝「たとえ〜でも」（まだ起きていない・仮の話）、even though＝「〜なのに」（本当に起きていること）。',
+        forms: [
+          { key: 'even if', kana: 'イーヴン イフ', kanaNote: '', label: 'even if（たとえ〜でも）', ja: 'たとえ〜でも', nuance: 'そうなるかわからないことを仮に置いて「それでも」。',
+            ex: ["Even if it rains, let's go.", 'たとえ雨でも行こう。'], tone: '中は現在形（Even if it will rain は ×）。' },
+          { key: 'even though', kana: 'イーヴン ゾウ', kanaNote: '', label: 'even though（〜なのに）', ja: '〜なのに・〜だけど', nuance: '本当にそうなっていることについて「それなのに」。although より気持ちが強い。',
+            ex: ['Thank you for coming, even though you were busy.', '忙しかったのに来てくれてありがとう。'], tone: 'お礼の文で「忙しいのに」を足すと気遣いが伝わる。' }
+        ]
+      }
+    ],
+    compare: {
+      lead: '例：even を置く場所で強める言葉が変わる',
+      rows: [
+        ['Even my mom knows.', '母でさえ知ってる。（my mom を強める）'],
+        ["I didn't even know.", '知りすらしなかった。（know を強める）'],
+        ['Should I even ask?', 'そもそも聞くべき？（ask すること自体を問い直す）'],
+        ["It's even colder in Sendai.", '仙台はさらに寒い。（colder を強める）'],
+        ['Even if you are busy, call me.', 'たとえ忙しくても電話してね。（仮の話）']
+      ]
+    },
+    cautions: [
+      'even は強めたい言葉のすぐ前に置く。',
+      '否定文では not の後ろ、動詞の前：I didn\'t even know.（I even didn\'t know は不自然）。',
+      'even if の中は現在形。未来のことでも will は使わない。',
+      'even if（仮の話）と even though（実際の話）を区別する。',
+      '「そもそも」は even だけでも言えるし、in the first place を足すとさらに強い。'
+    ],
+    quiz: [
+      { situation: '母でさえその曲知ってるよ。', sentence: '___ my mom knows that song.', options: ['Even', 'Ever', 'Also', 'Still'], answer: 'Even', full: 'Even my mom knows that song.', why: '「〜でさえ」は強めたい言葉（my mom）の前に even。' },
+      { situation: 'それすら知らなかった。', sentence: "I didn't ___ know that.", options: ['even', 'ever', 'also', 'still'], answer: 'even', full: "I didn't even know that.", why: '否定文の「〜すら」は didn\'t の後ろ・動詞の前に even。' },
+      { situation: 'そもそも彼女に言うべきなのかな？', sentence: 'Should I ___ tell her?', options: ['even', 'ever', 'yet', 'already'], answer: 'even', full: 'Should I even tell her?', why: '前提を問い直す「そもそも」は疑問文の even。' },
+      { situation: '思ってたよりさらによかった。', sentence: 'It was ___ better than I expected.', options: ['even', 'very', 'more', 'so'], answer: 'even', full: 'It was even better than I expected.', why: '比較級（better）を強める「さらに」は even。very better は ×。' },
+      { situation: '仙台は東京よりさらに寒いよ。', sentence: "It's ___ colder in Sendai.", options: ['even', 'very', 'too', 'such'], answer: 'even', full: "It's even colder in Sendai.", why: 'colder（比較級）の前は even / much。very は使えない。' },
+      { situation: 'たとえ雨でも行こう。', sentence: "___ it rains, let's go.", options: ['Even if', 'Even though', 'Even', 'If even'], answer: 'Even if', full: "Even if it rains, let's go.", why: 'まだわからない仮の話は even if。' },
+      { situation: '疲れてたのに走りに行った。', sentence: '___ I was tired, I went running.', options: ['Even though', 'Even if', 'Even', 'So'], answer: 'Even though', full: 'Even though I was tired, I went running.', why: '実際に疲れていたので even though（〜なのに）。' },
+      { situation: '忙しかったのに来てくれてありがとう。', sentence: 'Thank you for coming, ___ you were busy.', options: ['even though', 'even if', 'even', 'so'], answer: 'even though', full: 'Thank you for coming, even though you were busy.', why: '本当に忙しかったことに対する「〜なのに」は even though。' },
+      { situation: 'もう疲れすぎて、何もできない。', sentence: "I'm so tired, I can't ___ think.", options: ['even', 'ever', 'yet', 'still'], answer: 'even', full: "I'm so tired, I can't even think.", why: "can't の後ろ・動詞の前に even で「〜すらできない」。" },
+      { situation: '彼女は週末でさえ勉強してる。', sentence: 'She studies ___ on weekends.', options: ['even', 'ever', 'yet', 'just'], answer: 'even', full: 'She studies even on weekends.', why: '時の言葉（on weekends）の前に even で「〜でさえ」。' }
+    ]
   }];
 
 
@@ -2524,7 +2598,7 @@
     { name: '💭 気持ち・仮定（would / could）', ids: ['would-could', 'would-distance', 'modal-perfect', 'thought-would', 'hope-wish', 'intend'] },
     { name: '⚖️ 比べる', ids: ['comparative', 'as-as'] },
     { name: '🧩 語の形・語順（名詞・形容詞・副詞・受け身）', ids: ['adj-noun', 'adj-noun-2', 'adverb-position', 'get-adj', 'being-done'] },
-    { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'else-other', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
+    { name: '🔀 似た表現の使い分け', ids: ['prepositions', 'lately-recently', 'else-other', 'even', 'think-of-about', 'remember', 'for-usage', 'small-mistakes'] },
     { name: '🗣 話し言葉・発音', ids: ['contractions', 'linking'] },
     { name: '🔄 日本語→英語の発想', ids: ['think-person', 'think-have', 'think-naru', 'think-phrases', 'think-simple', 'think-thing', 'think-soft', 'think-image', 'would-distance'] }
   ];

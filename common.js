@@ -504,6 +504,16 @@
       ["文法・表現パターン", "Do you need anything else?", "ほかに何かいる？（anything else：ほかに何か）"],
       ["文法・表現パターン", "Let's go somewhere else.", "ほかの場所に行こう。（somewhere else：ほかの場所）"],
       ["文法・表現パターン", "What else do you want to eat?", "ほかに何食べたい？（what else：ほかに何）"],
+      ["文法・表現パターン", "Even my mom knows that song.", "母でさえその曲知ってるよ。（even ＋人＝〜でさえ）"],
+      ["文法・表現パターン", "She studies even on weekends.", "彼女は週末でさえ勉強してる。（even ＋時＝〜でさえ）"],
+      ["文法・表現パターン", "Should I even tell her?", "そもそも彼女に言うべきなのかな？（疑問文の even＝そもそも）"],
+      ["文法・表現パターン", "I didn't even know that.", "それすら知らなかった。（否定の even＝〜すら）"],
+      ["文法・表現パターン", "I'm so tired, I can't even think.", "疲れすぎて、考えることすらできない。（can't even ～）"],
+      ["文法・表現パターン", "It was even better than I expected.", "思ってたよりさらによかった。（even ＋比較級＝さらに）"],
+      ["文法・表現パターン", "It's even colder in Sendai.", "仙台はさらに寒いよ。（even ＋比較級）"],
+      ["文法・表現パターン", "Even if it rains, let's go.", "たとえ雨でも行こう。（even if＝たとえ〜でも。中は現在形）"],
+      ["文法・表現パターン", "Even though I was tired, I went running.", "疲れてたのに走りに行った。（even though＝〜なのに）"],
+      ["文法・表現パターン", "Thank you for coming, even though you were busy.", "忙しかったのに来てくれてありがとう。（even though）"],
       ["文法・表現パターン", "Do you know any other good places?", "ほかにいい場所知ってる？（other ＋ 複数の名詞）"],
       ["文法・表現パターン", "Can I have another beer?", "ビールもう1杯もらえる？（another ＋ 1つ）"],
       ["文法・表現パターン", "Where's the other chopstick?", "もう片方のお箸どこ？（the other：2つのうちもう片方）"],
@@ -2428,7 +2438,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v103';
+  const APP_VERSION = 'v104';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
