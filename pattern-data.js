@@ -440,7 +440,13 @@
     { id: "even-better", chunk: "It was even ～er than I expected!", group: "気持ちを言う", pre: "It was even", post: " than I expected!", head: "思ってたよりさらに", headFirst: true, tailJa: "！", note: "even ＋比較級＝（もともと良いけど）さらに〜。very better は ×。",
       slots: [["よかった", "better"], ["きれいだった", "more beautiful"], ["おいしかった", "more delicious"], ["楽しかった", "more fun"], ["寒かった", "colder"]] },
     { id: "even-if", chunk: "Even if ～, let's ～!", group: "願い・予定", pre: "Even if", post: ", let's go!", head: "行こう！", note: "Even if ＋現在形＝たとえ〜でも。まだ起きていない仮の話に。",
-      slots: [["たとえ雨でも", "it rains"], ["たとえ寒くても", "it's cold"], ["たとえ混んでても", "it's crowded"], ["たとえ遅くても", "it's late"], ["たとえ疲れてても", "we're tired"]] }
+      slots: [["たとえ雨でも", "it rains"], ["たとえ寒くても", "it's cold"], ["たとえ混んでても", "it's crowded"], ["たとえ遅くても", "it's late"], ["たとえ疲れてても", "we're tired"]] },
+    { id: "even-if-just", chunk: "even if it's just for ～", group: "気持ちを言う", pre: "I'd love to see you, even if it's just for", post: "!", head: "だけでも会いたいな！", note: "even if it's just ～＝たとえ〜だけでも。短い時間でも会いたい気持ちを伝える。even は「予想を超えて」の強め。",
+      slots: [["5分", "5 minutes"], ["少し", "a little while"], ["1時間", "an hour"], ["ちょっと", "a few minutes"], ["コーヒー1杯の間", "a quick coffee"]] },
+    { id: "better-not-to", chunk: "I think it might be better not to ～", group: "受け入れる・都合", pre: "I think it might be better not to", post: ".", head: "ほうがいいかも", note: "it might be better not to ～＝〜しないほうがいいかも。断りをやわらかくする言い方。better の後ろの not の位置に注意。",
+      slots: [["今日は会わない", "meet today"], ["今夜は出かけない", "go out tonight"], ["もう飲まない", "drink anymore"], ["今日は遅くまでいない", "stay out late tonight"], ["それは言わない", "say that"]] },
+    { id: "on-my-plate", chunk: "I have a lot on my plate ～", group: "気持ちを言う", pre: "I have a lot on my plate", post: ".", head: "やることがいっぱいなんだ", note: "have a lot on my plate＝やることが山ほどある（皿にたくさん乗っているイメージ）。忙しさを伝える定番。",
+      slots: [["今は", "right now"], ["今週は", "this week"], ["仕事で", "with work"], ["課題で", "with assignments"], ["バンドのことで", "with my band"]] }
   ];
 
   var PREPS = {
@@ -599,6 +605,9 @@
 
   // 各スロットの「場面」と「補足（言い換え・ポイント）」 [場面, 補足]（slotsと同じ順番）
   var NOTES = {
+    "even-if-just": [["相手が忙しくて会えないとき", "even if it's only for a few minutes とも言える"], ["夜遅いとき", "a little while＝ちょっとの間"], ["ごはんの時間がないとき", "for an hour＝1時間だけ"], ["相手が疲れているとき", "No pressure though! を足すと押しつけにならない"], ["仕事の合間に", "grab a quick coffee＝さっとコーヒーを飲む"]],
+    "better-not-to": [["予定をキャンセルするとき", "I'm really sorry, but ～ と前に置くとさらにやわらかい"], ["寒い夜や疲れた日", "go out＝出かける"], ["お酒の席で", "I think I'd better stop.（もうやめとく）とも"], ["次の日が早いとき", "stay out late＝夜遅くまで外にいる"], ["言い過ぎそうなとき", "Maybe I shouldn't say that.（言わないほうがいいかな）とも"]],
+    "on-my-plate": [["忙しさを伝えるとき", "I'm swamped.（手いっぱい）とも"], ["週の予定の話", "this week＝今週"], ["仕事の話", "with ～ で何に忙しいかを足す"], ["相手の課題に寄り添うとき", "You have a lot on your plate. と相手に使うと気遣いに"], ["ライブ前", "with my band＝バンドのことで"]],
     "didnt-even": [["知らなかった話を聞いたとき", "I had no idea!（全然知らなかった！）とも"], ["相手の変化に気づかなかったとき", "Sorry, I didn't even notice!（ごめん、気づきもしなかった）"], ["忙しかった一日の話", "I didn't even have time to eat.（食べる時間すらなかった）"], ["返信が遅れたとき", "Sorry, I didn't even see your message!"], ["寝不足の日", "I didn't get any sleep.（全然寝てない）とも"]],
     "even-better": [["デートの帰りに", "than I expected＝思っていたより"], ["イルミネーションを見て", "more ＋長い形容詞（beautiful）"], ["ごはんのあと", "more delicious より even tastier も自然"], ["イベントの感想", "fun の比較級は more fun"], ["寒い日に", "even colder は寒さに驚いたとき"]],
     "even-if": [["天気が心配なとき", "中は現在形：Even if it will rain は ×"], ["冬の予定", "it's cold＝寒い"], ["人気の場所", "crowded＝混んでいる"], ["夜の予定", "Even if it's late, call me.（遅くても電話して）にも"], ["疲れていても会いたいとき", "Even if you're tired, I want to see you.（疲れててもいいから会いたい）"]],
