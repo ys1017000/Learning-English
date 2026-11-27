@@ -2438,7 +2438,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v107';
+  const APP_VERSION = 'v109';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,

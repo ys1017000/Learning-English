@@ -97,6 +97,22 @@
       return [];
     }
     const DECK_LABEL = { lunch: 'カード暗唱を始める', week: '今週のカードを通しで言う', weak: '言えなかったカードだけ言う', check: '月末チェックを始める' };
+    // 今日の型 3つ：苦手（🔥）から1つ＋日付で回る型。同じ日は同じ3つ
+    function todayPats(day) {
+      const all = PT.PATTERNS, st = EA.getPatStats ? EA.getPatStats() : {};
+      const n = Math.floor(Date.parse(day + 'T00:00:00') / 86400000);
+      const weak = all.filter(p => { const e = st[p.id]; if (!e) return false; const said = e.ok + e.mid + e.ng; return e.l === 'ng' || e.l === 'mid' || (said && (e.ok + e.mid * 0.5) / said < 0.7); });
+      const out = [];
+      if (weak.length) out.push(weak[n % weak.length]);
+      for (let i = 0; out.length < 3 && i < all.length; i++) { const p = all[(n * 3 + i) % all.length]; if (!out.includes(p)) out.push(p); }
+      return out;
+    }
+    // ☀️ 昼のカードのあと：そのカードに出てきた型（なければ今日の型）を3つ
+    function noonPats(cards) {
+      const out = PT.patternsInCards(cards.map(c => c.en)).slice(0, 3);
+      todayPats(today).forEach(p => { if (out.length < 3 && !out.some(x => x.id === p.id)) out.push(p); });
+      return out;
+    }
     function slotHtml(s, done, p, day) {
       day = day || today;
       const links = (s.links || []).map(k => {
@@ -108,6 +124,11 @@
         const n = deckFor(s.deck, p).length;
         deckBtn = n ? '<button class="btn rm-deck" data-act="deck" data-deck="' + s.deck + '" data-slot="' + s.id + '">▶ ' + DECK_LABEL[s.deck] + '（' + n + '枚）</button>'
           : '<p class="muted rm-nodeck">' + (s.deck === 'weak' ? '言えなかったカードはまだありません。' : 'この枠で使うカードがまだありません。') + '</p>';
+      }
+      // 🌅 朝：今日の型 3つ（苦手な型を1つ＋日替わり）
+      if (s.id === 'am' && window.PT) {
+        const tp = todayPats(day);
+        if (tp.length) deckBtn += '<a class="btn rm-deck" href="pattern.html?from=am&ids=' + tp.map(x => x.id).join(',') + '" style="margin-top:0.4rem; display:block; text-align:center;">🔁 今日の型 3つ（1分）</a>';
       }
       // 🌙 夜：その日の昼のカードに出てきた型を、型練習（連続で言う）で応用
       if ((s.id === 'diary1' || (s.links || []).includes('diary')) && window.PT) {
@@ -358,7 +379,8 @@
         return html;
       }
       html += '<p class="muted" style="margin:0.6rem 0;">' + (stillN ? '「まだ」のカードは、明日の昼にもう一度出ます。1回目で言えるようになるまで、毎日1回ずつ出ます。' : '全部言えました！ 1回目で言えなかったカードも、明日の昼にもう一度出て、定着を確かめます。') + '</p>' +
-        '<button class="btn" data-act="closeRun">閉じる</button>';
+        (run.kind === 'lunch' && window.PT ? '<a class="btn" href="pattern.html?from=noon&auto=1&ids=' + noonPats(run.all).map(x => x.id).join(',') + '" style="display:block; text-align:center; margin-bottom:0.5rem;">▶ 続けて型×3（連続で言う・1分）</a>' : '') +
+        '<button class="btn' + (run.kind === 'lunch' ? ' btn-secondary' : '') + '" data-act="closeRun">閉じる</button>';
       return html;
     }
     function renderRun() {

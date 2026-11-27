@@ -193,7 +193,7 @@
       const fb = $('fromBox');
       if (fromIds.length) {
         fb.style.display = '';
-        fb.innerHTML = '<h2>🌙 昼のカードの型で応用</h2><p class="muted">今日の昼に練習したカードに出てきた型です。後ろの言葉を入れ替えて、続けて言ってみましょう。</p>' +
+        fb.innerHTML = FROM_HEAD[fromKey] +
           '<div class="pt-list" style="margin-bottom:0.6rem;">' + fromIds.map(p => '<div class="pt-note" style="margin:0;"><b>' + esc(PT.frame(p)) + '</b><br><span class="muted">' + esc(p.head || p.tailJa || '') + '</span></div>').join('') + '</div>' +
           '<button class="btn" data-act="startFrom">▶ はじめる（' + fromIds.length + '型）</button>';
       } else fb.style.display = 'none';
@@ -499,7 +499,15 @@
     const q = new URLSearchParams(location.search);
     // 🌙 ロードマップから：?ids=型,型 … 昼のカードに出てきた型をまとめて練習
     const fromIds = (q.get('ids') || '').split(',').map(x => PT.byId(x)).filter(Boolean);
+    const fromKey = ['am', 'noon'].includes(q.get('from')) ? q.get('from') : 'night';
+    const FROM_HEAD = {
+      am: '<h2>🌅 今日の型 3つ</h2><p class="muted">苦手な型と日替わりの型です。後ろの言葉を入れ替えて、続けて言ってみましょう（1分くらい）。</p>',
+      noon: '<h2>☀️ カードの続き：型×3</h2><p class="muted">さっきのカードに出てきた型です。後ろの言葉を入れ替えて、続けて言ってみましょう。</p>',
+      night: '<h2>🌙 昼のカードの型で応用</h2><p class="muted">今日の昼に練習したカードに出てきた型です。後ろの言葉を入れ替えて、続けて言ってみましょう。</p>'
+    };
     setTab(['slot', 'quiz', 'stats'].includes(q.get('tab')) ? q.get('tab') : 'slot');
+    // ☀️ 昼のカードのあとは、そのまま始める（タップを減らす）
+    if (q.get('auto') === '1' && fromIds.length) startSlot(fromIds.map(p => p.id));
     EA.updateStreakBadge();
   })();
   </script>
