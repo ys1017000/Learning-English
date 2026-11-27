@@ -446,7 +446,11 @@
     { id: "better-not-to", chunk: "I think it might be better not to ～", group: "受け入れる・都合", pre: "I think it might be better not to", post: ".", head: "ほうがいいかも", note: "it might be better not to ～＝〜しないほうがいいかも。断りをやわらかくする言い方。better の後ろの not の位置に注意。",
       slots: [["今日は会わない", "meet today"], ["今夜は出かけない", "go out tonight"], ["もう飲まない", "drink anymore"], ["今日は遅くまでいない", "stay out late tonight"], ["それは言わない", "say that"]] },
     { id: "on-my-plate", chunk: "I have a lot on my plate ～", group: "気持ちを言う", pre: "I have a lot on my plate", post: ".", head: "やることがいっぱいなんだ", note: "have a lot on my plate＝やることが山ほどある（皿にたくさん乗っているイメージ）。忙しさを伝える定番。",
-      slots: [["今は", "right now"], ["今週は", "this week"], ["仕事で", "with work"], ["課題で", "with assignments"], ["バンドのことで", "with my band"]] }
+      slots: [["今は", "right now"], ["今週は", "this week"], ["仕事で", "with work"], ["課題で", "with assignments"], ["バンドのことで", "with my band"]] },
+    { id: "not-sure-how-much", chunk: "I'm not sure how much ～", group: "気持ちを言う", pre: "I'm not sure how much", post: ".", head: "のか、よくわからないんだ", note: "I'm not sure how much ＋主語＋動詞＝どのくらい〜なのかわからない。how much のあとは普通の文の語順（疑問文にしない）。",
+      slots: [["気持ちをどこまで話していい", "I should share my feelings"], ["日本の文化をどこまで知ってる", "you know about Japanese culture"], ["どこまで説明すればいい", "I need to explain"], ["どのくらい時間がある", "time you have"], ["どこまで聞いていい", "I can ask"]] },
+    { id: "i-realized", chunk: "I realized ～", group: "気持ちを言う", pre: "I realized", post: ".", head: "", note: "I realized ＋ how / why / that ～＝〜に気づいた・わかった。話を聞いて理解したことを伝える。how / why のあとは普通の文の語順。",
+      slots: [["気持ちを伝えるのがどれだけ大事か気づいたよ", "how important it is to share my feelings"], ["君がたくさん話してくれる理由がわかったよ", "why you tell me so many things"], ["どれだけ会いたかったか気づいたよ", "how much I missed you"], ["英語をもっと練習しなきゃって気づいたよ", "I need to practice English more"], ["文化がこんなに違うんだって気づいたよ", "how different our cultures are"]] }
   ];
 
   var PREPS = {
@@ -605,6 +609,8 @@
 
   // 各スロットの「場面」と「補足（言い換え・ポイント）」 [場面, 補足]（slotsと同じ順番）
   var NOTES = {
+    "i-realized": [["相手の話を聞いたあと", "I realized ～ のあとに So I'll try ～.（だから〜してみる）と続けると前向き"], ["相手の気持ちがわかったとき", "I understood why ～ とも言える"], ["久しぶりに会ったとき", "how much ～＝どれだけ〜か"], ["自分の課題に気づいたとき", "that を省略して I realized ＋文 でもOK"], ["文化の違いの話", "how different ～ are＝どれだけ違うか"]],
+    "not-sure-how-much": [["正直な気持ちを話すとき", "Honestly, ～ を前につけるとやわらかい本音になる"], ["文化の違いを話すとき", "yet を最後につけると「まだ」のニュアンス"], ["説明する前に", "I don't know what I need to explain. とも"], ["忙しい相手に", "I'm not sure how much time you have, so I'll keep it short.（手短にするね）"], ["踏み込んだ話の前に", "Is it okay if I ask ～?（〜って聞いてもいい？）とも"]],
     "even-if-just": [["相手が忙しくて会えないとき", "even if it's only for a few minutes とも言える"], ["夜遅いとき", "a little while＝ちょっとの間"], ["ごはんの時間がないとき", "for an hour＝1時間だけ"], ["相手が疲れているとき", "No pressure though! を足すと押しつけにならない"], ["仕事の合間に", "grab a quick coffee＝さっとコーヒーを飲む"]],
     "better-not-to": [["予定をキャンセルするとき", "I'm really sorry, but ～ と前に置くとさらにやわらかい"], ["寒い夜や疲れた日", "go out＝出かける"], ["お酒の席で", "I think I'd better stop.（もうやめとく）とも"], ["次の日が早いとき", "stay out late＝夜遅くまで外にいる"], ["言い過ぎそうなとき", "Maybe I shouldn't say that.（言わないほうがいいかな）とも"]],
     "on-my-plate": [["忙しさを伝えるとき", "I'm swamped.（手いっぱい）とも"], ["週の予定の話", "this week＝今週"], ["仕事の話", "with ～ で何に忙しいかを足す"], ["相手の課題に寄り添うとき", "You have a lot on your plate. と相手に使うと気遣いに"], ["ライブ前", "with my band＝バンドのことで"]],
