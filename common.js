@@ -2438,7 +2438,7 @@
 
   /* ---------- 公開 ---------- */
   // アップデートのたびに sw.js の CACHE 名と一緒に上げる
-  const APP_VERSION = 'v109';
+  const APP_VERSION = 'v110';
   window.EA = {
     APP_VERSION,
     BASE_PHRASES, CUSTOM_CAT, recognitionSupported,
@@ -2461,7 +2461,7 @@
 
   /* ---------- ☰ メニュー（全ページ共通。画面下のナビとページ内のリンク列の代わり） ---------- */
   const MENU = [
-    { items: [['index.html', '🏠 ホーム'], ['roadmap.html', '🔥 今日の練習']] },
+    { items: [['index.html', '🏠 ホーム'], ['roadmap.html', '🔥 今日の練習'], ['sukima.html', '⏰ すきま復習']] },
     { title: '📖 まなぶ', items: [['grammar.html', '📖 文法ノート']] },
     { title: '✏️ れんしゅう', items: [['pattern.html', '🔁 型練習'], ['quiz.html', '❓ クイズ・声に出すカード'], ['quiz.html?format=drill&genre=PREMEET', '📅 会う前のカード'], ['writing.html', '✍️ 英作文'], ['answer.html', '💬 質問への答え方']] },
     { title: '💬 会うとき', items: [['translator.html', '💬 会話（翻訳）'], ['topics.html', '🎲 話題カード'], ['nihongo.html', '🇯🇵 日本語を教える']] },

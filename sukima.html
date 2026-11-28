@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>心をつなぐ英語表現 - すきま復習</title>
+  <meta name="theme-color" content="#4f46e5">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="英語表現">
+  <link rel="stylesheet" href="common.css?v=23">
+  <style>
+    .sk-src { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 0.6rem 0; }
+    .sk-src div { background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; padding: 0.45rem 0.2rem; text-align: center; }
+    .sk-src b { display: block; font-size: 1.3rem; color: var(--primary); }
+    .sk-src span { font-size: 0.72rem; color: var(--text-muted); }
+    .sk-row { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 0.5rem; }
+    .sk-row .tiny-btn { flex: 1; padding: 6px; }
+  </style>
+</head>
+<body>
+  <header>
+    <a href="index.html" class="logo">心をつなぐ英語表現</a>
+    <span id="streakBadge" class="streak-badge">🔥 0日連続学習</span>
+  </header>
+  <div class="container">
+    <div class="card" id="setup"></div>
+    <div class="card" id="drillBox" style="display:none;" aria-live="polite"></div>
+  </div>
+  <script src="common.js?v=64"></script>
+  <script src="usage-data.js?v=37"></script>
+  <script src="roadmap-data.js?v=11"></script>
+  <script>
+  (function () {
+    const $ = id => document.getElementById(id);
+    const esc = EA.esc;
+    const COUNTS = [10, 20];
+    const SRC_LABEL = { due: '⏰ 復習の時期', weak: '🎯 苦手', card: '🗺 言えなかったカード' };
+
+    /* ---------- 出す文を集める ----------
+       ① 復習の時期が来た文（間隔反復）② 苦手（間違えた文）③ ロードマップで言えなかったカード
+       ここで答えた結果は、苦手と「次に出す日」に反映される（ロードマップの記録には入らない） */
+    function sources() {
+      const st = EA.getStore(), today = EA.dateKey(), rest = new Set(st.resting);
+      const all = EA.getAllPhrases(), byEn = {};
+      all.forEach(p => { const k = p[1].toLowerCase(); if (!byEn[k]) byEn[k] = p; });
+      // ① 期限が古いものから
+      const due = EA.getDuePhrases().slice().sort((a, b) => (st.srs[a[1]].due < st.srs[b[1]].due ? -1 : 1));
+      // ② 間違えた回数が多いものから
+      const weak = EA.getWeakPhrases().slice().sort((a, b) => (st.weakPhrases[b[1]] || 0) - (st.weakPhrases[a[1]] || 0));
+      // ③ ロードマップで「1回目で言えなかった／最後まで言えなかった」カード。
+      //    すきま復習で言えて「次に出す日」が先になったものは、その日まで出さない
+      const card = [];
+      if (window.RM) {
+        const rd = EA.getRoadmap(), weeks = RM.cardsByWeek(EA.getCustomPhrases()), seen = new Set();
+        Object.keys(weeks).forEach(w => (weeks[w] || []).forEach(c => {
+          const k = c.en.toLowerCase(), l = rd.cardLog[c.en];
+          if (seen.has(k) || !l || (l.ok && l.f !== false) || rest.has(c.en)) return;
+          const s = st.srs[c.en];
+          if (s && s.due > today) return;
+          seen.add(k);
+          card.push({ p: byEn[k] || [EA.CUSTOM_CAT, c.en, c.ja, ''], d: l.d });
+        }));
+        card.sort((a, b) => (a.d < b.d ? -1 : 1));   // 古いものから
+      }
+      return { due, weak, card: card.map(x => x.p) };
+    }
+    // 3つの箱から順番に1枚ずつ取って混ぜる（同じ文は1回だけ）
+    function buildDeck(n, only) {
+      const s = sources(), keys = only ? [only] : ['due', 'weak', 'card'];
+      const out = [], seen = new Set(), idx = { due: 0, weak: 0, card: 0 };
+      let moved = true;
+      while (out.length < n && moved) {
+        moved = false;
+        keys.forEach(k => {
+          while (out.length < n && idx[k] < s[k].length) {
+            const p = s[k][idx[k]++], key = p[1].toLowerCase();
+            if (seen.has(key)) continue;
+            seen.add(key); out.push(p); moved = true; break;
+          }
+        });
+      }
+      return out;
+    }
+    // 何も無いとき：練習したことのある文からランダム
+    function randomStudied(n) {
+      const st = EA.getStore(), studied = new Set(st.studied), rest = new Set(st.resting);
+      const list = EA.getAllPhrases().filter(p => studied.has(p[1]) && !rest.has(p[1]));
+      for (let i = list.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [list[i], list[j]] = [list[j], list[i]]; }
+      return list.slice(0, n);
+    }
+
+    function cnt() { const p = +EA.getPrefs().sukimaCount; return COUNTS.includes(p) ? p : 10; }
+    function renderSetup() {
+      const s = sources();
+      const uniq = new Set(s.due.concat(s.weak, s.card).map(p => p[1].toLowerCase())).size;
+      const n = cnt();
+      let html = '<h2>⏰ すきま復習</h2>' +
+        '<p class="muted">くり返しで覚えるための復習です。ロードマップとは別に、空いた時間にいつでもどうぞ。言えた文は次に出るまでの間隔がのび（1→2→4→7→15→30日）、言えなかった文はまたすぐ出ます。</p>' +
+        '<div class="sk-src">' +
+        '<div><b>' + s.due.length + '</b><span>⏰ 復習の時期</span></div>' +
+        '<div><b>' + s.weak.length + '</b><span>🎯 苦手</span></div>' +
+        '<div><b>' + s.card.length + '</b><span>🗺 言えなかった<br>カード</span></div></div>' +
+        '<div class="pt-label" style="font-size:0.8rem; font-weight:bold; color:var(--text-muted); margin:0.4rem 0 0.3rem;">1回の枚数</div>' +
+        '<div class="chip-row" style="margin-bottom:0.6rem;">' + COUNTS.map(c => '<button class="chip' + (c === n ? ' active' : '') + '" data-count="' + c + '">' + c + '枚' + (c === 10 ? '（約2分）' : '（約4分）') + '</button>').join('') + '</div>';
+      if (uniq) {
+        html += '<button class="btn" data-act="start">▶ はじめる（' + Math.min(n, uniq) + '枚・3つを混ぜて）</button>' +
+          '<div class="sk-row">' + ['due', 'weak', 'card'].filter(k => s[k].length).map(k => '<button class="tiny-btn" data-act="start" data-only="' + k + '">' + SRC_LABEL[k] + 'だけ</button>').join('') + '</div>';
+      } else {
+        html += '<div class="notice">今、くり返す文はありません 🎉 クイズやカードで練習した文が、時間をおいてここに戻ってきます。</div>' +
+          '<button class="btn btn-secondary" data-act="random">🎲 練習したことのある文から' + n + '枚</button>';
+      }
+      html += '<p class="muted" style="font-size:0.78rem; margin-top:0.6rem;">※ 結果は苦手と「次に出す日」に入ります（1回目の結果だけ）。ロードマップの言えた率・翌日の再登場は変わりません。</p>';
+      $('setup').innerHTML = html;
+    }
+
+    function startDrill(items, title) {
+      if (!items.length) { EA.toast('出せる文がありません'); return; }
+      $('setup').style.display = 'none';
+      EA.cardDrill($('drillBox'), {
+        title, items, record: true,
+        onClose: () => { $('drillBox').style.display = 'none'; $('drillBox').innerHTML = ''; $('setup').style.display = ''; renderSetup(); EA.updateStreakBadge(); window.scrollTo(0, 0); }
+      });
+      EA.scrollToCard($('drillBox'), true);
+    }
+
+    document.addEventListener('click', e => {
+      const t = e.target.closest('#setup [data-act], #setup [data-count]');
+      if (!t) return;
+      if (t.dataset.count) { EA.setPref('sukimaCount', +t.dataset.count); renderSetup(); return; }
+      const a = t.dataset.act;
+      if (a === 'start') { const only = t.dataset.only || ''; startDrill(buildDeck(cnt(), only), only ? SRC_LABEL[only] : '⏰ すきま復習'); }
+      if (a === 'random') startDrill(randomStudied(cnt()), '🎲 おまかせ復習');
+    });
+
+    renderSetup();
+    EA.updateStreakBadge();
+  })();
+  </script>
+</body>
+</html>

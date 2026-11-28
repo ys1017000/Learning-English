@@ -184,6 +184,8 @@
         '<button class="tiny-btn" data-act="minimal" aria-pressed="' + minimal + '">' + (minimal ? '全部のメニューを見る' : '⏱ 時間がない日（最低ラインだけ）') + '</button>' +
         '<button class="tiny-btn" data-act="skip">' + (rd.skipped[today] ? '↩︎ 「捨てた」を取り消す' : '🗑 今日の残りは捨てる') + '</button></div>';
       html += '<p class="muted" style="margin-bottom:1rem;">最低ラインは「朝の単語＋昼のカード」です。できなかった分は翌週に詰め込まず、捨てて大丈夫です。</p>';
+      // ⏰ すきま時間：ロードマップとは別に、復習の時期が来た文・苦手・言えなかったカードをくり返す
+      html += '<a class="btn btn-secondary" href="sukima.html" style="display:block; text-align:center; margin-bottom:1rem;">⏰ すきま時間に復習する（くり返しで覚える）</a>';
       if (cards.length) {
         html += '<div class="card"><h2>📈 今週のカード</h2><div class="muted">' + cards.length + '枚 ・ 1回目で言えた：<b>' + sc.said + '/' + sc.tried + '</b>' + (sc.tried ? '（' + sc.pct + '%）' : '') +
           '　目標 ' + RM.PASS_RATE + '%</div>';
